@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "3e5Onk5JqGo=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\98849\\OneDrive\\Документы\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Terrapain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\98849\\.nuget\\packages\\ilgpu\\1.5.3\\ilgpu.1.5.3.nupkg.sha512",
+    "C:\\Users\\98849\\.nuget\\packages\\ilgpu.algorithms\\1.5.3\\ilgpu.algorithms.1.5.3.nupkg.sha512"
+  ],
+  "logs": []
+}

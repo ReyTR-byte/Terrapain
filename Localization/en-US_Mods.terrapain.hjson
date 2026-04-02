@@ -1,0 +1,734 @@
+# This file will automatically update with entries for new content after a build and reload.
+
+Items: {
+	TheSwordOfSpeed: {
+		DisplayName: The Sword Of Speed
+		Tooltip:
+			'''
+			This sword getting faster with every attack
+			Sword will lose its speed if you dont attack
+			If you throw it, it will lose its speed immediately
+			'''
+	}
+
+	WoodenShield: {
+		DisplayName: Wooden Shield
+		Tooltip: Allow make dashes
+	}
+
+	PlatinumShield: {
+		DisplayName: Platinum Shield
+		Tooltip:
+			'''
+			+5% melee damage
+			Allow make dashes
+			'''
+	}
+
+	FlinxFurShield: {
+		DisplayName: Flinx Fur Shield
+		Tooltip:
+			'''
+			+10% summoner damage
+			Allow make dashes
+			'''
+	}
+
+	FossilShield: {
+		DisplayName: Fossil Shield
+		Tooltip:
+			'''
+			+10% ranged damage
+			Allow make dashes
+			'''
+	}
+
+	GoldenShield: {
+		DisplayName: Golden Shield
+		Tooltip:
+			'''
+			+5% melee damage
+			Allow make dashes
+			'''
+	}
+
+	JungleShield: {
+		DisplayName: Jungle Shield
+		Tooltip:
+			'''
+			+10% magic damage
+			Allow make dashes
+			'''
+	}
+
+	FlinxLeggins: {
+		Tooltip: ""
+		DisplayName: Flinx Leggins
+	}
+
+	FlinxHood: {
+		Tooltip: ""
+		DisplayName: Flinx Hood
+	}
+
+	ExplosiveSkull: {
+		Tooltip: ""
+		DisplayName: Explosive Skull
+	}
+
+	CursedSpray: {
+		DisplayName: Cursed Spray
+		Tooltip: ""
+	}
+
+	InfernalLazerShotgun: {
+		DisplayName: Infernal Lazer Shotgun
+		Tooltip: ""
+	}
+
+	GlassSword: {
+		DisplayName: Glass Sword
+		Tooltip: ""
+	}
+
+	FireSword: {
+		DisplayName: Fire Sword
+		Tooltip: ""
+	}
+
+	SlimeBow: {
+		DisplayName: Slime Bow
+		Tooltip: ""
+	}
+
+	SlimeBullet: {
+		DisplayName: Slime Bullet
+		Tooltip: ""
+	}
+
+	SlimeStuff: {
+		DisplayName: Slime Stuff
+		Tooltip: ""
+	}
+
+	DeerFur: {
+		DisplayName: Deer Fur
+		Tooltip: ""
+	}
+
+	MassiveLensSharp: {
+		DisplayName: Massive Lens Sharp
+		Tooltip: ""
+	}
+
+	SuperDenseGel: {
+		DisplayName: Super Dense Gel
+		Tooltip: ""
+	}
+
+	TheForestRipper: {
+		DisplayName: The Forest Ripper
+		Tooltip: ""
+	}
+
+	SomeBullet: {
+		Tooltip: ""
+		DisplayName: Some Bullet
+	}
+
+	Headband: {
+		Tooltip: ""
+		DisplayName: Headband
+	}
+
+	HealfullHeadband: {
+		Tooltip: ""
+		DisplayName: Healfull Headband
+	}
+
+	DeepniteOre: {
+		DisplayName: Deepnite Ore
+		Tooltip: ""
+	}
+
+	ScorspiderSummon: {
+		Tooltip: ""
+		DisplayName: Scorspider Summon
+	}
+
+	TheDropOfPain: {
+		DisplayName: The Drop Of Pain
+		Tooltip:
+			'''
+			Choose the level of pain youll feel
+
+			'''
+	}
+
+	GlassKnife: {
+		DisplayName: Glass Knife
+		Tooltip: ""
+	}
+
+	Reflector: {
+		DisplayName: Reflector
+		Tooltip: ""
+	}
+
+	GelHeart: {
+		Tooltip: ""
+		DisplayName: Gel Heart
+	}
+
+	HoneyHeart: {
+		Tooltip: ""
+		DisplayName: Honey Heart
+	}
+
+	HeartOfEvil: {
+		Tooltip: ""
+		DisplayName: Heart Of Evil
+	}
+
+	DemonEyeHeart: {
+		Tooltip: ""
+		DisplayName: Demon Eye Heart
+	}
+
+	DeerclopeHeart: {
+		Tooltip: ""
+		DisplayName: Deerclope Heart
+	}
+
+	Boss2Heart: {
+		Tooltip: ""
+		DisplayName: Boss2 Heart
+	}
+
+	ScorspiderHeart: {
+		Tooltip: ""
+		DisplayName: Boss1 Heart
+	}
+
+	BoneHeart: {
+		Tooltip: ""
+		DisplayName: Bone Heart
+	}
+
+	FireStuff: {
+		DisplayName: Fire Stuff
+		Tooltip: ""
+	}
+
+	SimonsGlasses: {
+		DisplayName: Simons Glasses
+		Tooltip: ""
+	}
+
+	KitansGlasses: {
+		Tooltip: ""
+		DisplayName: Kitans Glasses
+	}
+
+	KaminasGlasses: {
+		Tooltip: ""
+		DisplayName: Kaminas Glasses
+	}
+
+	ScorspiderShellShard: {
+		Tooltip: ""
+		DisplayName: Scorspider Shell Shard
+	}
+
+	ScorspiderCobweb: {
+		Tooltip: ""
+		DisplayName: Scorspider Cobweb
+	}
+
+	GranithShellChestplate: {
+		Tooltip: ""
+		DisplayName: Granith Shell Chestplate
+	}
+
+	GranithShellLeggings: {
+		Tooltip: ""
+		DisplayName: Granith Shell Leggings
+	}
+
+	GranithShellHelmet: {
+		Tooltip: ""
+		DisplayName: Granith Shell Helmet
+	}
+
+	GranithShellMask: {
+		Tooltip: ""
+		DisplayName: Granith Shell Mask
+	}
+
+	ScorspiderHook: {
+		DisplayName: Scorspider Hook
+		Tooltip: ""
+	}
+
+	ScorspiderTrophy: {
+		DisplayName: Scorspider Trophy
+		Tooltip: ""
+	}
+
+	ScorspiderPaw: {
+		DisplayName: Scorspider Paw
+		Tooltip: ""
+	}
+
+	ScorspiderBag: {
+		DisplayName: Scorspider Bag
+		Tooltip: ""
+	}
+
+	AcidCobwebMask: {
+		Tooltip: ""
+		DisplayName: Acid Cobweb Mask
+	}
+
+	AcidCobwebLeggings: {
+		Tooltip: ""
+		DisplayName: Acid Cobweb Leggings
+	}
+
+	AcidCobwebHood: {
+		Tooltip: ""
+		DisplayName: Acid Cobweb Hood
+	}
+
+	AcidCobwebChestplate: {
+		DisplayName: Нагрудник токсичной паутины
+		Tooltip:
+			'''
+			Немного увеличивает регенерацию здоровь и маны
+			Когда вы получаете урон - стреляете паутиной во врага
+			Если ваше здоровье меньше 25% паутина выпускается постоянно
+			'''
+	}
+
+	GranithBook: {
+		Tooltip: ""
+		DisplayName: Granith Book
+	}
+
+	Sharper: {
+		DisplayName: Sharper
+		Tooltip: ""
+	}
+
+	PizdetsKrutayaPushka: {
+		DisplayName: Pizdets Krutaya Pushka
+		Tooltip: ""
+	}
+
+	GranithStuff: {
+		DisplayName: Granith Stuff
+		Tooltip: ""
+	}
+
+	Gardeneer: {
+		DisplayName: Gardeneer
+		Tooltip: ""
+	}
+
+	ScorspiderRelic: {
+		Tooltip: ""
+		DisplayName: Scorspider Relic
+	}
+
+	ScorspiderHeartAccesory: {
+		DisplayName: Scorspider Heart Accesory
+		Tooltip: ""
+	}
+
+	UnarmedContract: {
+		DisplayName: Unarmed Contract
+		Tooltip: ""
+	}
+
+	StarPowerChestplate: {
+		DisplayName: Star Power Chestplate
+		Tooltip: ""
+	}
+
+	StarPowerHelmet: {
+		DisplayName: Star Power Helmet
+		Tooltip: ""
+	}
+
+	StarPowerLegings: {
+		DisplayName: Star Power Legings
+		Tooltip: ""
+	}
+
+	StarPowerAlloy: {
+		DisplayName: Star Power Alloy
+		Tooltip: ""
+	}
+
+	Battery: {
+		DisplayName: Battery
+		Tooltip: ""
+	}
+
+	Bat: {
+		DisplayName: Bat
+		Tooltip: ""
+	}
+
+	StarFuryBracelet: {
+		Tooltip: ""
+		DisplayName: Star Fury Bracelet
+	}
+
+	BrokenHeartPotion: {
+		DisplayName: Broken Heart Potion
+		Tooltip: ""
+	}
+
+	ChaosPotion: {
+		DisplayName: Chaos Potion
+		Tooltip: ""
+	}
+
+	JungleBullet: {
+		DisplayName: Jungle Bullet
+		Tooltip: Have a little autoaim
+	}
+
+	JungleStuff: {
+		DisplayName: Jungle Stuff
+		Tooltip: ""
+	}
+}
+
+Buffs: {
+	ExplosiveSkullCD: {
+		DisplayName: Explosive Skull C D
+		Description: Mods.terrapain.Buffs.ExplosiveSkullCD.Description
+	}
+
+	GlassKnifeBuff: {
+		DisplayName: Glass Knife Buff
+		Description: Mods.terrapain.Buffs.GlassSwordBuff.Description
+	}
+
+	BandageSickness: {
+		Description: Mods.terrapain.Buffs.BandageSickness.Description
+		DisplayName: Bandage Sickness
+	}
+
+	BonusAcorns: {
+		DisplayName: Bonus Acorns
+		Description: Mods.terrapain.Buffs.BonusAcorns.Description
+	}
+
+	ScorspiderAcid: {
+		DisplayName: Scorspider Acid
+		Description: Mods.terrapain.Buffs.ScorspiderAcid.Description
+	}
+
+	ScorspiderStingBuff: {
+		DisplayName: Scorspider Sting Buff
+		Description: Mods.Terrapain.Buffs.ScorspiderStingBuff.Description
+	}
+
+	DaybloomInfection: {
+		Description: Mods.Terrapain.Buffs.DaybloomInfection.Description
+		DisplayName: Daybloom Infection
+	}
+
+	Shocked: {
+		DisplayName: Shocked
+		Description: Mods.Terrapain.Buffs.Shocked.Description
+	}
+
+	BrokenHeart: {
+		DisplayName: Broken Heart
+		Description: Mods.Terrapain.Buffs.BrokenHeart.Description
+	}
+
+	Chaos: {
+		DisplayName: Chaos
+		Description: Mods.Terrapain.Buffs.Chaos.Description
+	}
+}
+
+Projectiles: {
+	GlassBouble.DisplayName: Glass Bouble
+	Lazer.DisplayName: Lazer
+	GlassKnife.DisplayName: Glass Knife
+	SlimeBullet.DisplayName: Slime Bullet
+	SlimeBall.DisplayName: Slime Ball
+	FireSplash.DisplayName: Fire Splash
+	Acorn.DisplayName: Acorn
+	SomeBullet.DisplayName: Some Bullet
+	TheForestRipperProjectile.DisplayName: The Forest Ripper Projectile
+	TheForestRipperSword.DisplayName: The Forest Ripper Sword
+	ScorspiderLeg.DisplayName: Scorspider Leg
+	ScorspiderTail.DisplayName: Scorspider Tail
+	ScorspiderSpike.DisplayName: Scorspider Spike
+	ScorspiderShellShard.DisplayName: Scorspider Shell Shard
+	GlassSwordProjectile.DisplayName: Glass Sword Projectile
+	ChargedBlood.DisplayName: Charged Blood
+	DemonicEyeLazer.DisplayName: Demonic Eye Lazer
+	PetEye.DisplayName: Pet Eye
+	ScorspiderRocket.DisplayName: Scorspider Rocket
+	ExplosiveSkull.DisplayName: Explosive Skull
+	TestProjectile.DisplayName: Test Projectile
+	FireBall.DisplayName: Fire Ball
+	BigSpiderSpike.DisplayName: Big Spider Spike
+	ScorspiderWeb.DisplayName: Scorspider Web
+	ScorspiderFlower.DisplayName: Scorspider Flower
+	ScorspiderHookProjectile.DisplayName: Scorspider Hook Projectile
+	ScorspiderSting.DisplayName: Scorspider Sting
+	CobwebBullet.DisplayName: Cobweb Bullet
+	SharperProj.DisplayName: Sharper Proj
+	BiggerGranithBall.DisplayName: Bigger Granith Ball
+	GranithBall.DisplayName: Granith Ball
+	GranithBallShard.DisplayName: Granith Ball Shard
+	GranithStuffProjectile.DisplayName: Granith Stuff Projectile
+	BlinkrootPetal.DisplayName: Blinkroot Petal
+	BouquetArrow.DisplayName: Bouquet Arrow
+	DaybloomPetal.DisplayName: Daybloom Petal
+	DeathweedPetal.DisplayName: Deathweed Petal
+	FireblossomPetal.DisplayName: Fireblossom Petal
+	MoonglowPetal.DisplayName: Moonglow Petal
+	ShiverthornPetal.DisplayName: Shiverthorn Petal
+	WaterleafPetal.DisplayName: Waterleaf Petal
+	BloodyLaser.DisplayName: Bloody Laser
+	UVLaser.DisplayName: U V Laser
+	BatProjectile.DisplayName: Bat Projectile
+	EoCServantSoul.DisplayName: Eo C Servant Soul
+	EoCLaser.DisplayName: Eo C Laser
+	GhostServantofCthulhu.DisplayName: Ghost Servantof Cthulhu
+	ServantofCthulhuSoul.DisplayName: Servantof Cthulhu Soul
+	BloodSpike.DisplayName: Blood Spike
+	JungleBullet.DisplayName: Jungle Bullet
+	JungleSeed.DisplayName: Jungle Seed
+	SapphireSharp.DisplayName: Sapphire Sharp
+	RubySharp.DisplayName: Ruby Sharp
+	EmeraldSharp.DisplayName: Emerald Sharp
+	AmethystSharp.DisplayName: Amethyst Sharp
+	SapphireStaff.DisplayName: Sapphire Staff
+	DesertGore.DisplayName: Desert Gore
+}
+
+NPCs: {
+	DeadMelee.DisplayName: Dead Melee
+	DeadWings.DisplayName: Dead Wings
+	Scorspider.DisplayName: Scorspider
+	ScorspiderSting.DisplayName: Scorspider Sting
+	ScorspiderHead.DisplayName: Scorspider Head
+	ScorspiderBody.DisplayName: Scorspider Body
+	Suicide.DisplayName: Suicide
+	Torture.DisplayName: Torture
+	ScorspiderLittleMinionSpidersCocoon.DisplayName: Scorspider Little Minion Spiders Cocoon
+	SmallSpider.DisplayName: Small Spider
+	BigSpider.DisplayName: Big Spider
+	ScorspiderBigMinionSpiderCocoon.DisplayName: Scorspider Big Minion Spider Cocoon
+	FireShooterServantofCthulhu.DisplayName: Fire Shooter Servantof Cthulhu
+	HealerServantofCthulhu.DisplayName: Healer Servantof Cthulhu
+	LaserServantofCthulhu.DisplayName: Laser Servantof Cthulhu
+	SheildedServantofCthulhu.DisplayName: Sheilded Servantof Cthulhu
+
+	DemonMerchant: {
+		DeathMessage: Mods.Terrapain.NPCs.DemonMerchant.DeathMessage
+		Upgraded: Mods.Terrapain.NPCs.DemonMerchant.Upgraded
+		DisplayName: Demon Merchant
+
+		TownNPCMood: {
+			Content: Я довольный.
+			NoHome: Терпеть не могу, когда у меня нет дома.
+			FarFromHome: Я слишком далеко от дома.
+			LoveSpace: Я люблю, когда так много пространства.
+			DislikeCrowded: Мне не нравится то, как здесь людно.
+			HateCrowded: Я ненавижу то, как здесь людно.
+			LikeBiome: Мне нравится {BiomeName}.
+			DislikeBiome: Мне не нравится {BiomeName}.
+			DislikeNPC: Мне не нравится {NPCName}.
+			HateNPC: Я ненавижу {NPCName}.
+			LikeNPC_Princess: Мне нравится {NPCName}.
+			Princess_LovesNPC: Мне нравится {NPCName}.
+		}
+	}
+}
+
+Tiles: {
+	DeepniteOre.MapEntry: Deepnite Ore
+	HardenedCrimtaneBrick.MapEntry: Hardened Crimtane Brick
+	HardenedDemoniteBrick.MapEntry: Hardened Demonite Brick
+}
+
+NetworkText: {
+	PlayerChooseSuicideDeathMale: Игрок {0} выбрал самоубийство
+	PlayerChooseSuicideDeathFemale: Игрок {0} выбрала самоубийство
+	PlayerCooseSuicideHardcoreMale: Игрок {0} отстранил свою смерть(не на долго)
+	PlayerCooseSuicideHardcoreFemale: Игрок {0} отстранила свою смерть(не на долго)
+	PlayerDiedSuicideHardcoreMale: Каким образом ты сдох???
+	PlayerDiedSuicideHardcoreFemale: Каким образом ты сдохла???
+	PlayerChooseSuicide: Счастливой агонии!
+	PlayerChooseTorture: Весёлых страданий!
+	SetDifficultyToZero: Слабак
+	OrganismOverloadDeath: Организм игрока не справился с таким количеством улучшений
+	TheDropOfPainTooltip0: Choosen mode - Clasic
+	TheDropOfPainTooltip1: Choosen mode - Torture
+	TheDropOfPainTooltip2: Choosen mode - Suicide
+	ShockDeathMale: Игрок {0} забыл про изоляцию
+	ShockDeathFemale: Игрок {0} забыла про изоляцию
+	BadPotion: Не надо было это пить...
+}
+
+BossStory: {
+	1_0: Глаз Ктулху - взрослая особь демонического глаза, а демонический глаз в свою очередь - искусственно созданый вид для выращивания дешевых и мощных источников света
+	1_1: Несмотря на свое название он не имеет ничего общего с Ктуху
+	1_2: Демонические глаза были созданы студентом для дипломной работы
+	1_3: Защитить свою работу он смог с трудом
+	1_4: Хоть источники света и получались дешевыми, энерго эффективными и такими мощными что их можно было использовать в качестве оружия, проблем с демоническими глазами было немерено
+	1_5: Главными их проблемами были их агрессия и способность сбегать откуда угодно
+	1_6: Нападали на людей они совсем без причины
+	1_7: И за это их стали истреблять
+	1_8: Полностью истребить их так и не удалось
+	1_9: Нападают на людей они в основном ночью потому что поняли что ночью люди более уязвимы
+	1_10: Они прекрасно видят в темноте, по слуху и обонянию значительно превосходят людей
+	1_11: Может показаться что яркий свет это их слабость, но это не так
+	1_12: Они могут часами смотреть на Солнце без последствий
+	1_13: Один озлобленый на них человек проверил это
+	2_0: Скорпаук - жертва экспериментов человека над природой
+	2_1: когда то давно один учёный экспериментировал над смешиванием генов разных сушеств
+	2_2: он экспериментировал над сотней различных видов
+	2_3: но ни с кем не получалось
+	2_4: новое существо погибало ещё в зародыше
+	2_5: он искал ответы в сотнях книгах, но ничего не нашел
+	2_6: он спрашивал советы у сотен биологов, но все считали его безумцем
+	2_7: все, кроме одного
+	2_8: учёный, который согласился ему помочь был наверное умнейшим и богатейшим человеком на земле
+	2_9: но интересовали его только деньги и слава
+	2_10: и не трудно догадаться, что если он согласился помочь, только потому что увидел в этом возможность заработать кучу денег
+	2_11: так и появился Скорпаук
+	2_12: но изначально он был не больше скорпиона и небыл агрессивным
+	2_13: сделал его таким второй учёный, увидев потенциал в его паутине, которую он выпускает в случае опасности
+	2_14: второй учёный украл скорпаука и начал ставить на нем эксперименты в надежде заставить его вырабатывать больше этого вещества
+	2_15: в конце концов скорпаук стал таким какой он есть сейчас
+	2_16: стратегия заработка была в том чтобы солдат, заходя в комнату с ним заставлял скорпаука стрелять в него своей паутиной
+	2_17: опытному солдату с хорошей экипировкой нет разницы кто перед ним, обычный комнатный паук или такой монстр
+	2_18: это тебе победа над ним досталась не просто из за из за того что тебе сейчас не доступны современные технологии
+	2_19: но вернёмся к истории нашего мутанта
+	2_20: в результате мощнейшего за всю историю землетрясения, его тюрьма была разрушена
+	2_21: зная на сколько это существо опасно для мирных жителей на место тут же вызвали военных
+	2_22: но скорпаук так же был важен для экономики, поэтому его не убили, а построили ему новую тюрьму под землёй
+	2_23: вот так его оружие стало его проклятием
+}
+
+Warns.CantAddAllItems: Не удалось добавить все предметы стартового инвентаря
+BossDespawn.ScorspiderDespawn: Скорпаук вернется тобой и твоими жителями
+
+Keybinds: {
+	Dash.DisplayName: Dash
+	RealiseHookedNPC.DisplayName: Realise Hooked NPC
+	ActiveAccesory1.DisplayName: Active Accesory1
+	ActiveAccesory2.DisplayName: Active Accesory2
+	ActiveAccesory3.DisplayName: Active Accesory3
+	ActiveAccesory4.DisplayName: Active Accesory4
+	ActiveAccesory5.DisplayName: Active Accesory5
+	ActiveAccesory6.DisplayName: Active Accesory6
+	ActiveAccesory7.DisplayName: Active Accesory7
+}
+
+Configs: {
+	ClientConfig: {
+		DisplayName: Client Config
+
+		UseShaders: {
+			Label: Use Shaders
+			Tooltip: ""
+		}
+
+		drawHitbox: {
+			Label: draw Hitbox
+			Tooltip: ""
+		}
+
+		hitboxColor: {
+			Label: hitbox Color
+			Tooltip: ""
+		}
+
+		LimboSpeed: {
+			Label: Limbo Speed
+			Tooltip: ""
+		}
+
+		Tips: {
+			Label: Tips
+			Tooltip: ""
+		}
+
+		CameraTime: {
+			Label: Camera Time
+			Tooltip: ""
+		}
+
+		CameraZoom: {
+			Label: Camera Zoom
+			Tooltip: ""
+		}
+	}
+}
+
+SetBonus: {
+	FlinxHood: Increese max minions by 1
+	AcidCobwebHood:
+		'''
+		Reduse mana cost by 5% 
+		Increese mana regen a bit
+		Increese max mana by 60;
+		Increese magic damage by 5%
+		On you got hit by npc you shoot with web
+		You dont need to get damage if youre hp lower then 25%
+		'''
+	AcidCobwebMask:
+		'''
+		Increese max minions and turrets by 1 
+		Increese summoner damage by 5%
+		On you got hit by npc you shoot with web
+		You dont need to get damage if youre hp lower then 25%
+		'''
+	GranithShellHelmet:
+		'''
+		Increese melee damage by 5%
+		Scorspider sting protects you
+		'''
+	GranithShellMask:
+		'''
+		Increese ranged damage by 5%
+		You shoot with Scorspider projectiles
+		'''
+	StarPowerSet: На противников которых вы ранили с неба падают звезды
+}
+
+DamageClasses.Unarmed.DisplayName: unarmed damage
+Unarmed.SetBonus.CactusArmor: Unarmed: Gives Thorns effect
+
+Tips: {
+	Tip: Tip:
+	BrainOfCthulhuTip: jump to pick
+	EyeofCthulhuTip: убивай миньонов чтобы наносить урон
+}
+
+PressXToActivate: Press {0} to activate
+Ability: Ability
+
+AbilityDescription: {
+	EoCShield_0: Длинный рывок в любую сторону и даже по диагонали
+	BootsActiveAccessory_0: Увеличивает скорость бега на некоторое время
+	BootsActiveAccessoryInfFly_0: Увеличивает скорость бега и дает бесконечный полет на некоторое время
+	MagmaStone_0: Взрыв!
+	StarFuryBracelet_0: Стреляет во врагов звездами
+	Battery_0: Дает эффект увеличивающий урон в 1.5 раза, но наносящий вам постоянный урон
+	Battery_1: Создает ауру вокруг игрока, которая замедляет врагов, наносит им постоянный урон и иногда бьет их молниями
+}

@@ -1,0 +1,80 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\98849\\OneDrive\\Документы\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Terrapain.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\98849\\OneDrive\\Документы\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Terrapain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\98849\\OneDrive\\Документы\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Terrapain.csproj",
+        "projectName": "Terrapain",
+        "projectPath": "C:\\Users\\98849\\OneDrive\\Документы\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Terrapain.csproj",
+        "packagesPath": "C:\\Users\\98849\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\98849\\OneDrive\\Документы\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\98849\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Users\\98849\\Downloads": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "ILGPU": {
+              "target": "Package",
+              "version": "[1.5.3, )"
+            },
+            "ILGPU.Algorithms": {
+              "target": "Package",
+              "version": "[1.5.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,798 @@
+# This file will automatically update with entries for new content after a build and reload.
+
+Items: {
+	TheSwordOfSpeed: {
+		DisplayName: Меч скорости
+		Tooltip:
+			'''
+			Этот меч увеличивает свою скорость с каждой атакой
+			Если перестать атаковать меч потеряет свою скорость
+			Если выкинуть мечь он потеряет свою скорость моментально
+			'''
+	}
+
+	WoodenShield: {
+		DisplayName: Деревянный щит
+		Tooltip: Позволяет делать рывки
+	}
+
+	PlatinumShield: {
+		DisplayName: Платиновый щит
+		Tooltip:
+			'''
+			+5% урона ближнего боя
+			Позволяет делать рывки
+			'''
+	}
+
+	FlinxFurShield: {
+		DisplayName: Щит из меха флинкса
+		Tooltip:
+			'''
+			+10% урона призывателя
+			Позволяет делать рывки
+			'''
+	}
+
+	FossilShield: {
+		DisplayName: Окаменелый щит
+		Tooltip:
+			'''
+			+10% урона стрелка
+			Позволяет делать рывки
+			'''
+	}
+
+	GoldenShield: {
+		DisplayName: Золотой щит
+		Tooltip:
+			'''
+			+5% урона ближнего боя
+			Позволяет делать рывки
+			'''
+	}
+
+	JungleShield: {
+		DisplayName: Щит джунглей
+		Tooltip:
+			'''
+			+5% магического урона
+			Позволяет делать рывки
+			'''
+	}
+
+	FlinxLeggins: {
+		Tooltip: +5% урона призывателя
+		DisplayName: Штаны флинкса
+	}
+
+	FlinxHood: {
+		Tooltip: +5% урона призывателя
+		DisplayName: Капюшон флинкса
+	}
+
+	ExplosiveSkull: {
+		Tooltip: Стрелковое оружие призывает взрывные черепа
+		DisplayName: Взрывной череп
+	}
+
+	CursedSpray: {
+		// DisplayName: Cursed Spray
+		Tooltip: DisplayName: Проклятый спрей
+	}
+
+	InfernalLazerShotgun: {
+		DisplayName: Адский лазерный дробовик
+		// Tooltip: ""
+	}
+
+	GlassSword: {
+		DisplayName: Стеклянный меч
+		Tooltip:
+			'''
+			Накапливет заряд попадая по врагам
+			При накоплении заряда призывает демонический глаз который вам помогает
+			и стреляет вверх 5 заряжеными каплями крови
+			Если вы не можете его поймать используйте второстепенную атаку, учтите что это будет стоить одного заряда
+			'''
+	}
+
+	FireSword: {
+		DisplayName: Огненный меч
+		Tooltip: Загорится если зажать ПКМ
+	}
+
+	SlimeBow: {
+		DisplayName: Гелевый лук
+		Tooltip: Стреляет очень быстро и далеко
+	}
+
+	SlimeBullet: {
+		DisplayName: Гелевая пуля
+		Tooltip: Отскакивает от врагов и блоков
+	}
+
+	SlimeStuff: {
+		DisplayName: Посох слизней
+		Tooltip:
+			'''
+			Стреляет шарами слизи которые отскакивают от врагов и преград
+			При некоторых обстоятельствах могут загореться
+			'''
+	}
+
+	DeerFur: {
+		DisplayName: Олений мех
+		Tooltip: Не путать с тем, о чем поется в одной песне
+	}
+
+	MassiveLensSharp: {
+		DisplayName: Осколок огромной линзы
+		Tooltip: Хрусталик самого глаза ктулху
+	}
+
+	SuperDenseGel: {
+		DisplayName: Сверх плотный гель
+		Tooltip:
+			'''
+			Настолько плотный, что из него можно строить
+			При этом давольно прыгучий и легковоспламеняемый
+			'''
+	}
+
+	TheForestRipper: {
+		DisplayName: Меч леса
+		Tooltip:
+			'''
+			С каждой атакой стреляет желудем
+			Чем больше вы атакуете в ближнем бою, тем больше будет желудей
+			'''
+	}
+
+	SomeBullet: {
+		// Tooltip: ""
+		// DisplayName: Some Bullet
+	}
+
+	Headband: {
+		// Tooltip: ""
+		DisplayName: Повязка
+	}
+
+	HealfullHeadband: {
+		Tooltip:
+			'''
+			Увеличивает регенерацию если осталось меньше половины здоровья
+			Немного увеличивает скорость движения
+			Каждые 5 секунд востанавливает 5 единиц здоровья
+			'''
+		DisplayName: Лечебная повязка
+	}
+
+	DeepniteOre: {
+		// DisplayName: Deepnite Ore
+		// Tooltip: ""
+	}
+
+	ScorspiderSummon: {
+		Tooltip: Призывает Скорпаука
+		DisplayName: Жертвенный паук
+	}
+
+	TheDropOfPain: {
+		DisplayName: Капля боли
+		Tooltip:
+			'''
+			Выбирете насколько больно вам будет
+
+
+			'''
+	}
+
+	GlassKnife: {
+		DisplayName: Стеклянный нож
+		Tooltip:
+			'''
+			Призывает стеклянные ножи, которые будут вас защищать
+			Накопив заряд становятся сильнее
+			'''
+	}
+
+	Reflector: {
+		DisplayName: Преломлятор
+		Tooltip:
+			'''
+			Стреляет лазерами
+			Лазеры наносят двойной урон в точке фокуса
+			Точка фокуса определяется положением курсора
+			'''
+	}
+
+	GelHeart: {
+		Tooltip: Можно использовать, если было использованно 7 кристалов жизни
+		DisplayName: Сердце из слизи
+	}
+
+	HoneyHeart: {
+		Tooltip: Можо использовать, если до этого было использованно сердце зла
+		DisplayName: Медовое сердце
+	}
+
+	HeartOfEvil: {
+		Tooltip: Можно использовать если до этого было использованно сердце **********
+		DisplayName: Сердце зла
+	}
+
+	DemonEyeHeart: {
+		Tooltip: Можно использовать, если было использованно сердце из слизи
+		DisplayName: Сердце демонического глза
+	}
+
+	DeerclopeHeart: {
+		Tooltip: Можно использовать, если до этого было использованно 689790olku98urtg89783opliu сердце
+		DisplayName: Сердце Циклопа-Оленя
+	}
+
+	Boss2Heart: {
+		Tooltip: jhkl;xc78uijk;'\lkjhg7k
+		DisplayName: ув5fffа4вс8н56546е8556hskjgklf64dfsda446капgfghимhhhмммв
+	}
+
+	ScorspiderHeart: {
+		Tooltip: Можно использовать, если до этого было использованно сердце демонического глаза
+		DisplayName: Сердце Скорпаука
+	}
+
+	BoneHeart: {
+		Tooltip: Можно использовать, если до этого было использованно медовое сердце
+		DisplayName: Костяное сердце
+	}
+
+	FireStuff: {
+		DisplayName: Огненный посох
+		Tooltip:
+			'''
+			Стреляет огненными шарами которые следуют за курсором
+			Если удерживать основную атаку, огненый шар будет надуваться
+			Если отпустить основную атаки или использовать вместе с ней второстепенную, шар полетит за курсором
+			Если использовать второстепенную атаку без основной, шары не будут следовать за курсором и надуваться, но расходоваться будет на 1 ед. маны меньше
+			'''
+	}
+
+	SimonsGlasses: {
+		DisplayName: Очки симона
+		Tooltip:
+			'''
+			Предмет украшения
+			Вас переполняет вера в себя
+			'''
+	}
+
+	KitansGlasses: {
+		Tooltip:
+			'''
+			Предмет украшения
+			Вас переполняет храбрость
+			'''
+		DisplayName: Очки китана
+	}
+
+	KaminasGlasses: {
+		Tooltip:
+			'''
+			Предмет украшения
+			Вас переполняет мужество
+			'''
+		DisplayName: Очки Камины
+	}
+
+	ScorspiderShellShard: {
+		// Tooltip: ""
+		DisplayName: Осколок гранитного панциря
+	}
+
+	ScorspiderCobweb: {
+		// Tooltip: ""
+		DisplayName: Паутина Скорпаука
+	}
+
+	GranithShellChestplate: {
+		Tooltip:
+			'''
+			Увеличивает здоровье на 25
+			Когда противник атакует вас если на вас еффект шипов, противник получает эффект яда
+			'''
+		DisplayName: Нагрудник гранитного панциря
+	}
+
+	GranithShellLeggings: {
+		Tooltip: Увеличивает ускорение и максимальную скорость, максимальную скорость падения и ускорение падения
+		DisplayName: Поножи гранитного панциря
+	}
+
+	GranithShellHelmet: {
+		Tooltip: Чем меньше здоровья у вас тем больше урона вы получаете, 50% максимум
+		DisplayName: Шлем гранитного панциря
+	}
+
+	GranithShellMask: {
+		Tooltip: Увеличивает стрелковый урон на 5%
+		DisplayName: Маска гранитного панциря
+	}
+
+	ScorspiderHook: {
+		DisplayName: Скорпаучий крюк
+		Tooltip: Позволяет цеплять мобов
+	}
+
+	ScorspiderTrophy: {
+		DisplayName: Трофей Скорпаука
+		// Tooltip: ""
+	}
+
+	ScorspiderPaw: {
+		DisplayName: Лапа скорпаука
+		// Tooltip: ""
+	}
+
+	ScorspiderBag: {
+		DisplayName: Мешок Скорпаука
+		// Tooltip: ""
+	}
+
+	AcidCobwebMask: {
+		Tooltip: Увеличивает урон хлыстов на 10%
+		DisplayName: Маска токсичной паутины
+	}
+
+	AcidCobwebLeggings: {
+		Tooltip: Увеличивает ускорение и максимальную скорость, максимальную скорость падения
+		DisplayName: Поножи токсичной паутины
+	}
+
+	AcidCobwebHood: {
+		Tooltip: Увеличивает урон мага на 7,5%
+		DisplayName: Капюшон токсичной паутины
+	}
+
+	AcidCobwebChestplate: {
+		DisplayName: Нагрудник токсичной паутины
+		Tooltip:
+			'''
+			Немного увеличивает регенерацию здоровь и маны
+			Когда вы получаете урон - стреляете паутиной во врага
+			Если ваше здоровье меньше 25% паутина выпускается постоянно
+			'''
+	}
+
+	GranithBook: {
+		Tooltip: Стреляет гранитными комками
+		DisplayName: Гранитная книга
+	}
+
+	Sharper: {
+		DisplayName: Оскольник
+		Tooltip:
+			'''
+			Урон увеличивает в зависимости от скорости
+			Чтобы урон увеличивался нужно задержать
+			'''
+	}
+
+	PizdetsKrutayaPushka: {
+		DisplayName: Гранитная пушка
+		Tooltip:
+			'''
+			Стреляет 2 большими и 2 маленькими гранитными шарами
+			Шары распадаются на гранитные осколки
+			'''
+	}
+
+	GranithStuff: {
+		DisplayName: Гранитный посох
+		Tooltip: Призывает гранитные туррели
+	}
+
+	Gardeneer: {
+		// DisplayName: Gardeneer
+		// Tooltip: ""
+	}
+
+	ScorspiderRelic: {
+		// Tooltip: ""
+		// DisplayName: Scorspider Relic
+	}
+
+	ScorspiderHeartAccesory: {
+		DisplayName: Сердце Скорпаука
+		Tooltip:
+			'''
+			Увеличивает максимальную скорость падения и ускорение
+			При приземлении на скорости близкой к максимальной повторяет первую атаку второй фазы скорпаука
+			'''
+	}
+
+	UnarmedContract: {
+		// DisplayName: Unarmed Contract
+		// Tooltip: ""
+	}
+
+	StarPowerChestplate: {
+		DisplayName: Нагрудник звездной силы
+		Tooltip: Увеличивает урон безоружного на 10%
+	}
+
+	StarPowerHelmet: {
+		DisplayName: Шлем звездной силы
+		Tooltip: ""
+	}
+
+	StarPowerLegings: {
+		DisplayName: Штаны звездной силы
+		Tooltip: ""
+	}
+
+	StarPowerAlloy: {
+		DisplayName: Сплав звездной силы
+		Tooltip: Из за того сколько здесь намешано не выглядит как то, что можно назвать "сплав звездной силы"
+	}
+
+	Battery: {
+		DisplayName: Батарея
+		Tooltip: Позволяет совершать рывки не дожидаясь перезарядки, но наносит урон когда вы так делаете
+	}
+
+	Bat: {
+		DisplayName: Бита
+		Tooltip: Заряженная атака отбрасывает противников, отброшеный противник наносит урон остальным противникам
+	}
+
+	StarFuryBracelet: {
+		Tooltip: Магические атаки также запускают звезды в сторону курсора
+		DisplayName: Браслет звездной ярости
+	}
+
+	BrokenHeartPotion: {
+		// DisplayName: Broken Heart Potion
+		// Tooltip: ""
+	}
+
+	ChaosPotion: {
+		// DisplayName: Chaos Potion
+		// Tooltip: ""
+	}
+
+	JungleBullet: {
+		DisplayName: Джунглевая пуля
+		Tooltip: Обладает небольшой самонаводкой
+	}
+
+	JungleStuff: {
+		// DisplayName: Jungle Stuff
+		// Tooltip: ""
+	}
+}
+
+Buffs: {
+	ExplosiveSkullCD: {
+		// DisplayName: Explosive Skull C D
+		// Description: Mods.terrapain.Buffs.ExplosiveSkullCD.Description
+	}
+
+	GlassKnifeBuff: {
+		DisplayName: Стеклянный нож
+		Description: Вас защищают стеклянные ножи
+	}
+
+	BandageSickness: {
+		Description: Вы не можете получить исцеление от повязки
+		DisplayName: Тугая повязка
+	}
+
+	BonusAcorns: {
+		// DisplayName: Bonus Acorns
+		// Description: Mods.terrapain.Buffs.BonusAcorns.Description
+	}
+
+	ScorspiderAcid: {
+		DisplayName: Скорпаучья кислота
+		Description: Все характеристии снижены и вы теряете здоровье
+	}
+
+	ScorspiderStingBuff: {
+		DisplayName: Жало Скорпаука
+		Description: Жало Скорпаука защищает вас
+	}
+
+	DaybloomInfection: {
+		// Description: Mods.Terrapain.Buffs.DaybloomInfection.Description
+		// DisplayName: Daybloom Infection
+	}
+
+	Shocked: {
+		DisplayName: Удар током
+		Description: У получаете урон, но наносите больше урона
+	}
+
+	BrokenHeart: {
+		// DisplayName: Broken Heart
+		// Description: Mods.Terrapain.Buffs.BrokenHeart.Description
+	}
+
+	Chaos: {
+		// DisplayName: Chaos
+		// Description: Mods.Terrapain.Buffs.Chaos.Description
+	}
+}
+
+Projectiles: {
+	GlassBouble.DisplayName: Стеклянный шар
+	Lazer.DisplayName: Лазер
+	GlassKnife.DisplayName: Стеклянный нож
+	SlimeBullet.DisplayName: Гелевая пуля
+	SlimeBall.DisplayName: Гелевый шар
+	FireSplash.DisplayName: Огненный всплеск
+	Acorn.DisplayName: Желудь
+	SomeBullet.DisplayName: Глубинитовая пуля
+	// TheForestRipperProjectile.DisplayName: The Forest Ripper Projectile
+	TheForestRipperSword.DisplayName: Сокрушитель желудей
+	ScorspiderLeg.DisplayName: Scorspider Leg
+	ScorspiderTail.DisplayName: Scorspider Tail
+	ScorspiderSpike.DisplayName: Шип скорпаука
+	ScorspiderShellShard.DisplayName: Осколок панциря скорпаука
+	// GlassSwordProjectile.DisplayName: Glass Sword Projectile
+	// ChargedBlood.DisplayName: Charged Blood
+	DemonicEyeLazer.DisplayName: Лазер демонического глаза
+	// PetEye.DisplayName: Pet Eye
+	ScorspiderRocket.DisplayName: Ракета Скорпаука
+	ExplosiveSkull.DisplayName: Взрывной череп
+	// TestProjectile.DisplayName: Test Projectile
+	FireBall.DisplayName: Фаерболл
+	BigSpiderSpike.DisplayName: Шип большого паука
+	ScorspiderWeb.DisplayName: Паутина Скорпаука
+	ScorspiderFlower.DisplayName: Цветок Скорпаука
+	ScorspiderHookProjectile.DisplayName: Крюк Скорпаука
+	ScorspiderSting.DisplayName: Жало Скорпаука
+	CobwebBullet.DisplayName: Снаряд паутины
+	// SharperProj.DisplayName: Sharper Proj
+	BiggerGranithBall.DisplayName: Гранитный шар
+	GranithBall.DisplayName: Гранитный шар
+	GranithBallShard.DisplayName: Осколок гранитного шара
+	GranithStuffProjectile.DisplayName: Гранитная ракетно-пусковая станция
+	// BlinkrootPetal.DisplayName: Blinkroot Petal
+	// BouquetArrow.DisplayName: Bouquet Arrow
+	// DaybloomPetal.DisplayName: Daybloom Petal
+	// DeathweedPetal.DisplayName: Deathweed Petal
+	// FireblossomPetal.DisplayName: Fireblossom Petal
+	// MoonglowPetal.DisplayName: Moonglow Petal
+	// ShiverthornPetal.DisplayName: Shiverthorn Petal
+	// WaterleafPetal.DisplayName: Waterleaf Petal
+	// BloodyLaser.DisplayName: Bloody Laser
+	UVLaser.DisplayName: Ультрафиолетовый лазер
+	BatProjectile.DisplayName: Отброшеный битой
+	// EoCServantSoul.DisplayName: Eo C Servant Soul
+	EoCLaser.DisplayName: Лазер глаза ктулху
+	GhostServantofCthulhu.DisplayName: Призрак прислужника ктулзу
+	ServantofCthulhuSoul.DisplayName: Servantof Cthulhu Soul
+	BloodSpike.DisplayName: Кровавый пиздец
+	// JungleBullet.DisplayName: Jungle Bullet
+	// JungleSeed.DisplayName: Jungle Seed
+	// SapphireSharp.DisplayName: Sapphire Sharp
+	// RubySharp.DisplayName: Ruby Sharp
+	// EmeraldSharp.DisplayName: Emerald Sharp
+	// AmethystSharp.DisplayName: Amethyst Sharp
+	// SapphireStaff.DisplayName: Sapphire Staff
+	// DesertGore.DisplayName: Desert Gore
+}
+
+NPCs: {
+	DeadMelee.DisplayName: Dead Melee
+	DeadWings.DisplayName: Dead Wings
+	Scorspider.DisplayName: Скорпаук
+	ScorspiderSting.DisplayName: Скорпаук
+	ScorspiderHead.DisplayName: Скорпаук
+	ScorspiderBody.DisplayName: Скорпаук
+	Suicide.DisplayName: Самоубийство
+	Torture.DisplayName: Пытка
+	ScorspiderLittleMinionSpidersCocoon.DisplayName: Кокон маленького паука
+	SmallSpider.DisplayName: Маленький паук
+	BigSpider.DisplayName: Большой паук
+	ScorspiderBigMinionSpiderCocoon.DisplayName: Кокон большого паука
+	FireShooterServantofCthulhu.DisplayName: Прислужник ктулху с огнеметом
+	HealerServantofCthulhu.DisplayName: Целитель ктулху
+	LaserServantofCthulhu.DisplayName: Прислужник ктулху с лазером
+	SheildedServantofCthulhu.DisplayName: Прислужник ктулху с щитом
+
+	DemonMerchant: {
+		// DeathMessage: Mods.Terrapain.NPCs.DemonMerchant.DeathMessage
+		// Upgraded: Mods.Terrapain.NPCs.DemonMerchant.Upgraded
+		// DisplayName: Demon Merchant
+
+		TownNPCMood: {
+			// Content: Я довольный.
+			// NoHome: Терпеть не могу, когда у меня нет дома.
+			// FarFromHome: Я слишком далеко от дома.
+			// LoveSpace: Я люблю, когда так много пространства.
+			// DislikeCrowded: Мне не нравится то, как здесь людно.
+			// HateCrowded: Я ненавижу то, как здесь людно.
+			// LikeBiome: Мне нравится {BiomeName}.
+			// DislikeBiome: Мне не нравится {BiomeName}.
+			// DislikeNPC: Мне не нравится {NPCName}.
+			// HateNPC: Я ненавижу {NPCName}.
+			// LikeNPC_Princess: Мне нравится {NPCName}.
+			// Princess_LovesNPC: Мне нравится {NPCName}.
+		}
+	}
+}
+
+Tiles: {
+	DeepniteOre.MapEntry: Глубинитовая руда
+	// HardenedCrimtaneBrick.MapEntry: Hardened Crimtane Brick
+	// HardenedDemoniteBrick.MapEntry: Hardened Demonite Brick
+}
+
+NetworkText: {
+	PlayerChooseSuicideDeathMale: Игрок {0} выбрал самоубийство
+	PlayerChooseSuicideDeathFemale: Игрок {0} выбрала самоубийство
+	PlayerCooseSuicideHardcoreMale: Игрок {0} отстранил свою смерть(не на долго)
+	PlayerCooseSuicideHardcoreFemale: Игрок {0} отстранила свою смерть(не на долго)
+	PlayerDiedSuicideHardcoreMale: Каким образом ты сдох???
+	PlayerDiedSuicideHardcoreFemale: Каким образом ты сдохла???
+	PlayerChooseSuicide: Счастливой агонии!
+	PlayerChooseTorture: Весёлых страданий!
+	SetDifficultyToZero: Слабак
+	OrganismOverloadDeath: Организм игрока не справился с таким количеством улучшений
+	TheDropOfPainTooltip0: Выбраный режим - Класика
+	TheDropOfPainTooltip1: Выбраный режим - Пытка
+	TheDropOfPainTooltip2: Выбраный режим - Самоубийство
+	ShockDeathMale: Игрок {0} забыл про изоляцию
+	ShockDeathFemale: Игрок {0} забыла про изоляцию
+	BadPotion: Не надо было это пить...
+}
+
+BossStory: {
+	1_0: Глаз Ктулху - взрослая особь демонического глаза, а демонический глаз в свою очередь - искусственно созданый вид для выращивания дешевых и мощных источников света
+	1_1: Несмотря на свое название он не имеет ничего общего с Ктуху
+	1_2: Демонические глаза были созданы студентом для дипломной работы
+	1_3: Защитить свою работу он смог с трудом
+	1_4: Хоть источники света и получались дешевыми, энерго эффективными и такими мощными что их можно было использовать в качестве оружия, проблем с демоническими глазами было немерено
+	1_5: Главными их проблемами были их агрессия и способность сбегать откуда угодно
+	1_6: Нападали на людей они совсем без причины
+	1_7: И за это их стали истреблять
+	1_8: Полностью истребить их так и не удалось
+	1_9: Нападают на людей они в основном ночью потому что поняли что ночью люди более уязвимы
+	1_10: Они прекрасно видят в темноте, по слуху и обонянию значительно превосходят людей
+	1_11: Может показаться что яркий свет это их слабость, но это не так
+	1_12: Они могут часами смотреть на Солнце без последствий
+	1_13: Один озлобленый на них человек проверил это
+	2_0: Скорпаук - жертва экспериментов человека над природой
+	2_1: когда то давно один учёный экспериментировал над смешиванием генов разных сушеств
+	2_2: он экспериментировал над сотней различных видов
+	2_3: но ни с кем не получалось
+	2_4: новое существо погибало ещё в зародыше
+	2_5: он искал ответы в сотнях книгах, но ничего не нашел
+	2_6: он спрашивал советы у сотен биологов, но все считали его безумцем
+	2_7: все, кроме одного
+	2_8: учёный, который согласился ему помочь был наверное умнейшим и богатейшим человеком на земле
+	2_9: но интересовали его только деньги и слава
+	2_10: и не трудно догадаться, что если он согласился помочь, только потому что увидел в этом возможность заработать кучу денег
+	2_11: так и появился Скорпаук
+	2_12: но изначально он был не больше скорпиона и небыл агрессивным
+	2_13: сделал его таким второй учёный, увидев потенциал в его паутине, которую он выпускает в случае опасности
+	2_14: второй учёный украл скорпаука и начал ставить на нем эксперименты в надежде заставить его вырабатывать больше этого вещества
+	2_15: в конце концов скорпаук стал таким какой он есть сейчас
+	2_16: стратегия заработка была в том чтобы солдат, заходя в комнату с ним заставлял скорпаука стрелять в него своей паутиной
+	2_17: опытному солдату с хорошей экипировкой нет разницы кто перед ним, обычный комнатный паук или такой монстр
+	2_18: это тебе победа над ним досталась не просто из за из за того что тебе сейчас не доступны современные технологии
+	2_19: но вернёмся к истории нашего мутанта
+	2_20: в результате мощнейшего за всю историю землетрясения, его тюрьма была разрушена
+	2_21: зная на сколько это существо опасно для мирных жителей на место тут же вызвали военных
+	2_22: но скорпаук так же был важен для экономики, поэтому его не убили, а построили ему новую тюрьму под землёй
+	2_23: вот так его оружие стало его проклятием
+}
+
+Warns.CantAddAllItems: Не удалось добавить все предметы стартового инвентаря
+BossDespawn.ScorspiderDespawn: Скорпаук вернется за тобой и твоими жителями
+
+Keybinds: {
+	Dash.DisplayName: Рывок
+	RealiseHookedNPC.DisplayName: Отпустить НИПа на крюке
+	ActiveAccesory1.DisplayName: Активный Аксессуар 1
+	ActiveAccesory2.DisplayName: Активный Аксессуар 2
+	ActiveAccesory3.DisplayName: Активный Аксессуар 3
+	ActiveAccesory4.DisplayName: Активный Аксессуар 4
+	ActiveAccesory5.DisplayName: Активный Аксессуар 5
+	ActiveAccesory6.DisplayName: Активный Аксессуар 6
+	ActiveAccesory7.DisplayName: Активный Аксессуар 7
+}
+
+Configs: {
+	ClientConfig: {
+		DisplayName: Client Config
+
+		UseShaders: {
+			Label: Использовать шейдеры
+			// Tooltip: ""
+		}
+
+		drawHitbox: {
+			Label: Показывать хитбоксы
+			// Tooltip: ""
+		}
+
+		hitboxColor: {
+			Label: Цвет хитбоксов
+			// Tooltip: ""
+		}
+
+		LimboSpeed: {
+			// Label: Limbo Speed
+			// Tooltip: ""
+		}
+
+		Tips: {
+			// Label: Tips
+			// Tooltip: ""
+		}
+
+		CameraTime: {
+			// Label: Camera Time
+			// Tooltip: ""
+		}
+
+		CameraZoom: {
+			// Label: Camera Zoom
+			// Tooltip: ""
+		}
+	}
+}
+
+SetBonus: {
+	FlinxHood: Увеличивает максимальное количиство миньонов на 1
+	AcidCobwebHood:
+		'''
+		Снижает расход маны на 5%
+		Немного увеличивает регенерацию маны
+		Умеличивет максимальное кольчество маны на 60
+		Увеличивает урон мага на 5%
+		'''
+	AcidCobwebMask:
+		'''
+		Увеличивает максимальное количиство миньонов и часовых на 1
+		Увеличивает урон призывателя на 5%
+		'''
+	GranithShellHelmet:
+		'''
+		Увеличивает урон ближнего боя на 5%
+		Жало Скорпаука защищает вас
+		'''
+	GranithShellMask:
+		'''
+		Увеличивет стрелковывй урон на 5%
+		Снаряды выпущенные из стрелкового оружия летят немного быстрее
+		Вы стреляете снарядами Скорпаука
+		'''
+	StarPowerSet: На противников которых вы ранили с неба падают звезды
+}
+
+DamageClasses.Unarmed.DisplayName: урона безоружного
+Unarmed.SetBonus.CactusArmor: Безоружный: дает эффект шипов
+
+Tips: {
+	Tip: Совет:
+	BrainOfCthulhuTip: Прыгни чтобы выбрать
+	EyeofCthulhuTip: убивай миньонов чтобы наносить урон
+}
+
+PressXToActivate: Нажмите {0} чтобы активировать
+Ability: Активная способность
+
+AbilityDescription: {
+	EoCShield_0: Длинный рывок в любую сторону и даже по диагонали
+	BootsActiveAccessory_0: Увеличивает скорость бега на некоторое время
+	BootsActiveAccessoryInfFly_0: Увеличивает скорость бега и дает бесконечный полет на некоторое время
+	MagmaStone_0: Взрыв!
+	StarFuryBracelet_0: Стреляет во врагов звездами
+	Battery_0: Дает эффект увеличивающий урон в 1.5 раза, но наносящий вам постоянный урон
+	Battery_1: Создает ауру вокруг игрока, которая замедляет врагов, наносит им постоянный урон и иногда бьет их молниями
+}
