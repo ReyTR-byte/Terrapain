@@ -4,10 +4,10 @@ using Terraria.ModLoader;
 using Terrapain.Content.Buffs;
 using Terraria.ID;
 
-namespace Terrapain.Content.Items.Accessories
+namespace Terrapain.Content.Items.Accessories.Vanish
 {
     [AutoloadEquip(EquipType.Face)]
-    public class KitansGlasses : ModItem
+    public class SimonsGlasses : ModItem
     {
         public override void SetStaticDefaults()
         {

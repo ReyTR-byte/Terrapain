@@ -11,7 +11,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Terrapain.Content.Items.Accessories
+namespace Terrapain.Content.Items.Accessories.ActiveAccessories
 {
     public class StarFuryBracelet : ActiveAccessory
     {

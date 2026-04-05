@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Terrapain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d6d143a951b96442220ce5fdaacdd06b807df5b")]
 [assembly: System.Reflection.AssemblyProductAttribute("Terrapain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Terrapain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

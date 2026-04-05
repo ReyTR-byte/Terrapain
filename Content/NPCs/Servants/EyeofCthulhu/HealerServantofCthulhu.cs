@@ -134,6 +134,10 @@ namespace Terrapain.Content.NPCs.Servants.EyeofCthulhu
                 NPC.rotation = (NPC.rotation.ToRotationVector2() * -1).ToRotation();
             }
         }
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            return false;
+        }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             TGlobalNPC.PostDrawNPCsDrawTasks.Add(new AuraDrawTask(aura));

@@ -25,8 +25,8 @@ namespace Terrapain.Content.Auras
             this.Radius = radius;
             InternalRadius = radius * 0.8f;
             dust = DustID.HealingPlus;
-            dustCountMin = (int)(radius / 100);
-            dustCountMax = (int)(radius / 60);
+            dustCountMin = (int)(radius / 200);
+            dustCountMax = (int)(radius / 90);
             if (whiteList.Count != 0)
             {
                 checkNPC = true;
@@ -42,13 +42,15 @@ namespace Terrapain.Content.Auras
             if(WhiteList.Contains(npc.type))
             {
                 npc.lifeRegenCount += RegenPower;
-                Dust.NewDust(npc.position, npc.width, npc.height, DustID.HealingPlus);
+                if (random.NextBool(10))
+                    Dust.NewDust(npc.position, npc.width, npc.height, DustID.HealingPlus);
             }
         }
         public override void OnPlayerInAura(Player player)
         {
             player.lifeRegen += RegenPower;
-            Dust.NewDust(player.position, player.width, player.height, DustID.HealingPlus);
+            if (random.NextBool(10))
+                Dust.NewDust(player.position, player.width, player.height, DustID.HealingPlus);
         }
         public override void PostDraw(SpriteBatch sprite)
         {

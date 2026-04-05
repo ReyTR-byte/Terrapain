@@ -43,30 +43,30 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 uv : TEXCOORD0) :
     float4 adjustColor = shineColor * intensity;
     float2 target = notAbsoluteUV / scale.y * min((10000 - clamp(distance(notAbsoluteUV,player), 100, 10000)) / 9900, 2);
     float4 anotherColor = float4(0,0,0,0);
-    if (uv.x > EyeOfCthulhu)
-    {
-        target.x += time / float(-10);
-        anotherColor = tex2D(texture1, target);
-        float a = anotherColor.a;
-        anotherColor *= a;
-        anotherColor.a = a;
-    }
-    else
-    {
-        target.x += time / float(-5);
-        target.y += 0.5;
-        target.x *= -1;
-        target.x %= 1;
-        if (target.x < 0)
-        {
-            target.x += 1;
-        }
-        anotherColor = tex2D(texture2, target);
-        float a = anotherColor.a;
-        anotherColor *= a;
-        anotherColor.a = a;
-    }
-    anotherColor *= 1 - border.a;
+    //if (uv.x > EyeOfCthulhu)
+    //{
+    //    target.x += time / float(-10);
+    //    anotherColor = tex2D(texture1, target);
+    //    float a = anotherColor.a;
+    //    anotherColor *= a;
+    //    anotherColor.a = a;
+    //}
+    //else
+    //{
+    //    target.x += time / float(-5);
+    //    target.y += 0.5;
+    //    target.x *= -1;
+    //    target.x %= 1;
+    //    if (target.x < 0)
+    //    {
+    //        target.x += 1;
+    //    }
+    //    anotherColor = tex2D(texture2, target);
+    //    float a = anotherColor.a;
+    //    anotherColor *= a;
+    //    anotherColor.a = a;
+    //}
+    //anotherColor *= 1 - border.a;
     return (mainColor + border + adjustColor + anotherColor) * alpha;
 }
 

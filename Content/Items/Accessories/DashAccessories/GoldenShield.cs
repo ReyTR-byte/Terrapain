@@ -4,30 +4,31 @@ using Terrapain.Content.Dashes;
 using Terrapain.Content.Items.Abstract;
 using Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories;
 using Terraria;
+using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Terrapain.Content.Items.Accessories
+namespace Terrapain.Content.Items.Accessories.DashAccessories
 {
 	[AutoloadEquip(EquipType.Shield)] // Load the spritesheet you create as a shield for the player when it is equipped.
-	public class FossilShield : ActiveAccessory
+	public class GoldenShield : ActiveAccessory
 	{
         public override void ModSetDefaults()
         {
-            Item.width = 24;
-            Item.height = 28;
+            Item.width = 27;
+            Item.height = 27;
             Item.value = Item.buyPrice(gold: 5);
             Item.rare = ItemRarityID.Green;
-			Item.accessory = true;
+            Item.accessory = true;
 
-            Item.defense = 2;
+            Item.defense = 3;
             Item.GetGlobalItem<TGlobalItem>().dashAccessory = true;
             activeAccessory = new ClasicDashAccessory();
         }
 
 		public override void ModUpdateAccessory(Player player, bool hideVisual)
         {
-            player.GetDamage(DamageClass.Ranged) += 0.10f;
+            player.GetDamage(DamageClass.Melee) += 0.05f;
             player.Custom().Dash = new ActiveAccessoryDash(Item) { DashPower = DashPower, DashDuration = DashDuration, damageType = Item.DamageType };
         }
 
@@ -36,7 +37,7 @@ namespace Terrapain.Content.Items.Accessories
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient(ModContent.ItemType<WoodenShield>());
-			recipe.AddIngredient(ItemID.DesertFossil, 12);
+			recipe.AddIngredient(ItemID.GoldBar, 8);
 			recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}

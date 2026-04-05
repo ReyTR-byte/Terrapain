@@ -471,6 +471,11 @@ Items: {
 		// DisplayName: Jungle Stuff
 		// Tooltip: ""
 	}
+
+	ArrivedHeart: {
+		// DisplayName: Arrived Heart
+		// Tooltip: ""
+	}
 }
 
 Buffs: {
@@ -583,6 +588,7 @@ Projectiles: {
 	// AmethystSharp.DisplayName: Amethyst Sharp
 	// SapphireStaff.DisplayName: Sapphire Staff
 	// DesertGore.DisplayName: Desert Gore
+	// ArrivedHeartProjectile.DisplayName: Arrived Heart Projectile
 }
 
 NPCs: {
@@ -786,6 +792,9 @@ Tips: {
 
 PressXToActivate: Нажмите {0} чтобы активировать
 Ability: Активная способность
+AutoUseIsOff: Может быть использован автоматически, нажмите ПКМ чтобы использовать автоматьчески
+AutoUseIsOn: Используется автоматически, нажмите ПКМ чтобы использовать на {0}
+AutoUseIsOnNoKey: Используется автоматически, нажмите ПКМ чтобы использовать самостоятельно
 
 AbilityDescription: {
 	EoCShield_0: Длинный рывок в любую сторону и даже по диагонали

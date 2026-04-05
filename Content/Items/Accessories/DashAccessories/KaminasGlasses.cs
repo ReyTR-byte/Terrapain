@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 using Terrapain.Content.Buffs;
 using Terraria.ID;
 
-namespace Terrapain.Content.Items.Accessories
+namespace Terrapain.Content.Items.Accessories.DashAccessories
 {
     [AutoloadEquip(EquipType.Face)]
     public class KaminasGlasses : ModItem

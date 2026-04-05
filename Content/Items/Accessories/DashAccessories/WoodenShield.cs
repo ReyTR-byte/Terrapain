@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
-namespace Terrapain.Content.Items.Accessories
+namespace Terrapain.Content.Items.Accessories.DashAccessories
 {
 	[AutoloadEquip(EquipType.Shield)] // Load the spritesheet you create as a shield for the player when it is equipped.
 	public class WoodenShield : ActiveAccessory

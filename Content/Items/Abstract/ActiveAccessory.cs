@@ -14,6 +14,16 @@ namespace Terrapain.Content.Items.Abstract
 {
     public abstract class ActiveAccessory : ModItem
     {
+        public bool AutoUse
+        {
+            get => activeAccessory.AutoUse;
+            set => activeAccessory.AutoUse = value;
+        }
+        public bool CanAutoUse
+        {
+            get => activeAccessory.CanAutoUse;
+            set => activeAccessory.CanAutoUse = value;
+        }
         public int DescriptionLinesCount
         {
             get => activeAccessory.DescriptionLinesCount;

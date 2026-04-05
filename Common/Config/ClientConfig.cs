@@ -29,6 +29,8 @@ namespace Terrapain.Common.Config
         [DefaultValue(0)]
         public int CameraTime;
 
+        [Range(1f, 2.5f)]
+        [Increment(0.1f)]
         [DefaultValue(2.5f)]
         public float CameraZoom;
         

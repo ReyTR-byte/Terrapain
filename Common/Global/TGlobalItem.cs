@@ -365,20 +365,50 @@ namespace Terrapain.Common.Global
 			{
 				if (ActiveAccessoryVanillaItem.DescriptionLinesCount > 0)
 				{
-					TooltipLine line = new TooltipLine(Mod, "ability", NetworkText.FromKey("Mods.Terrapain.Ability") + ": " + NetworkText.FromKey(ActiveAccessoryVanillaItem.AbilityDescription + "_0"));
+					TooltipLine line = new TooltipLine(Mod, "Ability", NetworkText.FromKey("Mods.Terrapain.Ability") + ": " + NetworkText.FromKey(ActiveAccessoryVanillaItem.AbilityDescription + "_0"));
 					tooltips.Add(line);
 					for (int i = 1; i < ActiveAccessoryVanillaItem.DescriptionLinesCount; i++)
 					{
-						line = new TooltipLine(Mod, $"ability{i}", NetworkText.FromKey(ActiveAccessoryVanillaItem.AbilityDescription + $"_{i}").ToString());
+						line = new TooltipLine(Mod, $"Ability{i}", NetworkText.FromKey(ActiveAccessoryVanillaItem.AbilityDescription + $"_{i}").ToString());
 						tooltips.Add(line);
 					}
 				}
-				if (slot >= 0 && slot < 7)
+				if (slot > -1 && slot < 7 && !ActiveAccessoryVanillaItem.AutoUse)
 				{
-					TooltipLine line = new TooltipLine(Mod, "PressXToActivate", NetworkText.FromKey("Mods.Terrapain.PressXToActivate", KeybindSystem.ActiveAccesories[slot].GetAssignedKeys()[0]).ToString());
+                    TooltipLine line = new TooltipLine(Mod, "PressXToActivate", NetworkText.FromKey("Mods.Terrapain.PressXToActivate", KeybindSystem.ActiveAccesories[slot].GetAssignedKeys()[0]).ToString());
 					tooltips.Add(line);
 				}
+			    if (ActiveAccessoryVanillaItem.CanAutoUse)
+				{
+					if (ActiveAccessoryVanillaItem.AutoUse)
+					{
+						if (slot > -1 && slot < 7 && !ActiveAccessoryVanillaItem.AutoUse)
+						{
+							TooltipLine line = new TooltipLine(Mod, "AutoUse", NetworkText.FromKey("Mods.Terrapain.AutoUseIsOn", KeybindSystem.ActiveAccesories[slot].GetAssignedKeys()[0]).ToString());
+							tooltips.Add(line);
+						}
+						else
+						{
+                            TooltipLine line = new TooltipLine(Mod, "AutoUse", NetworkText.FromKey("Mods.Terrapain.AutoUseIsOnNoKey").ToString());
+                            tooltips.Add(line);
+                        }	
+					}
+					else
+					{
+						TooltipLine line = new TooltipLine(Mod, "AutoUse", NetworkText.FromKey("Mods.Terrapain.AutoUseIsOff").ToString());
+						tooltips.Add(line);
+					}
+				}
             }
+        }
+        public override bool CanRightClick(Item item)
+        {
+			return ActiveAccessoryVanillaItem?.CanAutoUse?? false;
+        }
+        public override void RightClick(Item item, Terraria.Player player)
+        {
+			if (ActiveAccessoryVanillaItem != null && ActiveAccessoryVanillaItem.CanAutoUse)
+				ActiveAccessoryVanillaItem.AutoUse = !ActiveAccessoryVanillaItem.AutoUse;
         }
         public override void UseItemHitbox(Item item, Terraria.Player player, ref Rectangle hitbox, ref bool noHitbox)
         {

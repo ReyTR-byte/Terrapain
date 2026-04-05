@@ -3,6 +3,7 @@ using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 using Terrapain.Content.Buffs;
 using Terraria.ID;
+using Terrapain.Content.Items.Accessories.Vanish;
 
 namespace Terrapain.Content.Items.Accessories
 {

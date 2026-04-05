@@ -10,6 +10,8 @@ namespace Terrapain.Content.Items.Abstract
 {
     public abstract class VanillaItemActiveAccessory
     {
+        public bool AutoUse;
+        public bool CanAutoUse;
         public int AbilityReload;
         public int AbilityReloadMax;
         public bool AbilityUnarmedOnly = true;

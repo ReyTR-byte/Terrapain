@@ -25,7 +25,6 @@ namespace Terrapain.Common.Global.TGlobalNPCs
 {
     public class EyeofCthulhu : NPCBehaviour
     {
-        public int killedServants;
         public struct DrawLaser
         {
             public Vector2 start;
@@ -868,6 +867,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
             }
             if (attack == 1)
             {
+                //t.Target.wingTime++;
                 if (dir[0] == 0)
                 {
                     dir[0] = npc.velocity.X.NonZeroSign() == 1 ? 1 : -1;
@@ -1067,7 +1067,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         PredictVelocity = PredictVelocity.RotatedBy(0.25f * MathF.PI);
                         predictRot = npc.ai[2];
                     }
-                    predictRot += 0.125f * MathF.PI * (0.5f - WorldDifficultySystem.TerrapainDifficulty * 0.1f);
+                    predictRot += 0.125f * MathF.PI * (0.6f - WorldDifficultySystem.TerrapainDifficulty * 0.1f);
                     if ((TimeToPredict + timers[1]) % 2 == 0)
                     {
                         DrawLaser laser = new DrawLaser();
@@ -1106,7 +1106,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                     npc.rotation = npc.ai[2];
                     SoundEngine.PlaySound(SoundID.ForceRoarPitched, npc.Center);
                 }
-                npc.rotation += 0.125f * MathF.PI * (0.5f - WorldDifficultySystem.TerrapainDifficulty * 0.1f);
+                npc.rotation += 0.125f * MathF.PI * (0.6f - WorldDifficultySystem.TerrapainDifficulty * 0.1f);
                 goalRotation = npc.rotation + MathF.PI * 0.5f;
                 Vector2 velocity = UnitVectorFromRotation(goalRotation) * 5;
                 if (timers[1] == 0)
@@ -1185,7 +1185,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         }
                         break;
                     case 1:
-                        if (mainTimer > 600)
+                        if (mainTimer > 480)
                         {
                             npc.ai[0] = 0;
                             goalRotation += EasingInOut(125, 125 - mainTimer + 600) * 4 * MathF.PI;
@@ -1199,7 +1199,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         {
                             t.Target.wingTime = 20;
                             GridLaserServants group = (GridLaserServants)Terrapain.group[Group.FindGroup("GridLaserServants")[0]];
-                            if (group.members.Count < 24)
+                            if (group.members.Count < 24 && mainTimer % 10 == 0)
                             {
                                 int _npc = NPC.NewNPC(npc.GetSource_FromThis("grid AI"), (int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>());
                                 Main.npc[_npc].velocity = UnitVectorFromRotation(goalRotation) * 5;
@@ -1211,7 +1211,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                             }
                             if (mainTimer % 120 == 0)
                             {
-                                int variant = random.Next(2);
+                                int variant = WorldDifficultySystem.suicide? random.Next(2) : mainTimer == 480? 1 : 0;
                                 group.target = t.Target;
                                 switch (variant)
                                 {
@@ -1415,12 +1415,9 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         break;
                 }
             }
-            if (npc.Distance(t.Target.Center) < 520 && npc.Distance(t.Target.Center) > 480)
+            else if (npc.Distance(t.Target.Center) < 520 && npc.Distance(t.Target.Center) > 480)
             {
-                if (attackCounter == -1)
-                {
-                    NextAttack2(npc);
-                }
+                NextAttack2(npc);
             }
         }
         public void DoThirdPhase(NPC npc)
@@ -1535,7 +1532,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                             laser = true;
                             laserAngle += MathF.PI / 4 / 15;
                         }
-                        if (mainTimer < 500)
+                        if (mainTimer < 600)
                         {
                             npc.immortal = true;
                         }
@@ -1549,7 +1546,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         {
                             npc.velocity = npc.velocity.Normalized() * (npc.velocity.Length() - 1);
                         }
-                        goalRotation += (1 + Progress * (Main.dayTime? 2.1f : 1.8f)) * MathF.PI * 0.01f;
+                        goalRotation += (1 + Progress * (Main.dayTime ? 2.1f : 1.8f)) * MathF.PI * 0.01f * dir[0];
                         if (timers[0] == 0)
                         {
                             int count = 3 + WorldDifficultySystem.TerrapainDifficulty;
@@ -1731,13 +1728,18 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                     }
                     break;
                 case 1:
-                    targetPosition = t.Target.Center + npc.DirectionFrom(t.Target.Center).RotatedBy(1f) * (450 - 200 * ((300 - mainTimer) / 450f));
+                    targetPosition = t.Target.Center + npc.DirectionFrom(t.Target.Center).RotatedBy(1f * dir[0]) * (450 - 200 * ((300 - mainTimer) / 450f));
                     goalRotation = AngleFromVector(npc.DirectionTo(SmartShoot(npc.Center, 20, t.Target.Center, t.Target.velocity, 60)));
                     if (timers[0] == 0)
                     {
                         Vector2 velocity = (SmartShoot(npc.Center, 20, t.Target.Center, t.Target.velocity, 60) - npc.Center).Normalized() * 5;
-                        int proj = Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, velocity, ModContent.ProjectileType<UVLaser>(), defDamage, 2);
+                        Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center, velocity, ModContent.ProjectileType<UVLaser>(), defDamage, 2);
                         timers[0] = 25 - WorldDifficultySystem.TerrapainDifficulty * 5;
+                        if (Main.dayTime)
+                        {
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + npc.rotation.ToRotationVector2() * 4, velocity, ModContent.ProjectileType<UVLaser>(), defDamage, 2);
+                            Projectile.NewProjectile(npc.GetSource_FromAI(), npc.Center + npc.rotation.ToRotationVector2() * -4, velocity, ModContent.ProjectileType<UVLaser>(), defDamage, 2);
+                        }
                     }
                     if (mainTimer == 0)
                     {
@@ -1773,7 +1775,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         {
                             player.wingTime = 20;
                         }
-                        if (mainTimer < 500)
+                        if (mainTimer < 600)
                         {
                             npc.immortal = true;
                         }
@@ -1788,7 +1790,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         {
                             npc.velocity = npc.velocity.Normalized() * (npc.velocity.Length() - 1);
                         }
-                        goalRotation += (1 + Progress * (Main.dayTime ? 2.2f : 1.9f)) * MathF.PI * 0.009f;
+                        goalRotation += (1 + Progress * (Main.dayTime ? 2.2f : 1.9f)) * MathF.PI * 0.009f * dir[0];
                         if (timers[0] == 0)
                         {
                             int count = 2 + WorldDifficultySystem.TerrapainDifficulty;
@@ -1956,7 +1958,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                     }
                     break;
                 case 4:
-                    float progress = MathF.Min((700 - mainTimer) / 400f, 1);
+                    float progress = MathF.Min((550 - mainTimer) / 400f, 1);
                     if (timers[0] == 0)
                     {
                         if (npc.alpha == 0)
@@ -2118,26 +2120,26 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         }
                         goalRotation += (1 + progress * ((WorldDifficultySystem.torture? attack0RotSpeedTorture : attack0RotSpeedSuicide) - 1)) * MathF.PI * 0.01f;
 
-                        {
-                            int count = 5 - WorldDifficultySystem.TerrapainDifficulty;
-                            for (int i = 0; i < count; i++)
-                            {
-                                DrawLaser laser = new DrawLaser();
-                                laser.color = Color.Red;
-                                if (ClientConfig.Instance.UseShaders)
-                                {
-                                    laser.color *= ((1 - (MathF.Abs(mainTimer % 10 - 5) / 5f) * (MathF.Abs(mainTimer % 10 - 5) / 5f)) * 0.5f + 0.3f);
-                                }
-                                else
-                                {
-                                    laser.color.A = (byte)(255 * ((1 - (MathF.Abs(mainTimer % 10 - 5) / 5f) * (MathF.Abs(mainTimer % 10 - 5) / 5f)) * 0.5f + 0.3f));
-                                }
-                                laser.start = npc.Center + (npc.rotation + MathF.PI / count + MathF.PI / count * 2 * i).ToRotationVector2() * 50;
-                                laser.end = laser.start + (npc.rotation + MathF.PI / count + MathF.PI / count * 2 * i).ToRotationVector2() * (auraRadius - 50);
-                                laser.width = 8;
-                                Lasers.Add(laser);
-                            }
-                        }
+                        //{
+                        //    int count = 5 - WorldDifficultySystem.TerrapainDifficulty;
+                        //    for (int i = 0; i < count; i++)
+                        //    {
+                        //        DrawLaser laser = new DrawLaser();
+                        //        laser.color = Color.Red;
+                        //        if (ClientConfig.Instance.UseShaders)
+                        //        {
+                        //            laser.color *= ((1 - (MathF.Abs(mainTimer % 10 - 5) / 5f) * (MathF.Abs(mainTimer % 10 - 5) / 5f)) * 0.5f + 0.3f);
+                        //        }
+                        //        else
+                        //        {
+                        //            laser.color.A = (byte)(255 * ((1 - (MathF.Abs(mainTimer % 10 - 5) / 5f) * (MathF.Abs(mainTimer % 10 - 5) / 5f)) * 0.5f + 0.3f));
+                        //        }
+                        //        laser.start = npc.Center + (npc.rotation + MathF.PI / count + MathF.PI / count * 2 * i).ToRotationVector2() * 50;
+                        //        laser.end = laser.start + (npc.rotation + MathF.PI / count + MathF.PI / count * 2 * i).ToRotationVector2() * (auraRadius - 50);
+                        //        laser.width = 8;
+                        //        Lasers.Add(laser);
+                        //    }
+                        //}
 
                         if (timers[0] == 0)
                         {
@@ -2342,9 +2344,28 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         }
                         if (mainTimer == 0)
                         {
-                            npc.immortal = false;
-                            npc.StrikeInstantKill();
+                            if (Main.dayTime)
+                            {
+                                attack++;
+                            }
+                            else
+                            {
+                                npc.immortal = false;
+                                npc.StrikeInstantKill();
+                            }
                         }
+                    }
+                    break;
+                case 4:
+                    auraRadius = MathHelper.Lerp(350, 650, (666 - mainTimer) / 50);
+                    if (mainTimer % 60 == 0)
+                    {
+                        //Projectile.NewProjectile(npc.GetSource_FromThis("flyStraight"), npc.Center, npc.rotation)
+                    }
+                    if (mainTimer == 0)
+                    {
+                        npc.immortal = false;
+                        npc.StrikeInstantKill();
                     }
                     break;
             }
@@ -2406,7 +2427,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                     dir[1] = 1;
                     timers[0] = timers[0] = 20 - WorldDifficultySystem.TerrapainDifficulty * 2;
                     timers[1] = 120;
-                    mainTimer = 400;
+                    mainTimer = 250;
                     break;
                 case 2:
                     maxVelocity = 30;
@@ -2450,11 +2471,11 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                     break;
                 case 0:
                     timers[0] = 151;
-                    mainTimer = 500;
+                    mainTimer = 400;
                     break;
                 case 1:
                     timers[0] = 0;
-                    mainTimer = 726;
+                    mainTimer = 606;
                     break;
                 case 2:
                     timers[0] = 0;
@@ -2488,12 +2509,20 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                     mainTimer = 65;
                     break;
                 case 0:
-                    timers[1] = 20; 
+                    timers[1] = 20;
                     mainTimer = 161;
                     dir[0] = -1;
                     npc.ai[0] = 0;
                     break;
                 case 1:
+                    if (WorldDifficultySystem.suicide)
+                    {
+                        dir[0] = random.NextBool() ? 1 : -1;
+                    }
+                    else
+                    {
+                        dir[0] = 1;
+                    }
                     mainTimer = 1000;
                     npc.ai[0] = 0;
                     break;
@@ -2522,19 +2551,22 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                     mainTimer = 65;
                     break;
                 case 1:
+                    dir[0] = random.NextBool()? 1 : -1;
+                    timers[0] = Main.dayTime? 30 : 45;
                     mainTimer = 300;
                     break;
                 case 2:
+                    dir[0] = random.NextBool()? 1 : -1;
                     mainTimer = 1000;
                     break;
                 case 3:
                     timers[1] = 140;
-                    mainTimer = 500;
+                    mainTimer = 400;
                     npc.ai[2] = 0;
                     npc.ai[3] = 0;
                     break;
                 case 4:
-                    mainTimer = 700;
+                    mainTimer = 550;
                     break;
                 case 5:
                     mainTimer = 450;

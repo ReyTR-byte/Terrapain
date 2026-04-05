@@ -3,22 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\assets\\autoloadedeffects\\shaders\\eyeofcthulhuclonedash.fx||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:assets\\autoloadedeffects\\shaders\\eyeofcthulhuclonedash.fx||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\build.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:build.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\projectiles\\friendly\\arrivedheartprojectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\projectiles\\friendly\\arrivedheartprojectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\items\\accessories\\activeaccessories\\arrivedheart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\items\\accessories\\activeaccessories\\arrivedheart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\common\\global\\tglobalnpcs\\eyeofcthulhu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:common\\global\\tglobalnpcs\\eyeofcthulhu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\assets\\extratextures\\extratextureregistry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:assets\\extratextures\\extratextureregistry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModReader\\Luminance\\Core\\Graphics\\Shaders\\ManagedShader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\98849\\AppData\\Local\\Temp\\.vsdbgsrc\\c8cd398856b8c3f3f27c8696101d54fc6783da9b1574697bbe646765c5d28ffc\\Vector2.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -28,17 +26,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 216,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "EyeofCthulhu.cs",
               "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalNPCs\\EyeofCthulhu.cs",
               "RelativeDocumentMoniker": "Common\\Global\\TGlobalNPCs\\EyeofCthulhu.cs",
               "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalNPCs\\EyeofCthulhu.cs",
               "RelativeToolTip": "Common\\Global\\TGlobalNPCs\\EyeofCthulhu.cs",
-              "ViewState": "AgIAAD0LAAAAAAAAAAAAAE0LAACeAAAAAAAAAA==",
+              "ViewState": "AgIAAFgEAAAAAAAAAAAQwFQEAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-22T16:17:08.666Z",
               "IsPinned": true,
@@ -50,54 +48,41 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ManagedShader.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModReader\\Luminance\\Core\\Graphics\\Shaders\\ManagedShader.cs",
-              "RelativeDocumentMoniker": "..\\..\\ModReader\\Luminance\\Core\\Graphics\\Shaders\\ManagedShader.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModReader\\Luminance\\Core\\Graphics\\Shaders\\ManagedShader.cs",
-              "RelativeToolTip": "..\\..\\ModReader\\Luminance\\Core\\Graphics\\Shaders\\ManagedShader.cs",
-              "ViewState": "AgIAANQAAAAAAAAAAAAAwHkAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-02T18:16:43.426Z",
+              "DocumentIndex": 0,
+              "Title": "build.txt",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\build.txt",
+              "RelativeDocumentMoniker": "build.txt",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\build.txt",
+              "RelativeToolTip": "build.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2026-04-05T18:49:02.289Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Vector2.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\AppData\\Local\\Temp\\.vsdbgsrc\\c8cd398856b8c3f3f27c8696101d54fc6783da9b1574697bbe646765c5d28ffc\\Vector2.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\c8cd398856b8c3f3f27c8696101d54fc6783da9b1574697bbe646765c5d28ffc\\Vector2.cs",
-              "ToolTip": "C:\\Users\\98849\\AppData\\Local\\Temp\\.vsdbgsrc\\c8cd398856b8c3f3f27c8696101d54fc6783da9b1574697bbe646765c5d28ffc\\Vector2.cs [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\c8cd398856b8c3f3f27c8696101d54fc6783da9b1574697bbe646765c5d28ffc\\Vector2.cs [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAwCYAAAABAAAAAQAAAA==",
+              "DocumentIndex": 1,
+              "Title": "ArrivedHeartProjectile.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Friendly\\ArrivedHeartProjectile.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\Friendly\\ArrivedHeartProjectile.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Friendly\\ArrivedHeartProjectile.cs",
+              "RelativeToolTip": "Content\\Projectiles\\Friendly\\ArrivedHeartProjectile.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwCIAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-02T18:12:40.134Z",
-              "EditorCaption": " [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]"
+              "WhenOpened": "2026-04-05T18:32:12.822Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ExtraTextureRegistry.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Assets\\ExtraTextures\\ExtraTextureRegistry.cs",
-              "RelativeDocumentMoniker": "Assets\\ExtraTextures\\ExtraTextureRegistry.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Assets\\ExtraTextures\\ExtraTextureRegistry.cs",
-              "RelativeToolTip": "Assets\\ExtraTextures\\ExtraTextureRegistry.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAACrAAAAAAAAAA==",
+              "Title": "ArrivedHeart.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\ActiveAccessories\\ArrivedHeart.cs",
+              "RelativeDocumentMoniker": "Content\\Items\\Accessories\\ActiveAccessories\\ArrivedHeart.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\ActiveAccessories\\ArrivedHeart.cs",
+              "RelativeToolTip": "Content\\Items\\Accessories\\ActiveAccessories\\ArrivedHeart.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAwwCQAAACCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-02T17:35:25.234Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "EyeofCthulhuCloneDash.fx",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Assets\\AutoloadedEffects\\Shaders\\EyeofCthulhuCloneDash.fx",
-              "RelativeDocumentMoniker": "Assets\\AutoloadedEffects\\Shaders\\EyeofCthulhuCloneDash.fx",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Assets\\AutoloadedEffects\\Shaders\\EyeofCthulhuCloneDash.fx",
-              "RelativeToolTip": "Assets\\AutoloadedEffects\\Shaders\\EyeofCthulhuCloneDash.fx",
-              "ViewState": "AgIAACEAAAAAAAAAAAAAACsAAABoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-04-02T14:19:00.139Z",
+              "WhenOpened": "2026-04-05T18:19:38.322Z",
               "EditorCaption": ""
             }
           ]

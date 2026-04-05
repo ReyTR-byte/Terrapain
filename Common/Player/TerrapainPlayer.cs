@@ -48,6 +48,7 @@ namespace Terrapain.Common.Player
 		public Stimulator stimulator = null;
 		private Dash _dash = null;
 		public bool bootsActiveAccessory;
+		public int oldLifeRegen;
 
         public Dash Dash
 		{
@@ -182,6 +183,7 @@ namespace Terrapain.Common.Player
 		}
 		public override void PostUpdate()
 		{
+			oldLifeRegen = Player.lifeRegen;
 			if (ExplosiveSkullReload > 0)
 			{
 				ExplosiveSkullReload--;

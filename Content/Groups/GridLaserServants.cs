@@ -85,7 +85,7 @@ namespace Terrapain.Content.Groups
                     NPC Mem = Main.npc[members[i]];
                     if (Mem.ai[0] != -1)
                     {
-                        int proj = Projectile.NewProjectile(Mem.GetSource_FromThis(), Mem.Center, Mem.rotation.ToRotationVector2() * 5 * Mem.spriteDirection, ModContent.ProjectileType<DemonicEyeLazer>(), 20, 3, ai0: 2);
+                        int proj = Projectile.NewProjectile(Mem.GetSource_FromThis(), Mem.Center, Mem.rotation.ToRotationVector2() * 5 * Mem.spriteDirection, ModContent.ProjectileType<DemonicEyeLazer>(), 12, 3, ai0: 2);
                         Main.projectile[proj].hostile = true;
                         Main.projectile[proj].friendly = false;
                     }
@@ -120,34 +120,34 @@ namespace Terrapain.Content.Groups
             {
                 color.A = (byte)(color.A * ((100 - timer) / 80f) * 0.8f);
             }
+            Texture2D tex = null;
+            if (ClientConfig.Instance.UseShaders)
+            {
+                ManagedShader Shade = ShaderManager.GetShader("Terrapain.LaserShader");
+                Shade.TrySetParameter("lenght", 900);
+                Shade.TrySetParameter("width", 8);
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, Shade.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
+            }
+            else
+            {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                tex = ExtraTextureRegistry.CubedGradient10Mirrored.Value;
+            }
             foreach (var mem in members)
             {
                 NPC npc = Main.npc[mem];
 
                 if (npc.ai[0] != -1)
                 {
-                    Texture2D tex = null;
-                    if (ClientConfig.Instance.UseShaders)
-                    {
-                        ManagedShader Shade = ShaderManager.GetShader("Terrapain.LaserShader");
-                        Shade.TrySetParameter("lenght", 900);
-                        Shade.TrySetParameter("width", 8);
-                        spriteBatch.End();
-                        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, Shade.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
-                    }
-                    else
-                    {
-                        spriteBatch.End();
-                        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-                        tex = ExtraTextureRegistry.CubedGradient10Mirrored.Value;
-                    }
                     spriteBatch.DrawLine(npc.Center, npc.Center + Vector2.UnitX.RotatedBy(npc.rotation + (npc.spriteDirection == 1 ? 0 : MathF.PI)) * 900, color, 8, tex);
-                    if (ClientConfig.Instance.UseShaders)
-                    {
-                        spriteBatch.End();
-                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-                    }
                 }
+            }
+            if (ClientConfig.Instance.UseShaders)
+            {
+                spriteBatch.End();
+                spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
             }
         }
     }

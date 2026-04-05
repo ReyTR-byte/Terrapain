@@ -254,3 +254,4 @@ C:\Users\98849\OneDrive\Документы\My Games\Terraria\tModLoader\ModSourc
 C:\Users\98849\OneDrive\Документы\My Games\Terraria\tModLoader\ModSources\Terrapain\obj\Debug\net8.0\refint\Terrapain.dll
 C:\Users\98849\OneDrive\Документы\My Games\Terraria\tModLoader\ModSources\Terrapain\obj\Debug\net8.0\Terrapain.pdb
 C:\Users\98849\OneDrive\Документы\My Games\Terraria\tModLoader\ModSources\Terrapain\obj\Debug\net8.0\ref\Terrapain.dll
+C:\Users\98849\OneDrive\Документы\My Games\Terraria\tModLoader\ModSources\Terrapain\obj\Debug\net8.0\Terrapain.sourcelink.json
