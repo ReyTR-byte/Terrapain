@@ -1385,8 +1385,30 @@ namespace Terrapain.Content
 			sides[2] = (float)Math.Cos(angle) * V2.Length();
 			return sides;
 		}
+		/// <summary>
+		/// A and B is Vertices on hipotinuse
+		/// </summary>
+		/// <param name="A"></param>
+		/// <param name="B"></param>
+		/// <param name="a">length from B to C</param>
+		/// <returns>returns unknown point on right angle</returns>
+        public static Vector2 RightTriangle(Vector2 A, Vector2 B, float a)
+        {
+			Vector2 start = A;
+			float rotation = (B - A).ToRotation();
+			A -= start;
+			B -= start;
+			B.RotateBy(-rotation);
+			float c = B.X;
+			float b = MathF.Sqrt(c * c - a * a);
+			float angle = MathF.Tan(a / b);
+			Vector2 C = A + Vector2.UnitX.RotatedBy(angle) * b;
+			C.RotateBy(rotation);
+			C += start;
+			return C;
+        }
 
-		public static float AngleFromVector(Vector2 V)
+        public static float AngleFromVector(Vector2 V)
 		{
 			V.Normalize();
 			float angle = (float)Math.Acos(V.X);

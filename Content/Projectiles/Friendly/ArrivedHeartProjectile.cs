@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Common.Global;
+﻿using Terrapain.Common.Global;
+using Terrapain.Content.Dusts;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
@@ -17,6 +14,42 @@ namespace Terrapain.Content.Projectiles.Friendly
     {
         public override void SetStaticDefaults()
         {
+            int count = 20;
+            Vector2 circleCenter = new Vector2(0.5f, -0.5f);
+            float circleRadius = 0.5f;
+            Vector2 bottom = new Vector2(0, 1);
+            Vector2 transitionPoint = RightTriangle(bottom, circleCenter, circleRadius);
+            float maxAngle = MathF.PI + (transitionPoint - circleCenter).ToRotation();
+            float perimeter = circleRadius * maxAngle + bottom.Distance(transitionPoint);
+            float step = perimeter / count;
+            float stepsForCircle = circleRadius * maxAngle / perimeter * count;
+            float stepOnCircle = maxAngle / stepsForCircle;
+            Vector2[] vertices = new Vector2[count];
+            for (int i = 0; i < count; i++)
+            {
+                if (i < stepsForCircle)
+                {
+                    vertices[i] = circleCenter - Vector2.UnitX.RotatedBy(stepOnCircle * i) * circleRadius;
+                }
+                else
+                {
+                    vertices[i] = transitionPoint + (bottom - transitionPoint) * ((i - stepsForCircle) / (count - 1 - stepsForCircle));
+                }
+            }
+            HeartVertices = new Vector2[count * 2 - 2];
+            for (int i = 0; i < count * 2 - 2; i++)
+            {
+                if (i < count)
+                {
+                    HeartVertices[i] = vertices[i];
+                }
+                else
+                {
+                    Vector2 vec = vertices[i - count + 1];
+                    vec.X *= -1;
+                    HeartVertices[i] = vec;
+                }
+            }
             ProjectileID.Sets.TrailingMode[Type] = 2;
         }
         public override void SetDefaults()
@@ -35,11 +68,60 @@ namespace Terrapain.Content.Projectiles.Friendly
             Projectile.GetT().trailColor = Color.LightPink * 0.4f;
             Projectile.GetT().trailWidth = 20;
             Projectile.GetT().trailLength = 10;
+
+            //{
+            //    int count = 20;
+            //    Vector2 circleCenter = new Vector2(0.5f, -0.5f);
+            //    float circleRadius = 0.5f;
+            //    Vector2 bottom = new Vector2(0, 1);
+            //    Vector2 transitionPoint = RightTriangle(bottom, circleCenter, circleRadius);
+            //    float maxAngle = MathF.PI + (transitionPoint - circleCenter).ToRotation();
+            //    float perimeter = circleRadius * maxAngle + bottom.Distance(transitionPoint);
+            //    float step = perimeter / count;
+            //    float stepsForCircle = circleRadius * maxAngle / perimeter * count;
+            //    float stepOnCircle = maxAngle / stepsForCircle;
+            //    Vector2[] vertices = new Vector2[count];
+            //    for (int i = 0; i < count; i++)
+            //    {
+            //        if (i < stepsForCircle)
+            //        {
+            //            vertices[i] = circleCenter - Vector2.UnitX.RotatedBy(stepOnCircle * i) * circleRadius;
+            //        }
+            //        else
+            //        {
+            //            vertices[i] = transitionPoint + (bottom - transitionPoint) * ((i - stepsForCircle) / (count - 1 - stepsForCircle));
+            //        }
+            //    }
+            //    HeartVertices = new Vector2[count * 2 - 2];
+            //    for (int i = 0; i < count * 2 - 2; i++)
+            //    {
+            //        if (i < count)
+            //        {
+            //            HeartVertices[i] = vertices[i];
+            //        }
+            //        else
+            //        {
+            //            Vector2 vec = vertices[i - count + 1];
+            //            vec.X *= -1;
+            //            HeartVertices[i] = vec;
+            //        }
+            //    }
+            //}
         }
+        public static Vector2[] HeartVertices;
         int target;
         int oldTarget = -1;
         bool FoundTarget;
         static UnifiedRandom random = new UnifiedRandom();
+        public override void OnSpawn(IEntitySource source)
+        {
+            foreach(var vec in HeartVertices)
+            {
+                int d = Dust.NewDust(Projectile.Center + vec * 15, 0, 0, ModContent.DustType<PinkHeart>());
+                Main.dust[d].velocity = vec * 2;
+                Main.dust[d].rotation = MathF.PI / 2;
+            }
+        }
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity == Vector2.Zero? 0 : Projectile.velocity.ToRotation();
@@ -48,7 +130,7 @@ namespace Terrapain.Content.Projectiles.Friendly
                 if (Main.npc[target].active)
                 {
                     Vector2 vectorToTargetPosition = Main.npc[target].Center - Projectile.Center;
-                    Projectile.velocity += vectorToTargetPosition.Normalized() * (0.025f + Projectile.velocity.Length());
+                    Projectile.velocity += vectorToTargetPosition.Normalized() * (0.015f + Projectile.velocity.Length());
                     float positiveRotation = AngleBetweenVectors(vectorToTargetPosition, Projectile.velocity);
                     positiveRotation = NormalizeRotation(positiveRotation);
                     float negativeRotation = AngleBetweenVectors(Projectile.velocity, vectorToTargetPosition);
@@ -71,9 +153,12 @@ namespace Terrapain.Content.Projectiles.Friendly
             {
                 AISearchForTarget(out FoundTarget, out target);
             }
-            if (Projectile.timeLeft % 4 == 0 && random.NextBool(6))
+            if (Projectile.timeLeft % 4 == 0 && random.NextBool(3))
             {
-                //Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.JungleSpore);
+                int d = Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, ModContent.DustType<PinkHeart>());
+                Main.dust[d].velocity = Projectile.velocity.Normalized() * 0.5f;
+                Main.dust[d].rotation = Projectile.rotation;
+                Main.dust[d].noGravity = true;
             }
             Lighting.AddLight(Projectile.Center, Color.LightPink.ToVector3() * 0.8f);
         }
@@ -86,7 +171,13 @@ namespace Terrapain.Content.Projectiles.Friendly
         {
             // This code and the similar code above in OnTileCollide spawn dust from the tiles collided with. SoundID.Item10 is the bounce sound you hear.
             Terraria.Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
-            SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            //SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
+            foreach (var vec in HeartVertices)
+            {
+                int d = Dust.NewDust(Projectile.Center + vec * 15, 0, 0, ModContent.DustType<PinkHeart>());
+                Main.dust[d].velocity = vec * 2;
+                Main.dust[d].rotation = MathF.PI / 2;
+            }
         }
         private void AISearchForTarget(out bool foundTarget, out int target)
         {
