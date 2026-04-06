@@ -44,6 +44,9 @@ namespace Terrapain.Common.Global.TGlobalItems
                     for (int i = 0; i < 7; i++)
                         Projectile.NewProjectile(source, position, velocity.RotatedByRandom(0.3) * random.NextFloat(0.8f, 1), ModContent.ProjectileType<DesertGore>(), damage, knockback, player.whoAmI);
                     break;
+                case ItemID.DiamondStaff:
+                    Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<DiamondStaffLaser>(), damage, knockback, player.whoAmI, -1, -1, 1);
+                    break;
             }
             return false;
         }

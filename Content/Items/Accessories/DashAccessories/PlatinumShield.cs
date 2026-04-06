@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace Terrapain.Content.Items.Accessories.DashAccessories
 {
-	[AutoloadEquip(EquipType.Shield)] // Load the spritesheet you create as a shield for the player when it is equipped.
+	[AutoloadEquip(EquipType.Shield)]
 	public class PlatinumShield : ActiveAccessory
 	{
         public override void ModSetDefaults()

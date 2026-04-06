@@ -4,10 +4,10 @@ using Terraria.ModLoader;
 using Terrapain.Content.Buffs;
 using Terraria.ID;
 
-namespace Terrapain.Content.Items.Accessories.DashAccessories
+namespace Terrapain.Content.Items.Accessories.Vanish
 {
     [AutoloadEquip(EquipType.Face)]
-    public class KaminasGlasses : ModItem
+    public class KitansGlasses : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -18,7 +18,7 @@ namespace Terrapain.Content.Items.Accessories.DashAccessories
         public override void SetDefaults()
         {
             Item.width = 22;
-            Item.height = 14;
+            Item.height = 24;
             Item.accessory = true;
         }
     }

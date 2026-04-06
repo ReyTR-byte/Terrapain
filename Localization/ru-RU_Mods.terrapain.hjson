@@ -476,6 +476,11 @@ Items: {
 		// DisplayName: Arrived Heart
 		// Tooltip: ""
 	}
+
+	StarPowerShield: {
+		// DisplayName: Star Power Shield
+		// Tooltip: ""
+	}
 }
 
 Buffs: {
@@ -589,6 +594,7 @@ Projectiles: {
 	// SapphireStaff.DisplayName: Sapphire Staff
 	// DesertGore.DisplayName: Desert Gore
 	// ArrivedHeartProjectile.DisplayName: Arrived Heart Projectile
+	// DiamondStaffLaser.DisplayName: Diamond Staff Laser
 }
 
 NPCs: {

@@ -3,28 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\dusts\\pinkheart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\dusts\\pinkheart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\common\\global\\tglobalitems\\gemstaffsprojectiles\\diamondstafflaser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:common\\global\\tglobalitems\\gemstaffsprojectiles\\diamondstafflaser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\projectiles\\friendly\\arrivedheartprojectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\projectiles\\friendly\\arrivedheartprojectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\items\\accessories\\vanish\\kitansglasses.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\items\\accessories\\vanish\\kitansglasses.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\items\\accessories\\activeaccessories\\arrivedheart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\items\\accessories\\activeaccessories\\arrivedheart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\items\\accessories\\vanish\\kaminasglasses.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\items\\accessories\\vanish\\kaminasglasses.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\build.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:build.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\common\\global\\tglobalitems\\gemstaffs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:common\\global\\tglobalitems\\gemstaffs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\functions\\functions.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\functions\\functions.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\items\\accessories\\dashaccessories\\starpowershield.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\items\\accessories\\dashaccessories\\starpowershield.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\common\\global\\tglobalnpcs\\eyeofcthulhu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:common\\global\\tglobalnpcs\\eyeofcthulhu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\items\\accessories\\dashaccessories\\platinumshield.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\items\\accessories\\dashaccessories\\platinumshield.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\dashes\\dash.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\dashes\\dash.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 216,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,81 +46,93 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "EyeofCthulhu.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalNPCs\\EyeofCthulhu.cs",
-              "RelativeDocumentMoniker": "Common\\Global\\TGlobalNPCs\\EyeofCthulhu.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalNPCs\\EyeofCthulhu.cs",
-              "RelativeToolTip": "Common\\Global\\TGlobalNPCs\\EyeofCthulhu.cs",
-              "ViewState": "AgIAAFgEAAAAAAAAAAAQwFQEAAA4AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-22T16:17:08.666Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PinkHeart.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Dusts\\PinkHeart.cs",
-              "RelativeDocumentMoniker": "Content\\Dusts\\PinkHeart.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Dusts\\PinkHeart.cs",
-              "RelativeToolTip": "Content\\Dusts\\PinkHeart.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA1AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T07:30:54.946Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Functions.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Functions\\Functions.cs",
-              "RelativeDocumentMoniker": "Content\\Functions\\Functions.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Functions\\Functions.cs",
-              "RelativeToolTip": "Content\\Functions\\Functions.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T06:43:39.949Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "build.txt",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\build.txt",
-              "RelativeDocumentMoniker": "build.txt",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\build.txt",
-              "RelativeToolTip": "build.txt",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
-              "WhenOpened": "2026-04-05T18:49:02.289Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ArrivedHeartProjectile.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Friendly\\ArrivedHeartProjectile.cs",
-              "RelativeDocumentMoniker": "Content\\Projectiles\\Friendly\\ArrivedHeartProjectile.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Friendly\\ArrivedHeartProjectile.cs",
-              "RelativeToolTip": "Content\\Projectiles\\Friendly\\ArrivedHeartProjectile.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAAAIYAAAAOAAAAAAAAAA==",
+              "Title": "KitansGlasses.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\Vanish\\KitansGlasses.cs",
+              "RelativeDocumentMoniker": "Content\\Items\\Accessories\\Vanish\\KitansGlasses.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\Vanish\\KitansGlasses.cs",
+              "RelativeToolTip": "Content\\Items\\Accessories\\Vanish\\KitansGlasses.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-05T18:32:12.822Z",
+              "WhenOpened": "2026-04-06T12:35:00.595Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ArrivedHeart.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\ActiveAccessories\\ArrivedHeart.cs",
-              "RelativeDocumentMoniker": "Content\\Items\\Accessories\\ActiveAccessories\\ArrivedHeart.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\ActiveAccessories\\ArrivedHeart.cs",
-              "RelativeToolTip": "Content\\Items\\Accessories\\ActiveAccessories\\ArrivedHeart.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAAMAAAAAAAAAA==",
+              "Title": "KaminasGlasses.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\Vanish\\KaminasGlasses.cs",
+              "RelativeDocumentMoniker": "Content\\Items\\Accessories\\Vanish\\KaminasGlasses.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\Vanish\\KaminasGlasses.cs",
+              "RelativeToolTip": "Content\\Items\\Accessories\\Vanish\\KaminasGlasses.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-05T18:19:38.322Z",
+              "WhenOpened": "2026-04-06T12:34:50.839Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GemStaffs.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalItems\\GemStaffs.cs",
+              "RelativeDocumentMoniker": "Common\\Global\\TGlobalItems\\GemStaffs.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalItems\\GemStaffs.cs",
+              "RelativeToolTip": "Common\\Global\\TGlobalItems\\GemStaffs.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAxwC8AAACiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T12:31:32.995Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DiamondStaffLaser.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalItems\\GemStaffsProjectiles\\DiamondStaffLaser.cs",
+              "RelativeDocumentMoniker": "Common\\Global\\TGlobalItems\\GemStaffsProjectiles\\DiamondStaffLaser.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalItems\\GemStaffsProjectiles\\DiamondStaffLaser.cs",
+              "RelativeToolTip": "Common\\Global\\TGlobalItems\\GemStaffsProjectiles\\DiamondStaffLaser.cs",
+              "ViewState": "AgIAAFAAAAAAAAAAAAAuwGsAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T11:31:44.14Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Dash.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Dashes\\Dash.cs",
+              "RelativeDocumentMoniker": "Content\\Dashes\\Dash.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Dashes\\Dash.cs",
+              "RelativeToolTip": "Content\\Dashes\\Dash.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T09:56:29.54Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "PlatinumShield.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\DashAccessories\\PlatinumShield.cs",
+              "RelativeDocumentMoniker": "Content\\Items\\Accessories\\DashAccessories\\PlatinumShield.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\DashAccessories\\PlatinumShield.cs",
+              "RelativeToolTip": "Content\\Items\\Accessories\\DashAccessories\\PlatinumShield.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T09:49:12.862Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "StarPowerShield.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\DashAccessories\\StarPowerShield.cs",
+              "RelativeDocumentMoniker": "Content\\Items\\Accessories\\DashAccessories\\StarPowerShield.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\DashAccessories\\StarPowerShield.cs",
+              "RelativeToolTip": "Content\\Items\\Accessories\\DashAccessories\\StarPowerShield.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAIwCYAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-06T09:48:22.551Z",
               "EditorCaption": ""
             }
           ]
