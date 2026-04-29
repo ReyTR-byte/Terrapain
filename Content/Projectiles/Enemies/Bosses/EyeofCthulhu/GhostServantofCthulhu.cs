@@ -3,7 +3,7 @@ using Terraria.DataStructures;
 using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
 
-namespace Terrapain.Content.Projectiles.Enemies
+namespace Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu
 {
     public class GhostServantofCthulhu : ModProjectile
     {

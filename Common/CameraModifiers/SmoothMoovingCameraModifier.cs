@@ -8,7 +8,7 @@ using Terraria;
 using Terraria.Graphics;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ModLoader;
-using static Terrapain.Common.Global.TGlobalNPCs.EyeofCthulhu;
+using static Terrapain.Content.NPCs.Bosses.VanillaBosses.EyeofCthulhu;
 
 namespace Terrapain.Common.CameraModifiers
 {

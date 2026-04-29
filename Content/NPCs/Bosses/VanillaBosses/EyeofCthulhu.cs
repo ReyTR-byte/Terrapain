@@ -5,12 +5,14 @@ using System.Diagnostics;
 using Terrapain.Assets.Extratextures;
 using Terrapain.Common.CameraModifiers;
 using Terrapain.Common.Config;
+using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Common.System;
 using Terrapain.Content;
 using Terrapain.Content.Dusts;
 using Terrapain.Content.Groups;
 using Terrapain.Content.Items.DropRulls;
 using Terrapain.Content.Projectiles.Enemies;
+using Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -21,7 +23,7 @@ using Terraria.ModLoader;
 using static AssGen.Assets;
 using static Terrapain.Content.Functions;
 
-namespace Terrapain.Common.Global.TGlobalNPCs
+namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
 {
     public class EyeofCthulhu : NPCBehaviour
     {
@@ -346,11 +348,11 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                 Gore4,
                 Gore5,
                 ];
-            public Texture2D Gore1 => ModContent.Request<Texture2D>("Terrapain/Common/Global/TGlobalNPCs/Gores/EyeofCthulhu_Gore1").Value;
-            public Texture2D Gore2 => ModContent.Request<Texture2D>("Terrapain/Common/Global/TGlobalNPCs/Gores/EyeofCthulhu_Gore2").Value;
-            public Texture2D Gore3 => ModContent.Request<Texture2D>("Terrapain/Common/Global/TGlobalNPCs/Gores/EyeofCthulhu_Gore3").Value;
-            public Texture2D Gore4 => ModContent.Request<Texture2D>("Terrapain/Common/Global/TGlobalNPCs/Gores/EyeofCthulhu_Gore4").Value;
-            public Texture2D Gore5 => ModContent.Request<Texture2D>("Terrapain/Common/Global/TGlobalNPCs/Gores/EyeofCthulhu_Gore5").Value;
+            public Texture2D Gore1 => ModContent.Request<Texture2D>("Terrapain/Content/NPCs/Bosses/VanillaBosses/Gores/EyeofCthulhu_Gore1").Value;
+            public Texture2D Gore2 => ModContent.Request<Texture2D>("Terrapain/Content/NPCs/Bosses/VanillaBosses/Gores/EyeofCthulhu_Gore2").Value;
+            public Texture2D Gore3 => ModContent.Request<Texture2D>("Terrapain/Content/NPCs/Bosses/VanillaBosses/Gores/EyeofCthulhu_Gore3").Value;
+            public Texture2D Gore4 => ModContent.Request<Texture2D>("Terrapain/Content/NPCs/Bosses/VanillaBosses/Gores/EyeofCthulhu_Gore4").Value;
+            public Texture2D Gore5 => ModContent.Request<Texture2D>("Terrapain/Content/NPCs/Bosses/VanillaBosses/Gores/EyeofCthulhu_Gore5").Value;
             public _2To3PhaseTransitionAnimation(NPC npc)
             {
                 StartCameraPosition = Main.screenPosition;
@@ -1161,7 +1163,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                     case 0:
                         if (timers[0] == 150)
                         {
-                            servantsTypes = new List<int>([5, 5, ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>(), ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>(), ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.SheildedServantofCthulhu>(), ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.SheildedServantofCthulhu>(), ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.HealerServantofCthulhu>(), ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.HealerServantofCthulhu>(), ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>(), ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>()]);
+                            servantsTypes = new List<int>([5, 5, ModContent.NPCType<Servants.EyeofCthulhu.LaserServantofCthulhu>(), ModContent.NPCType<Servants.EyeofCthulhu.LaserServantofCthulhu>(), ModContent.NPCType<Servants.EyeofCthulhu.SheildedServantofCthulhu>(), ModContent.NPCType<Servants.EyeofCthulhu.SheildedServantofCthulhu>(), ModContent.NPCType<Servants.EyeofCthulhu.HealerServantofCthulhu>(), ModContent.NPCType<Servants.EyeofCthulhu.HealerServantofCthulhu>(), ModContent.NPCType<Servants.EyeofCthulhu.FireShooterServantofCthulhu>(), ModContent.NPCType<Servants.EyeofCthulhu.FireShooterServantofCthulhu>()]);
                             SoundEngine.PlaySound(SoundID.Roar);
                             npc.ai[0] = 0;
                         }
@@ -1171,7 +1173,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                             goalRotation += EasingInOut(150, 150 - timers[0]) * 4 * MathF.PI;
                             if (timers[0] % 15 == 0)
                             {
-                                if (servantsTypes[index] != ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.HealerServantofCthulhu>() || AllNPCByType(ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.HealerServantofCthulhu>()).Count < 2)
+                                if (servantsTypes[index] != ModContent.NPCType<Servants.EyeofCthulhu.HealerServantofCthulhu>() || AllNPCByType(ModContent.NPCType<Servants.EyeofCthulhu.HealerServantofCthulhu>()).Count < 2)
                                 {
                                     int _npc = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.Center.X, (int)npc.Center.Y, servantsTypes[index]);
                                     servantsTypes.RemoveAt(index);
@@ -1191,7 +1193,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                             goalRotation += EasingInOut(125, 125 - mainTimer + 600) * 4 * MathF.PI;
                             if (mainTimer % 5 == 0)
                             {
-                                int _npc = NPC.NewNPC(npc.GetSource_FromThis("grid AI"), (int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>());
+                                int _npc = NPC.NewNPC(npc.GetSource_FromThis("grid AI"), (int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<Servants.EyeofCthulhu.LaserServantofCthulhu>());
                                 Main.npc[_npc].velocity = UnitVectorFromRotation(goalRotation) * 5;
                             }
                         }
@@ -1201,7 +1203,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                             GridLaserServants group = (GridLaserServants)Terrapain.group[Group.FindGroup("GridLaserServants")[0]];
                             if (group.members.Count < 24 && mainTimer % 10 == 0)
                             {
-                                int _npc = NPC.NewNPC(npc.GetSource_FromThis("grid AI"), (int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>());
+                                int _npc = NPC.NewNPC(npc.GetSource_FromThis("grid AI"), (int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<Servants.EyeofCthulhu.LaserServantofCthulhu>());
                                 Main.npc[_npc].velocity = UnitVectorFromRotation(goalRotation) * 5;
                             }
                             if (mainTimer == 0)
@@ -1322,11 +1324,11 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                                 servantsTypes = new List<int>([
                                     5,
                                     5,
-                                    ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>(),
-                                    ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>(),
-                                    ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
-                                    ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
-                                    ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
+                                    ModContent.NPCType<Servants.EyeofCthulhu.LaserServantofCthulhu>(),
+                                    ModContent.NPCType<Servants.EyeofCthulhu.LaserServantofCthulhu>(),
+                                    ModContent.NPCType<Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
+                                    ModContent.NPCType<Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
+                                    ModContent.NPCType<Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
                                 ]);
 
                                 SoundEngine.PlaySound(SoundID.Roar);
@@ -1355,10 +1357,10 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                                 servantsTypes = new List<int>([
                                     5,
                                     5,
-                                    ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>(),
-                                    ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>(),
-                                    ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
-                                    ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
+                                    ModContent.NPCType<Servants.EyeofCthulhu.LaserServantofCthulhu>(),
+                                    ModContent.NPCType<Servants.EyeofCthulhu.LaserServantofCthulhu>(),
+                                    ModContent.NPCType<Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
+                                    ModContent.NPCType<Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
                                 ]);
                             }
                             if (mainTimer == 0)
@@ -1763,10 +1765,10 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         servantsTypes = new List<int>([
                             5,
                             5,
-                            ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.SheildedServantofCthulhu>(),
-                            ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.SheildedServantofCthulhu>(),
-                            ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.HealerServantofCthulhu>(),
-                            ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.HealerServantofCthulhu>(),
+                            ModContent.NPCType<Servants.EyeofCthulhu.SheildedServantofCthulhu>(),
+                            ModContent.NPCType<Servants.EyeofCthulhu.SheildedServantofCthulhu>(),
+                            ModContent.NPCType<Servants.EyeofCthulhu.HealerServantofCthulhu>(),
+                            ModContent.NPCType<Servants.EyeofCthulhu.HealerServantofCthulhu>(),
                         ]);
                     }
                     else
@@ -1803,7 +1805,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         if (servantsTypes.Count != 0 && timers[1] == 0)
                         {
                             int index = 0;
-                            if (servantsTypes[index] != ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.HealerServantofCthulhu>() || AllNPCByType(ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.HealerServantofCthulhu>()).Count < 3)
+                            if (servantsTypes[index] != ModContent.NPCType<Servants.EyeofCthulhu.HealerServantofCthulhu>() || AllNPCByType(ModContent.NPCType<Servants.EyeofCthulhu.HealerServantofCthulhu>()).Count < 3)
                             {
                                 int _npc = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.Center.X, (int)npc.Center.Y, servantsTypes[index]);
                                 servantsTypes.RemoveAt(index);
@@ -1997,12 +1999,12 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         servantsTypes = new List<int>([
                             5,
                             5,
-                            ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>(),
-                            ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>(),
-                            ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>(),
-                            ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
-                            ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
-                            ModContent.NPCType<Content.NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
+                            ModContent.NPCType<Servants.EyeofCthulhu.LaserServantofCthulhu>(),
+                            ModContent.NPCType<Servants.EyeofCthulhu.LaserServantofCthulhu>(),
+                            ModContent.NPCType<Servants.EyeofCthulhu.LaserServantofCthulhu>(),
+                            ModContent.NPCType<Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
+                            ModContent.NPCType<Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
+                            ModContent.NPCType<Servants.EyeofCthulhu.FireShooterServantofCthulhu>(),
                         ]);
                     }
                     if (mainTimer == 0)

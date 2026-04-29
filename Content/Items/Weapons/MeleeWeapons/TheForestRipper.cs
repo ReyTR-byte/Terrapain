@@ -39,7 +39,7 @@ namespace Terrapain.Content.Items.Weapons.MeleeWeapons
             Item.autoReuse = true;
             Item.shootSpeed = 6;
             Item.value = Item.buyPrice(gold: 5);
-            Item.GetT().basicRotation = 0;
+            Item.GetT().spriteRotation = 0;
             Item.GetT().DrawOrigin = new Vector2(2, 10);
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

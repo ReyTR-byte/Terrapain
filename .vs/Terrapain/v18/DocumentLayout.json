@@ -3,35 +3,64 @@
   "WorkspaceRootPath": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\npcs\\bosses\\vanillabosses\\kingslime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\npcs\\bosses\\vanillabosses\\kingslime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\projectiles\\enemies\\bosses\\kingslime\\slimeball.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\projectiles\\enemies\\bosses\\kingslime\\slimeball.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\projectiles\\friendly\\slimeball.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\projectiles\\friendly\\slimeball.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\common\\global\\tglobalnpc.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:common\\global\\tglobalnpc.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\common\\global\\tglobalnpcs\\npcbehaviour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:common\\global\\tglobalnpcs\\npcbehaviour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\projectiles\\enemies\\bosses\\kingslime\\slimewall.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\projectiles\\enemies\\bosses\\kingslime\\slimewall.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\functions\\functions.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\functions\\functions.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\common\\global\\tglobalitems\\gemstaffsprojectiles\\diamondstafflaser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:common\\global\\tglobalitems\\gemstaffsprojectiles\\diamondstafflaser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\98849\\AppData\\Local\\Temp\\.vsdbgsrc\\cd60b07d4e8137a4c633035023ae49db1c0c84aa50c02ebd90ec26b439ca7155\\Main.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\projectiles\\enemies\\bosses\\eyeofcthulhu\\ghostservantofcthulhu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\projectiles\\enemies\\bosses\\eyeofcthulhu\\ghostservantofcthulhu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\items\\accessories\\vanish\\kitansglasses.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\items\\accessories\\vanish\\kitansglasses.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\npcs\\bosses\\vanillabosses\\eyeofcthulhu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\npcs\\bosses\\vanillabosses\\eyeofcthulhu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\items\\accessories\\vanish\\kaminasglasses.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\items\\accessories\\vanish\\kaminasglasses.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\projectiles\\enemies\\bosses\\eyeofcthulhu\\eoclaser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\projectiles\\enemies\\bosses\\eyeofcthulhu\\eoclaser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\common\\global\\tglobalitems\\gemstaffs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:common\\global\\tglobalitems\\gemstaffs.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\projectiles\\enemies\\bosses\\eyeofcthulhu\\bloodspike.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\projectiles\\enemies\\bosses\\eyeofcthulhu\\bloodspike.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\items\\accessories\\dashaccessories\\starpowershield.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\items\\accessories\\dashaccessories\\starpowershield.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\common\\global\\usestyles\\laserusestyle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:common\\global\\usestyles\\laserusestyle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\items\\accessories\\dashaccessories\\platinumshield.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\items\\accessories\\dashaccessories\\platinumshield.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\projectiles\\enemies\\bosses\\eyeofcthulhu\\servantofcthulhusoul.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\projectiles\\enemies\\bosses\\eyeofcthulhu\\servantofcthulhusoul.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\dashes\\dash.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\dashes\\dash.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|c:\\users\\98849\\onedrive\\\u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\my games\\terraria\\tmodloader\\modsources\\terrapain\\content\\projectiles\\enemies\\bosses\\eyeofcthulhu\\uvlaser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5B269830-3259-FE5A-23BF-085CB3FFE3C2}|Terrapain.csproj|solutionrelative:content\\projectiles\\enemies\\bosses\\eyeofcthulhu\\uvlaser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -41,115 +70,197 @@
       "DocumentGroups": [
         {
           "DockedWidth": 216,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 14,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SlimeBall.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Friendly\\SlimeBall.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\Friendly\\SlimeBall.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Friendly\\SlimeBall.cs",
+              "RelativeToolTip": "Content\\Projectiles\\Friendly\\SlimeBall.cs",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAgwKAAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-29T18:51:25.954Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "SlimeBall.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\KingSlime\\SlimeBall.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\Enemies\\Bosses\\KingSlime\\SlimeBall.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\KingSlime\\SlimeBall.cs",
+              "RelativeToolTip": "Content\\Projectiles\\Enemies\\Bosses\\KingSlime\\SlimeBall.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAcwHgAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-29T18:45:39.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "TGlobalNPC.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalNPC.cs",
+              "RelativeDocumentMoniker": "Common\\Global\\TGlobalNPC.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalNPC.cs",
+              "RelativeToolTip": "Common\\Global\\TGlobalNPC.cs",
+              "ViewState": "AgIAADoBAAAAAAAAAAAYwDEAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-29T16:55:39.797Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "NPCBehaviour.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalNPCs\\NPCBehaviour.cs",
+              "RelativeDocumentMoniker": "Common\\Global\\TGlobalNPCs\\NPCBehaviour.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalNPCs\\NPCBehaviour.cs",
+              "RelativeToolTip": "Common\\Global\\TGlobalNPCs\\NPCBehaviour.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA0AAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-29T15:19:05.343Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "KitansGlasses.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\Vanish\\KitansGlasses.cs",
-              "RelativeDocumentMoniker": "Content\\Items\\Accessories\\Vanish\\KitansGlasses.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\Vanish\\KitansGlasses.cs",
-              "RelativeToolTip": "Content\\Items\\Accessories\\Vanish\\KitansGlasses.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA0AAAAAAAAAA==",
+              "DocumentIndex": 12,
+              "Title": "LaserUseStyle.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\UseStyles\\LaserUseStyle.cs",
+              "RelativeDocumentMoniker": "Common\\Global\\UseStyles\\LaserUseStyle.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\UseStyles\\LaserUseStyle.cs",
+              "RelativeToolTip": "Common\\Global\\UseStyles\\LaserUseStyle.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA8AAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T12:35:00.595Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-27T12:30:06.89Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "KaminasGlasses.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\Vanish\\KaminasGlasses.cs",
-              "RelativeDocumentMoniker": "Content\\Items\\Accessories\\Vanish\\KaminasGlasses.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\Vanish\\KaminasGlasses.cs",
-              "RelativeToolTip": "Content\\Items\\Accessories\\Vanish\\KaminasGlasses.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA0AAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "Functions.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Functions\\Functions.cs",
+              "RelativeDocumentMoniker": "Content\\Functions\\Functions.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Functions\\Functions.cs",
+              "RelativeToolTip": "Content\\Functions\\Functions.cs",
+              "ViewState": "AgIAAB0DAAAAAAAAAAAmwDADAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T12:34:50.839Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-27T12:09:56.182Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Main.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\AppData\\Local\\Temp\\.vsdbgsrc\\cd60b07d4e8137a4c633035023ae49db1c0c84aa50c02ebd90ec26b439ca7155\\Main.cs",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\cd60b07d4e8137a4c633035023ae49db1c0c84aa50c02ebd90ec26b439ca7155\\Main.cs",
-              "ToolTip": "C:\\Users\\98849\\AppData\\Local\\Temp\\.vsdbgsrc\\cd60b07d4e8137a4c633035023ae49db1c0c84aa50c02ebd90ec26b439ca7155\\Main.cs [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\..\\..\\AppData\\Local\\Temp\\.vsdbgsrc\\cd60b07d4e8137a4c633035023ae49db1c0c84aa50c02ebd90ec26b439ca7155\\Main.cs [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]",
-              "ViewState": "AgIAAL07AAAAAAAAAAAuwNM7AAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T12:33:40.827Z",
-              "EditorCaption": " [\u0422\u043E\u043B\u044C\u043A\u043E \u0447\u0442\u0435\u043D\u0438\u0435]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "GemStaffs.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalItems\\GemStaffs.cs",
-              "RelativeDocumentMoniker": "Common\\Global\\TGlobalItems\\GemStaffs.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalItems\\GemStaffs.cs",
-              "RelativeToolTip": "Common\\Global\\TGlobalItems\\GemStaffs.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAxwC8AAACiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T12:31:32.995Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 7,
               "Title": "DiamondStaffLaser.cs",
               "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalItems\\GemStaffsProjectiles\\DiamondStaffLaser.cs",
               "RelativeDocumentMoniker": "Common\\Global\\TGlobalItems\\GemStaffsProjectiles\\DiamondStaffLaser.cs",
               "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Common\\Global\\TGlobalItems\\GemStaffsProjectiles\\DiamondStaffLaser.cs",
               "RelativeToolTip": "Common\\Global\\TGlobalItems\\GemStaffsProjectiles\\DiamondStaffLaser.cs",
-              "ViewState": "AgIAADUAAAAAAAAAAAAuwFcAAAA4AAAAAAAAAA==",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAYwEMAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T11:31:44.14Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Dash.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Dashes\\Dash.cs",
-              "RelativeDocumentMoniker": "Content\\Dashes\\Dash.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Dashes\\Dash.cs",
-              "RelativeToolTip": "Content\\Dashes\\Dash.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T09:56:29.54Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "PlatinumShield.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\DashAccessories\\PlatinumShield.cs",
-              "RelativeDocumentMoniker": "Content\\Items\\Accessories\\DashAccessories\\PlatinumShield.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\DashAccessories\\PlatinumShield.cs",
-              "RelativeToolTip": "Content\\Items\\Accessories\\DashAccessories\\PlatinumShield.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T09:49:12.862Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-27T12:04:16.823Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "StarPowerShield.cs",
-              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\DashAccessories\\StarPowerShield.cs",
-              "RelativeDocumentMoniker": "Content\\Items\\Accessories\\DashAccessories\\StarPowerShield.cs",
-              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Items\\Accessories\\DashAccessories\\StarPowerShield.cs",
-              "RelativeToolTip": "Content\\Items\\Accessories\\DashAccessories\\StarPowerShield.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAIwCYAAAAwAAAAAAAAAA==",
+              "Title": "SlimeWall.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\KingSlime\\SlimeWall.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\Enemies\\Bosses\\KingSlime\\SlimeWall.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\KingSlime\\SlimeWall.cs",
+              "RelativeToolTip": "Content\\Projectiles\\Enemies\\Bosses\\KingSlime\\SlimeWall.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAqwEgAAABCAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T09:48:22.551Z",
+              "WhenOpened": "2026-04-27T11:31:15.373Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ServantofCthulhuSoul.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\ServantofCthulhuSoul.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\ServantofCthulhuSoul.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\ServantofCthulhuSoul.cs",
+              "RelativeToolTip": "Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\ServantofCthulhuSoul.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-27T11:21:32.772Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "UVLaser.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\UVLaser.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\UVLaser.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\UVLaser.cs",
+              "RelativeToolTip": "Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\UVLaser.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-27T11:21:28.481Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "GhostServantofCthulhu.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\GhostServantofCthulhu.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\GhostServantofCthulhu.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\GhostServantofCthulhu.cs",
+              "RelativeToolTip": "Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\GhostServantofCthulhu.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-27T11:21:21.002Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "EoCLaser.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\EoCLaser.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\EoCLaser.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\EoCLaser.cs",
+              "RelativeToolTip": "Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\EoCLaser.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-27T11:21:10.31Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "BloodSpike.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\BloodSpike.cs",
+              "RelativeDocumentMoniker": "Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\BloodSpike.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\BloodSpike.cs",
+              "RelativeToolTip": "Content\\Projectiles\\Enemies\\Bosses\\EyeofCthulhu\\BloodSpike.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAIwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-27T11:21:03.799Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "KingSlime.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\NPCs\\Bosses\\VanillaBosses\\KingSlime.cs",
+              "RelativeDocumentMoniker": "Content\\NPCs\\Bosses\\VanillaBosses\\KingSlime.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\NPCs\\Bosses\\VanillaBosses\\KingSlime.cs",
+              "RelativeToolTip": "Content\\NPCs\\Bosses\\VanillaBosses\\KingSlime.cs",
+              "ViewState": "AgIAAI0AAAAAAAAAAAAswKkAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-27T11:09:41.973Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "EyeofCthulhu.cs",
+              "DocumentMoniker": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\NPCs\\Bosses\\VanillaBosses\\EyeofCthulhu.cs",
+              "RelativeDocumentMoniker": "Content\\NPCs\\Bosses\\VanillaBosses\\EyeofCthulhu.cs",
+              "ToolTip": "C:\\Users\\98849\\OneDrive\\\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u044B\\My Games\\Terraria\\tModLoader\\ModSources\\Terrapain\\Content\\NPCs\\Bosses\\VanillaBosses\\EyeofCthulhu.cs",
+              "RelativeToolTip": "Content\\NPCs\\Bosses\\VanillaBosses\\EyeofCthulhu.cs",
+              "ViewState": "AgIAANULAAAAAAAAAAAIwOsLAAC1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-27T11:06:10.2Z"
             }
           ]
         }

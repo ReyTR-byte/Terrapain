@@ -52,9 +52,9 @@ namespace Terrapain.Common.Global.UseStyles
                 }
                 offset.Y *= player.direction;
                 float basicRotation = MathF.PI / 4;
-                if (item.GetT().basicRotation.HasValue)
+                if (item.GetT().spriteRotation.HasValue)
                 {
-                    basicRotation = item.GetT().basicRotation.Value;
+                    basicRotation = item.GetT().spriteRotation.Value;
                 }
                 player.HeldItem.GetT().drawDir = ls.hitDir * player.direction;
                 player.SetItemRotation(rotation + basicRotation * player.direction);
@@ -75,9 +75,9 @@ namespace Terrapain.Common.Global.UseStyles
                 offset.X *= player.direction;
             }
             float basicRotation = MathF.PI / 4;
-            if (item.GetT().basicRotation.HasValue)
+            if (item.GetT().spriteRotation.HasValue)
             {
-                basicRotation = item.GetT().basicRotation.Value;
+                basicRotation = item.GetT().spriteRotation.Value;
             }
             Vector2 position = player.MountedCenter + TGlobalItem.GetHandOffset(player) + offset + TGlobalItem.basicOffset.RotatedBy(rotation);
             float lenth = GetLengthInHitBox(hitbox, basicRotation);

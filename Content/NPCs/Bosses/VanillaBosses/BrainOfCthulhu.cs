@@ -7,8 +7,9 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Utilities;
 using static Terrapain.Content.Functions;
+using Terrapain.Common.Global.TGlobalNPCs;
 
-namespace Terrapain.Common.Global.TGlobalNPCs
+namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
 {
 	public class BrainOfCthulhu : NPCBehaviour
 	{

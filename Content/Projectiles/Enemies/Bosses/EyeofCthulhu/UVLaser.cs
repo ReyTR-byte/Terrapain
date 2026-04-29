@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Terrapain.Content.Projectiles.Enemies
+namespace Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu
 {
     public class UVLaser : ModProjectile
     {

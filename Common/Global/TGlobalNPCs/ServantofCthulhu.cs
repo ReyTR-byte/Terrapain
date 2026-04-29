@@ -7,7 +7,7 @@ using Terrapain.Content;
 using Terrapain.Content.Groups;
 using Terrapain.Content.Items.ItemDropRules;
 using Terrapain.Content.NPCs.Servants.EyeofCthulhu;
-using Terrapain.Content.Projectiles.Enemies;
+using Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;

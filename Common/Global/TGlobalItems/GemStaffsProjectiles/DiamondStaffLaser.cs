@@ -8,126 +8,134 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Terraria.ID;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Luminance.Core.Graphics;
+using Steamworks;
+using Terrapain.Assets.Extratextures;
+using Microsoft.Xna.Framework.Graphics;
+using System.ComponentModel.DataAnnotations;
 
 namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
 {
     public class DiamondStaffLaser : ModProjectile
     {
-        public override string Texture => base.Texture;//"Terrapain/Assets/ExtraTextures/ShaderTextures/WhitePixel";
-        int tail
+        public override string Texture => "Terrapain/Assets/ExtraTextures/ShaderTextures/WhitePixel";
+        float lenght
         {
-            get => (int)Projectile.ai[0];
+            get => Projectile.ai[0];
             set => Projectile.ai[0] = value;
         }
-        int head
+        int cooldown
         {
             get => (int)Projectile.ai[1];
             set => Projectile.ai[1] = value;
         }
-        bool start
+        Vector2 dir
         {
-            get => Projectile.ai[2] == 1;
+            get => Projectile.rotation.ToRotationVector2();
+            set => Projectile.rotation = value.ToRotation();
         }
         public override void SetDefaults()
         {
             Projectile.aiStyle = -1;
             Projectile.DamageType = DamageClass.Magic;
-            Projectile.timeLeft = 100;
+            Projectile.timeLeft = 2;
             Projectile.width = 16;
             Projectile.height = 16;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = 1;
             Projectile.friendly = true;
             //Projectile.GetT().useVanillaDrawing = false;
         }
+        public override bool? CanCutTiles()
+        {
+            Functions.RayCutTile(Projectile.Center, Projectile.Center + dir * lenght, Main.player[Projectile.owner]);
+            return false;
+        }
+        public override void CutTiles()
+        {
+        }
         public override void OnSpawn(IEntitySource source)
         {
-            direction = Projectile.velocity.Normalized();
+            dir = Projectile.velocity;
             Projectile.velocity = Vector2.Zero;
         }
-        Vector2 direction;
         public override void AI()
         {
-            if (Projectile.Distance(Main.player[Projectile.owner].Center) > 500)
+            float totalLength = 0;
+            while (totalLength < lenght)
+            {
+                Lighting.AddLight(Projectile.Center + dir * totalLength, TorchID.White);
+                totalLength += 20;
+            }
+            Terraria.Player own = Main.player[Projectile.owner];
+            if (!own.controlUseItem)
             {
                 Projectile.active = false;
                 return;
             }
-            Lighting.AddLight(Projectile.Center, TorchID.White);
-            if (start)
+            else if (own.HeldItem.active && own.manaCost * own.HeldItem.mana > own.statMana)
             {
-                if (head == -1)
+                if (own.itemAnimation == 1)
                 {
-                    head = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + direction * 4, direction, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI);
-                    int proj2 = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + direction * 8, direction, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, head);
-                    Main.projectile[head].ai[1] = proj2;
-                    int proj3 = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + direction * 12, direction, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, proj2, -1);
-                    Main.projectile[proj2].ai[1] = proj3;
-                }
-                else
-                {
-                    Projectile Head = Main.projectile[head];
-                    int i = 1;
-                    Projectile.Center = Main.player[Projectile.owner].MountedCenter + TGlobalItem.GetHandOffset(Main.player[Projectile.owner]);
-                    direction = Projectile.DirectionTo(Main.MouseWorld);
-                    Projectile.Center += direction * 20;
-                    while (Head.active && Head.type == Type && Head.owner == Projectile.owner)
-                    {
-                        Head.Center = Projectile.Center + direction * 4 * i;
-                        ((DiamondStaffLaser)Head.ModProjectile).direction = direction;
-                        i++;
-                        if (Head.ai[1] < 0)
-                        {
-                            break;
-                        }
-                        Head = Main.projectile[(int)Head.ai[1]];
-                    }
+                    Projectile.active = false;
+                    return;
                 }
             }
             else
             {
-                Projectile Tail = Main.projectile[tail];
-                if (Tail.active && Tail.type == Type && Tail.owner == Projectile.owner || start)
-                {
-                    if (head == -1 && Main.player[Projectile.owner].ownedProjectileCounts[Type] < 25)
-                    {
-                        head = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + direction * 4, direction, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.whoAmI);
-                        int proj2 = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + direction * 8, direction, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, head);
-                        Main.projectile[head].ai[1] = proj2;
-                        int proj3 = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + direction * 12, direction, Type, Projectile.damage, Projectile.knockBack, Projectile.owner, proj2, -1);
-                        Main.projectile[proj2].ai[1] = proj3;
-                    }
-                }
-                else
-                {
-                    Projectile.active = false;
-                }
+                Projectile.timeLeft = 2;
+                Projectile.Center = Main.player[Projectile.owner].MountedCenter + TGlobalItem.GetHandOffset(Main.player[Projectile.owner]);
+                Projectile.rotation = own.itemRotation + (own.direction == -1? MathF.PI: 0) - 0.25f * MathF.PI * own.direction;
+                Projectile.Center += dir * 20;
+                cooldown -= 1;
+                lenght += 35;
+                lenght = Math.Min(lenght, 800);
+                Vector2 Center = Projectile.Center;
+                Projectile.width = (int)(Math.Abs(dir.X) * lenght * 2);
+                Projectile.height = (int)(Math.Abs(dir.Y) * lenght * 2);
+                Projectile.Center = Center;
             }
         }
-        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
         {
-            if (Functions.HitTiles(Projectile))
+            Vector2 Pos = Vector2.Zero;
+            if (Functions.Collision(Projectile.Center, dir, lenght, targetHitbox.Location.ToVector2(), targetHitbox.Width, targetHitbox.Height, ref Pos, false))
             {
-                OnTileCollide(Vector2.Zero);
+                lenght = Pos.Distance(Projectile.Center);
+                return cooldown <= 0;
             }
             return false;
         }
-        public override bool OnTileCollide(Vector2 oldVelocity)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (head != -1)
+            cooldown = 10;
+            Projectile.penetrate++;
+        }
+        public override void OnHitPlayer(Terraria.Player target, Terraria.Player.HurtInfo info)
+        {
+            cooldown = 10;
+            Projectile.penetrate++;
+        }
+        public override void OnKill(int timeLeft)
+        {
+            base.OnKill(timeLeft);
+        }
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            Vector2 collide = Functions.RayColisionInTheWorld(Projectile.Center, Projectile.Center + dir * lenght);
+            if (collide != Vector2.Zero)
             {
-                Projectile Head = Main.projectile[head];
-                if (Head.active && Head.type == Type && Head.owner == Projectile.owner)
-                {
-                    Head.active = false;
-                }
-                head = -1;
+                lenght = Projectile.Distance(collide);
+
             }
-            Collision.HitTiles(Projectile.position, direction * 5, Projectile.width, Projectile.height);
             return false;
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            return true;
+            Main.spriteBatch.DrawLine(Projectile.Center, Projectile.Center + dir * lenght, Color.LightBlue, 20);
+            return false;
         }
+        public float WidthFunction(float value) => 12f;
+        public Color ColorFunction(float value) => Color.LightBlue;
     }
 }

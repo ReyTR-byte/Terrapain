@@ -14,8 +14,9 @@ using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terrapain.Common.Global.TGlobalNPCs.EyeofCthulhu;
+using static Terrapain.Content.NPCs.Bosses.VanillaBosses.EyeofCthulhu;
 using static Terrapain.Content.Functions;
+using Terraria.Utilities;
 
 namespace Terrapain.Common.Global
 {
@@ -32,7 +33,7 @@ namespace Terrapain.Common.Global
         public int savedTarget = -1;
         public Terraria.Player SavedTarget => Main.player[savedTarget];
         public int npcid;
-        public Terraria.Player Target => Main.player[Main.npc[npcid].target];
+        public Terraria.Player Target => Main.npc[npcid].target >= 0? Main.player[Main.npc[npcid].target] : null;
         public bool hooked;
         public bool canBeHooked = true;
         public bool FirstTick;
@@ -46,6 +47,7 @@ namespace Terrapain.Common.Global
         public Rectangle[] oldFrame = new Rectangle[60];
         public int[] oldDirections = new int[60];
         public NPCBehaviour NPCBehaviour;
+        public static UnifiedRandom random = new UnifiedRandom();
 
         public float oldDamageMultiplier;
         public int oldIgnoreDefence;

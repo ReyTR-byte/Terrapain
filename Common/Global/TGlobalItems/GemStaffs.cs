@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles;
+using Terrapain.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -45,7 +46,13 @@ namespace Terrapain.Common.Global.TGlobalItems
                         Projectile.NewProjectile(source, position, velocity.RotatedByRandom(0.3) * random.NextFloat(0.8f, 1), ModContent.ProjectileType<DesertGore>(), damage, knockback, player.whoAmI);
                     break;
                 case ItemID.DiamondStaff:
-                    Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<DiamondStaffLaser>(), damage, knockback, player.whoAmI, -1, -1, 1);
+                    item.GetT().spriteRotation = 0.25f * MathF.PI;
+                    if (player.ownedProjectileCounts[ModContent.ProjectileType<DiamondStaffLaser>()] == 0)
+                    {
+                        int proj2 = Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<DiamondStaffLaser>(), damage, knockback, player.whoAmI, -1, -1, -1);
+                        Main.projectile[proj2].ai[2] = -1 * proj2 - 1;
+                        item.damage = 50;
+                    }
                     break;
             }
             return false;
@@ -77,6 +84,11 @@ namespace Terrapain.Common.Global.TGlobalItems
                     break;
                 case ItemID.AmberStaff:
                     entity.shootSpeed = 20;
+                    break;
+                case ItemID.DiamondStaff:
+                    entity.damage = 50;
+                    entity.useStyle = TGlobalItem.LaserUseStyle;
+                    entity.GetT().spriteRotation = 0.25f * MathF.PI;
                     break;
             }
         }

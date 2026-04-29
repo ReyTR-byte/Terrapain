@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Common.Config;
 using Terrapain.Content.Groups;
 using Terrapain.Content.Projectiles.Enemies;
+using Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;

@@ -45,7 +45,7 @@ namespace Terrapain.Common.Player.DrawLayers
             }
             if (swingDir == -1)
             {
-                rotationAdd += 2 * (drawInfo.drawPlayer.HeldItem.GetT().basicRotation.HasValue? MathF.PI / 2 - drawInfo.drawPlayer.HeldItem.GetT().basicRotation.Value : MathF.PI / 4) * dir;
+                rotationAdd += 2 * (drawInfo.drawPlayer.HeldItem.GetT().spriteRotation.HasValue? MathF.PI / 2 - drawInfo.drawPlayer.HeldItem.GetT().spriteRotation.Value : MathF.PI / 4) * dir;
 
             }
 

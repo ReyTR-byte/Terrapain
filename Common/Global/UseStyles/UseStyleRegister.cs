@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader;
 
-namespace Terrapain.Common.Global.TGlobalItems
+namespace Terrapain.Common.Global.UseStyles
 {
     public class UseStyleRegister : GlobalItem
     {
@@ -18,6 +18,7 @@ namespace Terrapain.Common.Global.TGlobalItems
             TGlobalItem.LightSwing = ItemLoader.RegisterUseStyle(Mod, "LightSwing");
             TGlobalItem.UseModDrawStyles.Add(TGlobalItem.LightSwing);
             TGlobalItem.BatUseStyle = ItemLoader.RegisterUseStyle(Mod, "Bat");
+            TGlobalItem.LaserUseStyle = ItemLoader.RegisterUseStyle(Mod, "Laser");
         }
     }
 }

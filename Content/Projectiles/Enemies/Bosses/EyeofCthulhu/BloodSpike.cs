@@ -4,7 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
-namespace Terrapain.Content.Projectiles.Enemies
+namespace Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu
 {
     public class BloodSpike : ModProjectile
     {

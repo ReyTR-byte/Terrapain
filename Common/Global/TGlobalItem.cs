@@ -33,10 +33,11 @@ namespace Terrapain.Common.Global
 		public static int NormalSwing;
 		public static int LightSwing;
 		public static int BatUseStyle;
-		public int drawDir;
+        public static int LaserUseStyle;
+        public int drawDir;
 		public static List<int> UseModDrawStyles = new List<int>();
 		public static Vector2 basicOffset = Vector2.UnitX * 10 + Vector2.UnitY * 2;
-		public float? basicRotation = null;
+		public float? spriteRotation = null;
 		public Vector2? DrawOrigin = null;
 		public bool[] hitList = new bool[Main.npc.Length];
 		float usedShootSpeedBonus;
@@ -213,6 +214,23 @@ namespace Terrapain.Common.Global
 		int swingDir;
 		bool resetTimer;
 
+        public override void UseAnimation(Item item, Terraria.Player player)
+        {
+            if (item.useStyle == ItemUseStyleID.Swing)
+            {
+                player.ChangeDir(Math.Sign(Main.MouseWorld.X - player.MountedCenter.X));
+            }
+        }
+        public override void UseItemFrame(Item item, Terraria.Player player)
+        {
+            if (item.useStyle == ItemUseStyleID.Swing)
+            {
+                if (item.DamageType != DamageClass.SummonMeleeSpeed)
+                {
+                    player.SetCompositeArmFront(true, Terraria.Player.CompositeArmStretchAmount.Full, player.itemRotation + MathHelper.ToRadians(-135 * player.direction));
+                }
+            }
+        }
 		public override void UseStyle(Item item, Terraria.Player player, Rectangle heldItemFrame)
 		{
 			if (item.useStyle == SharperUseStyle)

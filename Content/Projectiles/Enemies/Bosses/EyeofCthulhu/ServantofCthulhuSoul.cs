@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using static Terrapain.Content.Functions;
 
-namespace Terrapain.Content.Projectiles.Enemies
+namespace Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu
 {
     public class ServantofCthulhuSoul : ModProjectile
     {

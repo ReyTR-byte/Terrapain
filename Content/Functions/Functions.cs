@@ -6,6 +6,7 @@ using Terrapain.Assets.Extratextures;
 using Terrapain.Common.Config;
 using Terrapain.Common.Global;
 using Terrapain.Common.Player;
+using Terrapain.Content.Dusts;
 using Terraria;
 using Terraria.Chat;
 using Terraria.ID;
@@ -727,8 +728,196 @@ namespace Terrapain.Content
 			//Functions.Chatic(true);
 			return true;
 		}
-		public static bool SimpleColision(Vector2 Pos, Vector2 target, int width, int height)
+        public static bool Collision(Vector2 Pos1, Vector2 dir, float rad, Vector2 Pos2, int width, int height, ref Vector2 HitPoint, bool tileCollide = true)
+        {
+            //Chatic("call");
+            if (Pos1.X > Pos2.X && Pos1.X < Pos2.X + width && Pos1.Y > Pos2.Y && Pos1.Y < Pos2.Y + height)
+            {
+				HitPoint = Pos1;
+                return true;
+            }
+
+            Vector2 crossPoint;
+
+            /*if (dir.Y != 0)
+			{
+				crossPoint.Y = Pos2.Y;
+				crossPoint.X = Pos1.X - dir.X * ((Pos1.Y - crossPoint.Y) / dir.Y);
+				if (crossPoint.X < Pos2.X || crossPoint.X > Pos2.X + width)
+				{
+					crossPoint.Y = Pos2.Y + height;
+					crossPoint.X = Pos1.X - dir.X * ((Pos1.Y - crossPoint.Y) / dir.Y);
+					if (crossPoint.X < Pos2.X || crossPoint.X > Pos2.X + width)
+					{
+						return false;
+					}
+					else if (Vector2.Distance(DirectedTo, crossPoint) > rad)
+					{
+						if (dir.X != 0)
+						{
+							crossPoint.X = Pos2.X;
+							crossPoint.Y = Pos1.Y - dir.Y * ((Pos1.X - crossPoint.X) / dir.X);
+							if (crossPoint.Y < Pos2.Y || crossPoint.Y > Pos2.Y + height)
+							{
+								crossPoint.X = Pos2.X + width;
+								crossPoint.Y = Pos1.Y - dir.Y * ((Pos1.X - crossPoint.X) / dir.X);
+								if (crossPoint.Y < Pos2.Y || crossPoint.Y > Pos2.Y + height)
+								{
+									return false;
+								}
+								else if (Vector2.Distance(DirectedTo, crossPoint) > rad)
+								{
+									return false;
+								}
+							}
+						}
+					}
+				}
+				else if (Vector2.Distance(DirectedTo, crossPoint) > rad)
+				{
+					if (dir.X != 0)
+					{
+						crossPoint.X = Pos2.X;
+						crossPoint.Y = Pos1.Y - dir.Y * ((Pos1.X - crossPoint.X) / dir.X);
+						if (crossPoint.Y < Pos2.Y || crossPoint.Y > Pos2.Y + height)
+						{
+							crossPoint.X = Pos2.X + width;
+							crossPoint.Y = Pos1.Y - dir.Y * ((Pos1.X - crossPoint.X) / dir.X);
+							if (crossPoint.Y < Pos2.Y || crossPoint.Y > Pos2.Y + height)
+							{
+								return false;
+							}
+							else if (Vector2.Distance(DirectedTo, crossPoint) > rad)
+							{
+								return false;
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				if (DirectedTo.Y < Pos2.Y || DirectedTo.Y > Pos2.Y + height)
+				{
+					return false;
+				}
+				if (Math.Abs(Pos2.X - DirectedTo.X) > rad && Math.Abs(Pos2.X + width - DirectedTo.X) > rad)
+				{
+					return false;
+				}
+				crossPoint.Y = DirectedTo.Y;
+				crossPoint.X = dir.X > 0 ? Pos2.X : Pos2.X + width;
+			}*/
+
+            Vector2 closestCrossPoint = Vector2.Zero;
+            if (dir.Y != 0)
+            {
+                crossPoint.Y = Pos2.Y;
+                crossPoint.X = Pos1.X - dir.X * ((Pos1.Y - crossPoint.Y) / dir.Y);
+                if (crossPoint.X > Pos2.X && crossPoint.X < Pos2.X + width && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() || (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
+                {
+                    //Dust.NewDust(crossPoint, 0, 0, DustID.Torch);
+                    closestCrossPoint = crossPoint;
+                }
+                crossPoint.Y = Pos2.Y + height;
+                crossPoint.X = Pos1.X - dir.X * ((Pos1.Y - crossPoint.Y) / dir.Y);
+                if (crossPoint.X > Pos2.X && crossPoint.X < Pos2.X + width && (Vector2.Distance(closestCrossPoint, Pos1) > Vector2.Distance(crossPoint, Pos1) || closestCrossPoint == Vector2.Zero) && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() || (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
+                {
+                    //Dust.NewDust(crossPoint, 0, 0, DustID.Torch);
+                    closestCrossPoint = crossPoint;
+                }
+            }
+            if (dir.X != 0)
+            {
+                crossPoint.X = Pos2.X;
+                crossPoint.Y = Pos1.Y - dir.Y * ((Pos1.X - crossPoint.X) / dir.X);
+                if (crossPoint.Y > Pos2.Y & crossPoint.Y < Pos2.Y + height && (Vector2.Distance(closestCrossPoint, Pos1) > Vector2.Distance(crossPoint, Pos1) || closestCrossPoint == Vector2.Zero) && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() || (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign() && (crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() && (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
+                {
+                    //Dust.NewDust(crossPoint, 0, 0, DustID.Torch);
+                    closestCrossPoint = crossPoint;
+                }
+                crossPoint.X = Pos2.X + width;
+                crossPoint.Y = Pos1.Y - dir.Y * ((Pos1.X - crossPoint.X) / dir.X);
+                if (crossPoint.Y > Pos2.Y & crossPoint.Y < Pos2.Y + height && (Vector2.Distance(closestCrossPoint, Pos1) > Vector2.Distance(crossPoint, Pos1) || closestCrossPoint == Vector2.Zero) && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() || (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
+                {
+                    //Dust.NewDust(crossPoint, 0, 0, DustID.Torch);
+                    closestCrossPoint = crossPoint;
+                }
+            }
+
+            if (closestCrossPoint != Vector2.Zero && Vector2.Distance(closestCrossPoint, Pos1) <= rad)
+            {
+                crossPoint = closestCrossPoint;
+            }
+            else
+            {
+                return false;
+            }
+			HitPoint = crossPoint;
+			if (tileCollide)
+			{
+				Pos1 /= 16;
+				crossPoint /= 16;
+				int W = Math.Abs((int)Pos1.X - (int)crossPoint.X);
+				int H = Math.Abs((int)Pos1.Y - (int)crossPoint.Y);
+				int LeastX = Pos1.X < crossPoint.X ? (int)Pos1.X : (int)crossPoint.X;
+				int LeastY = Pos1.Y < crossPoint.Y ? (int)Pos1.Y : (int)crossPoint.Y;
+
+				for (int w = 0; w <= W; w++)
+				{
+					for (int h = 0; h <= H; h++)
+					{
+						if (Main.tile[LeastX + w, LeastY + h].HasTile && Main.tileSolid[Main.tile[LeastX + w, LeastY + h].TileType] && !Main.tileSolidTop[Main.tile[LeastX + w, LeastY + h].TileType])
+						{
+							if (dir.Y != 0)
+							{
+								crossPoint.Y = LeastY + h;
+								crossPoint.X = Pos1.X - dir.X * ((Pos1.Y - crossPoint.Y) / dir.Y);
+								if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1)
+								{
+									return false;
+								}
+								crossPoint.Y = LeastY + h + 1;
+								crossPoint.X = Pos1.X - dir.X * ((Pos1.Y - crossPoint.Y) / dir.Y);
+								if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1)
+								{
+									return false;
+								}
+								crossPoint.X = LeastX + w;
+								crossPoint.Y = Pos1.Y - dir.Y * ((Pos1.X - crossPoint.X) / dir.X);
+								if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1)
+								{
+									return false;
+								}
+								crossPoint.X = LeastX + w + 1;
+								crossPoint.Y = Pos1.Y - dir.Y * ((Pos1.X - crossPoint.X) / dir.X);
+								if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1)
+								{
+									return false;
+								}
+							}
+							else if (Main.tile[LeastX + w, LeastY + h].HasTile && Main.tileSolid[Main.tile[LeastX + w, LeastY + h].TileType] && !Main.tileSolidTop[Main.tile[LeastX + w, LeastY + h].TileType])
+							{
+								return false;
+							}
+						}
+					}
+				}
+			}
+            //Functions.Chatic(true);
+            return true;
+        }
+        public static bool SimpleColision(Vector2 Pos, Vector2 target, int width, int height)
 		{
+			if (Pos.X >= target.X && Pos.X <= target.X + width && Pos.Y >= target.Y && Pos.Y <= target.Y + height)
+			{
+                Pos /= 16;
+                if (Main.tile[(int)Pos.X, (int)Pos.Y].HasTile && Main.tileSolid[Main.tile[(int)Pos.X, (int)Pos.Y].TileType] && !Main.tileSolidTop[Main.tile[(int)Pos.X, (int)Pos.Y].TileType])
+                {
+                    return false;
+                }
+				return true;
+            }
 			Vector2 crossPoint;
 			Vector2 dir = target + new Vector2((float)width / 2, (float)height / 2) - Pos;
 			dir.Normalize();
@@ -893,6 +1082,391 @@ namespace Terrapain.Content
 			}
 			return false;
 		}
+		public static Vector2 RayColisionInTheWorld(Vector2 start, Vector2 end)
+		{
+			Vector2 crossPoint = Vector2.Zero;
+			start /= 16;
+			end /= 16;
+			Vector2 dir = (end - start).Normalized();
+            int W = (int)end.X - (int)start.X;
+            int H = (int)end.Y - (int)start.Y;
+            int LeastX = (int)start.X;
+            int LeastY = (int)start.Y;
+
+            for (int w = 0; Math.Abs(w) <= Math.Abs(W); w += W == 0? 1 : Math.Sign(W))
+            {
+                for (int h = 0; Math.Abs(h) <= Math.Abs(H); h += H == 0 ? 1 : Math.Sign(H))
+                {
+                    if (Main.tile[LeastX + w, LeastY + h].HasTile && Main.tileSolid[Main.tile[LeastX + w, LeastY + h].TileType] && !Main.tileSolidTop[Main.tile[LeastX + w, LeastY + h].TileType])
+                    {
+						if (dir.Y != 0)
+						{
+                            Vector2 result = Vector2.Zero;
+							if (Main.tile[LeastX + w, LeastY + h].IsHalfBlock)
+							{
+                                float distance = float.MaxValue;
+                                crossPoint.Y = LeastY + h + 0.5f;
+                                crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
+                                if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1)
+                                {
+                                    result = crossPoint;
+                                    distance = start.Distance(result);
+                                }
+                                crossPoint.Y = LeastY + h + 1;
+                                crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
+                                if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1 && crossPoint.Distance(start) < distance)
+                                {
+                                    result = crossPoint;
+                                    distance = crossPoint.Distance(start);
+                                }
+                                crossPoint.X = LeastX + w;
+                                crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
+                                if (crossPoint.Y > LeastY + h + 0.5f && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance)
+                                {
+                                    result = crossPoint;
+                                    distance = crossPoint.Distance(start);
+                                }
+                                crossPoint.X = LeastX + w + 1;
+                                crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
+                                if (crossPoint.Y > LeastY + h + 0.5f && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance)
+                                {
+                                    result = crossPoint;
+                                    distance = crossPoint.Distance(start);
+                                }
+                                if (result != Vector2.Zero)
+                                {
+                                    return result * 16;
+                                }
+                            }
+							else if (Main.tile[LeastX + w, LeastY + h].BottomSlope && Main.tile[LeastX + w, LeastY + h].RightSlope)
+							{
+                                float distance = float.MaxValue;
+								bool touchSlope = false;
+								bool touchSlope1 = false;
+                                bool touchSlope2 = false;
+                                crossPoint.Y = LeastY + h;
+                                crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
+                                if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1)
+                                {
+									touchSlope = true;
+									touchSlope1 = true;
+                                    result = crossPoint;
+                                    distance = crossPoint.Distance(start);
+                                }
+                                crossPoint.X = LeastX + w;
+                                crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
+                                if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1)
+                                {
+									touchSlope = !touchSlope;
+                                    touchSlope2 = true;
+                                    if (crossPoint.Distance(start) < distance)
+									{
+										result = crossPoint;
+										distance = crossPoint.Distance(start);
+									}
+                                }
+								if (touchSlope && (dir.X < 0 && touchSlope2 || dir.Y < 0 && touchSlope1))
+								{
+									Vector2 v = dir;
+									v.X = MathF.Abs(v.X);
+									v.Y = MathF.Abs(v.Y);
+									v /= v.X + v.Y;
+									if (touchSlope1)
+									{
+										float val = 1 - (result.X - LeastX - w);
+										float y = val * v.Y;
+										float x = 1 - y;
+										result.X = LeastX + w + x;
+										result.Y = LeastY + h + y;
+                                    }
+									else
+									{
+										float val = 1 - (result.Y - LeastY - h);
+										float x = val * v.X;
+										float y = 1 - x;
+										result.X = LeastX + w + x;
+										result.Y = LeastY + h + y;
+                                    }
+                                }
+                                if (result != Vector2.Zero)
+                                {
+                                    return result * 16;
+                                }
+                            }
+							else if (Main.tile[LeastX + w, LeastY + h].BottomSlope && Main.tile[LeastX + w, LeastY + h].LeftSlope)
+							{
+                                float distance = float.MaxValue;
+                                bool touchSlope = false;
+                                bool touchSlope1 = false;
+                                bool touchSlope2 = false;
+                                crossPoint.Y = LeastY + h;
+                                crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
+                                if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1)
+                                {
+                                    touchSlope = true;
+                                    touchSlope1 = true;
+                                    result = crossPoint;
+                                    distance = crossPoint.Distance(start);
+                                }
+                                crossPoint.X = LeastX + w + 1;
+                                crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
+                                if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1)
+                                {
+                                    touchSlope = !touchSlope;
+                                    touchSlope2 = true;
+                                    if (crossPoint.Distance(start) < distance)
+                                    {
+                                        result = crossPoint;
+                                        distance = crossPoint.Distance(start);
+                                    }
+                                }
+                                if (touchSlope && (dir.X > 0 && touchSlope2 || dir.Y < 0 && touchSlope1))
+                                {
+                                    Vector2 v = dir;
+                                    v.X = MathF.Abs(v.X);
+                                    v.Y = MathF.Abs(v.Y);
+                                    v /= v.X + v.Y;
+                                    if (touchSlope1)
+                                    {
+                                        float val = result.X - LeastX - w;
+                                        float y = val * v.Y;
+                                        float x = 1 - y;
+                                        result.X = LeastX + w + 1 - x;
+                                        result.Y = LeastY + h + y;
+                                    }
+                                    else
+                                    {
+                                        float val = 1 - (result.Y - LeastY - h);
+                                        float x = val * v.X;
+                                        float y = 1 - x;
+                                        result.X = LeastX + w + 1 - x;
+                                        result.Y = LeastY + h + y;
+                                    }
+                                }
+                                if (result != Vector2.Zero)
+                                {
+                                    return result * 16;
+                                }
+                            }
+							else if (Main.tile[LeastX + w, LeastY + h].TopSlope && Main.tile[LeastX + w, LeastY + h].LeftSlope)
+							{
+                                float distance = float.MaxValue;
+                                bool touchSlope = false;
+                                bool touchSlope1 = false;
+                                bool touchSlope2 = false;
+                                crossPoint.Y = LeastY + h + 1;
+                                crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
+                                if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1)
+                                {
+                                    touchSlope = true;
+                                    touchSlope1 = true;
+                                    result = crossPoint;
+                                    distance = crossPoint.Distance(start);
+                                }
+                                crossPoint.X = LeastX + w + 1;
+                                crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
+                                if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1)
+                                {
+                                    touchSlope = !touchSlope;
+                                    touchSlope2 = true;
+                                    if (crossPoint.Distance(start) < distance)
+                                    {
+                                        result = crossPoint;
+                                        distance = crossPoint.Distance(start);
+                                    }
+                                }
+                                if (touchSlope && (dir.X > 0 && touchSlope2 || dir.Y > 0 && touchSlope1))
+                                {
+                                    Vector2 v = dir;
+                                    v.X = MathF.Abs(v.X);
+                                    v.Y = MathF.Abs(v.Y);
+                                    v /= v.X + v.Y;
+                                    if (touchSlope1)
+                                    {
+                                        float val = result.X - LeastX - w;
+                                        float y = val * v.Y;
+                                        float x = 1 - y;
+                                        result.X = LeastX + w + 1 - x;
+                                        result.Y = LeastY + h + 1 - y;
+                                    }
+                                    else
+                                    {
+                                        float val = result.Y - LeastY - h;
+                                        float x = val * v.X;
+                                        float y = 1 - x;
+                                        result.X = LeastX + w + 1 - x;
+                                        result.Y = LeastY + h + 1 - y;
+                                    }
+                                }
+                                if (result != Vector2.Zero)
+                                {
+                                    return result * 16;
+                                }
+                            }
+							else if (Main.tile[LeastX + w, LeastY + h].TopSlope && Main.tile[LeastX + w, LeastY + h].RightSlope)
+							{
+                                float distance = float.MaxValue;
+                                bool touchSlope = false;
+                                bool touchSlope1 = false;
+                                bool touchSlope2 = false;
+                                crossPoint.Y = LeastY + h + 1;
+                                crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
+                                if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1)
+                                {
+                                    touchSlope = true;
+                                    touchSlope1 = true;
+                                    result = crossPoint;
+                                    distance = crossPoint.Distance(start);
+                                }
+                                crossPoint.X = LeastX + w;
+                                crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
+                                if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1)
+                                {
+                                    touchSlope = !touchSlope;
+                                    touchSlope2 = true;
+                                    if (crossPoint.Distance(start) < distance)
+                                    {
+                                        result = crossPoint;
+                                        distance = crossPoint.Distance(start);
+                                    }
+                                }
+                                if (touchSlope && (dir.X < 0 && touchSlope2 || dir.Y > 0 && touchSlope1))
+                                {
+                                    Vector2 v = dir;
+                                    v.X = MathF.Abs(v.X);
+                                    v.Y = MathF.Abs(v.Y);
+                                    v /= v.X + v.Y;
+                                    if (touchSlope1)
+                                    {
+                                        float val = 1 - (result.X - LeastX - w);
+                                        float y = val * v.Y;
+                                        float x = 1 - y;
+                                        result.X = LeastX + w + x;
+                                        result.Y = LeastY + h + 1 - y;
+                                    }
+                                    else
+                                    {
+                                        float val = result.Y - LeastY - h;
+                                        float x = val * v.X;
+                                        float y = 1 - x;
+                                        result.X = LeastX + w + x;
+                                        result.Y = LeastY + h + 1 - y;
+                                    }
+                                }
+                                if (result != Vector2.Zero)
+                                {
+                                    return result * 16;
+                                }
+                            }
+							else
+							{
+								float distance = float.MaxValue;
+								crossPoint.Y = LeastY + h;
+								crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
+								if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1)
+								{
+									result = crossPoint;
+									distance = start.Distance(result);
+								}
+								crossPoint.Y = LeastY + h + 1;
+								crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
+								if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1 && crossPoint.Distance(start) < distance)
+								{
+									result = crossPoint;
+									distance = crossPoint.Distance(start);
+								}
+								crossPoint.X = LeastX + w;
+								crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
+								if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance)
+								{
+									result = crossPoint;
+									distance = crossPoint.Distance(start);
+								}
+								crossPoint.X = LeastX + w + 1;
+								crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
+								if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance)
+								{
+									result = crossPoint;
+									distance = crossPoint.Distance(start);
+								}
+								if (result != Vector2.Zero)
+								{
+									return result * 16;
+								}
+							}
+                        }
+                        else if (Main.tile[LeastX + w, LeastY + h].HasTile && Main.tileSolid[Main.tile[LeastX + w, LeastY + h].TileType] && !Main.tileSolidTop[Main.tile[LeastX + w, LeastY + h].TileType])
+                        {
+                            return new Vector2(LeastX + w + (dir.X > 0? 0 : 1), start.Y) * 16;
+                        }
+                    }
+                }
+            }
+            return Vector2.Zero;
+		}
+		public static void RayCutTile(Vector2 start, Vector2 end, Player player)
+		{
+			bool[] tileCutIgnorance = player.GetTileCutIgnorance(true, false);
+            Vector2 crossPoint = Vector2.Zero;
+            start /= 16;
+            end /= 16;
+            Vector2 dir = (end - start).Normalized();
+            int W = (int)end.X - (int)start.X;
+            int H = (int)end.Y - (int)start.Y;
+            int LeastX = (int)start.X;
+            int LeastY = (int)start.Y;
+
+            for (int w = 0; Math.Abs(w) <= Math.Abs(W); w += W == 0 ? 1 : Math.Sign(W))
+            {
+                for (int h = 0; Math.Abs(h) <= Math.Abs(H); h += H == 0 ? 1 : Math.Sign(H))
+                {
+                    if (Main.tile[LeastX + w, LeastY + h].HasTile && Main.tileCut[Main.tile[LeastX + w, LeastY + h].TileType] && tileCutIgnorance[Main.tile[LeastX + w, LeastY + h].TileType] && WorldGen.CanCutTile(LeastX + w, LeastY + h, Terraria.Enums.TileCuttingContext.AttackProjectile))
+                    {
+						if (dir.Y != 0)
+						{
+							Vector2 result = Vector2.Zero;
+							float distance = float.MaxValue;
+							crossPoint.Y = LeastY + h;
+							crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
+							if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1)
+							{
+								result = crossPoint;
+								distance = start.Distance(result);
+							}
+							crossPoint.Y = LeastY + h + 1;
+							crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
+							if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1 && crossPoint.Distance(start) < distance)
+							{
+								result = crossPoint;
+								distance = crossPoint.Distance(start);
+							}
+							crossPoint.X = LeastX + w;
+							crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
+							if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance)
+							{
+								result = crossPoint;
+								distance = crossPoint.Distance(start);
+							}
+							crossPoint.X = LeastX + w + 1;
+							crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
+							if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance)
+							{
+								result = crossPoint;
+								distance = crossPoint.Distance(start);
+							}
+							if (result != Vector2.Zero)
+							{
+								WorldGen.KillTile(LeastX + w, LeastY + h);
+							}
+						}
+						else
+						{
+                            WorldGen.KillTile(LeastX + w, LeastY + h);
+                        }
+                    }
+                }
+            }
+        }
 		public static float DistanceBetweenHitboxes(Entity e1, Entity e2)
 		{
 			return DistanceBetweenHitboxes(e1.position, e1.width, e1.height, e2.position, e2.width, e2.height);

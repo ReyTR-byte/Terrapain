@@ -1,7 +1,7 @@
 ﻿using Luminance.Common.Utilities;
 using Terrapain.Common.System;
 using Terrapain.Content.Groups;
-using Terrapain.Content.Projectiles.Enemies;
+using Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
