@@ -54,7 +54,12 @@ namespace Terrapain.Common.Global.TGlobalItems
                         item.damage = 50;
                     }
                     break;
+                case ItemID.TopazStaff:
+                    item.shootSpeed = 20;
+                    return true;
+                    break;
             }
+
             return false;
         }
         public override void SetDefaults(Item entity)

@@ -8,7 +8,8 @@ namespace Terrapain.Assets.Extratextures
     {
         public static Asset<Texture2D> BlackPixel => ModContent.Request<Texture2D>("Terrapain/Assets/ExtraTextures/ShaderTextures/BlackPixel");
         public static Asset<Texture2D> WhitePixel => ModContent.Request<Texture2D>("Terrapain/Assets/ExtraTextures/ShaderTextures/WhitePixel");
-        public static Asset<Texture2D> Glow => ModContent.Request<Texture2D>("Terrapain/Assets/ExtraTextures/ShaderTextures/GlowTexture");
+        public static Asset<Texture2D> Glow1 => ModContent.Request<Texture2D>("Terrapain/Assets/ExtraTextures/ShaderTextures/Glow1Texture");
+        public static Asset<Texture2D> Glow2 => ModContent.Request<Texture2D>("Terrapain/Assets/ExtraTextures/ShaderTextures/Glow2Texture");
         public static Asset<Texture2D> Aura => ModContent.Request<Texture2D>("Terrapain/Assets/ExtraTextures/ShaderTextures/Aura");
         public static Asset<Texture2D> Portal => ModContent.Request<Texture2D>("Terrapain/Assets/ExtraTextures/Portal");
         public static Asset<Texture2D> Lighting => ModContent.Request<Texture2D>("Terrapain/Assets/ExtraTextures/ShaderTextures/Lighting");

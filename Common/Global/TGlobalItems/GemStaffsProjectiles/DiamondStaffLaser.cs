@@ -1,19 +1,21 @@
-﻿using System;
+﻿using Luminance.Core.Graphics;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Xna.Framework.Graphics;
+using Steamworks;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Assets.Extratextures;
+using Terrapain.Common.Config;
 using Terrapain.Content;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.ModLoader;
 using Terraria.ID;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Luminance.Core.Graphics;
-using Steamworks;
-using Terrapain.Assets.Extratextures;
-using Microsoft.Xna.Framework.Graphics;
-using System.ComponentModel.DataAnnotations;
+using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
 {
@@ -44,15 +46,13 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
             Projectile.height = 16;
             Projectile.penetrate = 1;
             Projectile.friendly = true;
+            Projectile.extraUpdates = 1;
             //Projectile.GetT().useVanillaDrawing = false;
         }
         public override bool? CanCutTiles()
         {
             Functions.RayCutTile(Projectile.Center, Projectile.Center + dir * lenght, Main.player[Projectile.owner]);
             return false;
-        }
-        public override void CutTiles()
-        {
         }
         public override void OnSpawn(IEntitySource source)
         {
@@ -84,13 +84,12 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
             else
             {
                 Projectile.timeLeft = 2;
-                Projectile.Center = Main.player[Projectile.owner].MountedCenter + TGlobalItem.GetHandOffset(Main.player[Projectile.owner]);
+                Vector2 Center = Main.player[Projectile.owner].MountedCenter + TGlobalItem.GetHandOffset(Main.player[Projectile.owner]);
                 Projectile.rotation = own.itemRotation + (own.direction == -1? MathF.PI: 0) - 0.25f * MathF.PI * own.direction;
-                Projectile.Center += dir * 20;
+                Center += dir * 65;
                 cooldown -= 1;
-                lenght += 35;
+                lenght += 18;
                 lenght = Math.Min(lenght, 800);
-                Vector2 Center = Projectile.Center;
                 Projectile.width = (int)(Math.Abs(dir.X) * lenght * 2);
                 Projectile.height = (int)(Math.Abs(dir.Y) * lenght * 2);
                 Projectile.Center = Center;
@@ -108,12 +107,12 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            cooldown = 10;
+            cooldown = 20;
             Projectile.penetrate++;
         }
         public override void OnHitPlayer(Terraria.Player target, Terraria.Player.HurtInfo info)
         {
-            cooldown = 10;
+            cooldown = 20;
             Projectile.penetrate++;
         }
         public override void OnKill(int timeLeft)
@@ -130,9 +129,35 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
             }
             return false;
         }
+        UnifiedRandom random = new UnifiedRandom();
+        int shaderTime;
         public override bool PreDraw(ref Color lightColor)
         {
-            Main.spriteBatch.DrawLine(Projectile.Center, Projectile.Center + dir * lenght, Color.LightBlue, 20);
+            float width = random.NextFloat(18, 22);
+            ManagedShader Shade = ShaderManager.GetShader("Terrapain.LaserShader");
+            Shade.TrySetParameter("lenght", lenght + width);
+            Shade.TrySetParameter("width", width);
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, Shade.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
+
+            Main.spriteBatch.DrawLine(Projectile.Center - dir * width / 2, Projectile.Center + dir * (lenght + width / 2), Color.LightBlue * 0.8f, width);
+            width *= 3;
+            ManagedShader shader = ShaderManager.GetShader("Terrapain.DiamondLaserGlowShader");
+            shader.TrySetParameter("color", Color.LightBlue * 0.7f);
+            shader.TrySetParameter("width", width);
+            shader.TrySetParameter("height", lenght + width);
+            shader.TrySetParameter("rastyajenie", 500 / width);
+            shader.TrySetParameter("time", shaderTime);
+            shader.TrySetParameter("speed", 0.96f);
+            Texture2D texture = ExtraTextureRegistry.Glow2.Value;
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, shader.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
+            Main.spriteBatch.DrawLine(Projectile.Center - dir * width / 2, Projectile.Center + dir * (lenght + width / 2), Color.LightBlue, width, texture);
+            shaderTime++;
+
+            Main.spriteBatch.End();
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
             return false;
         }
         public float WidthFunction(float value) => 12f;

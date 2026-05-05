@@ -7,6 +7,7 @@
 	  <AdditionalFiles Remove="Assets\AutoloadedEffects\Shaders\EyeofCthulhuLensShader.fx" />
 	</ItemGroup>
 	<ItemGroup>
+	  <AdditionalFiles Include="Assets\AutoloadedEffects\Shaders\DiamondLaserGlowShader.fxc" />
 	  <AdditionalFiles Include="Assets\AutoloadedEffects\Shaders\EoCShader.fxc" />
 	  <AdditionalFiles Include="Assets\AutoloadedEffects\Shaders\EyeofCthulhuLensShader.fxc" />
 	</ItemGroup>

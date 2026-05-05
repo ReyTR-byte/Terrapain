@@ -1,15 +1,18 @@
-﻿using Terrapain.Common.Global.TGlobalNPCs;
+﻿using Luminance.Common.Utilities;
+using Microsoft.Xna.Framework.Graphics;
+using System.Net.Security;
+using Terrapain.Assets.Extratextures;
+using Terrapain.Common.Config;
+using Terrapain.Common.Global;
+using Terrapain.Common.Global.TGlobalNPCs;
+using Terrapain.Common.System;
+using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
-using Terraria.DataStructures;
-using Luminance.Common.Utilities;
 using Terraria.Utilities;
-using Terrapain.Common.Global;
 using static Terrapain.Content.Functions;
-using System.Net.Security;
-using Terrapain.Common.System;
 
 namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
 {
@@ -37,8 +40,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
         }
         public int teleportTimer
         {
-            get => (int)Main.npc[t.npcid].ai[1] + 1;
-            set => Main.npc[t.npcid].ai[1] = value - 1;
+            get => (int)Main.npc[t.npcid].ai[1] - 1;
+            set => Main.npc[t.npcid].ai[1] = value + 1;
         }
         public Vector2 teleportPosition
         {
@@ -65,11 +68,13 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
             return t.Target.position.Y > npc.Bottom.Y;
         }
         protected int SlimeWall => ModContent.ProjectileType<SlimeWall>();
-        protected int SlimeBall => ModContent.ProjectileType<SlimeBall>();
+        protected int SlimeBall => ModContent.ProjectileType<KingSlimeBall>();
         public int SlimeBallDamage = 10;
         public float SlimeBallKnockback = 5.5f;
         public override bool ModPreAI(NPC npc)
         {
+            npc.MaxFallSpeedMultiplier = MultipliableFloat.One * 500;
+            npc.noTileCollide = false;
             switch (phase)
             {
                 case 0:
@@ -93,13 +98,18 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                 Main.dust[d].velocity = rand.NextVector2Unit() * (3 + rand.NextFloat(5));
                 teleportTimer--;
             }
+            phase1 = [0, 1, 0, 2];
             return false;
         }
         
         void ChillMovement(NPC npc)
         {
-            if (npc.collideY && !teleporting)
+            if ((npc.collideY || npc.collideX) && !teleporting)
             {
+                if(t.Target.controlJump)
+                {
+
+                }
                 npc.velocity = Vector2.Zero;
                 if (movementTimer > 0)
                 {
@@ -107,8 +117,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                 }
                 else
                 {
-                    npc.velocity.Y = -30;
-                    npc.velocity.X = MathF.Max(30, MathF.Abs(t.Target.Center.X - npc.Center.X) / 20) * (npc.Center.X - t.Target.Center.X).NonZeroSign();
+                    npc.velocity.Y = -MathHelper.Clamp((npc.Center.Y - t.Target.Center.Y) / 30, 10, 30);
+                    npc.velocity.X = MathHelper.Clamp(MathF.Abs(t.Target.Center.X - npc.Center.X) / 60, 10, 30) * (t.Target.Center.X - npc.Center.X).NonZeroSign();
                 }
             }
             else
@@ -132,9 +142,15 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                     npc.Center = teleportPosition;
                     if (npc.Distance(t.Target.Center) > 500)
                     {
-                        npc.velocity = npc.DirectionTo(t.Target.Center) * 60;
+                        npc.velocity = npc.DirectionTo(t.Target.Center) * 20;
                     }
                 }
+            }
+            if (npc.velocity.Y < 0)
+            {
+                npc.noTileCollide = true;
+                npc.collideY = false;
+                npc.collideX = false;
             }
         }
         void DoFirstPhase(NPC npc)
@@ -156,7 +172,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                         int count = WorldDifficultySystem.torture ? 6 : 8;
                         for (int i = 0; i < count; i++)
                         {
-                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, Vector2.UnitX.RotatedBy(0.1f * MathF.PI + (i / (count - 1f)) * 0.8f * MathF.PI) * 25, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(0.1f * MathF.PI + (i / (count - 1f)) * 0.8f * MathF.PI) * 25, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
                         }
                         npc.Center = teleportPosition;
                         teleporting = false;
@@ -165,9 +181,38 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                     {
                         if (!teleporting)
                         {
-                            teleportPosition = t.Target.Center + new Vector2((rand.Next(2) == 0 ? -1 : 1) * 150, -600);
+                            teleportPosition = t.Target.Center + new Vector2((rand.Next(2) == 0 ? -1 : 1) * 150, -1000);
                             teleportTimer = 100;
                         }
+                    }
+                    if (mainTimer == 0 && !teleporting)
+                    {
+                        NextAttack1(npc);
+                    }
+                    break;
+                case 2:
+                    ChillMovement(npc);
+                    if (timers[0] == 0)
+                    {
+                        int count = 5;
+                        for (int i = 0; i < count; i++)
+                        {
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count  * MathF.PI) * 2f + npc.DirectionTo(t.Target.Center) * 20, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
+                        }
+                        count = 4;
+                        for (int i = 0; i < count; i++)
+                        {
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count * MathF.PI) * 1.5f + npc.DirectionTo(t.Target.Center).RotatedBy(MathF.PI * 0.2f) * 25, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
+                        }
+                        for (int i = 0; i < count; i++)
+                        {
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count * MathF.PI) * 1.5f + npc.DirectionTo(t.Target.Center).RotatedBy(MathF.PI * -0.2f) * 25, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
+                        }
+                        timers[0] = 45;
+                    }
+                    if (mainTimer == 0 && !teleporting)
+                    {
+                        NextAttack1(npc);
                     }
                     break;
             }
@@ -175,7 +220,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
         void NextAttack1(NPC npc)
         {
             attackCounter++;
-            if (attackCounter > phase1.Length)
+            if (attackCounter >= phase1.Length)
             {
                 attackCounter = 0;
             }
@@ -188,7 +233,20 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                 case 1:
                     mainTimer = 300;
                     break;
+                case 2:
+                    timers[0] = 100;
+                    mainTimer = 450;
+                    break;
             }
+        }
+        public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            if (phase == 0 && CurentAttack == 1)
+            {
+                Rectangle rectangle = new Rectangle((int)npc.Center.X - 45 - (int)screenPos.X, 0, 90, Main.screenHeight);
+                spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, rectangle, Color.Blue * 0.5f);
+            }
+            return true;
         }
     }
 }

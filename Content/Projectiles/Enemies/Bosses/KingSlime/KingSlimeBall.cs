@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
 {
-    public class SlimeBall : ModProjectile
+    public class KingSlimeBall : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -18,7 +18,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             Projectile.height = 40;
             Projectile.timeLeft = 600;
             Projectile.tileCollide = true;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = 3;
             Projectile.hostile = true;
             Projectile.aiStyle = -1;
         }
@@ -38,34 +38,39 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
                     CollidePosition.X = Math.Abs(target.position.Y + target.height - Projectile.Center.Y) * Projectile.oldVelocity.X / Projectile.oldVelocity.Length() + Projectile.Center.X;
                 else
                 {
-                    Projectile.velocity.X *= -1.05f;
+                    Projectile.velocity.X *= -0.95f;
                     return;
                 }
             }
             if (CollidePosition.X > target.position.X && CollidePosition.X < target.position.X + target.width)
             {
-                Projectile.velocity.Y *= -1.05f;
+                Projectile.velocity.Y *= -0.95f;
             }
             else
             {
-                Projectile.velocity.X *= -1.05f;
+                Projectile.velocity.X *= -0.95f;
             }
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
+            Projectile.penetrate--;
+            if(Projectile.penetrate == 0)
+            {
+                Projectile.Kill();
+            }
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
             SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
 
             // If the projectile hits the left or right side of the tile, reverse the X velocity
             if (Math.Abs(Projectile.velocity.X - oldVelocity.X) > float.Epsilon)
             {
-                Projectile.velocity.X = -oldVelocity.X * 1.05f;
+                Projectile.velocity.X = -oldVelocity.X * 0.95f;
             }
 
             // If the projectile hits the top or bottom side of the tile, reverse the Y velocity
             if (Math.Abs(Projectile.velocity.Y - oldVelocity.Y) > float.Epsilon)
             {
-                Projectile.velocity.Y = -oldVelocity.Y * 1.05f;
+                Projectile.velocity.Y = -oldVelocity.Y * 0.95f;
             }
 
             return false;
@@ -77,8 +82,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
         }
         public override void AI()
         {
-            if (Projectile.velocity.Y < 12)
-                Projectile.velocity.Y += 0.075f;
+            Projectile.velocity.Y += 0.3f;
             if (Projectile.wet)
             {
                 Projectile.velocity *= 0.99f;

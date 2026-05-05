@@ -2065,7 +2065,7 @@ namespace Terrapain.Content
                 end -= Main.screenPosition;
                 float rotation = (end - start).ToRotation();
                 Texture2D value = texture?? ExtraTextureRegistry.WhitePixel.Value;
-                Vector2 scale = new Vector2(width / value.Size().Y, Vector2.Distance(start, end) / value.Size().X);
+                Vector2 scale = new Vector2(width / value.Size().X, Vector2.Distance(start, end) / value.Size().Y);
                 Vector2 origin = new Vector2((float)value.Width * 0.5f, 0);
                 spriteBatch.Draw(value, start, null, color, rotation - MathF.PI / 2, origin, scale, SpriteEffects.None, 0f);
             }

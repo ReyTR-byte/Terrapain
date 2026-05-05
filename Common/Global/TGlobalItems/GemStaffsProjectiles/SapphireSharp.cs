@@ -187,7 +187,7 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
                 Main.spriteBatch.Draw(blackTile.Value, rectangle, null, Color.Black/*, 0f, blackTile.Value.Size() * 0.5f, 0, 1f*/);
             }
             ManagedShader shader = ShaderManager.GetShader("Terrapain.GlowShader");
-            Texture2D texture = ExtraTextureRegistry.Glow.Value;
+            Texture2D texture = ExtraTextureRegistry.Glow1.Value;
             shader.TrySetParameter("color", Color.LightBlue.ToVector4() * (1 - val));
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, shader.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);

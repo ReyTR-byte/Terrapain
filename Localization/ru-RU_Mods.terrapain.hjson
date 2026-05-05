@@ -596,6 +596,7 @@ Projectiles: {
 	// ArrivedHeartProjectile.DisplayName: Arrived Heart Projectile
 	// DiamondStaffLaser.DisplayName: Diamond Staff Laser
 	// SlimeWall.DisplayName: Slime Wall
+	// KingSlimeBall.DisplayName: King Slime Ball
 }
 
 NPCs: {
