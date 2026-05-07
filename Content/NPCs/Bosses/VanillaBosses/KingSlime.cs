@@ -1,5 +1,6 @@
 ﻿using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework.Graphics;
+using Steamworks;
 using System.Net.Security;
 using Terrapain.Assets.Extratextures;
 using Terrapain.Common.Config;
@@ -24,14 +25,17 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
         }
         public int CurentAttack;
         public int attackCounter = -1;
-        public int[] phase1 = [0, 1];
+        public int[] phase1 = [0, 1, 0, 2, 0, 3, 0, 4];
         int mainTimer;
         int movementTimer;
         int[] timers = new int[2];
-        int phase
+        //int phase
+        //{
+        //    get => (int)Main.npc[t.npcid].ai[0];
+        //    set => Main.npc[t.npcid].ai[0] = value;
+        //}
+        public override void FindFrame(NPC npc, int frameHeight)
         {
-            get => (int)Main.npc[t.npcid].ai[0];
-            set => Main.npc[t.npcid].ai[0] = value;
         }
         public bool teleporting
         {
@@ -52,6 +56,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                 Main.npc[t.npcid].ai[3] = value.Y;
             } 
         }
+        bool oldCollideY;
         UnifiedRandom rand => TGlobalNPC.random;
 
         public override void OnSpawn(NPC npc, IEntitySource source)
@@ -65,22 +70,32 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
         }
         public override bool? CanFallThroughPlatforms(NPC npc)
         {
+            if (npc.ai[0] == 1 && CurentAttack == 4)
+            {
+                return false;
+            }
             return t.Target.position.Y > npc.Bottom.Y;
         }
-        protected int SlimeWall => ModContent.ProjectileType<SlimeWall>();
-        protected int SlimeBall => ModContent.ProjectileType<KingSlimeBall>();
+        int SlimeWall => ModContent.ProjectileType<SlimeWall>();
+        int SlimeBall => ModContent.ProjectileType<KingSlimeBall>();
         public int SlimeBallDamage = 10;
         public float SlimeBallKnockback = 5.5f;
+        int Shuriken => ModContent.ProjectileType<Shuriken>();
+        public int ShurikenDamage = 12;
+        public float ShurikenKnockBack = 3;
+        int Laser => ModContent.ProjectileType<KingSlimeKrownLaser>();
+        public int LaserDamage = 15;
+        public float LaserKnockBack = 2;
         public override bool ModPreAI(NPC npc)
         {
             npc.MaxFallSpeedMultiplier = MultipliableFloat.One * 500;
             npc.noTileCollide = false;
-            switch (phase)
-            {
-                case 0:
+            //switch (phase)
+            //{
+            //    case 0:
                     DoFirstPhase(npc);
-                    break;
-            }
+            //        break;
+            //}
             if (mainTimer > 0)
             {
                 mainTimer--;
@@ -98,7 +113,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                 Main.dust[d].velocity = rand.NextVector2Unit() * (3 + rand.NextFloat(5));
                 teleportTimer--;
             }
-            phase1 = [0, 1, 0, 2];
+            oldCollideY = npc.collideY;
             return false;
         }
         
@@ -165,6 +180,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                     }
                     break;
                 case 1:
+                    if (npc.Bottom.Y < t.Target.Top.Y - 150)
+                    {
+                        npc.noTileCollide = true;
+                    }
                     if ((npc.collideY || teleportTimer == 0) && teleporting)
                     {
                         teleportTimer = 80;
@@ -208,7 +227,59 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                         {
                             Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count * MathF.PI) * 1.5f + npc.DirectionTo(t.Target.Center).RotatedBy(MathF.PI * -0.2f) * 25, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
                         }
-                        timers[0] = 45;
+                        timers[0] = 65;
+                    }
+                    if (mainTimer == 0 && !teleporting)
+                    {
+                        NextAttack1(npc);
+                    }
+                    break;
+                case 3:
+                    int count1 = 4;
+                    if (teleporting || !npc.collideY || npc.ai[0] == 0 || npc.ai[0] == count1)
+                    { 
+                        ChillMovement(npc); 
+                    }
+                    if (npc.collideY)
+                    {
+                        if (npc.ai[0] == 0 && !oldCollideY)
+                        {
+                            float count = 16;
+                            int dir = 1;
+                            for (int i = 0; i < count; i++)
+                            {
+                                Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, Vector2.UnitX.RotatedBy(i / count * 2 * MathF.PI + 1 / count * MathF.PI) * 16, Shuriken, ShurikenDamage, ShurikenKnockBack, -1, dir * 1.25f);
+                                dir *= -1;
+                            }
+                            npc.ai[0] = count1;
+                            timers[0] = 10;
+                        }
+                        else if (npc.ai[0] != 0 && (npc.ai[0] != count1 || !oldCollideY) && timers[0] == 0)
+                        {
+                            npc.ai[0]--;
+                            Vector2 dir = npc.DirectionTo(t.Target.Center);
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, dir.RotatedBy(npc.ai[0] / (count1 - 1) * 0.25f * MathF.PI - 0.125f * MathF.PI) * 15, Shuriken, ShurikenDamage, ShurikenKnockBack, -1, (int)npc.ai[0] % 2 == 1? 1 : -1);
+                            timers[0] = 10;
+                        }
+                    }
+                    if (mainTimer == 0 && !teleporting)
+                    {
+                        NextAttack1(npc);
+                    }
+                    break;
+                case 4:
+                    if (npc.collideY)
+                    {
+                        npc.velocity = Vector2.Zero;
+                        mainTimer = Math.Min(350, mainTimer);
+                        if (npc.ai[0] == 0)
+                        {
+                            int dir = rand.Next(2) == 1? 1 : -1;
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center).RotatedBy(0.25f * MathF.PI * dir) * 4, Laser, LaserDamage, LaserKnockBack, -1, 0, npc.whoAmI, 0.005f * dir);
+                            Main.projectile[proj].timeLeft = mainTimer;
+
+                            npc.ai[0] = 1;
+                        }
                     }
                     if (mainTimer == 0 && !teleporting)
                     {
@@ -228,7 +299,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
             switch(CurentAttack)
             {
                 case 0:
-                    mainTimer = 100;
+                    mainTimer = 200;
                     break;
                 case 1:
                     mainTimer = 300;
@@ -237,11 +308,19 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                     timers[0] = 100;
                     mainTimer = 450;
                     break;
+                case 3:
+                    mainTimer = 450;
+                    npc.ai[0] = 0;
+                    break;
+                case 4:
+                    npc.ai[0] = 0;
+                    mainTimer = 500;
+                    break;
             }
         }
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            if (phase == 0 && CurentAttack == 1)
+            if (/*phase == 0 &&*/ CurentAttack == 1)
             {
                 Rectangle rectangle = new Rectangle((int)npc.Center.X - 45 - (int)screenPos.X, 0, 90, Main.screenHeight);
                 spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, rectangle, Color.Blue * 0.5f);

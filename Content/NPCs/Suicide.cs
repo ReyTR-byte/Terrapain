@@ -31,8 +31,8 @@ namespace Terrapain.Content.NPCs
         }
         public override void SetDefaults()
         {
-            NPC.width = 48; // The width of the npc hitbox
-            NPC.height = 48; // The height of the npc hitbox
+            NPC.width = 24; // The width of the npc hitbox
+            NPC.height = 46; // The height of the npc hitbox
             NPC.aiStyle = -1; // Using custom AI
             NPC.damage = 50; // The amount of damage this NPC will deal on collision
             NPC.defense = 2; // How resistant to damage this NPC is

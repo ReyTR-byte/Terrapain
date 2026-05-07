@@ -597,6 +597,8 @@ Projectiles: {
 	// DiamondStaffLaser.DisplayName: Diamond Staff Laser
 	// SlimeWall.DisplayName: Slime Wall
 	// KingSlimeBall.DisplayName: King Slime Ball
+	// Shuriken.DisplayName: Shuriken
+	// KingSlimeKrownLaser.DisplayName: King Slime Krown Laser
 }
 
 NPCs: {

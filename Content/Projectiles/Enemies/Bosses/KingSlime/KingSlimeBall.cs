@@ -16,7 +16,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
         {
             Projectile.width = 40;
             Projectile.height = 40;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 300;
             Projectile.tileCollide = true;
             Projectile.penetrate = 3;
             Projectile.hostile = true;
@@ -82,6 +82,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
         }
         public override void AI()
         {
+            Projectile.alpha = 255 - (int)(MathF.Min(Projectile.timeLeft / 50f, 1) * 255);
             Projectile.velocity.Y += 0.3f;
             if (Projectile.wet)
             {
@@ -121,6 +122,10 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
                     onFire = true;
                 }
             }
+        }
+        public override bool? CanDamage()
+        {
+            return Projectile.timeLeft > 25? null : false;
         }
         public override void OnKill(int timeLeft)
         {

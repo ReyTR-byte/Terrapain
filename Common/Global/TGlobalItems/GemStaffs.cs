@@ -51,13 +51,10 @@ namespace Terrapain.Common.Global.TGlobalItems
                     {
                         int proj2 = Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<DiamondStaffLaser>(), damage, knockback, player.whoAmI, -1, -1, -1);
                         Main.projectile[proj2].ai[2] = -1 * proj2 - 1;
-                        item.damage = 50;
                     }
                     break;
                 case ItemID.TopazStaff:
-                    item.shootSpeed = 20;
                     return true;
-                    break;
             }
 
             return false;
@@ -94,6 +91,9 @@ namespace Terrapain.Common.Global.TGlobalItems
                     entity.damage = 50;
                     entity.useStyle = TGlobalItem.LaserUseStyle;
                     entity.GetT().spriteRotation = 0.25f * MathF.PI;
+                    break;
+                case ItemID.TopazStaff:
+                    entity.shootSpeed = 20;
                     break;
             }
         }
