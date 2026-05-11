@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
 {
@@ -14,13 +16,19 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
     {
         public override void SetDefaults()
         {
-            Projectile.width = 40;
-            Projectile.height = 40;
+            Projectile.width = 38;
+            Projectile.height =38;
             Projectile.timeLeft = 300;
             Projectile.tileCollide = true;
             Projectile.penetrate = 3;
             Projectile.hostile = true;
             Projectile.aiStyle = -1;
+        }
+        static UnifiedRandom rand = new UnifiedRandom();
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.ai[1] = rand.NextFloat(-0.5f, 0.5f);
+            Projectile.rotation = rand.NextFloat(MathF.PI * 2);
         }
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
@@ -28,7 +36,6 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             {
                 target.AddBuff(BuffID.OnFire, 150);
             }
-
             Vector2 CollidePosition = Vector2.Zero;
             if (Projectile.oldVelocity.Y > 0)
                 CollidePosition.X = Math.Abs(target.position.Y - Projectile.Center.Y) * Projectile.oldVelocity.X / Projectile.oldVelocity.Length() + Projectile.Center.X;
@@ -82,7 +89,8 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
         }
         public override void AI()
         {
-            Projectile.alpha = 255 - (int)(MathF.Min(Projectile.timeLeft / 50f, 1) * 255);
+            Projectile.rotation += Projectile.ai[1];
+            Projectile.alpha = 255 - (int)(MathF.Min(Projectile.timeLeft / 50f, 1) * 225);
             Projectile.velocity.Y += 0.3f;
             if (Projectile.wet)
             {

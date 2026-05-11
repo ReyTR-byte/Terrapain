@@ -310,7 +310,7 @@ namespace Terrapain.Common.Player
 			if (drawInfo.drawPlayer.HeldItem.type == ModContent.ItemType<GranithStuff>())
 			{
 				textureSample = ModContent.Request<Texture2D>(drawInfo.drawPlayer.HeldItem.ModItem.Texture).Value;
-				texture = ModContent.Request<Texture2D>(drawInfo.drawPlayer.HeldItem.ModItem.Texture + "_Hand").Value;
+				texture = ModContent.Request<Texture2D>(drawInfo.drawPlayer.HeldItem.ModItem.Texture + "_Held").Value;
 			}
 			for (int i = 0; i < drawInfo.DrawDataCache.Count; i++)
 			{

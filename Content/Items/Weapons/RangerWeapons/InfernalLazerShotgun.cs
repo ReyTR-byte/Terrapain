@@ -67,7 +67,8 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 		// Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
 
 		// This method lets you adjust position of the gun in the player's hands. Play with these values until it looks good with your graphics.
-		public override Vector2? HoldoutOffset() {
+		public override Vector2? HoldoutOrigin()
+		{
 			return new Vector2(-2f, -2f);
 		}
 	}

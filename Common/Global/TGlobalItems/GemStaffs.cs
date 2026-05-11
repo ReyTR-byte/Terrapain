@@ -8,6 +8,7 @@ using Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles;
 using Terrapain.Content;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
@@ -59,6 +60,10 @@ namespace Terrapain.Common.Global.TGlobalItems
 
             return false;
         }
+        public override Vector2? HoldoutOrigin(int type)
+        {
+            return new Vector2(0, TextureAssets.Item[type].Value.Height / 2f);
+        }
         public override void SetDefaults(Item entity)
         {
             switch (entity.type)
@@ -69,23 +74,28 @@ namespace Terrapain.Common.Global.TGlobalItems
                     entity.shootSpeed = 20;
                     entity.damage = 40;
                     entity.mana = 15;
+                    entity.GetT().spriteRotation = 0.25f * MathF.PI;
                     break;
                 case ItemID.RubyStaff:
                     entity.shootSpeed = 9;
                     entity.useAnimation = 9;
                     entity.useTime = 10;
                     entity.mana = 3;
+                    entity.GetT().spriteRotation = 0.25f * MathF.PI;
                     break;
                 case ItemID.EmeraldStaff:
                     entity.useAnimation = 20;
                     entity.useTime = 20;
                     entity.shootSpeed = 13;
+                    entity.GetT().spriteRotation = 0.25f * MathF.PI;
                     break;
                 case ItemID.SapphireStaff:
                     entity.shootSpeed = 10;
+                    entity.GetT().spriteRotation = 0.25f * MathF.PI;
                     break;
                 case ItemID.AmberStaff:
                     entity.shootSpeed = 20;
+                    entity.GetT().spriteRotation = 0.25f * MathF.PI;
                     break;
                 case ItemID.DiamondStaff:
                     entity.damage = 50;
@@ -94,6 +104,7 @@ namespace Terrapain.Common.Global.TGlobalItems
                     break;
                 case ItemID.TopazStaff:
                     entity.shootSpeed = 20;
+                    entity.GetT().spriteRotation = 0.25f * MathF.PI;
                     break;
             }
         }

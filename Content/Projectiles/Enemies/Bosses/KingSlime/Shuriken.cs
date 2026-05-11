@@ -18,6 +18,8 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             Projectile.hostile = true;
             Projectile.ignoreWater = true;
             Projectile.timeLeft = 400;
+            Projectile.GetT().useVanillaDrawing = false;
+            Projectile.GetT().useModDrawingInPreDraw = true;
         }
         public override void AI()
         {

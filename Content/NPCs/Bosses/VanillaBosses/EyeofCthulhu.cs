@@ -685,6 +685,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
         bool canBeHit = true;
         public override void ModSetDefaults(NPC entity)
         {
+            entity.GetT().canselDeathHitEffect = true;
             entity.life = (int)(entity.life * 1.35f);
         }
         public override int type => NPCID.EyeofCthulhu;
@@ -724,6 +725,14 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
         {
             dir[1] = 1;
             drawCenter = new Vector2(55, 38 + npc.height / 2);
+        }
+        public override void BossHeadSlot(NPC npc, ref int index)
+        {
+            index = 0;
+            if (phase > 2)
+            {
+                index = 1;
+            }
         }
         public override bool ModPreAI(NPC npc)
         {
@@ -2287,6 +2296,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                         {
                             if (WorldDifficultySystem.torture)
                             {
+                                npc.GetT().canselDeathHitEffect = false;
                                 npc.immortal = false;
                                 npc.StrikeInstantKill();
                             }
@@ -2352,6 +2362,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                             }
                             else
                             {
+                                npc.GetT().canselDeathHitEffect = false;
                                 npc.immortal = false;
                                 npc.StrikeInstantKill();
                             }
@@ -2366,6 +2377,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                     }
                     if (mainTimer == 0)
                     {
+                        npc.GetT().canselDeathHitEffect = false;
                         npc.immortal = false;
                         npc.StrikeInstantKill();
                     }

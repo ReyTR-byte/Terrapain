@@ -8,6 +8,10 @@ namespace Terrapain.Common.Global
 {
     public class BombsRework : GlobalItem
     {
+        public override bool AppliesToEntity(Item entity, bool lateInstantiation)
+        {
+            return entity.type == ItemID.Dynamite || entity.type == ItemID.StickyDynamite || entity.type == ItemID.Dynamite || entity.type == ItemID.Bomb || entity.type == ItemID.StickyBomb;
+        }
         public override void SetStaticDefaults()
         {
             ItemID.Sets.ItemsThatAllowRepeatedRightClick[ItemID.Dynamite] = true;
@@ -27,9 +31,10 @@ namespace Terrapain.Common.Global
                     player.itemAnimation = 15;
                 }
                 Projectile.NewProjectile(source, position, velocity, type, damage, knockback);
+                item.stack--;
                 return false;
             }
-            return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
+            return true;
         }
         public override bool AltFunctionUse(Item item, Terraria.Player player)
         {

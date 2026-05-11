@@ -599,6 +599,11 @@ Projectiles: {
 	// KingSlimeBall.DisplayName: King Slime Ball
 	// Shuriken.DisplayName: Shuriken
 	// KingSlimeKrownLaser.DisplayName: King Slime Krown Laser
+	// Kunai.DisplayName: Kunai
+	// SmokeBomb.DisplayName: Smoke Bomb
+	// SmokeBombSmoke.DisplayName: Smoke Bomb Smoke
+	// KingSlimeKatana.DisplayName: King Slime Katana
+	// SlimeProjectile.DisplayName: Slime Projectile
 }
 
 NPCs: {
@@ -639,6 +644,8 @@ NPCs: {
 			// Princess_LovesNPC: Мне нравится {NPCName}.
 		}
 	}
+
+	// NinjaKingSlime.DisplayName: Ninja King Slime
 }
 
 Tiles: {

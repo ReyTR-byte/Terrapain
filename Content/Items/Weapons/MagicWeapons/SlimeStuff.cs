@@ -1,11 +1,13 @@
-using Terraria.ID;
-using Terraria.GameContent.Creative;
-using Terraria.ModLoader;
-using Terraria;
-using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
 using Terrapain.Content.Items.Ingredients;
 using Terrapain.Content.Projectiles.Friendly;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent;
+using Terraria.GameContent.Creative;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static AssGen.Assets;
 
 namespace Terrapain.Content.Items.Weapons.MagicWeapons
 {
@@ -35,6 +37,7 @@ namespace Terrapain.Content.Items.Weapons.MagicWeapons
 			Item.crit = 32; // The percent chance at hitting an enemy with a crit, plus the default amount of 4.
 			Item.mana = 3; // This is how much mana the item uses.
             Item.value = Item.buyPrice(gold: 6);
+			Item.GetT().spriteRotation = MathF.PI / 2;
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
@@ -43,7 +46,8 @@ namespace Terrapain.Content.Items.Weapons.MagicWeapons
         }
         public override Vector2? HoldoutOrigin()
         {
-			return new Vector2(-6, -5);
+            return new Vector2(-6, 40);
+			
         }
 		
         public override void AddRecipes()

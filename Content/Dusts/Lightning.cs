@@ -17,7 +17,7 @@ namespace Terrapain.Content.Dusts
         static UnifiedRandom random = new UnifiedRandom();
         public override void OnSpawn(Dust dust)
         {
-            dust.frame = new Microsoft.Xna.Framework.Rectangle(0, 13 * random.Next(3), 9, 13);
+            dust.frame = new Rectangle(0, 13 * random.Next(3), 9, 13);
         }
         public override bool Update(Dust dust)
         {

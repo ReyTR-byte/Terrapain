@@ -40,7 +40,7 @@ namespace Terrapain.Content.Items.Accessories.ActiveAccessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             if (AbilityReload > 0)
-                AbilityReload -= player.Custom().oldLifeRegen;
+                AbilityReload -= MathF.Abs(player.velocity.X) < 3? player.Custom().oldLifeRegen : player.Custom().oldLifeRegen / 10;
             else
                 AbilityReload = 0;
             if (AbilityReload > AbilityReloadMax)

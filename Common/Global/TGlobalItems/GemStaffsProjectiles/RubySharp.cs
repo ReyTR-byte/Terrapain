@@ -19,7 +19,7 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Prisma Regalia");
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
         }
         public override void SetDefaults()
@@ -34,7 +34,7 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
             Projectile.GetT().useVanillaDrawing = false;
             Projectile.GetT().drawTrail = true;
             Projectile.GetT().trailColor = Color.Red * 0.5f;
-            Projectile.GetT().trailLength = 4;
+            Projectile.GetT().trailLength = 10;
             Projectile.GetT().trailWidth = 7;
             Projectile.penetrate = 1;
         }

@@ -3,8 +3,10 @@ using Terrapain.Common.Global;
 using Terrapain.Content.Projectiles.Friendly;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static AssGen.Assets;
 
 namespace Terrapain.Content.Items.Weapons.MagicWeapons
 {
@@ -32,7 +34,7 @@ namespace Terrapain.Content.Items.Weapons.MagicWeapons
             Item.shootSpeed = 15;
             Item.noMelee = true;
             Item.UseSound = SoundID.Item20;
-            Item.GetGlobalItem<TGlobalItem>().ShootRotation = 0.25f * (float)Math.PI;
+            Item.GetGlobalItem<TGlobalItem>().spriteRotation = 0.25f * (float)Math.PI;
             Item.value = Item.buyPrice(gold: 6);
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -93,6 +95,10 @@ namespace Terrapain.Content.Items.Weapons.MagicWeapons
         public override bool AltFunctionUse(Player player)
         {
             return true;
+        }
+        public override Vector2? HoldoutOrigin()
+        {
+            return new Vector2(-4, +TextureAssets.Item[Type].Value.Height / 2 + 4);
         }
         public override void AddRecipes()
 		{

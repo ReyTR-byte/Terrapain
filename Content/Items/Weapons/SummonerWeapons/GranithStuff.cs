@@ -42,9 +42,9 @@ namespace Terrapain.Content.Items.Weapons.SummonerWeapons
             position = Main.MouseWorld;
             damage *= 2;
         }
-        public override Vector2? HoldoutOffset()
+        public override Vector2? HoldoutOrigin()
         {
-            return new Vector2(4, 0);
+            return new Vector2(-4, 0);
         }
     }
 }

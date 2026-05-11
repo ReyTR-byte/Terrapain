@@ -34,6 +34,7 @@ namespace Terrapain.Common.Global
 		public static int LightSwing;
 		public static int BatUseStyle;
         public static int LaserUseStyle;
+        public static int ShootOverride;
         public int drawDir;
 		public static List<int> UseModDrawStyles = new List<int>();
 		public static Vector2 basicOffset = Vector2.UnitX * 10 + Vector2.UnitY * 2;
@@ -207,7 +208,7 @@ namespace Terrapain.Common.Global
 			}
         }
 		//offset from mounted center
-		public static Vector2 GetHandOffset(Terraria.Player player) => new Vector2(-4 + (player.direction == -1? 8 : 0), -2);
+		public static Vector2 GetHandOffset(Terraria.Player player) => new Vector2(-4 * player.direction, -2);
 
 		int timer;
 		public int hitTimer;

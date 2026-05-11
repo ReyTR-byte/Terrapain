@@ -68,7 +68,7 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
                 totalLength += 20;
             }
             Terraria.Player own = Main.player[Projectile.owner];
-            if (!own.controlUseItem)
+            if (!own.controlUseItem || own.dead || !own.active)
             {
                 Projectile.active = false;
                 return;

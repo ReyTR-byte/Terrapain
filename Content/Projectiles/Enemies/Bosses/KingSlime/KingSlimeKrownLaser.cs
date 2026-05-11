@@ -24,84 +24,171 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             get => Projectile.ai[0];
             set => Projectile.ai[0] = value;
         }
-        int KingSlime
+        NPC KingSlime
         {
-            get => (int)Projectile.ai[1];
-            set => Projectile.ai[1] = value;
+            get
+            {
+                if ((int)Projectile.ai[1] < 0 || (int)Projectile.ai[1] >= Main.maxNPCs)
+                {
+                    return null;
+                }
+
+                return Main.npc[(int)Projectile.ai[1]];
+            }
+        }
+        Projectile MainLaser
+        {
+            get { 
+                if ((int)Projectile.ai[1] < 0 || (int)Projectile.ai[1] >= Main.maxProjectiles)
+                {
+                    return null;
+                }
+
+                return Main.projectile[(int)Projectile.ai[1]];
+            } 
         }
         float AngularAcceleration
         {
             get => Projectile.ai[2];
             set => Projectile.ai[2] = value;
         }
-        float angularVelocity;
+        float rotationAboutMainLaser
+        {
+            get => Projectile.ai[2];
+            set => Projectile.ai[2] = value;
+        }
+        Vector2 directionFromMainLaser
+        {
+            get => Projectile.ai[2].ToRotationVector2();
+        }
         Vector2 dir
         {
             get => Projectile.rotation.ToRotationVector2();
             set => Projectile.rotation = value.ToRotation();
         }
+        bool main;
+        float angularVelocity;
+        float maxRotationSpeed;
         public override void SetDefaults()
         {
             Projectile.aiStyle = -1;
             Projectile.DamageType = DamageClass.Magic;
+            Projectile.alpha = 255;
             Projectile.timeLeft = 3;
             Projectile.width = 16;
             Projectile.height = 16;
             Projectile.penetrate = -1;
             Projectile.hostile = true;
         }
+        public override void OnSpawn(IEntitySource source)
+        {
+            if (source.Context == "Main")
+            {
+                dir = Projectile.velocity;
+                maxRotationSpeed = Projectile.velocity.Length() / 60;
+                Projectile.velocity = Vector2.Zero;
+                main = true;
+                Projectile.NewProjectile(Projectile.GetSource_FromThis("Suport"), Projectile.Center, Vector2.Zero, Type, Projectile.damage, Projectile.knockBack, -1, AngularAcceleration.NonZeroSign(), Projectile.whoAmI, dir.RotatedBy(MathF.PI / 2).ToRotation());
+                Projectile.NewProjectile(Projectile.GetSource_FromThis("Suport"), Projectile.Center, Vector2.Zero, Type, Projectile.damage, Projectile.knockBack, -1, AngularAcceleration.NonZeroSign(), Projectile.whoAmI, dir.RotatedBy(-MathF.PI / 2).ToRotation());
+            }
+            else
+            {
+                Projectile.spriteDirection = (int)Projectile.ai[0];
+                lenght = 0;
+            }
+        }
         public override bool? CanCutTiles()
         {
             Functions.RayCutTile(Projectile.Center, Projectile.Center + dir * lenght, Main.player[Projectile.owner]);
             return false;
         }
-        float maxRotationSpeed;
-        public override void OnSpawn(IEntitySource source)
-        {
-            dir = Projectile.velocity;
-            maxRotationSpeed = Projectile.velocity.Length() / 60;
-            Projectile.velocity = Vector2.Zero;
-        }
         public override void AI()
         {
-            Projectile.alpha = 255 - (int)(MathF.Min(Projectile.timeLeft / 50f, 1) * 255);
+            if (main)
+            {
+                Projectile.alpha = Math.Max(Projectile.alpha - 5, 0);
+                if (Projectile.timeLeft < 50)
+                {
+                    Projectile.alpha = 255 - (int)(MathF.Min(Projectile.timeLeft / 50f, 1) * 255);
+                }
+                if (KingSlime != null && KingSlime.active && KingSlime.type == NPCID.KingSlime && !KingSlime.immortal)
+                {
+                    Vector2 Center = KingSlime.Top;
+                    switch (KingSlime.frame.Y)
+                    {
+                        case 0:
+                            Center = KingSlime.Top - Vector2.UnitY * 15;
+                            break;
+                        case 120:
+                            Center = KingSlime.Top - Vector2.UnitY * 25;
+                            break;
+                        case 240:
+                            Center = KingSlime.Top - Vector2.UnitY * 15;
+                            break;
+                        case 360:
+                            Center = KingSlime.Top - Vector2.UnitY * 5;
+                            break;
+                    }
+
+                    Projectile.rotation += angularVelocity;
+                    angularVelocity += AngularAcceleration;
+                    angularVelocity = MathF.Min(MathF.Abs(angularVelocity), maxRotationSpeed) * AngularAcceleration.NonZeroSign();
+                    lenght += 18;
+                    lenght = Math.Min(lenght, 2000);
+                    Projectile.width = (int)(Math.Abs(dir.X) * lenght * 2);
+                    Projectile.height = (int)(Math.Abs(dir.Y) * lenght * 2);
+                    Projectile.Center = Center;
+                }
+                else
+                {
+                    Projectile.active = false;
+                }
+            }
+            else
+            {
+                if (MainLaser != null && MainLaser.active && MainLaser.type == Type)
+                {
+                    Projectile.timeLeft = MainLaser.timeLeft;
+                    Vector2 targetPosition = MainLaser.Center + directionFromMainLaser * 50;
+                    rotationAboutMainLaser -= 0.1f * Projectile.spriteDirection;
+                    float maxVelocity = 25;
+                    float maxVelocityMultyplier = 1;
+                    if (targetPosition != Projectile.Center)
+                    {
+                        Projectile.velocity = Projectile.DirectionTo(targetPosition) * Projectile.velocity.Length();
+                        Projectile.velocity += Projectile.DirectionTo(targetPosition) * 1.2f;
+                    }
+                    if (Projectile.Distance(targetPosition) < 75)
+                    {
+                        maxVelocityMultyplier = 1 - (75 - Projectile.Distance(targetPosition)) / 75;
+                    }
+                    if (Projectile.velocity.Length() > maxVelocity * maxVelocityMultyplier)
+                    {
+                        Projectile.velocity = Projectile.velocity.ToUnit() * maxVelocity * maxVelocityMultyplier;
+                    }
+                    Projectile.alpha = Math.Max(Projectile.alpha - 5, 0);
+                    lenght += 18;
+                    if (MainLaser.timeLeft < 50)
+                    {
+                        Projectile.alpha = MainLaser.alpha;
+                    }
+                    dir = Projectile.DirectionTo(MainLaser.Center + MainLaser.rotation.ToRotationVector2() * 750);
+                    Vector2 Center = Projectile.Center;
+                    lenght = Math.Min(lenght, 2000);
+                    Projectile.width = (int)(Math.Abs(dir.X) * lenght * 2);
+                    Projectile.height = (int)(Math.Abs(dir.Y) * lenght * 2);
+                    Projectile.Center = Center;
+                }
+                else
+                {
+                    Projectile.active = false;
+                }
+            }
             float totalLength = 0;
             while (totalLength < lenght)
             {
                 Lighting.AddLight(Projectile.Center + dir * totalLength, TorchID.Red);
                 totalLength += 20;
-            }
-            if (KingSlime > -1 && KingSlime < Main.maxNPCs && Main.npc[KingSlime].active && Main.npc[KingSlime].type == NPCID.KingSlime)
-            {
-                Vector2 Center = Main.npc[KingSlime].Top;
-                switch (Main.npc[KingSlime].frame.Y)
-                {
-                    case 0:
-                        Center = Main.npc[KingSlime].Top - Vector2.UnitY * 15;
-                        break;
-                    case 120:
-                        Center = Main.npc[KingSlime].Top - Vector2.UnitY * 25;
-                        break;
-                    case 240:
-                        Center = Main.npc[KingSlime].Top - Vector2.UnitY * 15;
-                        break;
-                    case 360:
-                        Center = Main.npc[KingSlime].Top - Vector2.UnitY * 5;
-                        break;
-                }
-
-                Projectile.rotation += angularVelocity;
-                angularVelocity += AngularAcceleration;
-                angularVelocity = MathF.Min(MathF.Abs(angularVelocity), maxRotationSpeed) * AngularAcceleration.NonZeroSign();
-                lenght += 18;
-                lenght = Math.Min(lenght, 1000);
-                Projectile.width = (int)(Math.Abs(dir.X) * lenght * 2);
-                Projectile.height = (int)(Math.Abs(dir.Y) * lenght * 2);
-                Projectile.Center = Center;
-            }
-            else
-            {
-                Projectile.active = false;
             }
         }
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -137,6 +224,12 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
         int shaderTime;
         public override bool PreDraw(ref Color lightColor)
         {
+            float opacity = 1 - (Projectile.alpha / 255f);
+            if (!main)
+            {
+                Texture2D Ruby = ModContent.Request<Texture2D>("Terrapain/Content/Projectiles/Enemies/Bosses/KingSlime/KrownGem").Value;
+                Main.spriteBatch.Draw(Ruby, Projectile.Center - Main.screenPosition, null, lightColor * opacity, 0, Ruby.Size() / 2, 1, SpriteEffects.None, 0);
+            }
             float width = random.NextFloat(25, 28);
             ManagedShader Shade = ShaderManager.GetShader("Terrapain.LaserShader");
             Shade.TrySetParameter("lenght", lenght + width);
@@ -144,10 +237,10 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, Shade.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
 
-            Main.spriteBatch.DrawLine(Projectile.Center - dir * width / 2, Projectile.Center + dir * (lenght + width / 2), Color.Red * 0.8f * (1 - (Projectile.alpha / 255f)), width);
+            Main.spriteBatch.DrawLine(Projectile.Center - dir * width / 2, Projectile.Center + dir * (lenght + width / 2), Color.Red * 0.8f * opacity, width);
             width *= 3;
             ManagedShader shader = ShaderManager.GetShader("Terrapain.DiamondLaserGlowShader");
-            shader.TrySetParameter("color", (Color.Pink * 0.85f * (1 - (Projectile.alpha / 255f))).ToVector4());
+            shader.TrySetParameter("color", (Color.Pink * 0.85f * opacity).ToVector4());
             shader.TrySetParameter("width", width);
             shader.TrySetParameter("height", lenght + width);
             shader.TrySetParameter("rastyajenie", 500 / width);
@@ -157,7 +250,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
 
             Main.spriteBatch.End();
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.None, Main.Rasterizer, shader.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
-            Main.spriteBatch.DrawLine(Projectile.Center - dir * width / 2, Projectile.Center + dir * (lenght + width / 2), Color.LightBlue, width, texture);
+            Main.spriteBatch.DrawLine(Projectile.Center - dir * width / 2, Projectile.Center + dir * (lenght + width / 2), Color.Pink, width, texture);
             shaderTime++;
 
             Main.spriteBatch.End();

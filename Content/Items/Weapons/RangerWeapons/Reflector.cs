@@ -1,13 +1,15 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Terrapain.Content.Items.Ingredients;
+using Terrapain.Content.Projectiles.Enemies;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using Terrapain.Content.Items.Ingredients;
-using Terrapain.Content.Projectiles.Enemies;
+using static AssGen.Assets;
 
 namespace Terrapain.Content.Items.Weapons.RangerWeapons
 {
@@ -74,9 +76,9 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 			recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}
-		public override Vector2? HoldoutOffset()
-		{
-			return new Vector2(-9.5f, 0);
-		}
+        public override Vector2? HoldoutOrigin()
+        {
+            return new Vector2(-16, 0);
+        }
 	}
 }

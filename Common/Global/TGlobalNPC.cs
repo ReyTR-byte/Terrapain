@@ -64,10 +64,31 @@ namespace Terrapain.Common.Global
         public int? defender;
         public float defenderTakesDamage;
         public bool fallThroughtPlatforms;
+        public bool canselDeathHitEffect;
 
         
         public static List<DrawTask> PreDrawNPCsDrawTasks = new List<DrawTask>();
         public static List<DrawTask> PostDrawNPCsDrawTasks = new List<DrawTask>();
+
+        public override void Load()
+        {
+            On_NPC.VanillaHitEffect += On_NPC_VanillaHitEffect;
+        }
+        public override void Unload()
+        {
+            On_NPC.VanillaHitEffect -= On_NPC_VanillaHitEffect;
+        }
+
+        private void On_NPC_VanillaHitEffect(On_NPC.orig_VanillaHitEffect orig, NPC self, int hitDirection, double dmg, bool instantKill)
+        {
+            int realLife = self.life;
+            if (self.GetT().canselDeathHitEffect)
+            {
+                self.life = Math.Max(self.life, 1);
+            }
+            orig(self, hitDirection, dmg, instantKill);
+            self.life = realLife;
+        }
         public override void ResetEffects(NPC npc)
         {
             oldDamageMultiplier = damageMultiplier;
@@ -179,6 +200,12 @@ namespace Terrapain.Common.Global
         //public virtual bool ModPreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, Texture2D texture) => true;
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            Color col = npc.GetAlpha(Color.White);
+            Color col2 = npc.GetColor(Color.White);
+            if (npc.type == NPCID.YellowSlime)
+            {
+
+            }
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D texture;
@@ -220,10 +247,13 @@ namespace Terrapain.Common.Global
             }
             if (ClientConfig.Instance.drawHitbox)
             {
-                Rectangle rectangle = npc.Hitbox;
-                rectangle.X -= (int)screenPos.X;
-                rectangle.Y -= (int)screenPos.Y;
-                spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, rectangle, ClientConfig.Instance.hitboxColor);
+                if (npc.type != NPCID.KingSlime)
+                {
+                    Rectangle rectangle = npc.Hitbox;
+                    rectangle.X -= (int)screenPos.X;
+                    rectangle.Y -= (int)screenPos.Y;
+                    spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, rectangle, ClientConfig.Instance.hitboxColor);
+                }
             }
 
             bool? draw = NPCBehaviour?.ModPreDraw(npc, spriteBatch, screenPos, drawColor, texture);
@@ -329,19 +359,17 @@ namespace Terrapain.Common.Global
             On_Main.DrawItems += On_Main_DrawItems;
             On_Main.DrawInfernoRings += On_Main_DrawInfernoRings;
         }
-
-        private void On_Main_DrawInfernoRings(On_Main.orig_DrawInfernoRings orig, Main self)
-        {
-            orig(self);
-            Rectangle rekt = new(Main.screenWidth / 2, Main.screenHeight / 2, Main.screenWidth, Main.screenHeight);
-            Main.spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, rekt, null, Terrapain.screenColor, 0f, ExtraTextureRegistry.WhitePixel.Value.Size() * 0.5f, 0, 1f);
-        }
-
         public override void Unload()
         {
             On_Main.DoDraw_WallsTilesNPCs -= On_Main_DoDraw_WallsTilesNPCs;
             On_Main.DrawItems -= On_Main_DrawItems;
             On_Main.DrawInfernoRings -= On_Main_DrawInfernoRings;
+        }
+        private void On_Main_DrawInfernoRings(On_Main.orig_DrawInfernoRings orig, Main self)
+        {
+            orig(self);
+            Rectangle rekt = new(Main.screenWidth / 2, Main.screenHeight / 2, Main.screenWidth, Main.screenHeight);
+            Main.spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, rekt, null, Terrapain.screenColor, 0f, ExtraTextureRegistry.WhitePixel.Value.Size() * 0.5f, 0, 1f);
         }
         private void On_Main_DoDraw_WallsTilesNPCs(On_Main.orig_DoDraw_WallsTilesNPCs orig, Main self)
         {
@@ -359,7 +387,6 @@ namespace Terrapain.Common.Global
             }
             orig(self);
         }
-
         private void On_Main_DrawItems(On_Main.orig_DrawItems orig, Main self)
         {
             foreach (var group in Terrapain.group)
