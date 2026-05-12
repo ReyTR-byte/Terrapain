@@ -36,6 +36,10 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             {
                 Projectile.tileCollide = false;
             }
+            if (Projectile.ai[0] == 2)
+            {
+                Projectile.rotation = Projectile.velocity.ToRotation() - MathF.PI * 0.5f;
+            }
             variant = rand.Next(6);
         }
         public override void AI()

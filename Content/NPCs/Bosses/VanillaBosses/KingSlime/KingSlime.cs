@@ -9,6 +9,7 @@ using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Common.System;
 using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -99,9 +100,13 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         {
             if (died)
             {
-                if (ninjaKingSlime.active && ninjaKingSlime.type == ModContent.NPCType<NinjaKingSlime>())
+                if (NinjaKingSlime != null && NinjaKingSlime.active && NinjaKingSlime.type == ModContent.NPCType<NinjaKingSlime>())
                 {
-                    npc.Center = ninjaKingSlime.Center;
+                    npc.Center = NinjaKingSlime.Center;
+                }
+                else if (KrownedKingSlime != null && KrownedKingSlime.active && KrownedKingSlime.type == ModContent.NPCType<KrownedKingSlime>())
+                {
+                    npc.Center = KrownedKingSlime.Center;
                 }
                 else
                 {
@@ -145,10 +150,6 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         {
             if ((npc.collideY || npc.collideX) && !teleporting)
             {
-                if(t.Target.controlJump)
-                {
-
-                }
                 npc.velocity = Vector2.Zero;
                 if (movementTimer > 0)
                 {
@@ -465,7 +466,6 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         }
         void NextAttack1(NPC npc)
         {
-            phase1 = [0, 4, 5];
             attackCounter++;
             if (attackCounter >= phase1.Length)
             {
@@ -498,9 +498,41 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     break;
             }
         }
-        NPC krownedKingSlime;
-        NPC ninjaKingSlime;
-        NPC kingSlimeKrown;
+        int krownedKingSlime;
+        NPC KrownedKingSlime
+        {
+            get {
+                if (krownedKingSlime < 0 && krownedKingSlime >= Main.maxNPCs)
+                {
+                    return null;
+                }
+                return Main.npc[krownedKingSlime];
+            }
+        }
+        int ninjaKingSlime;    
+        NPC NinjaKingSlime
+        { 
+            get
+            {
+                if (ninjaKingSlime < 0 && ninjaKingSlime >= Main.maxNPCs)
+                {
+                    return null;
+                }
+                return Main.npc[ninjaKingSlime];
+            }
+        }
+        int kingSlimeKrown;
+        NPC KingSlimeKrown
+        {
+            get
+            {
+                if (kingSlimeKrown < 0 && kingSlimeKrown >= Main.maxNPCs)
+                {
+                    return null;
+                }
+                return Main.npc[kingSlimeKrown];
+            }
+        }
         bool died;
         public override bool CheckActive(NPC npc)
         {
@@ -510,17 +542,26 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         {
             if (npc.life <= 0 && !died)
             {
+                SoundEngine.PlaySound(npc.DeathSound, npc.Center);
+                npc.DeathSound = null;
+                npc.HitSound = null;
                 npc.immortal = true;
                 npc.damage = 0;
                 npc.alpha = 255;
                 npc.life = npc.lifeMax;
+                npc.scale = 0;
                 died = true;
                 foreach (var Ring in rings)
                 {
                     Ring.End();
                 }
                 rings = new();
-                ninjaKingSlime = Main.npc[NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.Center.X, (int)npc.Center.Y, ModContent.NPCType<NinjaKingSlime>())];
+                ninjaKingSlime = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.Center.X + 25, (int)npc.Center.Y, ModContent.NPCType<NinjaKingSlime>());
+                krownedKingSlime = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.Center.X - 25, (int)npc.Center.Y, ModContent.NPCType<KrownedKingSlime>());
+                NinjaKingSlime.velocity = new Vector2(10, -4);
+                KrownedKingSlime.velocity = new Vector2(-10, -4);
+                ((NinjaKingSlime)NinjaKingSlime.ModNPC).krownedKingSlime = krownedKingSlime;
+                ((KrownedKingSlime)KrownedKingSlime.ModNPC).ninjaKingSlime = ninjaKingSlime;
                 return false;
             }
             return true;
@@ -543,7 +584,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         }
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            if (/*phase == 0 &&*/ CurentAttack == 1 && MathF.Abs(npc.velocity.X) < 0.05f)
+            if (/*phase == 0 &&*/ CurentAttack == 1 && MathF.Abs(npc.velocity.X) < 0.05f && !died)
             {
                 Rectangle rectangle = new Rectangle((int)npc.Center.X - 45 - (int)screenPos.X, 0, 90, Main.screenHeight);
                 spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, rectangle, Color.Blue * 0.5f);

@@ -646,6 +646,7 @@ NPCs: {
 	}
 
 	// NinjaKingSlime.DisplayName: Ninja King Slime
+	// KrownedKingSlime.DisplayName: Krowned King Slime
 }
 
 Tiles: {

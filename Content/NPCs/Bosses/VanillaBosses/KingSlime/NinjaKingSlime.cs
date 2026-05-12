@@ -44,8 +44,14 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
 
             AnimationType = NPCID.KingSlime;
         }
-        public NPC KrownedKingSlime;
-        public NPC KingSlimeKrown;
+        public int krownedKingSlime;
+        public NPC KrownedKingSlime => Main.npc[krownedKingSlime];
+        KrownedKingSlime KKS => (KrownedKingSlime)KrownedKingSlime.ModNPC;
+        bool KKSactive => KrownedKingSlime != null && KrownedKingSlime.active && KrownedKingSlime.type == ModContent.NPCType<KrownedKingSlime>();
+        public int kingSlimeKrown;
+        public NPC KingSlimeKrown => Main.npc[kingSlimeKrown];
+        //KingSlimeKrown KSK => (KingSlimeKrown)KingSlimeKrown.ModNPC;
+        //bool KSKactive => KingSlimeKrown != null && KingSlimeKrown.active && KingSlimeKrown.type == ModContent.NPCType<KingSlimeKrown>();
         public int CurentAttack;
         public int attackCounter = -1;
         public int[] phase1 = [0, 1, 0, 2, 0, 3];
@@ -197,9 +203,16 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         {
             switch (CurentAttack)
             {
-                case 0:
+                case -1:
                     ChillMovement();
                     if (mainTimer == 0 && !teleporting)
+                    {
+                        NextAttack1();
+                    }
+                    break;
+                case 0:
+                    ChillMovement();
+                    if (mainTimer == 0 && !teleporting && (!KKSactive || KKS.CurentAttack == 0))
                     {
                         NextAttack1();
                     }
@@ -281,6 +294,13 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     if (katana < 0 || katana > Main.maxProjectiles - 1 || !Katana.active || Katana.type != KatanaProjectile)
                     {
                         katana = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, KatanaProjectile, KatanaDamage, KatanaKnockBack, -1, 0, NPC.whoAmI, 0);
+                        if (KKSactive)
+                        {
+                            KKS.CurentAttack = 2;
+                            KrownedKingSlime.ai[1] = 120;
+                            KrownedKingSlime.ai[2] = Target.Center.X;
+                            KrownedKingSlime.ai[3] = Target.Center.Y;
+                        }
                     }
                     Katana.timeLeft = 2;
                     if (mainTimer == 0)
@@ -292,14 +312,22 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         }
         void NextAttack1()
         {
-            attackCounter++;
-            if (attackCounter >= phase1.Length)
+            if (CurentAttack == 0 && KKSactive)
             {
-                attackCounter = 0;
+                CurentAttack = -1;
             }
-            CurentAttack = phase1[attackCounter];
+            else
+            {
+                attackCounter++;
+                if (attackCounter >= phase1.Length)
+                {
+                    attackCounter = 0;
+                }
+                CurentAttack = phase1[attackCounter];
+            }
             switch (CurentAttack)
             {
+                case -1:
                 case 0:
                     mainTimer = 200;
                     break;
