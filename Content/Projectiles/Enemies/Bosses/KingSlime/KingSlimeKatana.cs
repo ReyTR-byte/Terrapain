@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -88,7 +89,12 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
                             {
                                 King.velocity = dir * 18;
                             }
-
+                            if (Progress == 30)
+                            {
+                                SoundStyle swing = SoundID.Item1;
+                                swing.Volume *= 1.5f;
+                                SoundEngine.PlaySound(swing, King.Center);
+                            }
                             float progress1 = EasingIn(30, Progress);
                             float progress2 = EasingInOut(10, Progress - 30);
                             targetPosition = King.Center + dir * 30 - dir * 80 * progress1 + dir * 120 * progress2;
@@ -134,6 +140,9 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
                             if (Progress == 20)
                             {
                                 King.velocity = King.DirectionTo(Target.Center) * 15;
+                                SoundStyle swing = SoundID.Item1;
+                                swing.Volume *= 1.5f;
+                                SoundEngine.PlaySound(swing, King.Center);
                             }
                             Projectile.scale = 1 + 2 * progress1 - 2 * progress3;
                             targetPosition = King.Center + targetRotation.ToRotationVector2() * 30;

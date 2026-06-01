@@ -1,14 +1,15 @@
+using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Terrapain.Common.Config;
+using Terrapain.Common.Player;
+using Terrapain.Common.System;
 using Terraria;
 using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using Terrapain.Common.System;
-using Luminance.Common.Utilities;
-using Terrapain.Common.Player;
 
 namespace Terrapain.Content.NPCs
 {
@@ -223,6 +224,10 @@ namespace Terrapain.Content.NPCs
                 Suicide.life = 0;
                 WorldDifficultySystem.SetDifficulty(1, player);
                 NPC.velocity = Vector2.Zero;
+                if (ClientConfig.Instance.SkipDifficultyChangeAnimation)
+                {
+                    NPC.active = false;
+                }
             }
             if (animation > 0)
             {

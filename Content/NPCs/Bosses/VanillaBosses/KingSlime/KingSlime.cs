@@ -83,7 +83,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         int Shuriken => ModContent.ProjectileType<Shuriken>();
         public int ShurikenDamage = 12;
         public float ShurikenKnockBack = 3;
-        int Laser => ModContent.ProjectileType<KingSlimeKrownLaser>();
+        int Laser => ModContent.ProjectileType<KingSlimeCrownLaser>();
         public int LaserDamage = 15;
         public float LaserKnockBack = 2;
         public static int Slime => ModContent.ProjectileType<SlimeProjectile>();
@@ -104,9 +104,13 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 {
                     npc.Center = NinjaKingSlime.Center;
                 }
-                else if (KrownedKingSlime != null && KrownedKingSlime.active && KrownedKingSlime.type == ModContent.NPCType<KrownedKingSlime>())
+                else if (CrownedKingSlime != null && CrownedKingSlime.active && CrownedKingSlime.type == ModContent.NPCType<CrownedKingSlime>())
                 {
-                    npc.Center = KrownedKingSlime.Center;
+                    npc.Center = CrownedKingSlime.Center;
+                }
+                else if (KingSlimeCrown != null && KingSlimeCrown.active && KingSlimeCrown.type == ModContent.NPCType<KingSlimeCrown>())
+                {
+                    npc.Center = KingSlimeCrown.Center;
                 }
                 else
                 {
@@ -272,7 +276,6 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         List<RingOfSlimes> rings = new();
         void DoFirstPhase(NPC npc)
         {
-            npc.HitEffect();
             switch(CurentAttack)
             {
                 case 0:
@@ -471,6 +474,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             {
                 attackCounter = 0;
             }
+
             CurentAttack = phase1[attackCounter];
             switch(CurentAttack)
             {
@@ -498,15 +502,15 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     break;
             }
         }
-        int krownedKingSlime;
-        NPC KrownedKingSlime
+        int crownedKingSlime;
+        NPC CrownedKingSlime
         {
             get {
-                if (krownedKingSlime < 0 && krownedKingSlime >= Main.maxNPCs)
+                if (crownedKingSlime < 0 && crownedKingSlime >= Main.maxNPCs)
                 {
                     return null;
                 }
-                return Main.npc[krownedKingSlime];
+                return Main.npc[crownedKingSlime];
             }
         }
         int ninjaKingSlime;    
@@ -521,16 +525,16 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 return Main.npc[ninjaKingSlime];
             }
         }
-        int kingSlimeKrown;
-        NPC KingSlimeKrown
+        int kingSlimeCrown;
+        NPC KingSlimeCrown
         {
             get
             {
-                if (kingSlimeKrown < 0 && kingSlimeKrown >= Main.maxNPCs)
+                if (kingSlimeCrown < 0 && kingSlimeCrown >= Main.maxNPCs)
                 {
                     return null;
                 }
-                return Main.npc[kingSlimeKrown];
+                return Main.npc[kingSlimeCrown];
             }
         }
         bool died;
@@ -557,11 +561,38 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 }
                 rings = new();
                 ninjaKingSlime = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.Center.X + 25, (int)npc.Center.Y, ModContent.NPCType<NinjaKingSlime>());
-                krownedKingSlime = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.Center.X - 25, (int)npc.Center.Y, ModContent.NPCType<KrownedKingSlime>());
+                Vector2 Center = npc.Top;
+                switch (npc.frame.Y)
+                {
+                    case 0:
+                        Center = npc.Top - Vector2.UnitY * 15;
+                        break;
+                    case 120:
+                        Center = npc.Top - Vector2.UnitY * 25;
+                        break;
+                    case 240:
+                        Center = npc.Top - Vector2.UnitY * 15;
+                        break;
+                    case 360:
+                        Center = npc.Top - Vector2.UnitY * 5;
+                        break;
+                    case 480:
+                        Center = npc.Top - Vector2.UnitY * 15;
+                        break;
+                    case 600:
+                        Center = npc.Top - Vector2.UnitY * 17;
+                        break;
+                }
+                kingSlimeCrown = NPC.NewNPC(npc.GetSource_FromThis(), (int)Center.X, (int)Center.Y, ModContent.NPCType<KingSlimeCrown>(), 0, -1);
+                crownedKingSlime = NPC.NewNPC(npc.GetSource_FromThis(), (int)npc.Center.X - 25, (int)npc.Center.Y, ModContent.NPCType<CrownedKingSlime>(), kingSlimeCrown);
                 NinjaKingSlime.velocity = new Vector2(10, -4);
-                KrownedKingSlime.velocity = new Vector2(-10, -4);
-                ((NinjaKingSlime)NinjaKingSlime.ModNPC).krownedKingSlime = krownedKingSlime;
-                ((KrownedKingSlime)KrownedKingSlime.ModNPC).ninjaKingSlime = ninjaKingSlime;
+                CrownedKingSlime.velocity = new Vector2(-10, -4);
+                ((NinjaKingSlime)NinjaKingSlime.ModNPC).crownedKingSlime = crownedKingSlime;
+                ((NinjaKingSlime)NinjaKingSlime.ModNPC).kingSlimeCrown = kingSlimeCrown;
+                ((CrownedKingSlime)CrownedKingSlime.ModNPC).ninjaKingSlime = ninjaKingSlime;
+                ((CrownedKingSlime)CrownedKingSlime.ModNPC).kingSlimeCrown = kingSlimeCrown;
+                ((KingSlimeCrown)KingSlimeCrown.ModNPC).crownedKingSlime = crownedKingSlime;
+                ((KingSlimeCrown)KingSlimeCrown.ModNPC).ninjaKingSlime = ninjaKingSlime;
                 return false;
             }
             return true;

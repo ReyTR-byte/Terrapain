@@ -1,13 +1,7 @@
 ﻿using Luminance.Common.Utilities;
 using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terrapain.Assets.Extratextures;
-using Terrapain.Common.Global;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -16,7 +10,7 @@ using Terraria.Utilities;
 
 namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
 {
-    public class KingSlimeKrownLaser : ModProjectile
+    public class KingSlimeCrownLaser : ModProjectile
     {
         public override string Texture => "Terrapain/Assets/ExtraTextures/ShaderTextures/WhitePixel";
         float lenght
@@ -128,6 +122,12 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
                         case 360:
                             Center = KingSlime.Top - Vector2.UnitY * 5;
                             break;
+                        case 480:
+                            Center = KingSlime.Top - Vector2.UnitY * 15;
+                            break;
+                        case 600:
+                            Center = KingSlime.Top - Vector2.UnitY * 17;
+                            break;
                     }
 
                     Projectile.rotation += angularVelocity;
@@ -227,7 +227,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             float opacity = 1 - (Projectile.alpha / 255f);
             if (!main)
             {
-                Texture2D Ruby = ModContent.Request<Texture2D>("Terrapain/Content/Projectiles/Enemies/Bosses/KingSlime/KrownGem").Value;
+                Texture2D Ruby = ModContent.Request<Texture2D>("Terrapain/Content/Projectiles/Enemies/Bosses/KingSlime/CrownGem").Value;
                 Main.spriteBatch.Draw(Ruby, Projectile.Center - Main.screenPosition, null, lightColor * opacity, 0, Ruby.Size() / 2, 1, SpriteEffects.None, 0);
             }
             float width = random.NextFloat(25, 28);

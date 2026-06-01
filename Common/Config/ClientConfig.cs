@@ -26,14 +26,17 @@ namespace Terrapain.Common.Config
         [DefaultValue(12)]
         public int LimboSpeed;
 
-        [DefaultValue(0)]
-        public int CameraTime;
-
         [Range(1f, 2.5f)]
         [Increment(0.1f)]
         [DefaultValue(2.5f)]
-        public float CameraZoom;
-        
+        public float CutsceneCameraZoom;
+
+        [DefaultValue(true)]
+        public bool CutsceneHideUI;
+
+        [DefaultValue(false)]
+        public bool SkipDifficultyChangeAnimation;
+
         public Color hitboxColor;
     }
 }

@@ -466,6 +466,11 @@ Buffs: {
 		DisplayName: Chaos
 		Description: Mods.Terrapain.Buffs.Chaos.Description
 	}
+
+	Slimed: {
+		DisplayName: Slimed
+		Description: Mods.Terrapain.Buffs.Slimed.Description
+	}
 }
 
 Projectiles: {
@@ -537,6 +542,9 @@ Projectiles: {
 	SmokeBombSmoke.DisplayName: Smoke Bomb Smoke
 	KingSlimeKatana.DisplayName: King Slime Katana
 	SlimeProjectile.DisplayName: Slime Projectile
+	CrownGem.DisplayName: Crown Gem
+	KingSlimeCrownLaser.DisplayName: King Slime Crown Laser
+	KingSlimeCrownLaser2.DisplayName: King Slime Crown Laser2
 }
 
 NPCs: {
@@ -580,6 +588,8 @@ NPCs: {
 
 	NinjaKingSlime.DisplayName: Ninja King Slime
 	KrownedKingSlime.DisplayName: Krowned King Slime
+	CrownedKingSlime.DisplayName: Crowned King Slime
+	KingSlimeCrown.DisplayName: King Slime Crown
 }
 
 Tiles: {
@@ -699,6 +709,21 @@ Configs: {
 
 		CameraZoom: {
 			Label: Camera Zoom
+			Tooltip: ""
+		}
+
+		CutsceneCameraZoom: {
+			Label: Cutscene Camera Zoom
+			Tooltip: ""
+		}
+
+		CutsceneHideUI: {
+			Label: Cutscene Hide U I
+			Tooltip: ""
+		}
+
+		SkipDifficultyChangeAnimation: {
+			Label: Skip Difficulty Change Animation
 			Tooltip: ""
 		}
 	}

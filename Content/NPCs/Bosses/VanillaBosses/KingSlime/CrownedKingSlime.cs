@@ -1,11 +1,7 @@
 ﻿using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terrapain.Common.Global;
+using Terrapain.Content.Buffs;
 using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
 using Terraria;
 using Terraria.DataStructures;
@@ -18,8 +14,10 @@ using static Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime.KingSlime;
 
 namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
 {
-    public class KrownedKingSlime : ModNPC
+    [AutoloadBossHead]
+    public class CrownedKingSlime : ModNPC
     {
+        public override string BossHeadTexture => "Terrapain/Content/NPCs/Bosses/VanillaBosses/KingSlime/NinjaKingSlime_Head_Boss";
         public override string Texture => "Terrapain/Content/NPCs/Bosses/VanillaBosses/KingSlime/NinjaKingSlime";
         public override void SetStaticDefaults()
         {
@@ -33,6 +31,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             NPC.damage = 20;
             NPC.defense = 10;
             NPC.scale = 0.707106f;
+            NPC.boss = true;
 
             NPC.alpha = 30;
 
@@ -51,17 +50,24 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
 
             AnimationType = NPCID.KingSlime;
         }
+        public override void BossHeadSlot(ref int index)
+        {
+            if (KSCactive && KingSlimeCrown.ai[0] == -2)
+            {
+                index = 7;
+            }
+        }
         public int ninjaKingSlime;
         public NPC NinjaKingSlime => Main.npc[ninjaKingSlime];
         NinjaKingSlime NKS => (NinjaKingSlime)NinjaKingSlime.ModNPC;
         bool NKSactive => NinjaKingSlime != null && NinjaKingSlime.active && NinjaKingSlime.type == ModContent.NPCType<NinjaKingSlime>();
-        public int kingSlimeKrown;
-        public NPC KingSlimeKrown => Main.npc[kingSlimeKrown];
-        //KingSlimeKrown KSK => (KingSlimeKrown)KingSlimeKrown.ModNPC;
-        //bool KSKactive => KingSlimeKrown != null && KingSlimeKrown.active && KingSlimeKrown.type == ModContent.NPCType<KingSlimeKrown>();
+        public int kingSlimeCrown;
+        public NPC KingSlimeCrown => Main.npc[kingSlimeCrown];
+        KingSlimeCrown KSC => (KingSlimeCrown)KingSlimeCrown.ModNPC;
+        bool KSCactive => KingSlimeCrown != null && KingSlimeCrown.active && KingSlimeCrown.type == ModContent.NPCType<KingSlimeCrown>();
         public int CurentAttack;
         public int attackCounter = -1;
-        public int[] phase1 = [0, 1];
+        public int[] phase1 = [0, 1, 0, 4, 0, 5];
         int mainTimer;
         int movementTimer;
         int[] timers = new int[2];
@@ -100,7 +106,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         }
         public override bool? CanFallThroughPlatforms()
         {
-            return (Target.position.Y > NPC.Bottom.Y) && CurentAttack != 2;
+            return Target.position.Y > NPC.Bottom.Y && (CurentAttack != 2 || CurentAttack != 3);
         }
         int SlimeWall => ModContent.ProjectileType<SlimeWall>();
 
@@ -113,6 +119,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         public static float SlimeKnockBack = 4;
         public override void AI()
         {
+            NPC.immortal = false;
             NPC.TargetClosest();
             NPC.noTileCollide = false;
             //switch (phase)
@@ -132,7 +139,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     timers[i]--;
                 }
             }
-            if (teleporting)
+            if (teleporting && CurentAttack != 5)
             {
                 int d = Dust.NewDust(teleportPosition, 0, 0, DustID.ShimmerSpark);
                 Main.dust[d].velocity = rand.NextVector2Unit() * (3 + rand.NextFloat(5));
@@ -322,6 +329,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     }
                     if (mainTimer == 0 && !teleporting)
                     {
+                        movementTimer = 100;
                         foreach (var ring3 in rings)
                         {
                             ring3.End();
@@ -331,7 +339,176 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         NextAttack1();
                     }
                     break;
+                case 4:
+                    ChillMovement();
+                    KingSlimeCrown.ai[0] = 0;
+                    if (mainTimer == 0)
+                    {
+                        KingSlimeCrown.ai[0] = -1;
+                        NextAttack1();
+                    }
+                    break;
+                case 5:
+                    float shirikinSpeed = 1.5f;
+                    float targetX = Target.Center.X - 750 * NPC.ai[0].NonZeroSign();
+                    if (mainTimer > 600)
+                    {
+
+                        canHit = false;
+                        if (NPC.collideX || NPC.collideY)
+                        {
+                            NPC.velocity = Vector2.Zero;
+                        }
+                        int d = Dust.NewDust(new Vector2(targetX, NPC.ai[1]), 0, 0, DustID.ShimmerSpark);
+                        Main.dust[d].velocity = rand.NextVector2Unit() * (3 + rand.NextFloat(5));
+                    }
+                    else if (mainTimer == 600)
+                    {
+                        NPC.Center = new Vector2(targetX, NPC.ai[1]);
+                        NPC.velocity = Vector2.Zero;
+                    }
+                    else
+                    {
+                        if (KSCactive && KingSlimeCrown.ai[0] == 0)
+                            KingSlimeCrown.ai[0] = -1;
+                        if (Target.Center.Y < NPC.ai[1] - 500 || Target.Center.Y > NPC.ai[1] + 500 || (Target.Center.X > NPC.Center.X && NPC.ai[0].NonZeroSign() == -1) || (Target.Center.X < NPC.Center.X && NPC.ai[0].NonZeroSign() == 1))
+                        {
+                            if (KSCactive)
+                            {
+                                KingSlimeCrown.ai[0] = 0;
+                            }
+                            float saveai1 = NPC.ai[1];
+                            NPC.ai[1] = 0;
+                            ChillMovement();
+                            NPC.ai[1] = saveai1;
+                            if (timers[0] > 15)
+                            {
+                                timers[0] = 15;
+                            }
+                            if (timers[0] == 0)
+                            {
+                                int count = 5;
+                                for (int i = 0; i < count; i++)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, -Vector2.UnitX.RotatedBy(i * 2f / count * MathF.PI) * 2f + NPC.DirectionTo(Target.Center) * 20, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
+                                }
+                                count = 4;
+                                for (int i = 0; i < count; i++)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, -Vector2.UnitX.RotatedBy(i * 2f / count * MathF.PI) * 1.5f + NPC.DirectionTo(Target.Center).RotatedBy(MathF.PI * 0.2f) * 25, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
+                                }
+                                for (int i = 0; i < count; i++)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, -Vector2.UnitX.RotatedBy(i * 2f / count * MathF.PI) * 1.5f + NPC.DirectionTo(Target.Center).RotatedBy(MathF.PI * -0.2f) * 25, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
+                                }
+                                timers[0] = 15;
+                            }
+                        }
+                        else
+                        {
+                            float minSpeed = 6;
+                            float playerSpeedMultiply = (Target.Center.X - NPC.Center.X) / 750;
+                            float speed = 0;
+                            if (NPC.ai[0].NonZeroSign() == 1)
+                            {
+                                speed = MathF.Max(Target.velocity.X * NPC.ai[0].NonZeroSign() * playerSpeedMultiply, minSpeed);
+                            }
+                            else
+                            {
+                                speed = MathF.Min(Target.velocity.X * NPC.ai[0].NonZeroSign() * playerSpeedMultiply, -minSpeed);
+                            }
+                                NPC.velocity.X = speed;
+                            if (NPC.collideY)
+                            {
+                                NPC.velocity.Y = -MathHelper.Clamp((NPC.Center.Y - Target.Center.Y) / 30, 10, 30);
+                            }
+                        }
+                        canHit = true;
+                    }
+                    time = 70;
+                    if (NPC.ai[0] == 0)
+                    {
+                        Target.AddBuff(ModContent.BuffType<Slimed>(), 750);
+                        NPC.velocity = Vector2.Zero;
+                        teleportPosition = Vector2.Zero;
+                        NPC.ai[0] = Target.Center.X * Target.velocity.X.NonZeroSign();
+                        NPC.ai[1] = Target.Center.Y;
+                        int p = Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(MathF.Abs(NPC.ai[0]), NPC.ai[1] + 500), Vector2.UnitY * -shirikinSpeed, SlimeWall, 0, 0, -1, 40);
+                        Main.projectile[p].timeLeft = (int)(475 / shirikinSpeed);
+                        p = Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(MathF.Abs(NPC.ai[0]), NPC.ai[1] - 500), Vector2.UnitY * shirikinSpeed, SlimeWall, 0, 0, -1, 40);
+                        Main.projectile[p].timeLeft = (int)(475 / shirikinSpeed);
+                    }
+                    else if (Target.Center.X > MathF.Abs(NPC.ai[0]) + 800)
+                    {
+                        NPC.ai[0] += 1600 * NPC.ai[0].NonZeroSign();
+                        int p = Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(MathF.Abs(NPC.ai[0]), NPC.ai[1] + 500), Vector2.UnitY * -shirikinSpeed, SlimeWall, 0, 0, -1, 40);
+                        Main.projectile[p].timeLeft = (int)(475 / shirikinSpeed);
+                        p = Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(MathF.Abs(NPC.ai[0]), NPC.ai[1] - 500), Vector2.UnitY * shirikinSpeed, SlimeWall, 0, 0, -1, 40);
+                        Main.projectile[p].timeLeft = (int)(475 / shirikinSpeed);
+                    }
+                    else if (Target.Center.X < MathF.Abs(NPC.ai[0]) - 800)
+                    {
+                        NPC.ai[0] -= 1600 * NPC.ai[0].NonZeroSign();
+                        int p = Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(MathF.Abs(NPC.ai[0]), NPC.ai[1] + 500), Vector2.UnitY * -shirikinSpeed, SlimeWall, 0, 0, -1, 40);
+                        Main.projectile[p].timeLeft = (int)(475 / shirikinSpeed);
+                        p = Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(MathF.Abs(NPC.ai[0]), NPC.ai[1] - 500), Vector2.UnitY * shirikinSpeed, SlimeWall, 0, 0, -1, 40);
+                        Main.projectile[p].timeLeft = (int)(475 / shirikinSpeed);
+                    }
+                    if (timers[0] == 0)
+                    {
+                        if (mainTimer < 250)
+                        {
+                            float speed = 17;
+                            float angle = 0.2f;
+                            int count = 4;
+                            for (int i = -count; i < count + 1; i++)
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X, NPC.ai[1] + 1000f / count * i), Vector2.UnitX.RotatedBy(angle) * speed * NPC.ai[0].NonZeroSign(), Slime, SlimeDamage, SlimeKnockBack, -1, 2);
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X, NPC.ai[1] + 1000f / count * i), Vector2.UnitX.RotatedBy(-angle) * speed * NPC.ai[0].NonZeroSign(), Slime, SlimeDamage, SlimeKnockBack, -1, 2);
+                            }
+                            timers[0] = time;
+                        }
+                        else if(mainTimer < 500)
+                        {
+                            int count = 5;
+                            float randomRange = 0.3f;
+                            float r = rand.NextFloat(-randomRange, randomRange);
+                            for (int i = 0; i < count; i++)
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(15 * NPC.ai[0].NonZeroSign(), -15).RotatedBy(randomRange) + Vector2.UnitX.RotatedBy(MathF.PI / count * 2 * i) * 3.5f, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
+                            }
+                            timers[0] = time;
+                        }
+                        else
+                        {
+                            float speed = 15;
+                            int range = 4;
+                            int safeRange = 2;
+                            int count = 20;
+                            int hole = rand.Next(-range, range + 1);
+                            for (int i = -count; i < count + 1; i++)
+                            {
+                                if (Math.Abs(i - hole) > safeRange)
+                                {
+                                    Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(targetX, NPC.ai[1] + 500f / count * i), Vector2.UnitX * speed * NPC.ai[0].NonZeroSign(), Slime, SlimeDamage, SlimeKnockBack, -1, 2);
+                                }
+                            }
+                            timers[0] = time;
+                        }
+                    }
+                    if (mainTimer == 0)
+                    {
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(MathF.Abs(NPC.ai[0]) + 800 * NPC.ai[0].NonZeroSign(), NPC.ai[1]), Vector2.UnitX * -NPC.ai[0].NonZeroSign(), SlimeWall, 0, 0, -1, 40);
+                        NPC.ai[1] = 0;
+                        NextAttack1();
+                    }
+                    break;
             }
+        }
+        bool canHit = true;
+        public override bool CanHitPlayer(Player target, ref int cooldownSlot)
+        {
+            return canHit;
         }
         void NextAttack1()
         {
@@ -348,6 +525,15 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 }
                 CurentAttack = phase1[attackCounter];
             }
+            if (CurentAttack == 4 && !KSCactive)
+            {
+                attackCounter += 2;
+                if (attackCounter >= phase1.Length)
+                {
+                    attackCounter = 0;
+                }
+                CurentAttack = phase1[attackCounter];
+            }
             switch (CurentAttack)
             {
                 case -1:
@@ -356,6 +542,14 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     break;
                 case 1:
                     mainTimer = 250;
+                    break;
+                case 4:
+                    mainTimer = 350;
+                    break;
+                case 5:
+                    mainTimer = 750;
+                    NPC.ai[0] = 0;
+                    timers[0] = 20;
                     break;
             }
         }

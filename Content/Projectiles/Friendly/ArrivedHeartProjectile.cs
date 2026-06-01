@@ -149,9 +149,13 @@ namespace Terrapain.Content.Projectiles.Friendly
                     }
                 }
             }
-            else if (Projectile.timeLeft % 6 == 0)
+            else
             {
-                AISearchForTarget(out FoundTarget, out target);
+                Projectile.velocity = Projectile.DirectionTo(Main.player[Projectile.owner].Center) * 0.5f;
+                if (Projectile.timeLeft % 6 == 0)
+                {
+                    AISearchForTarget(out FoundTarget, out target);
+                }
             }
             if (Projectile.timeLeft % 4 == 0 && random.NextBool(3))
             {

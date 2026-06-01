@@ -28,7 +28,7 @@ namespace Terrapain.Common.Global
         public bool drawTrail;
         public Color trailColor;
         /// <summary>
-        /// 50 max
+        /// 45 max
         /// </summary>
         public int trailLength;
         public float trailWidth;

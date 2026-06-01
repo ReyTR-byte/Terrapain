@@ -447,6 +447,23 @@ namespace Terrapain.Content
 		{
 			vect = vect.RotatedBy(radians);
 		}
+		public static void CommonTerrapainFlyingMovement(Entity entity, Vector2 targetPosition, float rotatingSpeed, float MaxSpeed, float acceleration, float BreakingZone)
+		{
+            float maxVelocityMultyplier = 1;
+            if (targetPosition != entity.Center)
+            {
+                entity.velocity = entity.DirectionTo(targetPosition) * entity.velocity.Length();
+                entity.velocity += entity.DirectionTo(targetPosition) * acceleration;
+            }
+            if (entity.Distance(targetPosition) < MaxSpeed)
+            {
+                maxVelocityMultyplier = 1 - (MaxSpeed - entity.Distance(targetPosition)) / MaxSpeed;
+            }
+            if (entity.velocity.Length() > MaxSpeed * maxVelocityMultyplier)
+            {
+                entity.velocity = entity.velocity.ToUnit() * MaxSpeed * maxVelocityMultyplier;
+            }
+        }
 		public static bool AngularAcceleration(ref float angularVelocity, float acceleration, float maxAngularVelocity, float goalRotation, ref float rotation, bool Break = true)
 		{
 			bool rotateToTarget = false;
@@ -730,6 +747,14 @@ namespace Terrapain.Content
 		}
         public static bool Collision(Vector2 Pos1, Vector2 dir, float rad, Vector2 Pos2, int width, int height, ref Vector2 HitPoint, bool tileCollide = true)
         {
+			if (dir.X < 0.00001 && dir.X > -0.00001)
+			{
+				dir.X = 0;
+			}
+            if (dir.Y < 0.00001 && dir.Y > -0.00001)
+            {
+                dir.Y = 0;
+            }
             //Chatic("call");
             if (Pos1.X > Pos2.X && Pos1.X < Pos2.X + width && Pos1.Y > Pos2.Y && Pos1.Y < Pos2.Y + height)
             {
@@ -814,14 +839,14 @@ namespace Terrapain.Content
             {
                 crossPoint.Y = Pos2.Y;
                 crossPoint.X = Pos1.X - dir.X * ((Pos1.Y - crossPoint.Y) / dir.Y);
-                if (crossPoint.X > Pos2.X && crossPoint.X < Pos2.X + width && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() || (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
+                if (crossPoint.X > Pos2.X && crossPoint.X < Pos2.X + width && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() && (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
                 {
                     //Dust.NewDust(crossPoint, 0, 0, DustID.Torch);
                     closestCrossPoint = crossPoint;
                 }
                 crossPoint.Y = Pos2.Y + height;
                 crossPoint.X = Pos1.X - dir.X * ((Pos1.Y - crossPoint.Y) / dir.Y);
-                if (crossPoint.X > Pos2.X && crossPoint.X < Pos2.X + width && (Vector2.Distance(closestCrossPoint, Pos1) > Vector2.Distance(crossPoint, Pos1) || closestCrossPoint == Vector2.Zero) && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() || (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
+                if (crossPoint.X > Pos2.X && crossPoint.X < Pos2.X + width && (Vector2.Distance(closestCrossPoint, Pos1) > Vector2.Distance(crossPoint, Pos1) || closestCrossPoint == Vector2.Zero) && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() && (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
                 {
                     //Dust.NewDust(crossPoint, 0, 0, DustID.Torch);
                     closestCrossPoint = crossPoint;
@@ -831,14 +856,14 @@ namespace Terrapain.Content
             {
                 crossPoint.X = Pos2.X;
                 crossPoint.Y = Pos1.Y - dir.Y * ((Pos1.X - crossPoint.X) / dir.X);
-                if (crossPoint.Y > Pos2.Y & crossPoint.Y < Pos2.Y + height && (Vector2.Distance(closestCrossPoint, Pos1) > Vector2.Distance(crossPoint, Pos1) || closestCrossPoint == Vector2.Zero) && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() || (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign() && (crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() && (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
+                if (crossPoint.Y > Pos2.Y & crossPoint.Y < Pos2.Y + height && (Vector2.Distance(closestCrossPoint, Pos1) > Vector2.Distance(crossPoint, Pos1) || closestCrossPoint == Vector2.Zero) && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() && (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
                 {
                     //Dust.NewDust(crossPoint, 0, 0, DustID.Torch);
                     closestCrossPoint = crossPoint;
                 }
                 crossPoint.X = Pos2.X + width;
                 crossPoint.Y = Pos1.Y - dir.Y * ((Pos1.X - crossPoint.X) / dir.X);
-                if (crossPoint.Y > Pos2.Y & crossPoint.Y < Pos2.Y + height && (Vector2.Distance(closestCrossPoint, Pos1) > Vector2.Distance(crossPoint, Pos1) || closestCrossPoint == Vector2.Zero) && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() || (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
+                if (crossPoint.Y > Pos2.Y & crossPoint.Y < Pos2.Y + height && (Vector2.Distance(closestCrossPoint, Pos1) > Vector2.Distance(crossPoint, Pos1) || closestCrossPoint == Vector2.Zero) && ((crossPoint.X - Pos1.X).NonZeroSign() == dir.X.NonZeroSign() && (crossPoint.Y - Pos1.Y).NonZeroSign() == dir.Y.NonZeroSign()))
                 {
                     //Dust.NewDust(crossPoint, 0, 0, DustID.Torch);
                     closestCrossPoint = crossPoint;
@@ -854,7 +879,9 @@ namespace Terrapain.Content
                 return false;
             }
 			HitPoint = crossPoint;
-			if (tileCollide)
+			float dist = Vector2.Distance(closestCrossPoint, Pos1);
+
+            if (tileCollide)
 			{
 				Pos1 /= 16;
 				crossPoint /= 16;

@@ -14,6 +14,12 @@ namespace Terrapain.Common.CameraModifiers
 {
     public class SmoothMoovingCameraModifier : ICameraModifier
     {
+        public SmoothMoovingCameraModifier()
+        {
+            unhideUI = Main.hideUI;
+        }
+        public bool hideUI;
+        bool unhideUI;
         public Vector2 OriginalCameraPosition;
         public static Vector2 TargetPosition;
         public float TargetZoom;
@@ -35,9 +41,10 @@ namespace Terrapain.Common.CameraModifiers
             }
             if (Zoom != 0)
             ZoomSystem.Zoom = Vector2.One * Zoom;
-
+            Main.hideUI = Main.hideUI || hideUI;
             if (Timer >= TotalTime)
             {
+                Main.hideUI = unhideUI;
                 Finished = true;
             }
         }

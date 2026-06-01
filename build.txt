@@ -1,6 +1,6 @@
 displayName = Terrapain
 author = ReyTR
-version = 0.0.2.8
+version = 0.0.3.1
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, .git\*, Folders to Port\*, Luminance.dll, compile_temp
 modReferences = Luminance@1.0.3
 dllReferences = StructureHelper, ILGPU, ILGPU.Algorithms

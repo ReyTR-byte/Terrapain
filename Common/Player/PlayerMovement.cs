@@ -14,6 +14,11 @@ namespace Terrapain.Common.Player
 {
     public class PlayerMovement : ModPlayer
     {
+        public int DownMovementTimer;
+        public int LeftMovementTimer;
+        public int RightMovementTimer;
+        public int UpMovementTimer;
+
         public bool ShouldFallThroughtPlatforms;
 
         public Item DashItem;
@@ -43,6 +48,29 @@ namespace Terrapain.Common.Player
             if (DashDuration <= 0)
             {
                 DashImmune--;
+            }
+        }
+        public override void PreUpdate()
+        {
+            if (DownMovementTimer > 0)
+            {
+                DownMovementTimer--;
+                Player.controlDown = false;
+            }
+            if (LeftMovementTimer > 0)
+            {
+                LeftMovementTimer--;
+                Player.controlLeft = false;
+            }
+            if (RightMovementTimer > 0)
+            {
+                RightMovementTimer--;
+                Player.controlRight = false;
+            }
+            if (UpMovementTimer > 0)
+            {
+                UpMovementTimer--;
+                Player.controlUp = false;
             }
         }
         public override void PreUpdateMovement()

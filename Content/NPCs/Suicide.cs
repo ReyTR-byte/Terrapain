@@ -8,6 +8,7 @@ using Terraria.Chat;
 using Terrapain.Common.System;
 using Luminance.Common.Utilities;
 using Terrapain.Common.Player;
+using Terrapain.Common.Config;
 
 namespace Terrapain.Content.NPCs
 {
@@ -143,6 +144,10 @@ namespace Terrapain.Content.NPCs
                 Torture.life = 0;
                 WorldDifficultySystem.SetDifficulty(2, player);
                 NPC.velocity = Vector2.Zero;
+                if (ClientConfig.Instance.SkipDifficultyChangeAnimation)
+                {
+                    NPC.active = false;
+                }
             }
             if (animation > 0)
             {

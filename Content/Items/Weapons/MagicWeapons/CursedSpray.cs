@@ -28,6 +28,7 @@ namespace Terrapain.Content.Items.Weapons.MagicWeapons
 			Item.shootSpeed = 7; // How fast the item shoots the projectile.
 			Item.crit = 32; // The percent chance at hitting an enemy with a crit, plus the default amount of 4.
 			Item.mana = 11; // This is how much mana the item uses.
+			Item.CloneDefaults(ItemID.LastPrism);
 		}
 
 		// Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.

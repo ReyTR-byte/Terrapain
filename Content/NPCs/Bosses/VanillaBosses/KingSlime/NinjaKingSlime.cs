@@ -12,6 +12,7 @@ using static Terrapain.Content.Functions;
 
 namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
 {
+    [AutoloadBossHead]
     public class NinjaKingSlime : ModNPC
     {
         public override void SetStaticDefaults()
@@ -26,6 +27,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             NPC.damage = 20;
             NPC.defense = 10;
             NPC.scale = 0.707106f;
+            NPC.boss = true;
 
             NPC.alpha = 30;
 
@@ -44,14 +46,14 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
 
             AnimationType = NPCID.KingSlime;
         }
-        public int krownedKingSlime;
-        public NPC KrownedKingSlime => Main.npc[krownedKingSlime];
-        KrownedKingSlime KKS => (KrownedKingSlime)KrownedKingSlime.ModNPC;
-        bool KKSactive => KrownedKingSlime != null && KrownedKingSlime.active && KrownedKingSlime.type == ModContent.NPCType<KrownedKingSlime>();
-        public int kingSlimeKrown;
-        public NPC KingSlimeKrown => Main.npc[kingSlimeKrown];
-        //KingSlimeKrown KSK => (KingSlimeKrown)KingSlimeKrown.ModNPC;
-        //bool KSKactive => KingSlimeKrown != null && KingSlimeKrown.active && KingSlimeKrown.type == ModContent.NPCType<KingSlimeKrown>();
+        public int crownedKingSlime;
+        public NPC CrownedKingSlime => Main.npc[crownedKingSlime];
+        CrownedKingSlime CKS => (CrownedKingSlime)CrownedKingSlime.ModNPC;
+        bool CKSactive => CrownedKingSlime != null && CrownedKingSlime.active && CrownedKingSlime.type == ModContent.NPCType<CrownedKingSlime>();
+        public int kingSlimeCrown;
+        public NPC KingSlimeCrown => Main.npc[kingSlimeCrown];
+        KingSlimeCrown KSC => (KingSlimeCrown)KingSlimeCrown.ModNPC;
+        bool KSKactive => KingSlimeCrown != null && KingSlimeCrown.active && KingSlimeCrown.type == ModContent.NPCType<KingSlimeCrown>();
         public int CurentAttack;
         public int attackCounter = -1;
         public int[] phase1 = [0, 1, 0, 2, 0, 3];
@@ -212,7 +214,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     break;
                 case 0:
                     ChillMovement();
-                    if (mainTimer == 0 && !teleporting && (!KKSactive || KKS.CurentAttack == 0))
+                    if (mainTimer == 0 && !teleporting && (!CKSactive || CKS.CurentAttack == 0))
                     {
                         NextAttack1();
                     }
@@ -294,12 +296,12 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     if (katana < 0 || katana > Main.maxProjectiles - 1 || !Katana.active || Katana.type != KatanaProjectile)
                     {
                         katana = Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.Zero, KatanaProjectile, KatanaDamage, KatanaKnockBack, -1, 0, NPC.whoAmI, 0);
-                        if (KKSactive)
+                        if (CKSactive)
                         {
-                            KKS.CurentAttack = 2;
-                            KrownedKingSlime.ai[1] = 120;
-                            KrownedKingSlime.ai[2] = Target.Center.X;
-                            KrownedKingSlime.ai[3] = Target.Center.Y;
+                            CKS.CurentAttack = 2;
+                            CrownedKingSlime.ai[1] = 120;
+                            CrownedKingSlime.ai[2] = Target.Center.X;
+                            CrownedKingSlime.ai[3] = Target.Center.Y;
                         }
                     }
                     Katana.timeLeft = 2;
@@ -312,7 +314,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         }
         void NextAttack1()
         {
-            if (CurentAttack == 0 && KKSactive)
+            if (CurentAttack == 0 && CKSactive)
             {
                 CurentAttack = -1;
             }

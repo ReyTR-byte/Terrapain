@@ -14,7 +14,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             Projectile.aiStyle = -1;
             Projectile.hostile = true;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 300;
             Projectile.tileCollide = true;
             AIType = ProjectileID.Bullet;
             Projectile.GetT().useModDrawingInPreDraw = true;

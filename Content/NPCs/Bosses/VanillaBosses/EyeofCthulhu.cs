@@ -385,13 +385,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
             npc.velocity = Vector2.Zero;
             if (anim.Time == 0)
             {
-                Main.instance.CameraModifiers.Add(new SmoothMoovingCameraModifier() { AimTime = _2To3PhaseTransitionAnimation.CameraTimeEnd, OriginalCameraPosition = Main.screenPosition, TotalTime = _2To3PhaseTransitionAnimation.ChargingTimeEnd + ClientConfig.Instance.CameraTime, StartZoom = Main.GameZoomTarget, TargetZoom = ClientConfig.Instance.CameraZoom });
+                Main.instance.CameraModifiers.Add(new SmoothMoovingCameraModifier() { AimTime = _2To3PhaseTransitionAnimation.CameraTimeEnd, OriginalCameraPosition = Main.screenPosition, TotalTime = _2To3PhaseTransitionAnimation.ChargingTimeEnd, StartZoom = Main.GameZoomTarget, TargetZoom = ClientConfig.Instance.CutsceneCameraZoom, hideUI = ClientConfig.Instance.CutsceneHideUI });
                 SmoothMoovingCameraModifier.TargetPosition = npc.Center - Main.ScreenSize.ToVector2() / 2;
                 SmoothMoovingCameraModifier.Timer = 0;
-                anim.saveUI = Main.hideUI;
-                anim.StartCameraZoom = Main.GameZoomTarget;
             }
-            Main.hideUI = true;
             for (int i = 0; i < 5; i++)
             {
                 if (anim.GoreActive[i] && anim.GorePhisics[i])
@@ -2077,17 +2074,17 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
             {
                 player.wingTime = 20;
             }
-            float attack0RotSpeedTorture = 2.8f;
-            float attack0RotSpeedSuicide = 2.9f;
+            float attack0RotSpeedTorture = 2.7f;
+            float attack0RotSpeedSuicide = 2.8f;
             float attack1RotSpeedTorture = 1f;
             float attack1RotSpeedSuicide = 1.2f;
             float attack2RotSpeedTorture = -2.3f;
             float attack2RotSpeedSuicide = -2.5f;
             float attack2RotSpeedTortureLegendary = -2.1f;
             float attack2RotSpeedSuicideLegendary = -2.2f;
-            float attack3RotSpeedSuicide = 2.5f;
+            float attack3RotSpeedSuicide = 2.4f;
             float attack3RotSpeedTortureLegendary = 2.4f;
-            float attack3RotSpeedSuicideLegendary = 2.6f;
+            float attack3RotSpeedSuicideLegendary = 2.5f;
             switch (attack)
             {
                 case 0:
