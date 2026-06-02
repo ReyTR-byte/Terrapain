@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Common.System;
 using Terrapain.Content.Dusts;
 using Terraria;
 using Terraria.ModLoader;
@@ -15,10 +16,10 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
         public override string Texture => "Terrapain/Assets/ExtraTextures/ShaderTextures/BlackPixel";
         public override void SetDefaults()
         {
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = WorldDifficultySystem.suicide? 800 : 600;
             Projectile.hostile = true;
-            Projectile.width = 100;
-            Projectile.height = 100;
+            Projectile.width = WorldDifficultySystem.suicide? 150 : 100;
+            Projectile.height = WorldDifficultySystem.suicide? 150 : 100;
             Projectile.tileCollide = false;
             Projectile.ignoreWater = true;
             Projectile.penetrate = -1;

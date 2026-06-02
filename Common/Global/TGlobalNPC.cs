@@ -162,36 +162,6 @@ namespace Terrapain.Common.Global
             //}
             return base.CanBeHitByItem(npc, player, item);
         }
-        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
-        {
-            switch (npc.type)
-            {
-                case NPCID.EyeofCthulhu:
-                    foreach (var loot in npcLoot.Get(false))
-                    {
-                        if (loot is ItemDropWithConditionRule)
-                        {
-                            if (((ItemDropWithConditionRule)loot).itemId == ItemID.EyeofCthulhuTrophy)
-                            {
-                                npcLoot.Remove(loot);
-                                break;
-                            }
-                        }
-                    }
-                    LeadingConditionRule suicide = new(new SuicideDropRule());
-                    suicide.OnSuccess(new DropOneByOne(ItemID.EyeofCthulhuTrophy, Terrapain.SuicideTrophyDropParameters));
-                    npcLoot.Add(suicide);
-
-                    LeadingConditionRule notSuicide = new(new NotSuicideDropRule());
-                    notSuicide.OnSuccess(new DropOneByOne(ItemID.EyeofCthulhuTrophy, Terrapain.NormalTrophyDropParameters));
-                    npcLoot.Add(notSuicide);
-
-                    LeadingConditionRule Torture = new(new TortureDropRule());
-                    Torture.OnSuccess(new DropOneByOne(4924 /*Eye of Cthulhu relic*/, Terrapain.SuicideTrophyDropParameters));
-                    npcLoot.Add(Torture);
-                    break;
-            }
-        }
         public int afterimageTimer;
         public void PreDrawNPCs(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos)
         {

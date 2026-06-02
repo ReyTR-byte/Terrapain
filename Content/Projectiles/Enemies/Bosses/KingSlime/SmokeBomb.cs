@@ -57,6 +57,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
         public override void OnKill(int timeLeft)
         {
             Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SmokeBombSmoke>(), Damage, Projectile.knockBack, Projectile.owner);
+
         }
     }
 }

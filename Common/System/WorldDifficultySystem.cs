@@ -4,6 +4,8 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Microsoft.Xna.Framework;
 using Terrapain.Content;
+using Terraria;
+using Terraria.ID;
 
 namespace Terrapain.Common.System
 {
@@ -13,6 +15,22 @@ namespace Terrapain.Common.System
         public static bool clasic => TerrapainDifficulty == 0;
         public static bool torture => TerrapainDifficulty == 1;
         public static bool suicide => TerrapainDifficulty == 2;
+        public override void PreUpdateGores()
+        {
+            foreach (Gore gore in Main.gore)
+            {
+                if (gore.active && gore.timeLeft < 320)
+                {
+                    if (gore.type == GoreID.KingSlimeCrown)
+                    {
+                        gore.velocity.X *= 0.95f;
+                        gore.velocity.Y -= 0.65f;
+                        int d = Dust.NewDust(gore.position, (int)gore.Width, (int)gore.Height, DustID.Torch);
+                        Main.dust[d].velocity.Y = 15;
+                    }
+                }
+            }
+        }
 
         public static void SetDifficulty(int Difficulty, Terraria.Player player)
         {

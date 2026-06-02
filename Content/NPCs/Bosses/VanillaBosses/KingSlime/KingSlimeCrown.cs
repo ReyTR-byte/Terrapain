@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Common.Global;
+using Terrapain.Common.System;
 using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
 using Terraria;
 using Terraria.GameContent;
@@ -47,8 +48,6 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             AnimationType = NPCID.KingSlime;
             NPC.noTileCollide = true;
             NPC.noGravity = true;
-
-            NPC.immortal = true;
         }
         Vector2 CrownAtKingSlime
         {
@@ -135,7 +134,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             }
             else
             {
-                NPC.ai[0] = Math.Max(0, NPC.ai[0]);
+                NPC.ai[0] = Math.Max(1, NPC.ai[0]);
             }
             if (mainTimer > 0)
             {
@@ -153,14 +152,14 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         int time0 = 10;
         int time1 = 20;
         int time2 = 60;
-        int time3 = 120;
+        int time3 => WorldDifficultySystem.suicide? 120 : 145;
         int time4 = 60;
         void DoFirstPhase()
         {
             switch (NPC.ai[0])
             {
                 case 0:
-                    int count = 3;
+                    int count = WorldDifficultySystem.suicide? 4 : 3;
                     int time = 15;
                     if (NPC.ai[1] == 0)
                     {
@@ -199,9 +198,9 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     {
                         if (NPC.ai[1] % 2 == 0)
                         {
-                        NPC.velocity = NPC.DirectionTo(Target.Center) * 20;
-                        float startRotation = NPC.DirectionTo(Target.Center).ToRotation() - MathF.PI / 4;
-                        float rotatePerIteration = MathF.PI / 8;
+                        NPC.velocity = NPC.DirectionTo(Target.Center) * (WorldDifficultySystem.suicide? 23 : 20);
+                        float rotatePerIteration = WorldDifficultySystem.suicide? MathF.PI / 8 : MathF.PI / 6;
+                        float startRotation = NPC.DirectionTo(Target.Center).ToRotation() - rotatePerIteration * (count - 1) / 2f;
                         for (int i = 0; i < count; i++)
                         {
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(startRotation + i * rotatePerIteration) * 20, CrownGem, CrownGemDamage, CrownGemKnockBack);
@@ -212,8 +211,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         else
                         {
                             NPC.velocity = NPC.DirectionTo(Target.Center) * 20;
-                            float startRotation = NPC.DirectionTo(Target.Center).ToRotation() - MathF.PI / 10;
-                            float rotatePerIteration = MathF.PI / 20;
+                            float rotatePerIteration = WorldDifficultySystem.suicide ? MathF.PI / 20 : MathF.PI / 24;
+                            float startRotation = NPC.DirectionTo(Target.Center).ToRotation() - rotatePerIteration * (count - 1) / 2f;
                             for (int i = 0; i < count; i++)
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(startRotation + i * rotatePerIteration) * 18, CrownGem, CrownGemDamage, CrownGemKnockBack);
@@ -303,9 +302,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         int rate = 10;
                         if (timer % rate == 0 && timer > 30)
                         {
+                            float speed = WorldDifficultySystem.suicide? 17.5f : 14;
                             float progress = (time4 - timer) * 2f / time4;
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(NPC.rotation + MathF.PI / 2 + progress * MathF.PI / 2) * 20, CrownGem, CrownGemDamage, CrownGemKnockBack);
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(NPC.rotation + MathF.PI / 2 - progress * MathF.PI / 2) * 20, CrownGem, CrownGemDamage, CrownGemKnockBack);
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(NPC.rotation + MathF.PI / 2 + progress * MathF.PI / 2) * speed, CrownGem, CrownGemDamage, CrownGemKnockBack);
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(NPC.rotation + MathF.PI / 2 - progress * MathF.PI / 2) * speed, CrownGem, CrownGemDamage, CrownGemKnockBack);
                         }
                         if (timer == 0)
                         {

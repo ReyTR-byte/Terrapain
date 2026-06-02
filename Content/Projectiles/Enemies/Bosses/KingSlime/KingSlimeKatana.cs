@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Common.System;
 using Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime;
 using Terraria;
 using Terraria.Audio;
@@ -87,7 +88,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
                             }
                             else if (Progress < 45)
                             {
-                                King.velocity = dir * 18;
+                                King.velocity = dir * (WorldDifficultySystem.suicide? 18 : 16);
                             }
                             if (Progress == 30)
                             {
@@ -139,7 +140,10 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
                             }
                             if (Progress == 20)
                             {
-                                King.velocity = King.DirectionTo(Target.Center) * 15;
+                                if (WorldDifficultySystem.suicide)
+                                {
+                                    King.velocity = King.DirectionTo(Target.Center) * 15;
+                                }
                                 SoundStyle swing = SoundID.Item1;
                                 swing.Volume *= 1.5f;
                                 SoundEngine.PlaySound(swing, King.Center);

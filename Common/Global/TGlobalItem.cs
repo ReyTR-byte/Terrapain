@@ -132,7 +132,15 @@ namespace Terrapain.Common.Global
 				entity.useStyle = LightSwing;
 				entity.useTurn = false;
 			}
-			ModSetDefaults(entity);    
+			switch (entity.type)
+			{
+				case ItemID.SlimeCrown:
+				case ItemID.SuspiciousLookingEye:
+					entity.maxStack = 1;
+					entity.consumable = false;
+					break;
+			}
+			ModSetDefaults(entity);
         }
 		public override bool Shoot(Item item, Terraria.Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{

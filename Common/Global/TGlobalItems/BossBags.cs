@@ -15,9 +15,10 @@ namespace Terrapain.Common.Global.TGlobalItems
 {
     internal class BossBags : GlobalItem
     {
+        static int[] bossBags = [ItemID.EyeOfCthulhuBossBag, ItemID.KingSlimeBossBag];
         public override bool AppliesToEntity(Item entity, bool lateInstantiation)
         {
-            return entity.type == ItemID.EyeOfCthulhuBossBag;
+            return bossBags.Contains(entity.type);
         }
         public override void ModifyItemLoot(Item item, ItemLoot itemLoot)
         {
@@ -37,17 +38,31 @@ namespace Terrapain.Common.Global.TGlobalItems
                     parameters.MaximumItemDropsCount = 3;
                     itemLoot.Add(new TerrapainDropRull(ItemID.CrimsonSeeds, parameters));
                     itemLoot.Add(new TerrapainDropRull(ItemID.CorruptSeeds, parameters));
-
-
-                    //parameters = Terrapain.DefaultRaretiesDropParameters;
-                    //parameters.ChanceDenominator = 3;
-                    //parameters.Boss = 1;
-                    //itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Tools.ScorspiderHook>(), parameters));
-                    //itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Accessories.ScorspiderHeartAccesory>(), parameters));
-                    //itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Weapons.MagicWeapons.GranithBook>(), parameters));
-                    //itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Weapons.MeleeWeapons.Sharper>(), parameters));
-                    //itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Weapons.RangerWeapons.PizdetsKrutayaPushka>(), parameters));
-                    //itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Weapons.SummonerWeapons.GranithStuff>(), parameters));
+                    parameters = Terrapain.DefaultRaretiesDropParameters;
+                    parameters.ChanceDenominator = 3;
+                    itemLoot.Add(new TerrapainDropRull(ItemID.PinkGel, parameters));
+                    itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Content.Items.Weapons.SummonerWeapons.GlassKnife>(), parameters));
+                    itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Content.Items.Weapons.MeleeWeapons.GlassSword>(), parameters));
+                    itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Content.Items.Weapons.RangerWeapons.Reflector>(), parameters));
+                    break;
+                case ItemID.KingSlimeBossBag:
+                    parameters = Terrapain.DefaultIngredientsDropParameters;
+                    parameters.Boss = 0;
+                    parameters.MinimumItemDropsCount = 15;
+                    parameters.MaximumItemDropsCount = 20;
+                    itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<SuperDenseGel>(), parameters));
+                    parameters.VanillaDrop = true;
+                    parameters.MinimumItemDropsCount = 25;
+                    parameters.MaximumItemDropsCount = 35;
+                    itemLoot.Add(new TerrapainDropRull(ItemID.Gel, parameters));
+                    parameters.MinimumItemDropsCount = 15;
+                    parameters.MaximumItemDropsCount = 20;
+                    parameters = Terrapain.DefaultRaretiesDropParameters;
+                    parameters.ChanceDenominator = 3;
+                    itemLoot.Add(new TerrapainDropRull(ItemID.PinkGel, parameters));
+                    itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Content.Items.Weapons.MagicWeapons.SlimeStuff>(), parameters));
+                    itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Content.Items.Weapons.MeleeWeapons.FireSword>(), parameters));
+                    itemLoot.Add(new TerrapainDropRull(ModContent.ItemType<Content.Items.Weapons.RangerWeapons.SlimeBow>(), parameters));
                     break;
             }
         }

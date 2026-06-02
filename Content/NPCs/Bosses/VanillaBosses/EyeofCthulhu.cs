@@ -2075,7 +2075,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
                 player.wingTime = 20;
             }
             float attack0RotSpeedTorture = 2.7f;
-            float attack0RotSpeedSuicide = 2.8f;
+            float attack0RotSpeedSuicide = 3f;
             float attack1RotSpeedTorture = 1f;
             float attack1RotSpeedSuicide = 1.2f;
             float attack2RotSpeedTorture = -2.3f;
@@ -2671,6 +2671,31 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
         float portalInRotation;
         bool portal;
         int portalDustCount = 20;
+        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
+        {
+            foreach (var loot in npcLoot.Get(false))
+            {
+                if (loot is ItemDropWithConditionRule)
+                {
+                    if (((ItemDropWithConditionRule)loot).itemId == ItemID.EyeofCthulhuTrophy)
+                    {
+                        npcLoot.Remove(loot);
+                        break;
+                    }
+                }
+            }
+            LeadingConditionRule suicide = new(new SuicideDropRule());
+            suicide.OnSuccess(new DropOneByOne(ItemID.EyeofCthulhuTrophy, Terrapain.SuicideTrophyDropParameters));
+            npcLoot.Add(suicide);
+
+            LeadingConditionRule notSuicide = new(new NotSuicideDropRule());
+            notSuicide.OnSuccess(new DropOneByOne(ItemID.EyeofCthulhuTrophy, Terrapain.NormalTrophyDropParameters));
+            npcLoot.Add(notSuicide);
+
+            LeadingConditionRule Torture = new(new TortureDropRule());
+            Torture.OnSuccess(new DropOneByOne(4924 /*Eye of Cthulhu relic*/, Terrapain.SuicideTrophyDropParameters));
+            npcLoot.Add(Torture);
+        }
         public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
             if (npc.immortal && projectile.type == ModContent.ProjectileType<ServantofCthulhuSoul>() && phase != 5 && !anim.Active)

@@ -1,6 +1,7 @@
 ﻿using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Common.Global;
+using Terrapain.Common.System;
 using Terrapain.Content.Buffs;
 using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
 using Terraria;
@@ -119,6 +120,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         public static float SlimeKnockBack = 4;
         public override void AI()
         {
+            NPC.defense = NPC.defDefense;
             NPC.immortal = false;
             NPC.TargetClosest();
             NPC.noTileCollide = false;
@@ -245,6 +247,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     }
                     break;
                 case 2:
+                    NPC.defense = 20;
                     if (NPC.collideY)
                     {
                         NPC.velocity = Vector2.Zero;
@@ -279,8 +282,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     }
                     break;
                 case 3:
+                    NPC.defense = 20;
                     int time = 90;
-                    if (timers[0] == 0 && NPC.ai[0] > 2)
+                    int num = WorldDifficultySystem.suicide? 2 : 3;
+                    if (timers[0] == 0 && NPC.ai[0] > num)
                     {
                         if (NPC.ai[0] < 5)
                         {
@@ -303,7 +308,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         rings.Add(new RingOfSlimes() { rotation = rings[0].Center.DirectionTo(Main.projectile[projs[0]].Center).ToRotation(), Center = rings[0].Center, angularVelocity = rings[0].angularVelocity * -1, Radius = ((NPC.ai[0] + 1) / 5 * 1000), slimeMaxSpeed = 50, dealDamage = true, Projectiles = projs });
                         timers[0] = time;
                     }
-                    if (timers[0] == 0 && NPC.ai[0] == 2)
+                    if (timers[0] == 0 && NPC.ai[0] == num)
                     {
                         foreach (int proj in rings[1].Projectiles)
                         {
@@ -312,7 +317,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         rings.RemoveAt(1);
                         NPC.ai[0]--;
                     }
-                    if (NPC.ai[0] < 5 && NPC.ai[0] > 1)
+                    if (NPC.ai[0] < 5 && NPC.ai[0] >= num)
                     {
                         var ring2 = rings[1];
                         ring2.Radius = MathF.Max(ring2.Radius - ((NPC.ai[0] + 1) / 5 * 1000) / time, 0);
@@ -359,7 +364,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         {
                             NPC.velocity = Vector2.Zero;
                         }
-                        int d = Dust.NewDust(new Vector2(targetX, NPC.ai[1]), 0, 0, DustID.ShimmerSpark);
+                        int d = Dust.NewDust(new Vector2(targetX, NPC.ai[2]), 0, 0, DustID.ShimmerSpark);
                         Main.dust[d].velocity = rand.NextVector2Unit() * (3 + rand.NextFloat(5));
                     }
                     else if (mainTimer == 600)
@@ -425,7 +430,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         }
                         canHit = true;
                     }
-                    time = 70;
+                    time = WorldDifficultySystem.suicide? 70 : 80;
                     if (NPC.ai[0] == 0)
                     {
                         Target.AddBuff(ModContent.BuffType<Slimed>(), 750);
@@ -460,7 +465,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         {
                             float speed = 17;
                             float angle = 0.2f;
-                            int count = 4;
+                            int count = WorldDifficultySystem.suicide? 4 : 3;
                             for (int i = -count; i < count + 1; i++)
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), new Vector2(NPC.Center.X, NPC.ai[1] + 1000f / count * i), Vector2.UnitX.RotatedBy(angle) * speed * NPC.ai[0].NonZeroSign(), Slime, SlimeDamage, SlimeKnockBack, -1, 2);
@@ -472,7 +477,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         {
                             int count = 5;
                             float randomRange = 0.3f;
-                            float r = rand.NextFloat(-randomRange, randomRange);
+                            float r = WorldDifficultySystem.suicide? rand.NextFloat(-randomRange, randomRange) : 0;
                             for (int i = 0; i < count; i++)
                             {
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, new Vector2(15 * NPC.ai[0].NonZeroSign(), -15).RotatedBy(randomRange) + Vector2.UnitX.RotatedBy(MathF.PI / count * 2 * i) * 3.5f, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
@@ -481,11 +486,12 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         }
                         else
                         {
-                            float speed = 15;
+                            float speed = WorldDifficultySystem.suicide? 15 : 14;
                             int range = 4;
-                            int safeRange = 2;
+                            int safeRange = WorldDifficultySystem.suicide? 2 : 3;
                             int count = 20;
-                            int hole = rand.Next(-range, range + 1);
+                            int shift = WorldDifficultySystem.suicide? 2 : 3;
+                            int hole = rand.Next(-range + shift, range + shift + 1);
                             for (int i = -count; i < count + 1; i++)
                             {
                                 if (Math.Abs(i - hole) > safeRange)

@@ -601,17 +601,17 @@ Projectiles: {
 	// ArrivedHeartProjectile.DisplayName: Arrived Heart Projectile
 	// DiamondStaffLaser.DisplayName: Diamond Staff Laser
 	// SlimeWall.DisplayName: Slime Wall
-	// KingSlimeBall.DisplayName: King Slime Ball
-	// Shuriken.DisplayName: Shuriken
+	KingSlimeBall.DisplayName: Комок слизи
+	Shuriken.DisplayName: Сюрикен
 	// KingSlimeKrownLaser.DisplayName: King Slime Krown Laser
-	// Kunai.DisplayName: Kunai
+	Kunai.DisplayName: Кунай
 	// SmokeBomb.DisplayName: Smoke Bomb
-	// SmokeBombSmoke.DisplayName: Smoke Bomb Smoke
-	// KingSlimeKatana.DisplayName: King Slime Katana
-	// SlimeProjectile.DisplayName: Slime Projectile
-	// CrownGem.DisplayName: Crown Gem
-	// KingSlimeCrownLaser.DisplayName: King Slime Crown Laser
-	// KingSlimeCrownLaser2.DisplayName: King Slime Crown Laser2
+	SmokeBombSmoke.DisplayName: Дым
+	KingSlimeKatana.DisplayName: Катана короля слизней
+	SlimeProjectile.DisplayName: Слизнь
+	CrownGem.DisplayName: Королевская драгоценность
+	KingSlimeCrownLaser.DisplayName: Короевский лазер
+	KingSlimeCrownLaser2.DisplayName: Королевский лазер
 }
 
 NPCs: {
@@ -653,10 +653,9 @@ NPCs: {
 		}
 	}
 
-	// NinjaKingSlime.DisplayName: Ninja King Slime
-	// KrownedKingSlime.DisplayName: Krowned King Slime
-	// CrownedKingSlime.DisplayName: Crowned King Slime
-	// KingSlimeCrown.DisplayName: King Slime Crown
+	NinjaKingSlime.DisplayName: Король слизней
+	CrownedKingSlime.DisplayName: Король слизней
+	KingSlimeCrown.DisplayName: Корона короля слизней
 }
 
 Tiles: {
@@ -685,6 +684,11 @@ NetworkText: {
 }
 
 BossStory: {
+	0_0: Король слизней, как и все слизни, неразумное существо движемое простейшими инстинктами
+	0_1: Только его атаки были весьма сложными для столь простого создания
+	0_2: Им однозначно кто-то управлял
+	0_3: Надеюсь его корона поможет выяснить кто это был и зачем ему нужно было тебя убить
+	0_4: Сообщу если что то об этом узнаю
 	1_0: Глаз Ктулху - взрослая особь демонического глаза, а демонический глаз в свою очередь - искусственно созданый вид для выращивания дешевых и мощных источников света
 	1_1: Несмотря на свое название он не имеет ничего общего с Ктуху
 	1_2: Демонические глаза были созданы студентом для дипломной работы
@@ -848,3 +852,7 @@ AbilityDescription: {
 	Battery_0: Дает эффект увеличивающий урон в 1.5 раза, но наносящий вам постоянный урон
 	Battery_1: Создает ауру вокруг игрока, которая замедляет врагов, наносит им постоянный урон и иногда бьет их молниями
 }
+
+NightBossSummon_0: Не меняет время
+NightBossSummon_1: Устанавливает ночь
+NightBossSummon_2: Устанавливает день (удачи)

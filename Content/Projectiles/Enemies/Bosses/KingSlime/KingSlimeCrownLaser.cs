@@ -72,6 +72,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             Projectile.width = 16;
             Projectile.height = 16;
             Projectile.penetrate = -1;
+            Projectile.ignoreWater = true;
             Projectile.hostile = true;
         }
         public override void OnSpawn(IEntitySource source)

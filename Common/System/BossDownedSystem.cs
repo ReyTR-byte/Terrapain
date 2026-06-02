@@ -36,6 +36,13 @@ namespace Terrapain.Common.System
             }
             switch (BossID)
             {
+                case 0:
+                    if (!NPC.downedSlimeKing)
+                    {
+                        tellingStory = true;
+                        timer = DealayBetweenLines[0][0];
+                    }
+                    break;
                 case 1:
                     if (!NPC.downedBoss1)
                     {

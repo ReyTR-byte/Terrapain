@@ -1,6 +1,7 @@
 ﻿using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Common.Global;
+using Terrapain.Common.System;
 using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
 using Terraria;
 using Terraria.DataStructures;
@@ -229,7 +230,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         {
                             case 0:
                                 count = 4;
-                                int count1 = 4;
+                                int count1 = WorldDifficultySystem.suicide? 4 : 3;
                                 angle = MathF.PI * 2 / count;
                                 float angle1 = angle / count1;
                                 for (int i = 0; i < count; i++)
@@ -246,17 +247,17 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                                 angle = MathF.PI * 2 / count;
                                 for (int i = 0; i < count; i++)
                                 {
-                                    float speed = 22 - 11 * (i % 2);
+                                    float speed = 22 - (WorldDifficultySystem.suicide? 9 : 11) * (i % 2);
                                     Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(i * angle) * speed, Kunai, KunaiDamage, KunaiKnockBack);
                                 }
                                 break;
                             case 2:
                                 count = 4;
-                                angle = 0.08f * MathF.PI;
-                                float startAngle = NPC.DirectionTo(Target.Center).ToRotation() - angle * count / 2;
+                                angle = (WorldDifficultySystem.suicide? 0.08f : 0.15f) * MathF.PI;
+                                float startAngle = NPC.DirectionTo(Target.Center).ToRotation() - angle * count / 2f;
                                 for (int i = 0; i < count; i++)
                                 {
-                                    float speed = 22;
+                                    float speed = WorldDifficultySystem.suicide? 20 : 18;
                                     Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(i * angle + startAngle) * speed, Kunai, KunaiDamage, KunaiKnockBack);
                                 }
                                 break;
@@ -265,8 +266,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                                 angle = MathF.PI * 2 / count;
                                 for (int i = 0; i < count; i++)
                                 {
-                                    float speed = 17;
-                                    int dir = i % 2 == 1 ? 1 : -1;
+                                    float speed = WorldDifficultySystem.suicide? 18 : 16;
+                                    int dir = i % 2 == 1? 1 : -1;
                                     Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(i * angle) * speed, Shuriken, ShurikenDamage, ShurikenKnockBack, -1, dir * 1.5f);
                                 }
                                 break;

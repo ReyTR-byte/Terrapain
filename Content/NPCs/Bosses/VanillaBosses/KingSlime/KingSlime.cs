@@ -7,10 +7,12 @@ using Terrapain.Common.Config;
 using Terrapain.Common.Global;
 using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Common.System;
+using Terrapain.Content.Items.DropRulls;
 using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
@@ -70,7 +72,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         }
         public override bool? CanFallThroughPlatforms(NPC npc)
         {
-            if (npc.ai[0] == 1 && CurentAttack == 4)
+            if ((npc.ai[0] == 1 && CurentAttack == 4) || CurentAttack == 5)
             {
                 return false;
             }
@@ -167,7 +169,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             }
             else
             {
-                movementTimer = (int)(50 * npc.GetLifePercent()) + 20;
+                float num = WorldDifficultySystem.suicide? 0.8f : 1;
+                movementTimer = (int)(((50 * npc.GetLifePercent()) + 20) * num);
             }
             if (npc.Distance(t.Target.Center) > 1500)
             {
@@ -293,7 +296,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     if ((npc.collideY || teleportTimer == 0) && teleporting)
                     {
                         teleportTimer = 80;
-                        npc.velocity = Vector2.UnitY * 20;
+                        npc.velocity = Vector2.UnitY * (WorldDifficultySystem.suicide? 22 : 20);
                         int count = WorldDifficultySystem.torture ? 6 : 8;
                         for (int i = 0; i < count; i++)
                         {
@@ -320,18 +323,19 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     if (timers[0] == 0)
                     {
                         int count = 5;
+                        float speed = WorldDifficultySystem.suicide? 20 : 18;
                         for (int i = 0; i < count; i++)
                         {
-                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count  * MathF.PI) * 2f + npc.DirectionTo(t.Target.Center) * 20, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count  * MathF.PI) * 2f + npc.DirectionTo(t.Target.Center) * speed, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
                         }
-                        count = 4;
+                        count = WorldDifficultySystem.suicide? 5 : 4;
                         for (int i = 0; i < count; i++)
                         {
-                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count * MathF.PI) * 1.5f + npc.DirectionTo(t.Target.Center).RotatedBy(MathF.PI * 0.2f) * 25, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count * MathF.PI) * 1.5f + npc.DirectionTo(t.Target.Center).RotatedBy(MathF.PI * 0.2f) * speed * 1.25f, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
                         }
                         for (int i = 0; i < count; i++)
                         {
-                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count * MathF.PI) * 1.5f + npc.DirectionTo(t.Target.Center).RotatedBy(MathF.PI * -0.2f) * 25, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count * MathF.PI) * 1.5f + npc.DirectionTo(t.Target.Center).RotatedBy(MathF.PI * -0.2f) * speed * 1.25f, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
                         }
                         timers[0] = 65;
                     }
@@ -341,7 +345,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     }
                     break;
                 case 3:
-                    int count1 = 4;
+                    int count1 = WorldDifficultySystem.suicide? 5 : 4;
                     if (teleporting || !npc.collideY || npc.ai[0] == 0 || npc.ai[0] == count1)
                     { 
                         ChillMovement(npc); 
@@ -351,10 +355,11 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         if (npc.ai[0] == 0 && !oldCollideY)
                         {
                             float count = 16;
-                            int dir = 1;
+                            float dir = 1.25f * (WorldDifficultySystem.suicide? 1.05f : 1);
+                            float speed = WorldDifficultySystem.suicide? 18 : 16;
                             for (int i = 0; i < count; i++)
                             {
-                                Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, Vector2.UnitX.RotatedBy(i / count * 2 * MathF.PI + 1 / count * MathF.PI) * 16, Shuriken, ShurikenDamage, ShurikenKnockBack, -1, dir * 1.25f);
+                                Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, Vector2.UnitX.RotatedBy(i / count * 2 * MathF.PI + 1 / count * MathF.PI) * speed, Shuriken, ShurikenDamage, ShurikenKnockBack, -1, dir);
                                 dir *= -1;
                             }
                             npc.ai[0] = count1;
@@ -394,7 +399,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         if (npc.ai[0] == 0)
                         {
                             int dir = rand.Next(2) == 1? 1 : -1;
-                            int proj = Projectile.NewProjectile(npc.GetSource_FromThis("Main"), npc.Center, npc.DirectionTo(t.Target.Center).RotatedBy(0.25f * MathF.PI * dir) * 2.5f, Laser, LaserDamage, LaserKnockBack, -1, 0, npc.whoAmI, 0.005f * -dir);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromThis("Main"), npc.Center, npc.DirectionTo(t.Target.Center).RotatedBy((WorldDifficultySystem.suicide? 0.5f : 1) * MathF.PI * dir) * 2.5f, Laser, LaserDamage, LaserKnockBack, -1, 0, npc.whoAmI, 0.005f * -dir);
                             Main.projectile[proj].timeLeft = mainTimer;
 
                             npc.ai[0] = 1;
@@ -407,8 +412,12 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     break;
                 case 5:
                     int time = 90;
-                    ChillMovement(npc);
-                    if (timers[0] == 0 && npc.ai[0] > 2)
+                    if (WorldDifficultySystem.suicide)
+                    {
+                        ChillMovement(npc);
+                    }
+                    int num = WorldDifficultySystem.suicide? 2 : 3;
+                    if (timers[0] == 0 && npc.ai[0] > num)
                     {
                         if (npc.ai[0] < 5)
                         {
@@ -431,7 +440,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         rings.Add(new RingOfSlimes() { rotation = rings[0].Center.DirectionTo(Main.projectile[projs[0]].Center).ToRotation(), Center = rings[0].Center, angularVelocity = rings[0].angularVelocity * -1, Radius = ((npc.ai[0] + 1) / 5 * 1000), slimeMaxSpeed = 50, dealDamage = true, Projectiles = projs });
                         timers[0] = time;
                     }
-                    if (timers[0] == 0 && npc.ai[0] == 2)
+                    if (timers[0] == 0 && npc.ai[0] == num)
                     {
                         foreach (int proj in rings[1].Projectiles)
                         {
@@ -440,7 +449,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         rings.RemoveAt(1);
                         npc.ai[0]--;
                     }
-                    if (npc.ai[0] < 5 && npc.ai[0] > 1)
+                    if (npc.ai[0] < 5 && npc.ai[0] >= num)
                     {
                         var ring2 = rings[1];
                         ring2.Radius = MathF.Max(ring2.Radius - ((npc.ai[0] + 1) / 5 * 1000) / time, 0);
@@ -612,6 +621,35 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         public override bool CanHitPlayer(NPC npc, Player target, ref int cooldownSlot)
         {
             return !died;
+        }
+        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
+        {
+            foreach (var loot in npcLoot.Get(false))
+            {
+                if (loot is ItemDropWithConditionRule)
+                {
+                    if (((ItemDropWithConditionRule)loot).itemId == ItemID.KingSlimeTrophy)
+                    {
+                        npcLoot.Remove(loot);
+                        break;
+                    }
+                }
+            }
+            LeadingConditionRule suicide = new(new SuicideDropRule());
+            suicide.OnSuccess(new DropOneByOne(ItemID.KingSlimeTrophy, Terrapain.SuicideTrophyDropParameters));
+            npcLoot.Add(suicide);
+
+            LeadingConditionRule notSuicide = new(new NotSuicideDropRule());
+            notSuicide.OnSuccess(new DropOneByOne(ItemID.KingSlimeTrophy, Terrapain.NormalTrophyDropParameters));
+            npcLoot.Add(notSuicide);
+
+            LeadingConditionRule Torture = new(new TortureDropRule());
+            Torture.OnSuccess(new DropOneByOne(4929 /*King slime relic*/, Terrapain.SuicideTrophyDropParameters));
+            npcLoot.Add(Torture);
+        }
+        public override void OnKill(NPC npc)
+        {
+            BossDownedSystem.BossDowned(0);
         }
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
