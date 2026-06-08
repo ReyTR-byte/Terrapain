@@ -69,6 +69,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         {
             entity.GetT().canselDeathHitEffect = true;
             entity.aiStyle = -1;
+            entity.lifeMax = (int)(entity.lifeMax * 1.5f);
         }
         public override bool? CanFallThroughPlatforms(NPC npc)
         {
@@ -116,8 +117,15 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 }
                 else
                 {
-                    npc.immortal = false;
-                    npc.StrikeInstantKill();
+                    if (kingSlimeCrownKilled && ninjaKingSlimeKilled && crownedKingSlimeKilled)
+                    {
+                        npc.immortal = false;
+                        npc.StrikeInstantKill();
+                    }
+                    else
+                    {
+                        npc.active = false;
+                    }
                 }
             }
             else
@@ -320,10 +328,12 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     break;
                 case 2:
                     ChillMovement(npc);
+                    npc.velocity.X *= 0.975f;
                     if (timers[0] == 0)
                     {
+                        int time1 = WorldDifficultySystem.suicide? 75 : 87;
                         int count = 5;
-                        float speed = WorldDifficultySystem.suicide? 20 : 18;
+                        float speed = WorldDifficultySystem.suicide? 18 : 17;
                         for (int i = 0; i < count; i++)
                         {
                             Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count  * MathF.PI) * 2f + npc.DirectionTo(t.Target.Center) * speed, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
@@ -337,7 +347,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         {
                             Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, -Vector2.UnitX.RotatedBy(i * 2f / count * MathF.PI) * 1.5f + npc.DirectionTo(t.Target.Center).RotatedBy(MathF.PI * -0.2f) * speed * 1.25f, SlimeBall, SlimeBallDamage, SlimeBallKnockback);
                         }
-                        timers[0] = 65;
+                        timers[0] = time1;
                     }
                     if (mainTimer == 0 && !teleporting)
                     {
@@ -356,14 +366,14 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         {
                             float count = 16;
                             float dir = 1.25f * (WorldDifficultySystem.suicide? 1.05f : 1);
-                            float speed = WorldDifficultySystem.suicide? 18 : 16;
+                            float speed = WorldDifficultySystem.suicide? 16.25f : 15;
                             for (int i = 0; i < count; i++)
                             {
                                 Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, Vector2.UnitX.RotatedBy(i / count * 2 * MathF.PI + 1 / count * MathF.PI) * speed, Shuriken, ShurikenDamage, ShurikenKnockBack, -1, dir);
                                 dir *= -1;
                             }
                             npc.ai[0] = count1;
-                            timers[0] = 10;
+                            timers[0] = 60;
                         }
                         else if (npc.ai[0] != 0 && (npc.ai[0] != count1 || !oldCollideY) && timers[0] == 0)
                         {
@@ -381,7 +391,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 case 4:
                     if (mainTimer == 499)
                     {
-                        rings.Add(new RingOfSlimes(50, npc) { angularVelocity = 9, Center = npc.Center });
+                        int dir = WorldDifficultySystem.suicide? (rand.NextBool(2)? 1 : -1) : 1;
+                        rings.Add(new RingOfSlimes(50, npc) { angularVelocity = 9 * dir, Center = npc.Center });
                     }
                     RingOfSlimes ring = rings[0];
                     ring.Center = npc.Center;
@@ -398,8 +409,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                         mainTimer = Math.Min(350, mainTimer);
                         if (npc.ai[0] == 0)
                         {
-                            int dir = rand.Next(2) == 1? 1 : -1;
-                            int proj = Projectile.NewProjectile(npc.GetSource_FromThis("Main"), npc.Center, npc.DirectionTo(t.Target.Center).RotatedBy((WorldDifficultySystem.suicide? 0.5f : 1) * MathF.PI * dir) * 2.5f, Laser, LaserDamage, LaserKnockBack, -1, 0, npc.whoAmI, 0.005f * -dir);
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromThis("Main"), npc.Center, npc.DirectionTo(t.Target.Center).RotatedBy((WorldDifficultySystem.suicide? 0.8f : 1) * MathF.PI * -ring.angularVelocity.NonZeroSign()) * 2.3f, Laser, LaserDamage, LaserKnockBack, -1, 0, npc.whoAmI, 0.004f * ring.angularVelocity.NonZeroSign());
                             Main.projectile[proj].timeLeft = mainTimer;
 
                             npc.ai[0] = 1;
@@ -522,6 +532,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 return Main.npc[crownedKingSlime];
             }
         }
+        public bool crownedKingSlimeKilled;
+
         int ninjaKingSlime;    
         NPC NinjaKingSlime
         { 
@@ -534,6 +546,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 return Main.npc[ninjaKingSlime];
             }
         }
+        public bool ninjaKingSlimeKilled;
+
         int kingSlimeCrown;
         NPC KingSlimeCrown
         {
@@ -546,6 +560,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 return Main.npc[kingSlimeCrown];
             }
         }
+        public bool kingSlimeCrownKilled;
+
         bool died;
         public override bool CheckActive(NPC npc)
         {
@@ -598,10 +614,13 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 CrownedKingSlime.velocity = new Vector2(-10, -4);
                 ((NinjaKingSlime)NinjaKingSlime.ModNPC).crownedKingSlime = crownedKingSlime;
                 ((NinjaKingSlime)NinjaKingSlime.ModNPC).kingSlimeCrown = kingSlimeCrown;
+                ((NinjaKingSlime)NinjaKingSlime.ModNPC).kingSlime = npc.whoAmI;
                 ((CrownedKingSlime)CrownedKingSlime.ModNPC).ninjaKingSlime = ninjaKingSlime;
                 ((CrownedKingSlime)CrownedKingSlime.ModNPC).kingSlimeCrown = kingSlimeCrown;
+                ((CrownedKingSlime)CrownedKingSlime.ModNPC).kingSlime = npc.whoAmI;
                 ((KingSlimeCrown)KingSlimeCrown.ModNPC).crownedKingSlime = crownedKingSlime;
                 ((KingSlimeCrown)KingSlimeCrown.ModNPC).ninjaKingSlime = ninjaKingSlime;
+                ((KingSlimeCrown)KingSlimeCrown.ModNPC).kingSlime = npc.whoAmI;
                 return false;
             }
             return true;

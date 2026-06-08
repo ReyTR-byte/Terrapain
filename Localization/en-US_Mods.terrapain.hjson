@@ -792,3 +792,4 @@ AbilityDescription: {
 NightBossSummon_0: Don't change time
 NightBossSummon_1: Sets night
 NightBossSummon_2: Sets day (good luck)
+ResourceDisplaySets.SlimeHeartDisplay.DisplayName: Slime Heart Display

@@ -32,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common\UI\ResourceDisplaySets\" />
     <Folder Include="Content\Items\Weapons\SummonerWeapons\Новая папка\" />
   </ItemGroup>
 </Project>

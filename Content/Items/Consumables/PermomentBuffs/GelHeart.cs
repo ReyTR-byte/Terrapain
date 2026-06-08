@@ -32,6 +32,7 @@ namespace Terrapain.Content.Items.Consumables.PermomentBuffs
 			// when at the max allowed, but it will just play the animation and not affect the player's max life
 			if (player.ConsumedLifeCrystals > 7) {
 				// Returning null will make the item not be consumed
+				player.Custom().CurentHeart = "SlimeHeart";
 				return null;
 			}
 

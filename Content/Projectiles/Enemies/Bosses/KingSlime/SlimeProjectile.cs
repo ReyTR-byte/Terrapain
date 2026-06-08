@@ -54,6 +54,33 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             {
                 Projectile.velocity.Y += 0.3f;
             }
+            if (Projectile.ai[0] == 2 && rand.NextBool(6))
+            {
+                Color color1 = Color.White;
+                switch (variant)
+                {
+                    case 0:
+                        color1 = Color.Blue;
+                        break;
+                    case 1:
+                        color1 = Color.Red;
+                        break;
+                    case 2:
+                        color1 = Color.Black;
+                        break;
+                    case 3:
+                        color1 = Color.Purple;
+                        break;
+                    case 4:
+                        color1 = Color.Yellow;
+                        break;
+                    case 5:
+                        color1 = Color.Green;
+                        break;
+                }
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.t_Slime, newColor: color1);
+
+            }
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {

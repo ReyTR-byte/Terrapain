@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -69,8 +70,24 @@ namespace Terrapain.Common.Global.TGlobalItems
             }
             if (mode == 2)
             {
-                Main.dayTime = false;
-                Main.time = Main.nightLength - 1;
+                Main.dayTime = true;
+                Main.time = 0;
+            }
+
+            int boss = 0;
+            switch (item.type)
+            {
+                case ItemID.SuspiciousLookingEye:
+                    boss = NPCID.EyeofCthulhu;
+                    break;
+            }
+            if (Main.IsItDay() && !NPC.AnyNPCs(NPCID.EyeofCthulhu) && player.whoAmI == Main.LocalPlayer.whoAmI)
+            {
+                SoundEngine.PlaySound(SoundID.Roar, player.position);
+                if (Main.netMode != 1)
+                    NPC.SpawnOnPlayer(player.whoAmI, boss);
+                else
+                    NetMessage.SendData(61, -1, -1, null, player.whoAmI, 4f);
             }
             return null;
         }

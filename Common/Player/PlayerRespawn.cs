@@ -17,7 +17,14 @@ namespace Terrapain.Common.Player
             {
                 if (npc.active && npc.boss)
                 {
-                    bossAlive = true;
+                    if (Player.respawnTimer == 1)
+                    {
+                        npc.active = false;
+                    }
+                    else
+                    {
+                        bossAlive = true;
+                    }
                 }
             } 
             if (!bossAlive)

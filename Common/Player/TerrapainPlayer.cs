@@ -13,6 +13,7 @@ using Terrapain.Content.NPCs.Bosses.Scorspider;
 using Terrapain.Content.Stimulators;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.UI.ResourceSets;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
@@ -38,6 +39,7 @@ namespace Terrapain.Common.Player
         public bool AcidCobwebBonus;
 		public bool GranithShellChestplateBonus;
 		public bool unarmed;
+		public string CurentHeart;
 		public int ExplosiveSkullDamage;
 		public int ExplosiveSkullReload;
 		public int StarFuryBrassletReload;
@@ -198,7 +200,23 @@ namespace Terrapain.Common.Player
 				Player.maxTurrets = 0;
 				Player.UpdateMaxTurrets();
 			}
-		}
+            if (brokenHeartLevel > 0)
+            {
+				PlayerStatsSnapshot snapshot = new(Player);
+
+                float oneHeart = 1f / snapshot.AmountOfLifeHearts;
+                int life = (int)(Player.statLifeMax2 * oneHeart);
+                if (brokenHeartLevel >= 2)
+                {
+                    life += (int)(Player.statLifeMax2 * oneHeart) * 2;
+                }
+                if (brokenHeartLevel == 3)
+                {
+                    life += (int)(Player.statLifeMax2 * oneHeart) * 3;
+                }
+                Player.statLife = Math.Min(Player.statLife, Player.statLifeMax2 - life);
+            }
+        }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (StarPowerSet && StarPowerSetReload == 0)
@@ -352,20 +370,16 @@ namespace Terrapain.Common.Player
 			}
 			if (brokenHeartLevel > 0)
 			{
-				int life = -Math.Max(Player.statLifeMax2 / 20, 20);
 				Player.lifeRegen += 4;
-				if (brokenHeartLevel == 2)
+				if (brokenHeartLevel >= 2)
 				{
-					life -= Math.Max(Player.statLifeMax2 / 20 * 2, 40);
 					Player.GetCritChance(DamageClass.Generic) += 4;
 				}
 				if (brokenHeartLevel == 3)
 				{
-					life -= Math.Max(Player.statLifeMax2 / 20 * 3, 60);
 					Player.GetDamage(DamageClass.Generic) *= 1.1f;
 				}
-				Player.statLifeMax2 += life;
-			}
+            }
         }
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {

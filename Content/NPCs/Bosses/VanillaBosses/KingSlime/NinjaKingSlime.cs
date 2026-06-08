@@ -51,10 +51,17 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         public NPC CrownedKingSlime => Main.npc[crownedKingSlime];
         CrownedKingSlime CKS => (CrownedKingSlime)CrownedKingSlime.ModNPC;
         bool CKSactive => CrownedKingSlime != null && CrownedKingSlime.active && CrownedKingSlime.type == ModContent.NPCType<CrownedKingSlime>();
+
         public int kingSlimeCrown;
         public NPC KingSlimeCrown => Main.npc[kingSlimeCrown];
         KingSlimeCrown KSC => (KingSlimeCrown)KingSlimeCrown.ModNPC;
         bool KSKactive => KingSlimeCrown != null && KingSlimeCrown.active && KingSlimeCrown.type == ModContent.NPCType<KingSlimeCrown>();
+
+        public int kingSlime;
+        public NPC KingSlime => Main.npc[kingSlime];
+        KingSlime KS => KingSlime.GetGlobalNPC<KingSlime>();
+        bool KSactive => KingSlime != null && KingSlime.active && KingSlime.type == NPCID.KingSlime;
+
         public int CurentAttack;
         public int attackCounter = -1;
         public int[] phase1 = [0, 1, 0, 2, 0, 3];
@@ -105,7 +112,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         public float SlimeBallKnockback = 5.5f;
 
         int Shuriken => ModContent.ProjectileType<Shuriken>();
-        public int ShurikenDamage = 12;
+        public int ShurikenDamage = 10;
         public float ShurikenKnockBack = 3;
 
         int Kunai => ModContent.ProjectileType<Kunai>();
@@ -127,6 +134,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         public float SmokeBombKnockBack = 1.5f;
         public override void AI()
         {
+            if (!KSactive)
+            {
+                NPC.active = false;
+            }
             NPC.TargetClosest();
             NPC.noTileCollide = false;
             //switch (phase)
@@ -222,7 +233,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                     break;
                 case 1:
                     ChillMovement();
-                    if (mainTimer % 50 == 1)
+                    if (mainTimer % 100 == 1)
                     {
                         int count;
                         float angle;
@@ -237,7 +248,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                                 {
                                     for (int l = 0; l < count1; l++)
                                     {
-                                        float speed = 22 - 4 * l;
+                                        float speed = 20 - 4 * l;
                                         Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(i * angle + l * angle1) * speed, Kunai, KunaiDamage, KunaiKnockBack);
                                     }
                                 }
@@ -247,17 +258,17 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                                 angle = MathF.PI * 2 / count;
                                 for (int i = 0; i < count; i++)
                                 {
-                                    float speed = 22 - (WorldDifficultySystem.suicide? 9 : 11) * (i % 2);
+                                    float speed = 20 - (WorldDifficultySystem.suicide? 9 : 11) * (i % 2);
                                     Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(i * angle) * speed, Kunai, KunaiDamage, KunaiKnockBack);
                                 }
                                 break;
                             case 2:
                                 count = 4;
-                                angle = (WorldDifficultySystem.suicide? 0.08f : 0.15f) * MathF.PI;
+                                angle = (WorldDifficultySystem.suicide? 0.1f : 0.12f) * MathF.PI;
                                 float startAngle = NPC.DirectionTo(Target.Center).ToRotation() - angle * count / 2f;
                                 for (int i = 0; i < count; i++)
                                 {
-                                    float speed = WorldDifficultySystem.suicide? 20 : 18;
+                                    float speed = WorldDifficultySystem.suicide? 19 : 17;
                                     Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(i * angle + startAngle) * speed, Kunai, KunaiDamage, KunaiKnockBack);
                                 }
                                 break;
@@ -266,7 +277,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                                 angle = MathF.PI * 2 / count;
                                 for (int i = 0; i < count; i++)
                                 {
-                                    float speed = WorldDifficultySystem.suicide? 18 : 16;
+                                    float speed = WorldDifficultySystem.suicide? 17 : 15;
                                     int dir = i % 2 == 1? 1 : -1;
                                     Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitX.RotatedBy(i * angle) * speed, Shuriken, ShurikenDamage, ShurikenKnockBack, -1, dir * 1.5f);
                                 }
@@ -332,7 +343,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             {
                 case -1:
                 case 0:
-                    mainTimer = 200;
+                    mainTimer = 150;
                     break;
                 case 1:
                     mainTimer = 450;
@@ -344,6 +355,13 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 case 3:
                     mainTimer = 450;
                     break;
+            }
+        }
+        public override void OnKill()
+        {
+            if (KSactive)
+            {
+                KS.ninjaKingSlimeKilled = true;
             }
         }
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

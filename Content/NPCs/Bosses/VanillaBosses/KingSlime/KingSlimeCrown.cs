@@ -90,9 +90,13 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         NinjaKingSlime NKS => (NinjaKingSlime)NinjaKingSlime.ModNPC;
         bool NKSactive => NinjaKingSlime != null && NinjaKingSlime.active && NinjaKingSlime.type == ModContent.NPCType<NinjaKingSlime>();
 
+        public int kingSlime;
+        public NPC KingSlime => Main.npc[kingSlime];
+        KingSlime KS => KingSlime.GetGlobalNPC<KingSlime>();
+        bool KSactive => KingSlime != null && KingSlime.active && KingSlime.type == NPCID.KingSlime;
 
         public static int CrownGem => ModContent.ProjectileType<CrownGem>();
-        public int CrownGemDamage = 18;
+        public int CrownGemDamage = 12;
         public int CrownGemKnockBack = 4;
 
         int Laser => ModContent.ProjectileType<KingSlimeCrownLaser2>();
@@ -105,6 +109,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         int[] attacks = [1, 2, 1, 3];
         public override void AI()
         {
+            if (!KSactive)
+            {
+                NPC.active = false;
+            }
             NPC.TargetClosest();
             if (CKSactive)
             {
@@ -348,6 +356,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         }
         public override void OnKill()
         {
+            if (KSactive)
+            {
+                KS.kingSlimeCrownKilled = true;
+            }
             Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, NPC.velocity, GoreID.KingSlimeCrown);
         }
         public override void BossHeadSlot(ref int index)

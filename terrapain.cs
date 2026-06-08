@@ -7,6 +7,8 @@ using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terrapain.Content.Items.ItemDropRules;
 using System.Text.RegularExpressions;
+using Terrapain.Content.Items.Ingredients;
+using Terrapain.Content.NPCs.Bosses.Scorspider;
 
 namespace Terrapain
 {
@@ -98,6 +100,23 @@ namespace Terrapain
                 if (r.createItem.type == ItemID.FlinxFurCoat)
                 {
                     r.DisableRecipe();
+                }
+                else if(r.createItem.type == ItemID.SapphireStaff)
+                {
+                    r.AddIngredient<SuperDenseGel>(6);
+                }
+                else if (r.createItem.type == ItemID.RubyStaff)
+                {
+                    r.AddIngredient<Content.Items.Ingredients.ScorspiderShellShard>(4);
+                    r.AddIngredient<Content.Items.Ingredients.ScorspiderCobweb>(4);
+                }
+                else if (r.createItem.type == ItemID.AmberStaff)
+                {
+                    r.AddIngredient(ItemID.BeeWax, 5);
+                }
+                else if (r.createItem.type == ItemID.DiamondStaff)
+                {
+                    r.AddIngredient(ItemID.Bone, 25);
                 }
             }
 			Recipe recipe = Recipe.Create(ItemID.FlinxFurCoat);

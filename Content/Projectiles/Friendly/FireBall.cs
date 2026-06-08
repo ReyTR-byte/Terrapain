@@ -63,7 +63,7 @@ namespace Terrapain.Content.Projectiles.Friendly
                     
             Projectile.damage = basicDamage + basicDamage * state;
             Player owner = Main.player[Projectile.owner];
-            Lighting.AddLight(Projectile.Center, 2f * (state + 1) / 5f, 1.9f * (state + 1) / 5f, 1.8f * (state + 1) / 5f);
+            Lighting.AddLight(Projectile.Center, 0.5f * (state + 1) / 5f, 0.45f * (state + 1) / 5f, 0.4f * (state + 1) / 5f);
             if (!Shoot)
             {
                 Projectile.position = owner.Center + new Vector2((float)Math.Cos(owner.itemRotation - 0.25 * (float)Math.PI * owner.direction) * owner.direction, (float)Math.Sin(owner.itemRotation - 0.25 * (float)Math.PI * owner.direction) * owner.direction) * 50 - new Vector2(Projectile.width / 2, Projectile.height / 2);
