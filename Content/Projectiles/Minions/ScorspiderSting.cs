@@ -253,7 +253,7 @@ namespace Terrapain.Content.Projectiles.Minions
         }
         public override bool PreDrawExtras()
         {
-            Texture2D texture = ModContent.Request<Texture2D>(ModContent.GetModProjectile(ModContent.ProjectileType<ScorspiderTail>()).Texture).Value;
+            Texture2D texture = ModContent.Request<Texture2D>("Terrapain/Content/NPCs/Bosses/Scorspider/ScorspiderTail").Value;
             Vector2 playerCenter = Main.player[Projectile.owner].MountedCenter;
             Vector2 directionToPlayer = playerCenter - Projectile.Center;
             float distanceToPlayer = directionToPlayer.Length();

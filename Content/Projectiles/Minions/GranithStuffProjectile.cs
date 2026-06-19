@@ -8,6 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terrapain.Content.NPCs.Bosses.Scorspider;
 using Terraria.DataStructures;
+using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
 
 namespace Terrapain.Content.Projectiles.Minions
 {

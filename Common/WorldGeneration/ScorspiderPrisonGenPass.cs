@@ -38,10 +38,10 @@ namespace Terrapain.Common.WorldGeneration
                 attempts++;
             }
             Generator.GenerateStructure("Common/WorldGeneration/Structures/ScorspiderPrison.shstruct", new Point16(x, y), ScorspiderPrisonGen._mod);
-            ScorspiderBody.PrisonPosition = new Vector2(x, y);
+            //ScorspiderBody.PrisonPosition = new Vector2(x, y);
             StructureData sd = Generator.GetStructureData("Common/WorldGeneration/Structures/ScorspiderPrison.shstruct", ScorspiderPrisonGen._mod);
-            ScorspiderBody.prisonWidth = sd.width;
-            ScorspiderBody.prisonHeight = sd.height;
+            //ScorspiderBody.prisonWidth = sd.width;
+            //ScorspiderBody.prisonHeight = sd.height;
         }
     }
 }

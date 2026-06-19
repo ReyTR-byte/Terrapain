@@ -11,13 +11,9 @@ using Terraria.ModLoader;
 namespace Terrapain.Common.Global.UseStyles{
     public class ShootRework : GlobalItem
     {
-        public override void SetDefaults(Item entity)
-        {
-            entity.useStyle = TGlobalItem.ShootOverride;
-        }
         public override bool AppliesToEntity(Item entity, bool lateInstantiation)
         {
-            return entity.useStyle == ItemUseStyleID.Shoot && entity.type != ItemID.DiamondStaff;
+            return entity.useStyle == TGlobalItem.ShootOverride;
         }
         public override void UseStyle(Item item, Terraria.Player player, Rectangle heldItemFrame)
         {

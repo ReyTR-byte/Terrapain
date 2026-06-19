@@ -1,7 +1,9 @@
 using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Terrapain.Common.Player;
+using Terrapain.Content.Items.Ingredients;
 using Terrapain.Content.NPCs.Bosses.Scorspider;
+using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -37,7 +39,7 @@ namespace Terrapain.Content.Items.Accessories
                     float rotation = (float)Math.PI * 0.2f + 0.6f * (i / 14f) * (float)Math.PI;
                     Vector2 velocity = Functions.UnitVectorFromRotation(rotation) * 12;
                     velocity.Y *= -1;
-                    proj = Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, velocity, ModContent.ProjectileType<ScorspiderShellShard>(), Item.damage, Item.knockBack, player.whoAmI);
+                    proj = Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center, velocity, ModContent.ProjectileType<Projectiles.Enemies.Bosses.Scorspider.ScorspiderShellShard>(), Item.damage, Item.knockBack, player.whoAmI);
                     Main.projectile[proj].hostile = false;
                     Main.projectile[proj].friendly = true;
                 }

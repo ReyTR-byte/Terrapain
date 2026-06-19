@@ -30,9 +30,9 @@ namespace Terrapain.Content.Items.Consumables.PermomentBuffs
 		public override bool? UseItem(Player player) {
 			// Moving the exampleLifeFruits check from CanUseItem to here allows this example fruit to still "be used" like Life Fruit can be
 			// when at the max allowed, but it will just play the animation and not affect the player's max life
+			player.Custom().CurentHeart = "SlimeHeart";
 			if (player.ConsumedLifeCrystals > 7) {
 				// Returning null will make the item not be consumed
-				player.Custom().CurentHeart = "SlimeHeart";
 				return null;
 			}
 

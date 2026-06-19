@@ -20,17 +20,17 @@ namespace Terrapain.Common.WorldGeneration
         {
             tasks.Add(new ScorspiderPrisonGenPass("Scorspider Prison", 200));
         }
-        public override void LoadWorldData(TagCompound tag)
-        {
-            ScorspiderBody.PrisonPosition = tag.Get<Vector2>("ScorspiderBody.PrisonPosition");
-            ScorspiderBody.prisonHeight = (int)tag["ScorspiderBody.prisonHeight"];
-            ScorspiderBody.prisonWidth = (int)tag["ScorspiderBody.prisonWidth"];
-        }
-        public override void SaveWorldData(TagCompound tag)
-        {
-            tag["ScorspiderBody.PrisonPosition"] = ScorspiderBody.PrisonPosition;
-            tag["ScorspiderBody.prisonHeight"] = ScorspiderBody.prisonHeight;
-            tag["ScorspiderBody.prisonWidth"] = ScorspiderBody.prisonWidth;
-        }
+        //public override void LoadWorldData(TagCompound tag)
+        //{
+        //    ScorspiderBody.PrisonPosition = tag.Get<Vector2>("ScorspiderBody.PrisonPosition");
+        //    ScorspiderBody.prisonHeight = (int)tag["ScorspiderBody.prisonHeight"];
+        //    ScorspiderBody.prisonWidth = (int)tag["ScorspiderBody.prisonWidth"];
+        //}
+        //public override void SaveWorldData(TagCompound tag)
+        //{
+        //    tag["ScorspiderBody.PrisonPosition"] = ScorspiderBody.PrisonPosition;
+        //    tag["ScorspiderBody.prisonHeight"] = ScorspiderBody.prisonHeight;
+        //    tag["ScorspiderBody.prisonWidth"] = ScorspiderBody.prisonWidth;
+        //}
     }
 }

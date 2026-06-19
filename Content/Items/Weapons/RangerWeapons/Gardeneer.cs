@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Common.Global;
+using Terrapain.Common.Global.UseStyles;
 using Terrapain.Content.Projectiles.Ammo.Bouquet;
 using Terraria;
 using Terraria.DataStructures;
@@ -25,7 +27,7 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
             Item.damage = 15;
             Item.knockBack = 2;
             Item.DamageType = DamageClass.Ranged;
-            Item.useStyle = ItemUseStyleID.Shoot;
+            Item.useStyle = TGlobalItem.BowOverride;
             Item.shoot = ProjectileID.PurificationPowder;
             Item.shootSpeed = 11;
             Item.value = 50000;
@@ -38,6 +40,17 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
                 velocity += player.velocity;
             }
             velocity = velocity.RotatedByRandom(0.02);
+        }
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            if (Item.GetGlobalItem<BowsOverride>().bowTime >= Item.useAnimation * 5)
+            {
+                foreach (int p in BouquetArrow.petals)
+                {
+                    Projectile.NewProjectile(source, position, velocity.RotatedByRandom(0.1), p, damage / 2, knockback / 2, player.whoAmI);
+                }
+            }
+            return true;
         }
     }
 }

@@ -8,6 +8,7 @@ using Terrapain.Content;
 using Terrapain.Content.Items.Abstract;
 using Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories;
 using Terrapain.Content.NPCs.Bosses.Scorspider;
+using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -35,6 +36,7 @@ namespace Terrapain.Common.Global
 		public static int BatUseStyle;
         public static int LaserUseStyle;
         public static int ShootOverride;
+        public static int BowOverride;
         public int drawDir;
 		public static List<int> UseModDrawStyles = new List<int>();
 		public static Vector2 basicOffset = Vector2.UnitX * 10 + Vector2.UnitY * 2;
@@ -111,6 +113,36 @@ namespace Terrapain.Common.Global
 			ItemID.SilverBroadsword,
 			ItemID.TungstenBroadsword,
         };
+		public int[] Bows =
+		{
+			ItemID.AshWoodBow,
+			ItemID.BeesKnees,
+			ItemID.CopperBow,
+			ItemID.DemonBow,
+			ItemID.EbonwoodBow,
+			ItemID.GiantBow,
+			ItemID.GoldBow,
+			ItemID.HellwingBow,
+			ItemID.IceBow,
+			ItemID.IronBow,
+			ItemID.LeadBow,
+			ItemID.Marrow,
+			ItemID.MoltenFury,
+			ItemID.PalmWoodBow,
+			ItemID.PearlwoodBow,
+			ItemID.PlatinumBow,
+			ItemID.PulseBow,
+			ItemID.RichMahoganyBow,
+			ItemID.ShadewoodBow,
+			ItemID.ShadowFlameBow,
+			ItemID.SilverBow,
+			ItemID.SkeletonBow,
+			ItemID.TendonBow,
+			ItemID.TinBow,
+			ItemID.Tsunami,
+			ItemID.TungstenBow,
+			ItemID.WoodenBow,
+		};
 
         public virtual void ModLoad() { }
         public override void Load()
@@ -132,7 +164,19 @@ namespace Terrapain.Common.Global
 				entity.useStyle = LightSwing;
 				entity.useTurn = false;
 			}
-			switch (entity.type)
+            else if (Bows.Contains(entity.type))
+            {
+                entity.useStyle = BowOverride;
+            }
+			else if (entity.type == ItemID.DiamondStaff)
+			{
+                entity.useStyle = LaserUseStyle;
+            }
+			else if (entity.useStyle == ItemUseStyleID.Shoot)
+			{
+				entity.useStyle = ShootOverride;
+            }
+            switch (entity.type)
 			{
 				case ItemID.SlimeCrown:
 				case ItemID.SuspiciousLookingEye:

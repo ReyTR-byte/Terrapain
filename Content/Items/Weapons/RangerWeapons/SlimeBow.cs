@@ -1,6 +1,10 @@
+using Luminance.Common.Easings;
 using Microsoft.Xna.Framework;
+using Terrapain.Common.Global;
+using Terrapain.Common.Global.UseStyles;
 using Terrapain.Content.Items.Ingredients;
 using Terrapain.Content.Projectiles;
+using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -29,7 +33,7 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 			// Use Properties
 			Item.useTime = 14; // The item's use time in ticks (60 ticks == 1 second.)
 			Item.useAnimation = 14; // The length of the item's use animation in ticks (60 ticks == 1 second.)
-			Item.useStyle = ItemUseStyleID.Shoot; // How you use the item (swinging, holding out, etc.)
+			Item.useStyle = TGlobalItem.BowOverride; // How you use the item (swinging, holding out, etc.)
 			Item.autoReuse = true; // Whether or not you can hold click to automatically use it again.
 
 			// The sound that this item plays when used.
@@ -50,6 +54,17 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 		UnifiedRandom rand = new UnifiedRandom();
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
+            if (Item.GetGlobalItem<BowsOverride>().bowTime >= Item.useAnimation * 5)
+			{
+				for (int i = -1; i < 2; i++)
+				{
+					float rotation = MathF.PI * 0.075f * i;
+					int p = Projectile.NewProjectile(source, position, velocity.Normalized().RotatedBy(rotation) * 15, ModContent.ProjectileType<KingSlimeBall>(), damage / 4, knockback, player.whoAmI);
+					Main.projectile[p].hostile = false;
+                    Main.projectile[p].friendly = true;
+                    Main.projectile[p].DamageType = DamageClass.Ranged;
+                }
+			}
 			for (int i = rand.Next(3, 7); i > 0; i--)
 			{
 				Dust.NewDust(player.Center + velocity / velocity.Length() + new Vector2(-3, -3), 6, 6, DustID.t_Slime, 0, 0, 0, Microsoft.Xna.Framework.Color.Blue);

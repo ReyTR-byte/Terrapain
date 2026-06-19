@@ -10,6 +10,7 @@ using Terrapain.Content.DamageClasses;
 using Terrapain.Content.Dashes;
 using Terrapain.Content.Items.Weapons.SummonerWeapons;
 using Terrapain.Content.NPCs.Bosses.Scorspider;
+using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
 using Terrapain.Content.Stimulators;
 using Terraria;
 using Terraria.DataStructures;

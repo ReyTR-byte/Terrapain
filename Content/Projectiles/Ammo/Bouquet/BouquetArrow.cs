@@ -9,6 +9,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 
 namespace Terrapain.Content.Projectiles.Ammo.Bouquet
 {
@@ -37,6 +38,7 @@ namespace Terrapain.Content.Projectiles.Ammo.Bouquet
             Projectile.GetGlobalProjectile<TGlobalProjectile>().useModDrawingInPreDraw = true;
             Projectile.GetGlobalProjectile<TGlobalProjectile>().useVanillaDrawing = false;
         }
+        UnifiedRandom random = new();
         public override void AI()
         {
             Projectile.velocity.Y += 0.09f;
@@ -46,8 +48,7 @@ namespace Terrapain.Content.Projectiles.Ammo.Bouquet
             Projectile.rotation = angel;
             if (Projectile.timeLeft != 600 && Projectile.timeLeft % 10 == 0 && Projectile.ai[0] < petals.Count)
             {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.1), petals[(int)Projectile.ai[0]], Projectile.damage / 2, Projectile.knockBack / 2, Projectile.owner);
-                Projectile.ai[0] += 1;
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.RotatedByRandom(0.1), petals[random.Next(petals.Count)], Projectile.damage / 2, Projectile.knockBack / 2, Projectile.owner);
             }
         }
         public override bool OnTileCollide(Vector2 oldVelocity)

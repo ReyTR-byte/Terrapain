@@ -20,6 +20,7 @@ namespace Terrapain.Common.Global.UseStyles
             TGlobalItem.BatUseStyle = ItemLoader.RegisterUseStyle(Mod, "Bat");
             TGlobalItem.LaserUseStyle = ItemLoader.RegisterUseStyle(Mod, "Laser");
             TGlobalItem.ShootOverride = ItemLoader.RegisterUseStyle(Mod, "ShootOverride");
+            TGlobalItem.BowOverride = ItemLoader.RegisterUseStyle(Mod, "BowOverride");
         }
     }
 }

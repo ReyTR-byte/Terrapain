@@ -12,6 +12,7 @@ using Terraria.Utilities;
 using Terrapain.Common.Global;
 using Terrapain.Content.NPCs.Bosses.Scorspider;
 using Terrapain.Content.Buffs;
+using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
 
 
 namespace Terrapain.Content.Projectiles.Friendly

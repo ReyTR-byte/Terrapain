@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
+﻿using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using Luminance.Common.Utilities;
 using Terraria.ID;
-using AssGen;
 using Terraria.GameContent;
 using Terraria.Utilities;
 using Terrapain.Common.Player;
@@ -122,7 +116,9 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             Vector2 start = Projectile.Center - rotatedDir * (Tiles - 1) * 20;
             for (int i = 0; i < Tiles; i++)
             {
-                Main.spriteBatch.Draw(TextureAssets.Projectile[Type].Value, start + rotatedDir * 40 * i - Main.screenPosition, null, Lighting.GetColor((start + rotatedDir * 40 * i).ToTileCoordinates()), Projectile.rotation, new Vector2(36, 20), 1, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0);
+                int f = i == 0? 0 : i == Tiles - 1? 2 : 1;
+                Rectangle frame = new Rectangle(0, 40 * f, 40, 40);
+                Main.spriteBatch.Draw(TextureAssets.Projectile[Type].Value, start + rotatedDir * 40 * i - Main.screenPosition, frame, Lighting.GetColor((start + rotatedDir * 40 * i).ToTileCoordinates()), Projectile.rotation, new Vector2(36, 20), 1, Microsoft.Xna.Framework.Graphics.SpriteEffects.None, 0);
             }
             return false;
         }

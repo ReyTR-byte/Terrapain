@@ -452,19 +452,60 @@ namespace Terrapain.Content
             float maxVelocityMultyplier = 1;
             if (targetPosition != entity.Center)
             {
-                entity.velocity = entity.DirectionTo(targetPosition) * entity.velocity.Length();
                 entity.velocity += entity.DirectionTo(targetPosition) * acceleration;
             }
             if (entity.Distance(targetPosition) < MaxSpeed)
             {
                 maxVelocityMultyplier = 1 - (MaxSpeed - entity.Distance(targetPosition)) / MaxSpeed;
             }
+            Vector2 vectorToTargetPosition = targetPosition - entity.Center;
+            float positiveRotation = AngleBetweenVectors(vectorToTargetPosition, entity.velocity);
+            positiveRotation = NormalizeRotation(positiveRotation);
+            float negativeRotation = AngleBetweenVectors(entity.velocity, vectorToTargetPosition);
+            negativeRotation = NormalizeRotation(negativeRotation);
+            if (positiveRotation > negativeRotation)
+            {
+                entity.velocity.RotateBy(MathF.Max(-negativeRotation, -0.2f));
+            }
+            else
+            {
+                entity.velocity.RotateBy(MathF.Min(positiveRotation, 0.2f));
+            }
             if (entity.velocity.Length() > MaxSpeed * maxVelocityMultyplier)
             {
                 entity.velocity = entity.velocity.ToUnit() * MaxSpeed * maxVelocityMultyplier;
             }
         }
-		public static bool AngularAcceleration(ref float angularVelocity, float acceleration, float maxAngularVelocity, float goalRotation, ref float rotation, bool Break = true)
+        public static void CommonTerrapainFlyingMovement(ref Vector2 position, ref Vector2 velocity, Vector2 targetPosition, float rotatingSpeed, float MaxSpeed, float acceleration, float BreakingZone)
+        {
+            float maxVelocityMultyplier = 1;
+            if (targetPosition != position)
+            {
+                velocity += position.DirectionTo(targetPosition) * acceleration;
+            }
+            if (position.Distance(targetPosition) < BreakingZone)
+            {
+                maxVelocityMultyplier = 1 - (BreakingZone - position.Distance(targetPosition)) / BreakingZone;
+            }
+            Vector2 vectorToTargetPosition = targetPosition - position;
+            float positiveRotation = AngleBetweenVectors(vectorToTargetPosition, velocity);
+            positiveRotation = NormalizeRotation(positiveRotation);
+            float negativeRotation = AngleBetweenVectors(velocity, vectorToTargetPosition);
+            negativeRotation = NormalizeRotation(negativeRotation);
+            if (positiveRotation > negativeRotation)
+            {
+                velocity.RotateBy(MathF.Max(-negativeRotation, -0.2f));
+            }
+            else
+            {
+                velocity.RotateBy(MathF.Min(positiveRotation, 0.2f));
+            }
+            if (velocity.Length() > MaxSpeed * maxVelocityMultyplier)
+            {
+                velocity = velocity.ToUnit() * MaxSpeed * maxVelocityMultyplier;
+            }
+        }
+        public static bool AngularAcceleration(ref float angularVelocity, float acceleration, float maxAngularVelocity, float goalRotation, ref float rotation, bool Break = true)
 		{
 			bool rotateToTarget = false;
             goalRotation = NormalizeRotation(goalRotation, true);
