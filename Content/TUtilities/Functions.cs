@@ -1150,8 +1150,12 @@ namespace Terrapain.Content
 			}
 			return false;
 		}
-		public static Vector2 RayColisionInTheWorld(Vector2 start, Vector2 end)
+		public static Vector2 RayColisionInTheWorld(Vector2 start, Vector2 end, bool checkPltforms = false)
 		{
+			if (start.Y > end.Y)
+			{
+				checkPltforms = false;
+			}
 			Vector2 crossPoint = Vector2.Zero;
 			start /= 16;
 			end /= 16;
@@ -1160,14 +1164,19 @@ namespace Terrapain.Content
             int H = (int)end.Y - (int)start.Y;
             int LeastX = (int)start.X;
             int LeastY = (int)start.Y;
+			if (Main.tile[start.ToTileCoordinates()].HasTile && Main.tileSolid[Main.tile[start.ToTileCoordinates()].TileType])
+			{
+				return start;
+			}
 
             for (int w = 0; Math.Abs(w) <= Math.Abs(W); w += W == 0? 1 : Math.Sign(W))
             {
                 for (int h = 0; Math.Abs(h) <= Math.Abs(H); h += H == 0 ? 1 : Math.Sign(H))
                 {
-                    if (Main.tile[LeastX + w, LeastY + h].HasTile && Main.tileSolid[Main.tile[LeastX + w, LeastY + h].TileType] && !Main.tileSolidTop[Main.tile[LeastX + w, LeastY + h].TileType])
+                    if (Main.tile[LeastX + w, LeastY + h].HasTile && Main.tileSolid[Main.tile[LeastX + w, LeastY + h].TileType] && (!Main.tileSolidTop[Main.tile[LeastX + w, LeastY + h].TileType] || checkPltforms))
                     {
-						if (dir.Y != 0)
+						bool flag = Main.tileSolidTop[Main.tile[LeastX + w, LeastY + h].TileType];
+                        if (dir.Y != 0)
 						{
                             Vector2 result = Vector2.Zero;
 							if (Main.tile[LeastX + w, LeastY + h].IsHalfBlock)
@@ -1182,21 +1191,21 @@ namespace Terrapain.Content
                                 }
                                 crossPoint.Y = LeastY + h + 1;
                                 crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
-                                if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1 && crossPoint.Distance(start) < distance)
+                                if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1 && crossPoint.Distance(start) < distance && !flag)
                                 {
                                     result = crossPoint;
                                     distance = crossPoint.Distance(start);
                                 }
                                 crossPoint.X = LeastX + w;
                                 crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
-                                if (crossPoint.Y > LeastY + h + 0.5f && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance)
+                                if (crossPoint.Y > LeastY + h + 0.5f && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance && !flag)
                                 {
                                     result = crossPoint;
                                     distance = crossPoint.Distance(start);
                                 }
                                 crossPoint.X = LeastX + w + 1;
                                 crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
-                                if (crossPoint.Y > LeastY + h + 0.5f && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance)
+                                if (crossPoint.Y > LeastY + h + 0.5f && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance && !flag)
                                 {
                                     result = crossPoint;
                                     distance = crossPoint.Distance(start);
@@ -1206,7 +1215,7 @@ namespace Terrapain.Content
                                     return result * 16;
                                 }
                             }
-							else if (Main.tile[LeastX + w, LeastY + h].BottomSlope && Main.tile[LeastX + w, LeastY + h].RightSlope)
+							else if (Main.tile[LeastX + w, LeastY + h].BottomSlope && Main.tile[LeastX + w, LeastY + h].RightSlope && !flag)
 							{
                                 float distance = float.MaxValue;
 								bool touchSlope = false;
@@ -1261,7 +1270,7 @@ namespace Terrapain.Content
                                     return result * 16;
                                 }
                             }
-							else if (Main.tile[LeastX + w, LeastY + h].BottomSlope && Main.tile[LeastX + w, LeastY + h].LeftSlope)
+							else if (Main.tile[LeastX + w, LeastY + h].BottomSlope && Main.tile[LeastX + w, LeastY + h].LeftSlope && !flag)
 							{
                                 float distance = float.MaxValue;
                                 bool touchSlope = false;
@@ -1366,7 +1375,7 @@ namespace Terrapain.Content
                                         result.Y = LeastY + h + 1 - y;
                                     }
                                 }
-                                if (result != Vector2.Zero)
+                                if (result != Vector2.Zero && (touchSlope || !flag))
                                 {
                                     return result * 16;
                                 }
@@ -1421,7 +1430,7 @@ namespace Terrapain.Content
                                         result.Y = LeastY + h + 1 - y;
                                     }
                                 }
-                                if (result != Vector2.Zero)
+                                if (result != Vector2.Zero && (touchSlope || !flag))
                                 {
                                     return result * 16;
                                 }
@@ -1431,28 +1440,28 @@ namespace Terrapain.Content
 								float distance = float.MaxValue;
 								crossPoint.Y = LeastY + h;
 								crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
-								if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1)
+								if (crossPoint.X >= LeastX + w && crossPoint.X <= LeastX + w + 1)
 								{
 									result = crossPoint;
 									distance = start.Distance(result);
 								}
 								crossPoint.Y = LeastY + h + 1;
 								crossPoint.X = start.X - dir.X * ((start.Y - crossPoint.Y) / dir.Y);
-								if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1 && crossPoint.Distance(start) < distance)
+								if (crossPoint.X > LeastX + w && crossPoint.X < LeastX + w + 1 && crossPoint.Distance(start) < distance && !flag)
 								{
 									result = crossPoint;
 									distance = crossPoint.Distance(start);
 								}
 								crossPoint.X = LeastX + w;
 								crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
-								if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance)
+								if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance && !flag)
 								{
 									result = crossPoint;
 									distance = crossPoint.Distance(start);
 								}
 								crossPoint.X = LeastX + w + 1;
 								crossPoint.Y = start.Y - dir.Y * ((start.X - crossPoint.X) / dir.X);
-								if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance)
+								if (crossPoint.Y > LeastY + h && crossPoint.Y < LeastY + h + 1 && crossPoint.Distance(start) < distance && !flag)
 								{
 									result = crossPoint;
 									distance = crossPoint.Distance(start);

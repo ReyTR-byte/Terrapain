@@ -19,7 +19,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             AIType = ProjectileID.Bullet;
             Projectile.GetT().useModDrawingInPreDraw = true;
             Projectile.GetT().useVanillaDrawing = false;
-            Projectile.GetT().drawCenter = new Vector2(49, 12);
+            Projectile.GetT().drawCenter = new Vector2(44, 13);
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {

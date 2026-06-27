@@ -10,6 +10,7 @@ using Terrapain.Common.Config;
 using Terrapain.Common.System;
 using Terrapain.Content.Buffs;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -30,7 +31,6 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
 
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[Type] = 2;
 
             NPCID.Sets.MPAllowedEnemies[Type] = true;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
@@ -47,8 +47,8 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         }
         public override void SetDefaults()
         {
-            NPC.width = 60;
-            NPC.height = 64;
+            NPC.width = 24;
+            NPC.height = 24;
 
             NPC.damage = 40;
             NPC.defense = 20;
@@ -67,23 +67,20 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
 
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath28;
+
+            NPC.GetT().drawCenter = new Vector2(30, 32);
+            NPC.GetT().useModDrawingInPreDraw = true;
+            NPC.GetT().useVanillaDrawing = false;
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            NPC.realLife = Body;
         }
         public override bool? CanFallThroughPlatforms()
         {
             return true;
         }
         int timer = 5;
-        public override void FindFrame(int frameHeight)
-        {
-            if (Math.Abs(Functions.NormalizeRotation(NPC.rotation)) < Math.PI / 2)
-            {
-                NPC.frame.Y = 0;
-            }
-            else
-            {
-                NPC.frame.Y = NPC.height;
-            }
-        }
         public override void AI()
         {
             timer--;
@@ -189,32 +186,6 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(ModContent.BuffType<ScorspiderAcid>(), 900);
-        }
-        public override void HitEffect(NPC.HitInfo hit)
-        {
-            if (NPC.life - hit.Damage <= 1 && (Main.npc[Body].ai[0] == 1 || Main.npc[Body].ai[0] == 0))
-            {
-                NPC.life = 1;
-                NPC.immortal = true;
-                Main.npc[Body].life = 1;
-                Main.npc[Head].life = 1;
-                Main.npc[Body].immortal = true;
-                Main.npc[Head].immortal = true;
-            }
-            else
-            {
-                if (Main.npc[Body].life - hit.Damage <= 0)
-                {
-                    hit.HideCombatText = true;
-                    Main.npc[Body].StrikeNPC(hit);
-                    Main.npc[Head].StrikeNPC(hit);
-                }
-                else
-                {
-                    Main.npc[Body].life -= hit.Damage;
-                    Main.npc[Head].life -= hit.Damage;
-                }
-            }
         }
         public override void OnKill()
         {

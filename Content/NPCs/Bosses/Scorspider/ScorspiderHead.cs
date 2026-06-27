@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Luminance.Common.Utilities;
+using Mono.Cecil.Cil;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Content.Buffs;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -17,6 +20,8 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             get => (int)NPC.ai[0];
             set => NPC.ai[0] = value;
         }
+        NPC body => Main.npc[Body];
+        ScorspiderBody sb => (ScorspiderBody)body.ModNPC;
         private int Sting
         {
             get => (int)NPC.ai[1];
@@ -66,6 +71,15 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             NPC.stairFall = true;
 
             NPC.HitSound = SoundID.NPCHit4;
+
+            NPC.GetT().useVanillaDrawing = false;
+            NPC.GetT().useModDrawingInPreDraw = true;
+            NPC.GetT().drawCenter = new Vector2(5, 25);
+            NPC.GetT().textureDirection = -1;
+        }
+        public override void OnSpawn(IEntitySource source)
+        {
+            NPC.realLife = Body;
         }
         int timer = 5;
         public override void AI()
@@ -74,6 +88,28 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             if (!Main.npc[Body].active || Main.npc[Body].type != ModContent.NPCType<ScorspiderBody>() && timer <= 0)
             {
                 NPC.life = 0;
+            }
+            else
+            {
+                if (NPC.spriteDirection != body.spriteDirection)
+                {
+                    NPC.rotation *= -1;
+                    NPC.ai[3] *= -1;
+                }
+                NPC.spriteDirection = body.spriteDirection;
+                float realRotation = NPC.rotation + (NPC.spriteDirection == 1? MathF.PI : 0);
+                NPC.Center = sb.HeadPosition;
+                NPC.velocity = Vector2.Zero;
+                float targetRotation = NPC.DirectionTo(body.GetT().Target.Center).ToRotation();
+                float r = body.rotation + (body.spriteDirection == 1 ? MathF.PI : 0);
+                if (!Functions.IsAngleBetweenAngles(r + 1.2f, targetRotation, r - 1.2f))
+                {
+                    int dir = Functions.NormalizeRotation(targetRotation - r, false).NonZeroSign();
+
+                    targetRotation = r + 1.2f * dir;
+                }
+                Functions.AngularAcceleration(ref NPC.ai[3], 0.03f, 0.3f, targetRotation, ref realRotation);
+                NPC.rotation = realRotation - (NPC.spriteDirection == 1? MathF.PI : 0);
             }
         }
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -89,32 +125,6 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
 
             Gore.NewGore(entitySource, NPC.position, new Vector2(Main.rand.Next(-6, 7), Main.rand.Next(-6, 7)), firstGoreType);
             Gore.NewGore(entitySource, NPC.position, new Vector2(Main.rand.Next(-6, 7), Main.rand.Next(-6, 7)), secondGoreType);
-        }
-        public override void HitEffect(NPC.HitInfo hit)
-        {
-            if (NPC.life - hit.Damage <= 1 && (Main.npc[Body].ai[0] == 1 || Main.npc[Body].ai[0] == 0))
-            {
-                NPC.life = 1;
-                NPC.immortal = true;
-                Main.npc[Body].life = 1;
-                Main.npc[Sting].life = 1;
-                Main.npc[Body].immortal = true;
-                Main.npc[Sting].immortal = true;
-            }
-            else
-            {
-                if (Main.npc[Body].life - hit.Damage <= 0)
-                {
-                    hit.HideCombatText = true;
-                    Main.npc[Body].StrikeNPC(hit);
-                    Main.npc[Sting].StrikeNPC(hit);
-                }
-                else
-                {
-                    Main.npc[Body].life -= hit.Damage;
-                    Main.npc[Sting].life -= hit.Damage;
-                }
-            }
         }
         public override void FindFrame(int frameHeight)
         {

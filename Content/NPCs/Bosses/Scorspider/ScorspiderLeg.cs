@@ -4,15 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Content.Dusts;
 using Terrapain.Content.TUtilities.Kinematic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace Terrapain.Content.NPCs.Bosses.Scorspider
 {
     public class ScorspiderLeg
     {
+        public bool Grounded;
+        public Vector2 Ground;
+        public float MaxLength;
+        public Vector2 velocity;
+        public float angularVelocity1;
+        public float angularVelocity2;
+        public float length;
+        bool notNormalPosition;
+        public int direction;
         /// <summary>
         /// The 0-1 interpolant of how far this leg is in its forward step animation.
         /// </summary>
@@ -75,7 +86,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         public const int Decel = 2;
         public const int AccelDecel = 3;
 
-        public ScorspiderLeg(Vector2 defaultOffset, float legSizeFactor, float legLength1, float legLength2, int index)
+        public ScorspiderLeg(Vector2 defaultOffset, float legSizeFactor, float legLength1, float legLength2, int index, float maxLength)
         {
             LegSizeFactor = legSizeFactor;
             DefaultOffset = defaultOffset;
@@ -83,131 +94,192 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             Leg = new();
             Leg.Add(new(LegSizeFactor * legLength1));
             Leg.Add(new(LegSizeFactor * legLength2));
+            length = legLength1 + legLength2;
+            direction = DefaultOffset.X.NonZeroSign();
             Index = index;
             AnimationMode = Accel;
+            MaxLength = maxLength;
         }
-        public Vector2 LegCenter(ScorspiderBody owner) => owner.NPC.Center + owner.LegBraces[Index];
-        public Vector2 DefaultPosition(ScorspiderBody owner) => LegCenter(owner) + DefaultOffset;
+        public Vector2 LegCenter(ScorspiderBody owner) => owner.NPC.Center + owner.LegBraces[Index].RotatedBy(owner.NPC.rotation);
+        public Vector2 DefaultPosition(ScorspiderBody owner) => LegCenter(owner) + DefaultOffset + new Vector2(owner.NPC.velocity.X * 3.5f, 0);
         public void Update(NPC owner)
         {
-            var scorspider = (ScorspiderBody)owner.ModNPC;
-            if (owner.IsABestiaryIconDummy)
-            {
-                Leg.Update(DefaultPosition(scorspider));
-                return;
-            }
-
-            // Calculate how many legs are on the ground.
-            int legSide = DefaultOffset.X.NonZeroSign();
-            var legOnSameSideAsMe = scorspider.Legs.Where(l => l.DefaultOffset.X.NonZeroSign() == legSide).ToArray();
-            int totalRemainingGroundedLegs = legOnSameSideAsMe.Count(l => l.StepAnimationInterpolant <= 0f);
-            int legsOnGroundIfISteppedForward = totalRemainingGroundedLegs - 1;
-
-            // Store direction vectors for ease of use.
-            Vector2 gravityDirection = Vector2.UnitY;
-            Vector2 forwardDirection = new(gravityDirection.Y, gravityDirection.X);
-            bool falling = Vector2.Dot(owner.velocity, gravityDirection) >= 8f;
-
-            // Initialize the step destination if necessary.
-            if (StepDestination == Vector2.Zero)
-                StepDestination = DefaultPosition(scorspider);
-
-            // Keep the leg below the owner if they're falling.
-            if (falling)
-                StepDestination = Vector2.Lerp(StepDestination, LegCenter(scorspider) + gravityDirection * LegSizeFactor * 160f, 1f);
-
-            // Prevent the leg from being behind walls.
-            Vector2 stepOffset = DefaultOffset.RotatedBy(gravityDirection.AngleBetween(Vector2.UnitY));
-            if (stepOffset.HasNaNs())
-                stepOffset = Vector2.Zero;
-
-            Vector2 idealDefaultStepPosition = ScorspiderBody.FindGround((LegCenter(scorspider) + stepOffset).ToTileCoordinates(), gravityDirection, "A").ToWorldCoordinates(8f, -16f);
-            for (int i = 0; i < 50; i++)
-            {
-                if (Collision.CanHitLine(LegCenter(scorspider), 1, 1, idealDefaultStepPosition, 1, 1) && !Collision.SolidCollision(idealDefaultStepPosition, 1, 1))
-                    break;
-
-                idealDefaultStepPosition -= gravityDirection * 8f;
-            }
-
-            // Make the step position interpolate towards its ideal. This helps allow for the legs to reorient naturally and prevents edge-cases where the leg snaps to a new position.
-            MovingDefaultStepPosition = Vector2.Lerp(MovingDefaultStepPosition, idealDefaultStepPosition, 0.11f);
-
-            // Attach to the owner at all times.
+            direction = DefaultOffset.X.NonZeroSign();
+            bool shouldStep = false;
+            ScorspiderBody scorspider = (ScorspiderBody)owner.ModNPC;
+            Vector2 oldPosition = Leg.EndEffectorPosition;
             Leg.StartingPoint = LegCenter(scorspider);
-
-            // Keep the limbs from pointing downward.
-            Leg[0].Constraints = [new FixedAngleDifferenceConstraint(0.6f, gravityDirection.ToRotation() + MathF.PI)];
-
-            // Move limbs forward if necessary.
-            if (StepAnimationInterpolant > 0f)
-                UpdateMovementAnimation(gravityDirection, owner);
-            else
-                KeepLegInPlace(gravityDirection);
-
-            // Determine if the limb needs to change position. If it does, do so. This is based on the following conditions:
-            // 1. A leg is unrealistically close to the body, step back.
-            // 2. A leg is too far from the body and thusly lagging behind, step forward.
-
-            // However, as long as the owner is visible, a step cannot happen if any of the following conditions are true:
-            // 1. The owner is falling. There would be no point to trying to step forward if there's no nearby ground in the first place.
-            // 2. If in stepping forward, no more legs would be on the ground. It obviously makes no logical sense for a spider to move its leg if in doing so it would lose its balance.
-            // 3. An animation is already ongoing. Trying to restart it during this process would cause the animations to fail and keyframes to become inaccurate, as
-            // they assume that when a leg starts an animation it was on ground to begin with.
-            // 4. The owner is barely moving at all (assuming they're visible).
-            float perpendicularDistanceFromOwner = Math.Abs(Utilities.SignedDistanceToLine(Leg.EndEffectorPosition, LegCenter(scorspider), forwardDirection));
-            float closeFactor = 0.3f;
-            float farFactor = 100f;
-
-            bool tooCloseToBody = perpendicularDistanceFromOwner <= Math.Abs(DefaultOffset.X) * closeFactor;
-            bool tooFarFromOwner = perpendicularDistanceFromOwner >= LegSizeFactor * farFactor || !StepDestination.WithinRange(MovingDefaultStepPosition, LegSizeFactor * farFactor);
-            bool shouldStepForward = tooFarFromOwner || tooCloseToBody;
-            bool cannotStepForward = falling || legsOnGroundIfISteppedForward <= 0 || StepAnimationInterpolant > 0f || owner.velocity.Length() <= 0.3f;
-            if (owner.Opacity <= 0.1f)
-                cannotStepForward = false;
-
-            if (shouldStepForward && !cannotStepForward)
-                StartStepAnimation(owner, gravityDirection, forwardDirection);
-            if (DefaultOffset.X.NonZeroSign() > 0)
+            Leg.UpdateEndEffector();
+            float stepRange = MathF.Abs(owner.velocity.X) > 0.5f? 80 : 5;
+            if (Leg.StartingPoint.Distance(Ground) > length - 10)
             {
-                if (Functions.NormalizeRotation(Leg[0].Rotation, false) < -0.45f * MathF.PI)
+                Grounded = false;
+            }
+            if (StepDestination == Vector2.Zero && MathF.Abs((DefaultPosition(scorspider) - Leg.EndEffectorPosition).RotatedBy(-owner.rotation).X) > stepRange)
+            {
+                shouldStep = true;
+            }
+            if (shouldStep)
+            {
+                var NeighbourLegs = scorspider.Legs.Where(l => (l.Index % 4 == Index % 4 || l.Index == Index - 1 || l.Index == Index + 1) && l.direction == direction).ToArray();
+                int notGroundedLegs = NeighbourLegs.Count(l => l.StepDestination != Vector2.Zero);
+                if (notGroundedLegs == 0 && Grounded)
                 {
-                    Leg[0].Rotation = -0.45f * MathF.PI;
+                    Grounded = false;
+                    StepDestination = Vector2.One;
                 }
-                else if (Functions.NormalizeRotation(Leg[0].Rotation, false) < -0.4f * MathF.PI)
+            }
+            bool findGround = false;
+            if (!Grounded && StepDestination == Vector2.Zero && !notNormalPosition)
+            {
+                Ground = ScorspiderBody.FindGround(DefaultPosition(scorspider), Vector2.UnitY.RotatedBy(owner.rotation), owner, out findGround);
+            }
+            float rot = Functions.NormalizeRotation(Leg[1].Rotation - Leg[0].Rotation, false);
+            if ((rot > 0 && direction == -1) || (rot < 0 && direction == 1) || notNormalPosition)
+            {
+                findGround = false;
+                Grounded = false;
+                StepDestination = Vector2.Zero;
+                notNormalPosition = true;
+            }
+            if (findGround)
+            {
+                Vector2 futureLegPoint = Leg.EndEffectorPosition;
+                Functions.CommonTerrapainFlyingMovement(ref futureLegPoint, ref velocity, Ground, 0.4f + MathF.Abs(owner.velocity.X) / 6, 100, 4f, 50);
+
+                if (Ground.Distance(futureLegPoint) < velocity.Length() * 1.5f)
                 {
-                    Leg[0].Rotation += 0.04f * MathF.PI;
+                    Leg.Update(StepDestination);
+                    Grounded = true;
+                    velocity = Vector2.Zero;
                 }
+                else
+                {
+                    Leg.Update(Leg.EndEffectorPosition + velocity);
+                }
+            }
+            else if (Grounded)
+            {
+                Point tile = (Ground + Vector2.UnitY).ToTileCoordinates();
+                if (!Main.tile[tile].HasTile || !Main.tileSolid[Main.tile[tile].TileType] || (NPCLoader.CanFallThroughPlatforms(owner) ?? false && Main.tileSolidTop[Main.tile[tile].TileType]))
+                {
+                    Grounded = false;
+                }
+                else
+                {
+                    Leg.Update(Ground);
+                }
+            }
+            else if (StepDestination != Vector2.Zero)
+            {
+                StepDestination = ScorspiderBody.FindGround(DefaultPosition(scorspider), Vector2.UnitY.RotatedBy(owner.rotation), owner, out findGround);
+                if (!findGround)
+                {
+                    StepDestination = ScorspiderBody.FindGround(DefaultPosition(scorspider), Vector2.UnitY.RotatedBy(owner.rotation + 0.5f * direction), owner, out findGround);
+                    if (!findGround)
+                    {
+                        StepDestination = ScorspiderBody.FindGround(DefaultPosition(scorspider), Vector2.UnitY.RotatedBy(owner.rotation + 0.5f * -direction), owner, out findGround);
+                        if (!findGround)
+                        {
+                            StepDestination = ScorspiderBody.FindGround(DefaultPosition(scorspider), Vector2.UnitY.RotatedBy(owner.rotation + 1f * direction), owner, out findGround);
+                            if (!findGround)
+                            {
+                                StepDestination = ScorspiderBody.FindGround(DefaultPosition(scorspider), Vector2.UnitY.RotatedBy(owner.rotation + 1f * -direction), owner, out findGround);
+                            }
+                        }
+                    }
+                }
+
+                Vector2 futureLegPoint = Leg.EndEffectorPosition;
+                float value = direction == owner.velocity.X.NonZeroSign() ? 1 : 2.5f;
+                //Functions.CommonTerrapainFlyingMovement(ref futureLegPoint, ref velocity, StepDestination, MathF.PI * 2, 10 + MathF.Abs(owner.velocity.X) * 1.3f * value, (0.39f + MathF.Abs(owner.velocity.X) / 7) * value, 40);
+                velocity = Leg.EndEffectorPosition.DirectionTo(StepDestination) * MathF.Min((velocity.Length() + (0.5f + MathF.Abs(owner.velocity.X) / 7) * value), 10 + MathF.Abs(owner.velocity.X) * 1.3f * value);
+                futureLegPoint += velocity;
+                float maxHeight = MathF.Abs(StepDestination.X - Leg.EndEffectorPosition.X) * 4;
+                float heightDifference = MathF.Abs(StepDestination.Y + maxHeight - futureLegPoint.Y);
+                if (futureLegPoint.Y > StepDestination.Y - maxHeight && owner.velocity.X.NonZeroSign() == (StepDestination.X - futureLegPoint.X).NonZeroSign())
+                {
+                    velocity.RotateBy(MathF.PI / 7 * (futureLegPoint.X - StepDestination.X).NonZeroSign());
+                }
+                int StepDirection = (StepDestination.X - Leg.EndEffectorPosition.X).NonZeroSign();
+                if (futureLegPoint.Y > StepDestination.Y)
+                {
+                    velocity.Y = MathF.Min(velocity.Y, -1);
+                }
+                if (futureLegPoint.X > StepDestination.X && owner.velocity.X > 0)
+                {
+                    velocity.X = MathF.Min(velocity.X, -1);
+                }
+                if (futureLegPoint.X < StepDestination.X && owner.velocity.X < 0)
+                {
+                    velocity.X = MathF.Max(velocity.X, 1);
+                }
+                if (StepDestination.Distance(futureLegPoint) < velocity.Length() * 1.3f)
+                {
+                    Leg.Update(StepDestination);
+                    Grounded = true;
+                    Ground = StepDestination;
+                    StepDestination = Vector2.Zero;
+                    velocity = Vector2.Zero;
+                }
+                else
+                {
+                    Leg.Update(Leg.EndEffectorPosition + velocity);
+                }
+                //if (DefaultOffset.X.NonZeroSign() == 1)
+                //{
+                //    if (Functions.NormalizeRotation(Leg[0].Rotation) > -0.05f)
+                //    {
+                //        Leg[0].Rotation = -0.05f;
+                //    }
+                //}
+                //else
+                //{
+                //    if (Functions.NormalizeRotation(Leg[0].Rotation) > -MathF.PI + 0.05f)
+                //    {
+                //        Leg[0].Rotation = -MathF.PI + 0.05f;
+                //    }
+                //}
             }
             else
             {
-                if (Functions.NormalizeRotation(Leg[0].Rotation, false) > -0.55f * MathF.PI)
+                float targetRotation = new Vector2(40 * DefaultOffset.X.NonZeroSign() - owner.velocity.X * 0.5f, owner.velocity.Y * -1 - 40).ToRotation();
+                if (Functions.AngularAcceleration(ref angularVelocity1, 0.03f, 0.3f, targetRotation, ref Leg[0].Rotation))
                 {
-                    Leg[0].Rotation = -0.55f * MathF.PI;
+                    notNormalPosition = false;
                 }
-                else if (Functions.NormalizeRotation(Leg[0].Rotation, false) > -0.6f * MathF.PI)
+                if (rot > 0 && direction == -1)
                 {
-                    Leg[0].Rotation -= 0.04f * MathF.PI;
+                    if (rot < MathF.PI / 2)
+                    {
+                        angularVelocity2 = MathF.Max(angularVelocity2 - 0.03f, -0.3f);
+                    }
+                    else
+                    {
+                        angularVelocity2 = MathF.Min(angularVelocity2 + 0.03f, 0.3f);
+                    }
+                    Leg[1].Rotation += angularVelocity2;
                 }
-            }
-        }
-
-        public static void ApplySlopeOffsets(ref Vector2 idealStepPosition)
-        {
-            Tile ground = Framing.GetTileSafely(idealStepPosition.ToTileCoordinates());
-            Vector2 groundPositionSnapped = (idealStepPosition / 16f).Floor() * 16f + Vector2.UnitY * 16f;
-
-            // Ignore tiles that aren't interactable.
-            if (!ground.HasUnactuatedTile)
-                return;
-
-            float tileSlopeInterpolant = Utilities.InverseLerp(0f, 16f, idealStepPosition.X % 16f);
-            if (ground.IsHalfBlock)
-                idealStepPosition.Y = groundPositionSnapped.Y - 8f;
-            else if (ground.Slope == SlopeType.SlopeDownLeft)
-                idealStepPosition.Y = groundPositionSnapped.Y - MathHelper.Lerp(16f, 0f, tileSlopeInterpolant) + 2f;
-            else if (ground.Slope == SlopeType.SlopeDownRight)
-                idealStepPosition.Y = groundPositionSnapped.Y - MathHelper.Lerp(0f, 16f, tileSlopeInterpolant) + 2f;
+                else if (rot < 0 && direction == 1)
+                {
+                    if (rot > -MathF.PI / 2)
+                    {
+                        angularVelocity2 = MathF.Min(angularVelocity2 + 0.03f, 0.3f);
+                    }
+                    else
+                    {
+                        angularVelocity2 = MathF.Max(angularVelocity2 - 0.03f, -0.3f);
+                    }
+                    Leg[1].Rotation += angularVelocity2;
+                }
+                else
+                {
+                    float fall = MathHelper.Clamp(-owner.velocity.Y / 5 + 1, -1, 1);
+                    targetRotation = new Vector2(owner.velocity.X * fall * -1 - DefaultOffset.X.NonZeroSign() * 6, 35 - owner.velocity.Y).ToRotation();
+                    Functions.AngularAcceleration(ref angularVelocity2, 0.03f, 0.3f, targetRotation, ref Leg[1].Rotation);
+                }
+                Leg.UpdateEndEffector();
+            }    
         }
 
         public void UpdateMovementAnimation(Vector2 gravityDirection, NPC owner)
@@ -215,7 +287,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             // Increment the animation interpolant.
             float interpolationSpeed = InterpolationSpeed;
             float velSq = owner.velocity.LengthSquared();
-            float velocityNorm = 10 * 10;
+            float velocityNorm = 90;
             if (velSq > velocityNorm)
                 interpolationSpeed *= velSq / velocityNorm;
             StepAnimationInterpolant += interpolationSpeed;
@@ -248,6 +320,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             // Stop the animation once it has completed.
             if (StepAnimationInterpolant >= 1f)
             {
+                Grounded = true;
                 StepAnimationInterpolant = 0f;
                 if (StepSound)
                     SoundEngine.PlaySound(SoundID.Dig with { Pitch = -0.5f }, StepDestination);
@@ -259,11 +332,11 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             }
         }
 
-        public void KeepLegInPlace(Vector2 gravityDirection)
+        public void KeepLegInPlace(Vector2 gravityDirection, Vector2 destination)
         {
             // Stay at the step destination.
             // This will, barring the above exception, be where the leg stopped at the last time a step was performed.
-            Leg.Update(StepDestination);
+            Leg.Update(destination);
         }
 
         public void StartStepAnimation(NPC owner, Vector2 gravityDirection, Vector2 forwardDirection, float interpolationSpeed = 0.05f)
@@ -284,16 +357,12 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             // Start the animation.
             StepAnimationInterpolant = 0.02f;
             EndEffectorPositionAtStartOfStep = Leg.EndEffectorPosition;
-            StepDestination = ScorspiderBody.FindGround((MovingDefaultStepPosition + aimAheadOffset).ToTileCoordinates(), gravityDirection, "B").ToWorldCoordinates(8f, 20f);
             InterpolationSpeed = interpolationSpeed;
             var hive = (ScorspiderBody)owner.ModNPC;
             //if (hive.PhaseTwo)
             //    InterpolationSpeed *= 1.5f;
             AnimationMode = AccelDecel;
             StepSound = true;
-
-            // Apply slope vertical offsets to the step position.
-            ApplySlopeOffsets(ref StepDestination);
         }
 
         public void StartCustomAnimation(NPC owner, Vector2 endPosition, float interpolationSpeed = 0.05f, int animationMode = AccelDecel, bool stepSound = false)
@@ -305,9 +374,6 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             InterpolationSpeed = interpolationSpeed;
             AnimationMode = animationMode;
             StepSound = stepSound;
-
-            // Apply slope vertical offsets to the step position.
-            ApplySlopeOffsets(ref StepDestination);
         }
 
         public Vector2 GetEndPoint() => Leg.EndEffectorPosition;
