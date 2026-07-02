@@ -50,13 +50,9 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
         float startRotation;
         public override void OnSpawn(IEntitySource source)
         {
-            foreach (var npc in Main.npc)
+            if (attackStyle == 5)
             {
-                if (npc.type == ModContent.NPCType<NPCs.Bosses.Scorspider.ScorspiderSting>())
-                {
-                    Sting = npc;
-                    break;
-                }
+                Sting = (NPC)((EntitySource_Parent)source).Entity;
             }
 
             Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
@@ -65,7 +61,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
             startVlocity = Projectile.velocity;
             if (Projectile.velocity != Vector2.Zero)
             {
-                float angel = Convert.ToSingle(Math.Acos(Projectile.velocity.X / Projectile.velocity.Length()));
+                float angel = MathF.Acos(Projectile.velocity.X / Projectile.velocity.Length());
                 if (Projectile.velocity.Y < 0)
                     angel = 2 * Convert.ToSingle(Math.PI) - angel;
                 startRotation = angel;
@@ -83,10 +79,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
             }
             if (Projectile.velocity != Vector2.Zero)
             {
-                float angel = Convert.ToSingle(Math.Acos(Projectile.velocity.X / Projectile.velocity.Length()));
-                if (Projectile.velocity.Y < 0)
-                    angel = 2 * Convert.ToSingle(Math.PI) - angel;
-                Projectile.rotation = angel;
+                Projectile.rotation = Projectile.velocity.ToRotation();
             }
 
             Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
@@ -191,24 +184,27 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
                     }
                     break;
                 case 5:
-                    if (timer < 90 && WorldDifficultySystem.suicide)
+                    if (timer < 90)
                     {
-                        if (Projectile.velocity.X > 0)
+                        if (WorldDifficultySystem.suicide)
                         {
-                            if (Projectile.position.X + 200 - Projectile.position.X % 200 <= Projectile.position.X + Projectile.velocity.X && i != 0)
+                            if (Projectile.velocity.X > 0)
                             {
-                                Vector2 ProjPos = Projectile.position;
-                                ProjPos.X = Projectile.position.X + 200 - Projectile.position.X % 200;
-                                Projectile.NewProjectile(Projectile.GetSource_FromAI(), ProjPos, Vector2.Zero, ModContent.ProjectileType<ScorspiderShellShard>(), Projectile.damage, Projectile.knockBack);
+                                if (Projectile.position.X + 200 - Projectile.position.X % 200 <= Projectile.position.X + Projectile.velocity.X && i != 0)
+                                {
+                                    Vector2 ProjPos = Projectile.position;
+                                    ProjPos.X = Projectile.position.X + 200 - Projectile.position.X % 200;
+                                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), ProjPos, Vector2.Zero, ModContent.ProjectileType<ScorspiderShellShard>(), Projectile.damage, Projectile.knockBack);
+                                }
                             }
-                        }
-                        else
-                        {
-                            if (Projectile.position.X - Projectile.position.X % 200 >= Projectile.position.X + Projectile.velocity.X && i != -1)
+                            else
                             {
-                                Vector2 ProjPos = Projectile.position;
-                                ProjPos.X = Projectile.position.X - Projectile.position.X % 200;
-                                Projectile.NewProjectile(Projectile.GetSource_FromAI(), ProjPos, Vector2.Zero, ModContent.ProjectileType<ScorspiderShellShard>(), Projectile.damage, Projectile.knockBack);
+                                if (Projectile.position.X - Projectile.position.X % 200 >= Projectile.position.X + Projectile.velocity.X && i != -1)
+                                {
+                                    Vector2 ProjPos = Projectile.position;
+                                    ProjPos.X = Projectile.position.X - Projectile.position.X % 200;
+                                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), ProjPos, Vector2.Zero, ModContent.ProjectileType<ScorspiderShellShard>(), Projectile.damage, Projectile.knockBack);
+                                }
                             }
                         }
                     }
@@ -216,6 +212,10 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
                     {
                         gravity = false;
                         Projectile.velocity = Projectile.DirectionTo(Sting.Center) * 20;
+                        if (Projectile.Distance(Sting.Center) < 25)
+                        {
+                            Projectile.active = false;
+                        }
                     }
                     break;
                 case 6:
@@ -247,7 +247,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
             }
 
             if (gravity)
-                Projectile.velocity.Y += 0.3f;
+                Projectile.velocity.Y += 0.15f;
             /*if (count != 0 && timer == 80 && WorldDifficultySystem.suicide)
 			{
 				Vector2 target = Main.player[Player.FindClosest(Projectile.Center, 1, 1)].position;

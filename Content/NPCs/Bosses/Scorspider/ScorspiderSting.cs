@@ -80,13 +80,24 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         {
             return true;
         }
-        int timer = 5;
         public override void AI()
         {
-            timer--;
-            if (!Main.npc[Body].active || Main.npc[Body].type != ModContent.NPCType<ScorspiderBody>() && timer <= 0)
+            if (!Main.npc[Body].active || Main.npc[Body].type != ModContent.NPCType<ScorspiderBody>())
             {
                 NPC.life = 0;
+            }
+            if (NPC.ai[3] == 0)
+            {
+                NPC.rotation = NPC.DirectionTo(Main.npc[Body].GetT().Target.Center).ToRotation();
+                if (NPC.rotation > MathF.PI / 2 || NPC.rotation < -MathF.PI / 2)
+                {
+                    NPC.rotation += MathF.PI;
+                    NPC.spriteDirection = -1;
+                }
+                else
+                {
+                    NPC.spriteDirection = 1;
+                }
             }
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

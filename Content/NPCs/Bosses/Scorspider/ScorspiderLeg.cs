@@ -22,7 +22,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         public float angularVelocity1;
         public float angularVelocity2;
         public float length;
-        bool notNormalPosition;
+        public bool notNormalPosition;
         public int direction;
         /// <summary>
         /// The 0-1 interpolant of how far this leg is in its forward step animation.

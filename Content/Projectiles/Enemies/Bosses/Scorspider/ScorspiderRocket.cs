@@ -59,7 +59,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
                 }
             }
 
-            Projectile.velocity = new Vector2((float)Math.Cos(Projectile.rotation), (float)Math.Sin(Projectile.rotation)) * (Projectile.velocity.Length() + (Projectile.velocity.Length() > 20 ? 0 : 0.5f));
+            Projectile.velocity = Projectile.rotation.ToRotationVector2() * (Projectile.velocity.Length() + (Projectile.velocity.Length() > 19? 0 : 0.25f));
             if (player != null)
             {
                 float goalAngle = Projectile.AngleTo(player.Center);

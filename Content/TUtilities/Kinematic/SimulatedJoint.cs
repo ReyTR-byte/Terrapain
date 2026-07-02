@@ -12,12 +12,18 @@ namespace Terrapain.Content.TUtilities.Kinematic
 {
     public struct SimulatedJoint
     {
-        public SimulatedJoint(float length, float mass, Vector2 position, float rotation = 0)
+        public SimulatedJoint(float length, float mass, Vector2 position, float accessfulRotation = MathF.PI)
         {
             this.length = length;
             this.mass = mass;
             this.position = position;
+            this.accessfulRotation = accessfulRotation;
         }
+
+        public bool draw = true;
+        public float backwardRotation;
+        public float forwardRotation;
+        public float accessfulRotation;
         public float length;
         public float mass;
         public Vector2 velocity;

@@ -45,13 +45,16 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
             if (followPlayer)
             {
                 Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
-                Projectile.velocity = Projectile.DirectionTo(player.Center) * speed;
+                Functions.CommonTerrapainFlyingMovement(Projectile, player.Center, 0.075f, Projectile.velocity.Length(), 0, 0);
                 if (speed > 0.3f)
                 {
                     speed -= 0.3f;
+                    Projectile.velocity.Normalize();
+                    Projectile.velocity *= speed;
                 }
                 else
                 {
+                    Projectile.velocity = Vector2.Zero;
                     speed = 0;
                 }
             }

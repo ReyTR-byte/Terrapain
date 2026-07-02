@@ -49,7 +49,7 @@ namespace Terrapain.Content
 			targetAngle = NormalizeRotation(targetAngle, false);
 			angle2 -= angle1;
             angle2 = NormalizeRotation(angle2, false);
-			return angle2.NonZeroSign() == targetAngle.NonZeroSign() && Math.Abs(angle2) > Math.Abs(targetAngle);
+			return angle2.NonZeroSign() == targetAngle.NonZeroSign() && Math.Abs(angle2) >= Math.Abs(targetAngle);
         }
 		public static void TryHit(Player player, Item item, NPC target, NPC.HitModifiers hitModifiers, int damage, float knockBack, bool useCanHit, bool useItemHitList)
 		{
