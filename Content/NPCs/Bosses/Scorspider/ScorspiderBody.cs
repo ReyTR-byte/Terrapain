@@ -33,7 +33,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         int attack;
         int phase = 1;
         int[] attacks1 = [0, 1, 0, 2, 0, 3];
-        int[] attacks2 = [0, 1];
+        int[] attacks2 = [0, 1, 0, 2, 0, 3];
 
         public override void SetStaticDefaults()
         {
@@ -98,7 +98,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             head = NPC.NewNPC(source, (int)HeadPosition.X, (int)HeadPosition.Y, ModContent.NPCType<ScorspiderHead>(), NPC.whoAmI,  NPC.whoAmI);
             sting = NPC.NewNPC(source, (int)StingPosition.X, (int)StingPosition.Y, ModContent.NPCType<ScorspiderSting>(), NPC.whoAmI, NPC.whoAmI, head);
             Main.npc[head].ai[1] = sting;
-            tail = new SimulatedChain(8, 26, tailPosition, 0, 1, 1f);
+            tail = new SimulatedChain(8, 26, tailPosition, 0, 1);
 
             TailTexture = ModContent.Request<Texture2D>("Terrapain/Content/NPCs/Bosses/Scorspider/ScorspiderTail");
             ShaderSystem.ScorspiderTimer = 20;
@@ -144,6 +144,10 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
 
         public override bool? CanFallThroughPlatforms()
         {
+            if (timer == 0 && phase == 2 && attack == 3)
+            {
+                return NPC.GetT().Target.Center.Y > NPC.Center.Y;
+            }
             return NPC.GetT().Target.Center.Y - NPC.Center.Y > 150;
         }
         public ScorspiderLeg[] Legs;
@@ -169,6 +173,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
 
         public override void AI()
         {
+            NPC.noGravity = dash;
             maxSpeed = MathF.Max(6, MathF.Abs(NPC.Center.X - NPC.GetT().Target.Center.X) / 70);
             NPC.TargetClosest();
             foreach (var leg in Legs)
@@ -279,14 +284,6 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     NPC.velocity.X += dir.X.NonZeroSign() * 0.3f;
                     NPC.velocity.X = MathHelper.Clamp(NPC.velocity.X, -maxSpeed, maxSpeed);
                 }
-                else
-                {
-                    NPC.velocity.X *= 0.98f;
-                    if (MathF.Abs(NPC.velocity.X) < maxSpeed)
-                    {
-                        dash = false;
-                    }
-                }
             }
             else
             {
@@ -295,9 +292,15 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             if (dash)
             {
                 NPC.spriteDirection = NPC.velocity.X.NonZeroSign() * -1;
+                NPC.velocity.Y += 0.05f;
+                NPC.velocity.X *= 0.99f;
+                if (MathF.Abs(NPC.velocity.X) < maxSpeed)
+                {
+                    dash = false;
+                }
             }
             else
-            { 
+            {
                 NPC.spriteDirection = dir.X.NonZeroSign() * -1;
             }
             float rotationToTarget = dir.ToRotation();
@@ -439,7 +442,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     progress = (400 - mainTimer) / 400f;
                     if (mainTimer > 250 && timer == 0)
                     {
-                        int count = 10;
+                        int count = 9;
                         Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * -15, Flower, SpikeDamage, SpikeKnockback, -1, count, 1, TGlobalNPC.random.NextFloat(MathF.PI * 2));
                         Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * 15, Flower, SpikeDamage, SpikeKnockback, -1, count, 1, TGlobalNPC.random.NextFloat(MathF.PI * 2));
                         timer = 30;
@@ -479,7 +482,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     {
                         float speed = 25;
                         Projectile.NewProjectile(Sting.GetSource_FromThis(), Sting.Center, Sting.rotation.ToRotationVector2() * speed, Spike, SpikeDamage, SpikeKnockback, -1, 0, 0, 5);
-                        timer = 10;
+                        timer = 13;
                     }
                     if (Sting.rotation > MathF.PI / 2 || Sting.rotation < -MathF.PI / 2)
                     {
@@ -496,6 +499,53 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         NextAttack2();
                     }
                     break;
+                case 2:
+                    if (mainTimer == 499 || NPC.Distance(NPC.GetT().Target.Center) > 1000)
+                    {
+                        NPC.velocity.X = NPC.DirectionTo(NPC.GetT().Target.Center).X.NonZeroSign() * 30;
+                        dash = true;
+                    }
+                    progress = (400 - mainTimer) / 400f;
+                    if (mainTimer > 250 && timer == 0)
+                    {
+                        if (NPC.ai[3] == 0)
+                        {
+                            int count = 8;
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * -15, Flower, SpikeDamage, SpikeKnockback, -1, count, 0, TGlobalNPC.random.NextFloat(MathF.PI * 2));
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * 15, Flower, SpikeDamage, SpikeKnockback, -1, count, 0, TGlobalNPC.random.NextFloat(MathF.PI * 2));
+                            timer = 35;
+                            NPC.ai[3] = 1;
+                        }
+                        else
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * -1, Rocket, RocketDamage, RocketKnockback);
+                            timer = 40;
+                            NPC.ai[3] = 0;
+                        }
+                    }
+                    if (mainTimer == 0)
+                    {
+                        NextAttack1();
+                    }
+                    break;
+                case 3:
+                    if (NPC.Center.Y > NPC.GetT().Target.Center.Y && timer == 0)
+                    {
+                        jumpAnimation = true;
+                    }
+                    if (timer == 0 && MathF.Abs(NPC.Center.Y - NPC.GetT().Target.Center.Y) < 10)
+                    {
+                        NPC.velocity.X = NPC.DirectionTo(NPC.GetT().Target.Center).X.NonZeroSign() * 30;
+                        NPC.velocity.Y = 0;
+                        dash = true;
+                        timer = 120;
+                    }
+                    if (mainTimer == 0)
+                    {
+                        NextAttack1();
+                    }
+                    break;
+
             }
         }
         void NextAttack1()
@@ -544,11 +594,12 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     mainTimer = 300;
                     break;
                 case 2:
-                    mainTimer = 360;
+                    mainTimer = 500;
+                    NPC.ai[3] = 0;
                     break;
                 case 3:
-                    timer = 30;
-                    mainTimer = 350;
+                    timer = 60;
+                    mainTimer = 700;
                     break;
             }
         }

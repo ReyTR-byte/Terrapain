@@ -211,7 +211,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
                     else
                     {
                         gravity = false;
-                        Projectile.velocity = Projectile.DirectionTo(Sting.Center) * 20;
+                        Projectile.velocity = Projectile.DirectionTo(Sting.Center) * 15;
                         if (Projectile.Distance(Sting.Center) < 25)
                         {
                             Projectile.active = false;
