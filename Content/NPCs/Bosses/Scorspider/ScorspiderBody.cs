@@ -14,7 +14,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Content.TUtilities.Kinematic;
 using ReLogic.Content;
 using static Terrapain.Content.Functions;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
 using Terrapain.Common.Global;
 
@@ -23,6 +22,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
     [AutoloadBossHead]
     public class ScorspiderBody : ModNPC
     {
+        //перейди на 355 строчку
         int head;
         int sting;
         public float angularVelocity;
@@ -354,19 +354,34 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         }
         void DoFirstPhase()
         {
+            // если хочешь добавить разницу между пыткой и самоубийством => переменная = WorldDifficultySystem.Suicide? значение для самоубийства : значение для пытки;
+            // если хочешь добавить рандома используй TGlobalNPC.random
+            // если не понимаешь где какая атака поставь тут true
+            bool chat = false;
             switch (attack)
             {
                 case 0:
+                    if (chat)
+                    {
+                        Chatic(0);
+                    }
                     if (mainTimer == 0)
                     {
                         NextAttack1();
                     }
                     break;
                 case 1:
+                    if (chat)
+                    {
+                        Chatic(1);
+                    }
                     float progress = (300 - mainTimer) / 300f;
                     NPC Sting = Main.npc[sting];
                     Sting.ai[3] = 1;
-                    float value = progress * 22 % 4;
+
+                    //чем больше это число тем больше скорость вращения жала
+                    float rotationSpeed = 22;
+                    float value = progress * rotationSpeed % 4;
                     if (value > 1)
                     {
                         value = 2 - value;
@@ -375,11 +390,16 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     {
                         value = -2 - value;
                     }
-                    Sting.rotation = NPC.DirectionTo(NPC.GetT().Target.Center).ToRotation() + MathF.Asin(value) / 1.5f;
+
+                    //чем больше это число тем больше угол вращения жала
+                    float rotationRange = 0.666f;
+                    Sting.rotation = NPC.DirectionTo(NPC.GetT().Target.Center).ToRotation() + MathF.Asin(value) * rotationRange;
                     if (timer == 0)
                     {
+                        //это скорость вылета шипов
                         float speed = 25;
                         Projectile.NewProjectile(NPC.GetSource_FromThis(), Sting.Center, Sting.rotation.ToRotationVector2() * speed, Spike, SpikeDamage, SpikeKnockback);
+                        //это чвстота вылета шипов в тиках
                         timer = 10;
                     }
                     if (Sting.rotation > MathF.PI / 2 || Sting.rotation < -MathF.PI / 2)
@@ -398,15 +418,28 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     }
                     break;
                 case 2:
+                    if (chat)
+                    {
+                        Chatic(2);
+                    }
                     if (timer == 0)
                     {
                         Sting = Main.npc[sting];
                         float rotation = Sting.DirectionTo(NPC.GetT().Target.Center).ToRotation();
                         if (mainTimer > 240)
                         {
+                            if (chat)
+                            {
+                                Chatic("података 1");
+                            }
                             float speed = 20;
+                            //количество шипов за 1 выстрел
                             int count = 4;
+                            //угол между ними в радианах
+                            //если не понимаешь в радианах в градусах будет так 
+                            //MathHelper.ToRadians(угол);
                             float angle = 0.198f;
+                            //не трогай
                             float start = rotation - (count - 1) / 2 * angle;
                             for (int i = 0; i < count; i++)
                             {
@@ -416,13 +449,23 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         }
                         else if (mainTimer > 120)
                         {
+                            if (chat)
+                            {
+                                Chatic("података 2");
+                            }
                             float speed = 27;
+                            //размах рандомного угла
                             float range = 0.5f;
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), Sting.Center, (rotation + TGlobalNPC.random.NextFloat(-range, range)).ToRotationVector2() * speed, Spike, SpikeDamage, SpikeKnockback, -1, 0, 0, -1);
                             timer = 7;
                         }
                         else
                         {
+                            if (chat)
+                            {
+                                Chatic("података 3");
+                            }
+                            //начальная скорость вылета ракеты, она потом разгоняется сильно
                             float speed = 3;
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), Sting.Center, rotation.ToRotationVector2() * speed, Rocket, RocketDamage, RocketKnockback);
                             timer = 25;
@@ -434,16 +477,26 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     }
                     break;
                 case 3:
+                    if (chat)
+                    {
+                        Chatic(3);
+                    }
                     if (mainTimer == 349)
                     {
-                        NPC.velocity.X = NPC.DirectionTo(NPC.GetT().Target.Center).X.NonZeroSign() * 30;
+                        //скорость деша
+                        float speed = 30;
+                        NPC.velocity.X = NPC.DirectionTo(NPC.GetT().Target.Center).X.NonZeroSign() * speed;
+                        NPC.velocity.Y = 0;
                         dash = true;
                     }
                     progress = (400 - mainTimer) / 400f;
                     if (mainTimer > 250 && timer == 0)
                     {
+                        //количестро шипов которые вылетят из цветка
                         int count = 9;
+                        //эти летят вверх
                         Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * -15, Flower, SpikeDamage, SpikeKnockback, -1, count, 1, TGlobalNPC.random.NextFloat(MathF.PI * 2));
+                        //эти летят вниз
                         Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * 15, Flower, SpikeDamage, SpikeKnockback, -1, count, 1, TGlobalNPC.random.NextFloat(MathF.PI * 2));
                         timer = 30;
                     }
@@ -456,19 +509,31 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         }
         void DoSecondPhase()
         {
+            bool chat = false;
             switch (attack)
             {
                 case 0:
+                    if (chat)
+                    {
+                        Chatic(0);
+                    }
                     if (mainTimer == 0)
                     {
                         NextAttack2();
                     }
                     break;
                 case 1:
+                    //тут все тоже самое что и с 1 атакой 1 фазы
+                    if (chat)
+                    {
+                        Chatic(1);
+                    }
                     float progress = (300 - mainTimer) / 300f;
                     NPC Sting = Main.npc[sting];
                     Sting.ai[3] = 1;
-                    float value = progress * 22 % 4;
+
+                    float rotationSpeed = 22;
+                    float value = progress * rotationSpeed % 4;
                     if (value > 1)
                     {
                         value = 2 - value;
@@ -477,7 +542,9 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     {
                         value = -2 - value;
                     }
-                    Sting.rotation = NPC.DirectionTo(NPC.GetT().Target.Center).ToRotation() + MathF.Asin(value) / 1.5f;
+
+                    float rotationRange = 0.666f;
+                    Sting.rotation = NPC.DirectionTo(NPC.GetT().Target.Center).ToRotation() + MathF.Asin(value) * rotationRange;
                     if (timer == 0)
                     {
                         float speed = 25;
@@ -500,9 +567,16 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     }
                     break;
                 case 2:
+                    if (chat)
+                    {
+                        Chatic(2);
+                    }
                     if (mainTimer == 499 || NPC.Distance(NPC.GetT().Target.Center) > 1000)
                     {
-                        NPC.velocity.X = NPC.DirectionTo(NPC.GetT().Target.Center).X.NonZeroSign() * 30;
+                        //скорость деша
+                        float speed = 30;
+                        NPC.velocity.X = NPC.DirectionTo(NPC.GetT().Target.Center).X.NonZeroSign() * speed;
+                        NPC.velocity.Y = 0;
                         dash = true;
                     }
                     progress = (400 - mainTimer) / 400f;
@@ -510,15 +584,19 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     {
                         if (NPC.ai[3] == 0)
                         {
+                            //количество шипов из цветка
                             int count = 8;
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * -15, Flower, SpikeDamage, SpikeKnockback, -1, count, 0, TGlobalNPC.random.NextFloat(MathF.PI * 2));
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * 15, Flower, SpikeDamage, SpikeKnockback, -1, count, 0, TGlobalNPC.random.NextFloat(MathF.PI * 2));
+                            //время до атаки рокетой
                             timer = 35;
                             NPC.ai[3] = 1;
                         }
                         else
                         {
+                            //атака рокетой
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * -1, Rocket, RocketDamage, RocketKnockback);
+                            //время до атаки цветком
                             timer = 40;
                             NPC.ai[3] = 0;
                         }
@@ -529,13 +607,19 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     }
                     break;
                 case 3:
+                    if (chat)
+                    {
+                        Chatic(3);
+                    }
                     if (NPC.Center.Y > NPC.GetT().Target.Center.Y && timer == 0)
                     {
                         jumpAnimation = true;
                     }
                     if (timer == 0 && MathF.Abs(NPC.Center.Y - NPC.GetT().Target.Center.Y) < 10)
                     {
-                        NPC.velocity.X = NPC.DirectionTo(NPC.GetT().Target.Center).X.NonZeroSign() * 30;
+                        //скорость деша
+                        float speed = 30;
+                        NPC.velocity.X = NPC.DirectionTo(NPC.GetT().Target.Center).X.NonZeroSign() * speed;
                         NPC.velocity.Y = 0;
                         dash = true;
                         timer = 120;
@@ -545,7 +629,6 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         NextAttack1();
                     }
                     break;
-
             }
         }
         void NextAttack1()
