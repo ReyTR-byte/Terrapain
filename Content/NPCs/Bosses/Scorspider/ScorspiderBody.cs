@@ -585,7 +585,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         if (NPC.ai[3] == 0)
                         {
                             //количество шипов из цветка
-                            int count = 8;
+                            int count = 9;
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * -15, Flower, SpikeDamage, SpikeKnockback, -1, count, 0, TGlobalNPC.random.NextFloat(MathF.PI * 2));
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * 15, Flower, SpikeDamage, SpikeKnockback, -1, count, 0, TGlobalNPC.random.NextFloat(MathF.PI * 2));
                             //время до атаки рокетой

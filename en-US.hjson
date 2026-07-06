@@ -1,0 +1,597 @@
+Mods: {
+	Terrapain: {
+		Keybinds: {
+			Dash.DisplayName: Dash
+			RealiseHookedNPC.DisplayName: Realise Hooked N P C
+			ActiveAccesory1.DisplayName: Active Accesory1
+			ActiveAccesory2.DisplayName: Active Accesory2
+			ActiveAccesory3.DisplayName: Active Accesory3
+			ActiveAccesory4.DisplayName: Active Accesory4
+			ActiveAccesory5.DisplayName: Active Accesory5
+			ActiveAccesory6.DisplayName: Active Accesory6
+			ActiveAccesory7.DisplayName: Active Accesory7
+		}
+
+		DamageClasses.Unarmed.DisplayName: Unarmed
+
+		NPCs: {
+			DemonMerchant: {
+				Upgraded: Mods.Terrapain.NPCs.DemonMerchant.Upgraded
+				DeathMessage: Mods.Terrapain.NPCs.DemonMerchant.DeathMessage
+				DisplayName: Demon Merchant
+
+				TownNPCMood: {
+					Content: Я довольный.
+					NoHome: Терпеть не могу, когда у меня нет дома.
+					FarFromHome: Я слишком далеко от дома.
+					LoveSpace: Я люблю, когда так много пространства.
+					DislikeCrowded: Мне не нравится то, как здесь людно.
+					HateCrowded: Я ненавижу то, как здесь людно.
+					LikeBiome: Мне нравится {BiomeName}.
+					DislikeBiome: Мне не нравится {BiomeName}.
+					DislikeNPC: Мне не нравится {NPCName}.
+					HateNPC: Я ненавижу {NPCName}.
+					LikeNPC_Princess: Мне нравится {NPCName}.
+					Princess_LovesNPC: Мне нравится {NPCName}.
+				}
+			}
+
+			ScorspiderBody.DisplayName: Scorspider Body
+			ScorspiderHead.DisplayName: Scorspider Head
+			ScorspiderSting.DisplayName: Scorspider Sting
+			CrownedKingSlime.DisplayName: Crowned King Slime
+			KingSlimeCrown.DisplayName: King Slime Crown
+			NinjaKingSlime.DisplayName: Ninja King Slime
+			FireShooterServantofCthulhu.DisplayName: Fire Shooter Servantof Cthulhu
+			HealerServantofCthulhu.DisplayName: Healer Servantof Cthulhu
+			LaserServantofCthulhu.DisplayName: Laser Servantof Cthulhu
+			SheildedServantofCthulhu.DisplayName: Sheilded Servantof Cthulhu
+			BigSpider.DisplayName: Big Spider
+			ScorspiderBigMinionSpiderCocoon.DisplayName: Scorspider Big Minion Spider Cocoon
+			ScorspiderLittleMinionSpidersCocoon.DisplayName: Scorspider Little Minion Spiders Cocoon
+			SmallSpider.DisplayName: Small Spider
+			Suicide.DisplayName: Suicide
+			Torture.DisplayName: Torture
+		}
+
+		Tiles: {
+			DeepniteOre.MapEntry: Deepnite Ore
+			HardenedCrimtaneBrick.MapEntry: Hardened Crimtane Brick
+			HardenedDemoniteBrick.MapEntry: Hardened Demonite Brick
+		}
+
+		Buffs: {
+			BandageSickness: {
+				DisplayName: Bandage Sickness
+				Description: Mods.Terrapain.Buffs.BandageSickness.Description
+			}
+
+			DaybloomInfection: {
+				DisplayName: Daybloom Infection
+				Description: Mods.Terrapain.Buffs.DaybloomInfection.Description
+			}
+
+			GlassKnifeBuff: {
+				DisplayName: Glass Knife Buff
+				Description: Mods.Terrapain.Buffs.GlassKnifeBuff.Description
+			}
+
+			BrokenHeart: {
+				DisplayName: Broken Heart
+				Description: Mods.Terrapain.Buffs.BrokenHeart.Description
+			}
+
+			Chaos: {
+				DisplayName: Chaos
+				Description: Mods.Terrapain.Buffs.Chaos.Description
+			}
+
+			ScorspiderAcid: {
+				DisplayName: Scorspider Acid
+				Description: Mods.Terrapain.Buffs.ScorspiderAcid.Description
+			}
+
+			ScorspiderStingBuff: {
+				DisplayName: Scorspider Sting Buff
+				Description: Mods.Terrapain.Buffs.ScorspiderStingBuff.Description
+			}
+
+			Shocked: {
+				DisplayName: Shocked
+				Description: Mods.Terrapain.Buffs.Shocked.Description
+			}
+
+			Slimed: {
+				DisplayName: Slimed
+				Description: Mods.Terrapain.Buffs.Slimed.Description
+			}
+		}
+
+		Items: {
+			ArrivedHeart: {
+				DisplayName: Arrived Heart
+				Tooltip: ""
+			}
+
+			Battery: {
+				DisplayName: Battery
+				Tooltip: ""
+			}
+
+			Bat: {
+				DisplayName: Bat
+				Tooltip: ""
+			}
+
+			StarFuryBracelet: {
+				DisplayName: Star Fury Bracelet
+				Tooltip: ""
+			}
+
+			FlinxFurShield: {
+				DisplayName: Flinx Fur Shield
+				Tooltip: ""
+			}
+
+			FossilShield: {
+				DisplayName: Fossil Shield
+				Tooltip: ""
+			}
+
+			GoldenShield: {
+				DisplayName: Golden Shield
+				Tooltip: ""
+			}
+
+			JungleShield: {
+				DisplayName: Jungle Shield
+				Tooltip: ""
+			}
+
+			PlatinumShield: {
+				DisplayName: Platinum Shield
+				Tooltip: ""
+			}
+
+			StarPowerShield: {
+				DisplayName: Star Power Shield
+				Tooltip: ""
+			}
+
+			WoodenShield: {
+				DisplayName: Wooden Shield
+				Tooltip: ""
+			}
+
+			ExplosiveSkull: {
+				DisplayName: Explosive Skull
+				Tooltip: ""
+			}
+
+			HealfullHeadband: {
+				DisplayName: Healfull Headband
+				Tooltip: ""
+			}
+
+			ScorspiderHeartAccesory: {
+				DisplayName: Scorspider Heart Accesory
+				Tooltip: ""
+			}
+
+			ScorspiderHeart: {
+				DisplayName: Scorspider Heart
+				Tooltip: ""
+			}
+
+			Headband: {
+				DisplayName: Headband
+				Tooltip: ""
+			}
+
+			KaminasGlasses: {
+				DisplayName: Kaminas Glasses
+				Tooltip: ""
+			}
+
+			KitansGlasses: {
+				DisplayName: Kitans Glasses
+				Tooltip: ""
+			}
+
+			SimonsGlasses: {
+				DisplayName: Simons Glasses
+				Tooltip: ""
+			}
+
+			JungleBullet: {
+				DisplayName: Jungle Bullet
+				Tooltip: ""
+			}
+
+			SlimeBullet: {
+				DisplayName: Slime Bullet
+				Tooltip: ""
+			}
+
+			SomeBullet: {
+				DisplayName: Some Bullet
+				Tooltip: ""
+			}
+
+			AcidCobwebChestplate: {
+				DisplayName: Acid Cobweb Chestplate
+				Tooltip: ""
+			}
+
+			AcidCobwebHood: {
+				DisplayName: Acid Cobweb Hood
+				Tooltip: ""
+			}
+
+			AcidCobwebLeggings: {
+				DisplayName: Acid Cobweb Leggings
+				Tooltip: ""
+			}
+
+			AcidCobwebMask: {
+				DisplayName: Acid Cobweb Mask
+				Tooltip: ""
+			}
+
+			FlinxHood: {
+				DisplayName: Flinx Hood
+				Tooltip: ""
+			}
+
+			FlinxLeggins: {
+				DisplayName: Flinx Leggins
+				Tooltip: ""
+			}
+
+			GranithShellChestplate: {
+				DisplayName: Granith Shell Chestplate
+				Tooltip: ""
+			}
+
+			GranithShellHelmet: {
+				DisplayName: Granith Shell Helmet
+				Tooltip: ""
+			}
+
+			GranithShellLeggings: {
+				DisplayName: Granith Shell Leggings
+				Tooltip: ""
+			}
+
+			GranithShellMask: {
+				DisplayName: Granith Shell Mask
+				Tooltip: ""
+			}
+
+			StarPowerChestplate: {
+				DisplayName: Star Power Chestplate
+				Tooltip: ""
+			}
+
+			StarPowerHelmet: {
+				DisplayName: Star Power Helmet
+				Tooltip: ""
+			}
+
+			StarPowerLegings: {
+				DisplayName: Star Power Legings
+				Tooltip: ""
+			}
+
+			ScorspiderBag: {
+				DisplayName: Scorspider Bag
+				Tooltip: ""
+			}
+
+			BoneHeart: {
+				DisplayName: Bone Heart
+				Tooltip: ""
+			}
+
+			Boss2Heart: {
+				DisplayName: Boss2 Heart
+				Tooltip: ""
+			}
+
+			DeerclopeHeart: {
+				DisplayName: Deerclope Heart
+				Tooltip: ""
+			}
+
+			DemonEyeHeart: {
+				DisplayName: Demon Eye Heart
+				Tooltip: ""
+			}
+
+			GelHeart: {
+				DisplayName: Gel Heart
+				Tooltip: ""
+			}
+
+			HeartOfEvil: {
+				DisplayName: Heart Of Evil
+				Tooltip: ""
+			}
+
+			HoneyHeart: {
+				DisplayName: Honey Heart
+				Tooltip: ""
+			}
+
+			BrokenHeartPotion: {
+				DisplayName: Broken Heart Potion
+				Tooltip: ""
+			}
+
+			ChaosPotion: {
+				DisplayName: Chaos Potion
+				Tooltip: ""
+			}
+
+			DeerFur: {
+				DisplayName: Deer Fur
+				Tooltip: ""
+			}
+
+			MassiveLensSharp: {
+				DisplayName: Massive Lens Sharp
+				Tooltip: ""
+			}
+
+			ScorspiderCobweb: {
+				DisplayName: Scorspider Cobweb
+				Tooltip: ""
+			}
+
+			ScorspiderShellShard: {
+				DisplayName: Scorspider Shell Shard
+				Tooltip: ""
+			}
+
+			StarPowerAlloy: {
+				DisplayName: Star Power Alloy
+				Tooltip: ""
+			}
+
+			SuperDenseGel: {
+				DisplayName: Super Dense Gel
+				Tooltip: ""
+			}
+
+			DeepniteOre: {
+				DisplayName: Deepnite Ore
+				Tooltip: ""
+			}
+
+			ScorspiderRelic: {
+				DisplayName: Scorspider Relic
+				Tooltip: ""
+			}
+
+			ScorspiderTrophy: {
+				DisplayName: Scorspider Trophy
+				Tooltip: ""
+			}
+
+			ScorspiderSummon: {
+				DisplayName: Scorspider Summon
+				Tooltip: ""
+			}
+
+			TheDropOfPain: {
+				DisplayName: The Drop Of Pain
+				Tooltip: ""
+			}
+
+			UnarmedContract: {
+				DisplayName: Unarmed Contract
+				Tooltip: ""
+			}
+
+			ScorspiderHook: {
+				DisplayName: Scorspider Hook
+				Tooltip: ""
+			}
+
+			CursedSpray: {
+				DisplayName: Cursed Spray
+				Tooltip: ""
+			}
+
+			FireStuff: {
+				DisplayName: Fire Stuff
+				Tooltip: ""
+			}
+
+			GranithBook: {
+				DisplayName: Granith Book
+				Tooltip: ""
+			}
+
+			JungleStuff: {
+				DisplayName: Jungle Stuff
+				Tooltip: ""
+			}
+
+			SlimeStuff: {
+				DisplayName: Slime Stuff
+				Tooltip: ""
+			}
+
+			FireSword: {
+				DisplayName: Fire Sword
+				Tooltip: ""
+			}
+
+			GlassSword: {
+				DisplayName: Glass Sword
+				Tooltip: ""
+			}
+
+			Sharper: {
+				DisplayName: Sharper
+				Tooltip: ""
+			}
+
+			TheForestRipper: {
+				DisplayName: The Forest Ripper
+				Tooltip: ""
+			}
+
+			TheSwordOfSpeed: {
+				DisplayName: The Sword Of Speed
+				Tooltip: ""
+			}
+
+			Gardeneer: {
+				DisplayName: Gardeneer
+				Tooltip: ""
+			}
+
+			InfernalLazerShotgun: {
+				DisplayName: Infernal Lazer Shotgun
+				Tooltip: ""
+			}
+
+			PizdetsKrutayaPushka: {
+				DisplayName: Pizdets Krutaya Pushka
+				Tooltip: ""
+			}
+
+			Reflector: {
+				DisplayName: Reflector
+				Tooltip: ""
+			}
+
+			SlimeBow: {
+				DisplayName: Slime Bow
+				Tooltip: ""
+			}
+
+			GlassKnife: {
+				DisplayName: Glass Knife
+				Tooltip: ""
+			}
+
+			GranithStuff: {
+				DisplayName: Granith Stuff
+				Tooltip: ""
+			}
+		}
+
+		Projectiles: {
+			AmethystSharp.DisplayName: Amethyst Sharp
+			DesertGore.DisplayName: Desert Gore
+			DiamondStaffLaser.DisplayName: Diamond Staff Laser
+			EmeraldSharp.DisplayName: Emerald Sharp
+			RubySharp.DisplayName: Ruby Sharp
+			SapphireSharp.DisplayName: Sapphire Sharp
+			SapphireStaff.DisplayName: Sapphire Staff
+			ScorspiderHookProjectile.DisplayName: Scorspider Hook Projectile
+			GlassSwordProjectile.DisplayName: Glass Sword Projectile
+			BlinkrootPetal.DisplayName: Blinkroot Petal
+			BouquetArrow.DisplayName: Bouquet Arrow
+			DaybloomPetal.DisplayName: Daybloom Petal
+			DeathweedPetal.DisplayName: Deathweed Petal
+			FireblossomPetal.DisplayName: Fireblossom Petal
+			MoonglowPetal.DisplayName: Moonglow Petal
+			ShiverthornPetal.DisplayName: Shiverthorn Petal
+			WaterleafPetal.DisplayName: Waterleaf Petal
+			JungleBullet.DisplayName: Jungle Bullet
+			SlimeBullet.DisplayName: Slime Bullet
+			SomeBullet.DisplayName: Some Bullet
+			BloodSpike.DisplayName: Blood Spike
+			EoCLaser.DisplayName: Eo C Laser
+			GhostServantofCthulhu.DisplayName: Ghost Servantof Cthulhu
+			ServantofCthulhuSoul.DisplayName: Servantof Cthulhu Soul
+			UVLaser.DisplayName: U V Laser
+			CrownGem.DisplayName: Crown Gem
+			KingSlimeBall.DisplayName: King Slime Ball
+			KingSlimeCrownLaser.DisplayName: King Slime Crown Laser
+			KingSlimeCrownLaser2.DisplayName: King Slime Crown Laser2
+			KingSlimeKatana.DisplayName: King Slime Katana
+			Kunai.DisplayName: Kunai
+			Shuriken.DisplayName: Shuriken
+			SlimeProjectile.DisplayName: Slime Projectile
+			SlimeWall.DisplayName: Slime Wall
+			SmokeBomb.DisplayName: Smoke Bomb
+			SmokeBombSmoke.DisplayName: Smoke Bomb Smoke
+			BigSpiderSpike.DisplayName: Big Spider Spike
+			ScorspiderFlower.DisplayName: Scorspider Flower
+			ScorspiderRocket.DisplayName: Scorspider Rocket
+			ScorspiderShellShard.DisplayName: Scorspider Shell Shard
+			ScorspiderSpike.DisplayName: Scorspider Spike
+			ScorspiderWeb.DisplayName: Scorspider Web
+			DemonicEyeLazer.DisplayName: Demonic Eye Lazer
+			Acorn.DisplayName: Acorn
+			ArrivedHeartProjectile.DisplayName: Arrived Heart Projectile
+			BatProjectile.DisplayName: Bat Projectile
+			BiggerGranithBall.DisplayName: Bigger Granith Ball
+			ChargedBlood.DisplayName: Charged Blood
+			CobwebBullet.DisplayName: Cobweb Bullet
+			ExplosiveSkull.DisplayName: Explosive Skull
+			FireBall.DisplayName: Fire Ball
+			GlassBouble.DisplayName: Glass Bouble
+			GranithBall.DisplayName: Granith Ball
+			GranithBallShard.DisplayName: Granith Ball Shard
+			JungleSeed.DisplayName: Jungle Seed
+			Lazer.DisplayName: Lazer
+			SlimeBall.DisplayName: Slime Ball
+			GlassKnife.DisplayName: Glass Knife
+			GranithStuffProjectile.DisplayName: Granith Stuff Projectile
+			PetEye.DisplayName: Pet Eye
+			ScorspiderSting.DisplayName: Scorspider Sting
+		}
+
+		Configs: {
+			ClientConfig: {
+				DisplayName: Client Config
+
+				UseShaders: {
+					Label: Use Shaders
+					Tooltip: ""
+				}
+
+				drawHitbox: {
+					Label: draw Hitbox
+					Tooltip: ""
+				}
+
+				Tips: {
+					Label: Tips
+					Tooltip: ""
+				}
+
+				LimboSpeed: {
+					Label: Limbo Speed
+					Tooltip: ""
+				}
+
+				CutsceneCameraZoom: {
+					Label: Cutscene Camera Zoom
+					Tooltip: ""
+				}
+
+				CutsceneHideUI: {
+					Label: Cutscene Hide U I
+					Tooltip: ""
+				}
+
+				SkipDifficultyChangeAnimation: {
+					Label: Skip Difficulty Change Animation
+					Tooltip: ""
+				}
+
+				hitboxColor: {
+					Label: hitbox Color
+					Tooltip: ""
+				}
+			}
+		}
+	}
+}
