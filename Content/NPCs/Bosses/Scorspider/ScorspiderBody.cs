@@ -26,6 +26,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         int head;
         int sting;
         public float angularVelocity;
+        public bool sleep;
 
         int mainTimer;
         int timer;
@@ -92,13 +93,17 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         Asset<Texture2D> TailTexture;
         Vector2 tailPosition => NPC.Center + new Vector2(60 * NPC.spriteDirection, 0).RotatedBy(NPC.rotation);
         public Vector2 HeadPosition => NPC.Center + new Vector2(-70 * NPC.spriteDirection, 5).RotatedBy(NPC.rotation);
-        public Vector2 StingPosition => tailPosition + new Vector2(100 * NPC.spriteDirection, -40);
+        public Vector2 StingPosition => tailPosition + new Vector2(110 * NPC.spriteDirection, -45);
         public override void OnSpawn(IEntitySource source)
         {
             head = NPC.NewNPC(source, (int)HeadPosition.X, (int)HeadPosition.Y, ModContent.NPCType<ScorspiderHead>(), NPC.whoAmI,  NPC.whoAmI);
             sting = NPC.NewNPC(source, (int)StingPosition.X, (int)StingPosition.Y, ModContent.NPCType<ScorspiderSting>(), NPC.whoAmI, NPC.whoAmI, head);
             Main.npc[head].ai[1] = sting;
-            tail = new SimulatedChain(8, 26, tailPosition, 0, 1);
+            tail = new SimulatedChain(8, 26, tailPosition, 0, 1, 1.2f);
+            tail.Fragments[tail.Count - 1].length = 20;
+            tail.Fragments[tail.Count - 1].draw = false;
+            var list = tail.Fragments.ToList();
+            list.Add(new(10, 0.5f, tailPosition));
 
             TailTexture = ModContent.Request<Texture2D>("Terrapain/Content/NPCs/Bosses/Scorspider/ScorspiderTail");
             ShaderSystem.ScorspiderTimer = 20;
@@ -113,6 +118,11 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             {
                 NPC.lifeMax = 6500 * (Main.GameMode + 3) / 3;
                 NPC.life = 6500 * (Main.GameMode + 3) / 3;
+            }
+
+            if (source.Context == "Prison")
+            {
+                sleep = true;
             }
         }
         public override void ModifyNPCLoot(NPCLoot npcLoot)
@@ -144,6 +154,10 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
 
         public override bool? CanFallThroughPlatforms()
         {
+            if (sleep)
+            {
+                return false;
+            }
             if (timer == 0 && phase == 2 && attack == 3)
             {
                 return NPC.GetT().Target.Center.Y > NPC.Center.Y;
@@ -170,35 +184,55 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         int Rocket => ModContent.ProjectileType<ScorspiderRocket>();
         int RocketDamage = 21;
         float RocketKnockback = 8.5f;
+        int oldDirection;
 
         public override void AI()
         {
-            NPC.noGravity = dash;
-            maxSpeed = MathF.Max(6, MathF.Abs(NPC.Center.X - NPC.GetT().Target.Center.X) / 70);
-            NPC.TargetClosest();
-            foreach (var leg in Legs)
+            if (sleep)
             {
-                leg.Update(NPC);
+                foreach (var leg in Legs)
+                {
+                    leg.Update(NPC);
+                }
+                UpdateBody();
+                Main.npc[sting].ai[3] = -1;
+                Main.npc[head].ai[3] = -1;
             }
-            switch (phase)
+            else
             {
-                case 1:
-                    DoFirstPhase();
-                    break;
-                case 2:
-                    DoSecondPhase();
-                    break;
+                Main.npc[head].ai[3] = 0;
+                Main.npc[sting].ai[3] = 0;
+                NPC.noGravity = dash;
+                maxSpeed = MathF.Max(6, MathF.Abs(NPC.Center.X - NPC.GetT().Target.Center.X) / 70);
+                NPC.TargetClosest();
+                foreach (var leg in Legs)
+                {
+                    leg.Update(NPC);
+                }
+                switch (phase)
+                {
+                    case 1:
+                        DoFirstPhase();
+                        break;
+                    case 2:
+                        DoSecondPhase();
+                        break;
+                    case 3:
+                        Main.npc[head].ai[3] = 1;
+                        break;
+                }
+                if (timer > 0)
+                {
+                    timer--;
+                }
+                if (mainTimer > 0)
+                {
+                    mainTimer--;
+                }
+                UpdateMovement();
+                UpdateBody();
             }
-            if (timer > 0)
-            {
-                timer--;
-            }
-            if (mainTimer > 0)
-            {
-                mainTimer--;
-            }
-            UpdateMovement();
-            UpdateBody();
+            oldDirection = NPC.spriteDirection;
         }
         bool jumpAnimation;
         float targetHeight = 120;
@@ -314,12 +348,34 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         }
         void UpdateBody()
         {
-            Main.npc[sting].Center = StingPosition;
+            tail.Fragments[tail.Fragments.Length - 1].position = Main.npc[sting].Center;
+            if (oldDirection != NPC.spriteDirection)
+            {
+                for (int i = 0; i < tail.Count; i++)
+                {
+                    var f = tail.Fragments[i];
+                    var pos = f.position;
+                    pos -= NPC.Center;
+                    pos.RotateBy(-NPC.rotation);
+                    pos.X *= -1;
+                    pos.RotateBy(NPC.rotation);
+                    pos += NPC.Center;
+                    tail.Fragments[i].position = pos;
+                }
+            }
+            for (int i = 0; i < tail.Count; i++)
+            {
+                tail.Fragments[i].velocity += (NPC.velocity - NPC.oldVelocity) * 0.95f;
+            }
+            //tail.Fragments[tail.Fragments.Length - 1].velocity = Main.npc[sting].velocity;
+            if (!sleep)
+            {
+                CommonTerrapainFlyingMovement(tail.Fragments[tail.Fragments.Length - 1].position, ref tail.Fragments[tail.Fragments.Length - 1].velocity, StingPosition, MathF.PI / 2, 15, 0.45f, 75);
+            }
             tail.Fragments[0].backwardRotation = NPC.rotation + (NPC.direction == 1? MathF.PI : 0);
             tail.Fragments[0].fixedAt = tailPosition;
-            tail.Fragments[tail.Fragments.Length - 1].fixedAt = Main.npc[sting].Center + (Main.npc[sting].rotation + MathF.PI / 2 * Main.npc[sting].spriteDirection).ToRotationVector2() * 10 * Main.npc[sting].spriteDirection;
-            tail.Fragments[tail.Fragments.Length - 1].forwardRotation = Main.npc[sting].rotation + MathF.PI / 2 * Main.npc[sting].spriteDirection;
             tail.Update();
+            Main.npc[sting].velocity = tail.Fragments[tail.Fragments.Length - 1].position - Main.npc[sting].Center;
             //if (Main.mouseLeft && Main.MouseWorld.X > NPC.position.X && Main.MouseWorld.X < NPC.TopRight.X && Main.MouseWorld.Y > NPC.position.Y && Main.MouseWorld.Y < NPC.BottomLeft.Y)
             //{
             //    NPC.velocity = Main.MouseWorld - NPC.Center;
@@ -699,6 +755,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         
         public override void HitEffect(NPC.HitInfo hit)
         {
+            sleep = false;
             NPC.immortal = false;
             //if (NPC.life - hit.Damage <= 0 && (state == 0 || secondPhase))
             //{

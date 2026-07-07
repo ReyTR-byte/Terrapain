@@ -81,16 +81,29 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         {
             NPC.realLife = Body;
         }
-        int timer = 5;
+        int animationTimer = 12;
         public override void AI()
         {
-            timer--;
-            if (!Main.npc[Body].active || Main.npc[Body].type != ModContent.NPCType<ScorspiderBody>() && timer <= 0)
+            if (!Main.npc[Body].active || Main.npc[Body].type != ModContent.NPCType<ScorspiderBody>())
             {
-                NPC.life = 0;
+                NPC.active = false;
             }
             else
             {
+                animationTimer--;
+                if (animationTimer <= 0 && NPC.ai[3] == -1)
+                {
+                    animationTimer = 12;
+                    frame = Math.Min(frame + 1, 5);
+                }
+                else if (NPC.ai[3] == 0)
+                {
+                    frame = 0;
+                }
+                else
+                {
+                    frame = 6;
+                }
                 if (NPC.spriteDirection != body.spriteDirection)
                 {
                     NPC.rotation *= -1;
@@ -100,8 +113,16 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                 float realRotation = NPC.rotation + (NPC.spriteDirection == 1? MathF.PI : 0);
                 NPC.Center = sb.HeadPosition;
                 NPC.velocity = Vector2.Zero;
-                float targetRotation = NPC.DirectionTo(body.GetT().Target.Center).ToRotation();
+                float targetRotation = 0;
                 float r = body.rotation + (body.spriteDirection == 1 ? MathF.PI : 0);
+                if (NPC.ai[3] == -1)
+                {
+                    targetRotation = r + (body.spriteDirection == 1? 1.2f : -1.2f);
+                }
+                else
+                {
+                    targetRotation = NPC.DirectionTo(body.GetT().Target.Center).ToRotation();
+                }
                 if (!Functions.IsAngleBetweenAngles(r + 1.2f, targetRotation, r - 1.2f))
                 {
                     int dir = Functions.NormalizeRotation(targetRotation - r, false).NonZeroSign();
@@ -111,6 +132,10 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                 Functions.AngularAcceleration(ref NPC.ai[3], 0.03f, 0.3f, targetRotation, ref realRotation);
                 NPC.rotation = realRotation - (NPC.spriteDirection == 1? MathF.PI : 0);
             }
+        }
+        public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
+        {
+            return false;
         }
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {

@@ -476,7 +476,7 @@ namespace Terrapain.Content
                 entity.velocity = entity.velocity.ToUnit() * MaxSpeed * maxVelocityMultyplier;
             }
         }
-        public static void CommonTerrapainFlyingMovement(ref Vector2 position, ref Vector2 velocity, Vector2 targetPosition, float rotatingSpeed, float MaxSpeed, float acceleration, float BreakingZone)
+        public static void CommonTerrapainFlyingMovement(Vector2 position, ref Vector2 velocity, Vector2 targetPosition, float rotatingSpeed, float MaxSpeed, float acceleration, float BreakingZone)
         {
             float maxVelocityMultyplier = 1;
             if (targetPosition != position)

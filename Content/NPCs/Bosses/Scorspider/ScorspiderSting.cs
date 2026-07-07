@@ -78,13 +78,22 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         }
         public override bool? CanFallThroughPlatforms()
         {
-            return true;
+            return NPC.ai[3] != -1;
         }
         public override void AI()
         {
             if (!Main.npc[Body].active || Main.npc[Body].type != ModContent.NPCType<ScorspiderBody>())
             {
-                NPC.life = 0;
+                NPC.active = false;
+                return;
+            }
+            if (NPC.ai[3] == -1)
+            {
+                NPC.noTileCollide = false;
+            }
+            else
+            {
+                NPC.noTileCollide = true;
             }
             if (NPC.ai[3] == 0)
             {
@@ -189,6 +198,10 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, new Rectangle((int)(center.X + radius - screenPos.X), (int)(center.Y - screenPos.Y - radius), (int)(screenSize.X - (center.X + radius - screenPos.X)), (int)(center.Y + radius - screenPos.Y - (center.Y - screenPos.Y - radius))), drawerColor);
                 }
             }
+        }
+        public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
+        {
+            return false;
         }
         public override void DrawBehind(int index)
         {
