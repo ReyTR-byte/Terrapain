@@ -145,7 +145,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             if (findGround)
             {
                 Vector2 futureLegPoint = Leg.EndEffectorPosition;
-                Functions.CommonTerrapainFlyingMovement(ref futureLegPoint, ref velocity, Ground, 0.4f + MathF.Abs(owner.velocity.X) / 6, 100, 4f, 50);
+                Functions.CommonTerrapainFlyingMovement(futureLegPoint, ref velocity, Ground, 0.4f + MathF.Abs(owner.velocity.X) / 6, 100, 4f, 50);
 
                 if (Ground.Distance(futureLegPoint) < velocity.Length() * 1.5f)
                 {

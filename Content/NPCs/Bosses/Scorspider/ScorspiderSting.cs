@@ -211,6 +211,11 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         {
             target.AddBuff(ModContent.BuffType<ScorspiderAcid>(), 900);
         }
+        public override void HitEffect(NPC.HitInfo hit)
+        {
+            Main.npc[Body].ModNPC.HitEffect(hit);
+            NPC.life = Math.Max(NPC.life, 1);
+        }
         public override void OnKill()
         {
             int firstGoreType = Mod.Find<ModGore>("ScorspiderSting_0").Type;

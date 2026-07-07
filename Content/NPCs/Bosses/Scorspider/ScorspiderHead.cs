@@ -91,10 +91,13 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             else
             {
                 animationTimer--;
-                if (animationTimer <= 0 && NPC.ai[3] == -1)
+                if (NPC.ai[3] == -1)
                 {
-                    animationTimer = 12;
-                    frame = Math.Min(frame + 1, 5);
+                    if (animationTimer <= 0)
+                    {
+                        animationTimer = 12;
+                        frame = Math.Min(frame + 1, 5);
+                    }
                 }
                 else if (NPC.ai[3] == 0)
                 {
@@ -117,7 +120,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                 float r = body.rotation + (body.spriteDirection == 1 ? MathF.PI : 0);
                 if (NPC.ai[3] == -1)
                 {
-                    targetRotation = r + (body.spriteDirection == 1? 1.2f : -1.2f);
+                    targetRotation = r + (body.spriteDirection == -1? 1.2f : -1.2f);
                 }
                 else
                 {
@@ -140,6 +143,11 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(ModContent.BuffType<ScorspiderAcid>(), 300);
+        }
+        public override void HitEffect(NPC.HitInfo hit)
+        {
+            Main.npc[Body].ModNPC.HitEffect(hit);
+            NPC.life = Math.Max(NPC.life, 1);
         }
         public override void OnKill()
         {

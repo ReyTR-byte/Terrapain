@@ -22,7 +22,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
     [AutoloadBossHead]
     public class ScorspiderBody : ModNPC
     {
-        //перейди на 355 строчку
+        //перейди на 422 строчку
         int head;
         int sting;
         public float angularVelocity;
@@ -35,6 +35,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         int phase = 1;
         int[] attacks1 = [0, 1, 0, 2, 0, 3];
         int[] attacks2 = [0, 1, 0, 2, 0, 3];
+        int[] attacks3 = [1, 0, 2, 0, 1, 2];
 
         public override void SetStaticDefaults()
         {
@@ -103,7 +104,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             tail.Fragments[tail.Count - 1].length = 20;
             tail.Fragments[tail.Count - 1].draw = false;
             var list = tail.Fragments.ToList();
-            list.Add(new(10, 0.5f, tailPosition));
+            list.Add(new(10, 1, tailPosition));
 
             TailTexture = ModContent.Request<Texture2D>("Terrapain/Content/NPCs/Bosses/Scorspider/ScorspiderTail");
             ShaderSystem.ScorspiderTimer = 20;
@@ -190,6 +191,8 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         {
             if (sleep)
             {
+                NPC.life = Math.Min(NPC.life + NPC.lifeMax / 1000, NPC.lifeMax);
+                NPC.velocity.X *= 0.98f;
                 foreach (var leg in Legs)
                 {
                     leg.Update(NPC);
@@ -197,6 +200,14 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                 UpdateBody();
                 Main.npc[sting].ai[3] = -1;
                 Main.npc[head].ai[3] = -1;
+                if (phase == 3)
+                {
+                    DoThirdPhase();
+                }
+                else if (phase == 4)
+                {
+                    sleep = false;
+                }
             }
             else
             {
@@ -217,20 +228,20 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     case 2:
                         DoSecondPhase();
                         break;
-                    case 3:
+                    case 4:
                         Main.npc[head].ai[3] = 1;
                         break;
                 }
-                if (timer > 0)
-                {
-                    timer--;
-                }
-                if (mainTimer > 0)
-                {
-                    mainTimer--;
-                }
                 UpdateMovement();
                 UpdateBody();
+            }
+            if (timer > 0)
+            {
+                timer--;
+            }
+            if (mainTimer > 0)
+            {
+                mainTimer--;
             }
             oldDirection = NPC.spriteDirection;
         }
@@ -687,6 +698,49 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     break;
             }
         }
+        void DoThirdPhase()
+        {
+            switch (attack)
+            {
+                case 0:
+                    if (mainTimer == 0)
+                    {
+                        NextAttack3();
+                    }
+                    break;
+                case 1:
+                    float progress = 1 - mainTimer / 350f;
+                    if (timer == 0)
+                    {
+                        Vector2 dir = Vector2.UnitX.RotatedBy(MathF.PI * 2 * progress - MathF.PI / 2);
+                        float distance = 800;
+                        float speed = 1.5f;
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.GetT().Target.Center + dir * 800, -dir * speed, Rocket, RocketDamage, RocketKnockback);
+                        timer = 30;
+                    }
+                    if (mainTimer == 0)
+                    {
+                        NextAttack3();
+                    }
+                    break;
+                case 2:
+                    if (timer == 0)
+                    {
+                        float range = 0.3f;
+                        Vector2 dir = Vector2.UnitY.RotatedBy(TGlobalNPC.random.NextFloat(-range, range));
+                        float speed = 6f;
+                        float dist = 1500;
+                        int anotherRange = 600;
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.GetT().Target.Center + new Vector2(TGlobalNPC.random.Next(-anotherRange, anotherRange + 1), -dist), dir * speed, Spike, SpikeDamage, SpikeKnockback, -1, 0, 0, -1);
+                        timer = 6;
+                    }
+                    if (mainTimer == 0)
+                    {
+                        NextAttack3();
+                    }
+                    break;
+            }
+        }
         void NextAttack1()
         {
             if (CheckPhase())
@@ -742,6 +796,33 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     break;
             }
         }
+        void NextAttack3()
+        {
+            attackCounter++;
+            if (attackCounter > attacks3.Length - 1)
+            {
+                phase = 4;
+                attackCounter = 0;
+            }
+            attack = attacks3[attackCounter];
+            switch (attack)
+            {
+                case 0:
+                    mainTimer = 120;
+                    break;
+                case 1:
+                    mainTimer = 350;
+                    break;
+                case 2:
+                    mainTimer = 500;
+                    NPC.ai[3] = 0;
+                    break;
+                case 3:
+                    timer = 60;
+                    mainTimer = 700;
+                    break;
+            }
+        }
         bool CheckPhase()
         {
             if (phase == 1 && NPC.life < NPC.lifeMax * 0.6f)
@@ -755,28 +836,26 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         
         public override void HitEffect(NPC.HitInfo hit)
         {
-            sleep = false;
+            if (phase != 3)
+            {
+                sleep = false;
+            }
             NPC.immortal = false;
-            //if (NPC.life - hit.Damage <= 0 && (state == 0 || secondPhase))
-            //{
-            //    NPC.life = 1;
-            //    NPC.immortal = true;
-            //    Main.npc[head].life = 1;
-            //    Main.npc[head].immortal = true;
-            //    Main.npc[sting].life = 1;
-            //    Main.npc[sting].immortal = true;
-            //}
-            //else
-            //{
-            //    if (NPC.life < hit.Damage)
-            //    {
-            //        hit.HideCombatText = true;
-            //        Main.npc[head].StrikeNPC(hit);
-            //        Main.npc[sting].StrikeNPC(hit);
-            //    }
-            //    Main.npc[head].life -= hit.Damage;
-            //    Main.npc[sting].life -= hit.Damage;
-            //}
+            if (NPC.life <= 0 && phase < 3)
+            {
+                sleep = true;
+                phase = 3;
+                attackCounter = 0;
+                NPC.life = 1;
+                timer = 0;
+                mainTimer = 350;
+                attack = 1;
+                NPC.life = 1;
+            }
+            if (phase == 3)
+            {
+                NPC.life = Math.Max(NPC.life, 1);
+            }
         }
         public override void OnKill()
         {
