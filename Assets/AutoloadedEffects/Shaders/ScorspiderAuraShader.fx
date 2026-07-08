@@ -5,8 +5,6 @@ float2 playerPos;
 float2 screenPosition;
 float2 screenSize;
 
-int timer;
-
 float InverseLerp(float a, float b, float t)
 {
     return saturate((t - a) / (b - a));
@@ -31,7 +29,7 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 uv : TEXCOORD0) :
     float opacity = 0.5;
     
     // Thresholds
-    bool border = worldDistance > radius + timer * timer * 2;
+    bool border = worldDistance > radius;
     float colorMult = 1;
 
     float4 color;

@@ -32,9 +32,10 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             get => (int)NPC.ai[2];
             set => NPC.ai[2] = value;
         }
+        float angularVelocity;
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[Type] = 36;
+            Main.npcFrameCount[Type] = 7;
 
             NPCID.Sets.MPAllowedEnemies[Type] = true;
             NPCID.Sets.BossBestiaryPriority.Add(Type);
@@ -84,6 +85,8 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         int animationTimer = 12;
         public override void AI()
         {
+            NPC.width = (int)(78 * NPC.scale);
+            NPC.height = (int)(50 * NPC.scale);
             if (!Main.npc[Body].active || Main.npc[Body].type != ModContent.NPCType<ScorspiderBody>())
             {
                 NPC.active = false;
@@ -132,7 +135,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
 
                     targetRotation = r + 1.2f * dir;
                 }
-                Functions.AngularAcceleration(ref NPC.ai[3], 0.03f, 0.3f, targetRotation, ref realRotation);
+                Functions.AngularAcceleration(ref angularVelocity, 0.03f, 0.3f, targetRotation, ref realRotation);
                 NPC.rotation = realRotation - (NPC.spriteDirection == 1? MathF.PI : 0);
             }
         }
@@ -161,7 +164,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         }
         public override void FindFrame(int frameHeight)
         {
-            NPC.frame = new Rectangle(0, frame * NPC.height, NPC.width, NPC.height);
+            NPC.frame = new Rectangle(0, frame * frameHeight, NPC.frame.Width, frameHeight);
         }
     }
 }

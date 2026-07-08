@@ -37,6 +37,6 @@ namespace Terrapain.Content.TUtilities.Kinematic
         /// <summary>
         /// This joint's length.
         /// </summary>
-        public readonly float Length = length;
+        public float Length = length;
     }
 }

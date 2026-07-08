@@ -153,51 +153,6 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     }
                 }
             }
-
-            if (ShaderSystem.drawScorspiderAura || ShaderSystem.ScorspiderAuraTimer < 20)
-            {
-                if (ClientConfig.Instance.UseShaders)
-                {
-                    var blackTile = ExtraTextureRegistry.BlackPixel;
-
-                    ManagedShader Shade = ShaderManager.GetShader("Terrapain.ScorspiderAuraShader");
-                    Shade.TrySetParameter("radius", ShaderSystem.AuraRadius);
-                    Shade.TrySetParameter("Scorspider", ShaderSystem.ScorspiderPosition);
-                    Shade.TrySetParameter("playerPos", Main.player[Main.myPlayer].Center);
-                    Shade.TrySetParameter("screenPosition", Main.screenPosition);
-                    Shade.TrySetParameter("screenSize", Main.ScreenSize.ToVector2());
-                    Shade.TrySetParameter("timer", ShaderSystem.ScorspiderAuraTimer);
-
-                    spriteBatch.End();
-                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, Shade.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
-                    Rectangle rekt = new(Main.screenWidth / 2, Main.screenHeight / 2, Main.screenWidth, Main.screenHeight);
-                    spriteBatch.Draw(blackTile.Value, rekt, null, Color.Black, 0f, blackTile.Value.Size() * 0.5f, 0, 1f);
-                    spriteBatch.End();
-                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-                }
-                else
-                {
-                    Vector2 center = ShaderSystem.ScorspiderPosition;
-                    Vector2 screenSize = Main.ScreenSize.ToVector2();
-                    Color drawerColor = new Color(0.5f, 0f, 0f, 0.5f);
-                    Vector2 screenPosition = Main.screenPosition;
-                    float radius = ShaderSystem.AuraRadius;
-
-                    spriteBatch.Draw(ExtraTextureRegistry.Aura.Value, center - screenPos, null, drawerColor, 0, Vector2.Zero, radius / 2000, SpriteEffects.None, 0);
-                    spriteBatch.Draw(ExtraTextureRegistry.Aura.Value, center - screenPos, null, drawerColor, (float)Math.PI / 2, Vector2.Zero, radius / 2000, SpriteEffects.None, 0);
-                    spriteBatch.Draw(ExtraTextureRegistry.Aura.Value, center - screenPos, null, drawerColor, (float)Math.PI, Vector2.Zero, radius / 2000, SpriteEffects.None, 0);
-                    spriteBatch.Draw(ExtraTextureRegistry.Aura.Value, center - screenPos, null, drawerColor, (float)Math.PI / 2 * 3, Vector2.Zero, radius / 2000, SpriteEffects.None, 0);
-
-                    if ((int)(center.Y - screenPos.Y - radius) > 0)
-                        spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, new Rectangle(0, 0, (int)screenSize.X, (int)(center.Y - screenPos.Y - radius)), drawerColor);
-                    if ((int)(screenSize.Y - (center.Y + radius - screenPos.Y)) > 0)
-                        spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, new Rectangle(0, (int)(center.Y + radius - screenPos.Y), (int)screenSize.X, (int)(screenSize.Y - (center.Y + radius - screenPos.Y))), drawerColor);
-                    if ((int)(center.X - radius - screenPosition.X) > 0 && (int)(center.Y + radius - screenPos.Y - (center.Y - screenPos.Y - radius)) > 0)
-                        spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, new Rectangle(0, (int)(center.Y - screenPos.Y - radius), (int)(center.X - radius - screenPosition.X) + 1, (int)(center.Y + radius - screenPos.Y - (center.Y - screenPos.Y - radius))), drawerColor);
-                    if ((int)(screenSize.X - (center.X + radius - screenPos.X)) > 0 && (int)(center.Y + radius - screenPos.Y - (center.Y - screenPos.Y - radius)) > 0)
-                        spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, new Rectangle((int)(center.X + radius - screenPos.X), (int)(center.Y - screenPos.Y - radius), (int)(screenSize.X - (center.X + radius - screenPos.X)), (int)(center.Y + radius - screenPos.Y - (center.Y - screenPos.Y - radius))), drawerColor);
-                }
-            }
         }
         public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
         {

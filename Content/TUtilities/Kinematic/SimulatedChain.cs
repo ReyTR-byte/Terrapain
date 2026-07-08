@@ -32,7 +32,7 @@ namespace Terrapain.Content.TUtilities.Kinematic
             }
             float averageDistanceMiss = -1;
             int itteration = 0;
-            while ((averageDistanceMiss == -1 || averageDistanceMiss > 0.1f) && itteration < 50)
+            while ((averageDistanceMiss == -1 || averageDistanceMiss > 0.1f) && itteration < 10)
             {
                 for (int i = 0; i < Fragments.Length - 1; i++)
                 {
@@ -128,7 +128,7 @@ namespace Terrapain.Content.TUtilities.Kinematic
                                 Fragments[i + 1].velocity += position2 - Fragments[i + 1].futurePosition;
                             }
                         }
-                        if (i == Fragments.Length - 2 && Fragments[i + 1].forwardRotation < MathF.PI)
+                        if (i == Fragments.Length - 2 && Fragments[i + 1].accessfulRotation < MathF.PI)
                         {
                             if (Fragments[i + 1].fixedAt.HasValue)
                             {

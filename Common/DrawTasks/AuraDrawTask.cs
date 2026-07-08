@@ -15,7 +15,7 @@ namespace Terrapain.Common.DrawTasks
         {
             this.aura = aura;
         }
-        public override void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             aura.Draw(spriteBatch);
         }

@@ -24,6 +24,9 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         public float length;
         public bool notNormalPosition;
         public int direction;
+        public float scale;
+        public float l1;
+        public float l2;
         /// <summary>
         /// The 0-1 interpolant of how far this leg is in its forward step animation.
         /// </summary>
@@ -92,6 +95,8 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             DefaultOffset = defaultOffset;
             StepAnimationInterpolant = -1f;
             Leg = new();
+            l1 = legLength1;
+            l2 = legLength2;
             Leg.Add(new(LegSizeFactor * legLength1));
             Leg.Add(new(LegSizeFactor * legLength2));
             length = legLength1 + legLength2;
@@ -104,6 +109,9 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         public Vector2 DefaultPosition(ScorspiderBody owner) => LegCenter(owner) + DefaultOffset + new Vector2(owner.NPC.velocity.X * 3.5f, 0);
         public void Update(NPC owner)
         {
+            scale = owner.scale;
+            Leg[0].Length = l1 * scale;
+            Leg[1].Length = l2 * scale;
             direction = DefaultOffset.X.NonZeroSign();
             bool shouldStep = false;
             ScorspiderBody scorspider = (ScorspiderBody)owner.ModNPC;
@@ -111,6 +119,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             Leg.StartingPoint = LegCenter(scorspider);
             Leg.UpdateEndEffector();
             float stepRange = MathF.Abs(owner.velocity.X) > 0.5f? 80 : 5;
+            stepRange *= scale;
             if (Leg.StartingPoint.Distance(Ground) > length - 10)
             {
                 Grounded = false;

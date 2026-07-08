@@ -240,9 +240,9 @@ namespace Terrapain.Common.Global
                     DrawCenter.X = npc.frame.Width - drawCenter.X;
                 }
                 color = npc.GetAlpha(color);
-                Main.EntitySpriteDraw(texture, npc.Center - Main.screenPosition + drawOffcet, npc.frame, color, npc.rotation, DrawCenter, 1, npc.spriteDirection * textureDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
+                Main.EntitySpriteDraw(texture, npc.Center - Main.screenPosition + drawOffcet, npc.frame, color, npc.rotation, DrawCenter, npc.scale, npc.spriteDirection * textureDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
                 color = npc.GetColor(color);
-                Main.EntitySpriteDraw(texture, npc.Center - Main.screenPosition + drawOffcet, npc.frame, color, npc.rotation, DrawCenter, 1, npc.spriteDirection * textureDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
+                Main.EntitySpriteDraw(texture, npc.Center - Main.screenPosition + drawOffcet, npc.frame, color, npc.rotation, DrawCenter, npc.scale, npc.spriteDirection * textureDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
             }
             if (draw == null)
                 draw = true;
@@ -277,9 +277,9 @@ namespace Terrapain.Common.Global
                     DrawCenter.X = npc.frame.Width - drawCenter.X;
                 }
                 color = npc.GetAlpha(color);
-                Main.EntitySpriteDraw(texture, npc.Center - Main.screenPosition + drawOffcet, npc.frame, color, npc.rotation, DrawCenter, 1, npc.spriteDirection * textureDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
+                Main.EntitySpriteDraw(texture, npc.Center - Main.screenPosition + drawOffcet, npc.frame, color, npc.rotation, DrawCenter, npc.scale, npc.spriteDirection * textureDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
                 color = npc.GetColor(color);
-                Main.EntitySpriteDraw(texture, npc.Center - Main.screenPosition + drawOffcet, npc.frame, color, npc.rotation, DrawCenter, 1, npc.spriteDirection * textureDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
+                Main.EntitySpriteDraw(texture, npc.Center - Main.screenPosition + drawOffcet, npc.frame, color, npc.rotation, DrawCenter, npc.scale, npc.spriteDirection * textureDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
             }
             NPCBehaviour?.ModPostDraw(npc, spriteBatch, screenPos, drawColor, texture);
             spriteBatch.End();

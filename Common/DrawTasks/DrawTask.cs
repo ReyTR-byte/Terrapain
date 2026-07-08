@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace Terrapain.Common.DrawTasks
 {
-    public abstract class DrawTask
+    public interface DrawTask
     {
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-
-        }
+        public void Draw(SpriteBatch spriteBatch);
     }
 }

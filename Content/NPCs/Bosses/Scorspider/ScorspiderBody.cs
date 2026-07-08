@@ -1,28 +1,33 @@
-﻿using Terrapain.Common.System;
+﻿using Luminance.Common.Utilities;
+using Luminance.Core.Graphics;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using Terrapain.Assets.Extratextures;
+using Terrapain.Common.Config;
+using Terrapain.Common.DrawTasks;
+using Terrapain.Common.Global;
+using Terrapain.Common.System;
 using Terrapain.Content.Buffs;
 using Terrapain.Content.Items.Bags;
 using Terrapain.Content.Items.DropRulls;
+using Terrapain.Content.Items.Placeable.Relics;
+using Terrapain.Content.Items.Placeable.Trophies;
+using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
+using Terrapain.Content.TUtilities.Kinematic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terrapain.Content.Items.Placeable.Relics;
-using Terrapain.Content.Items.Placeable.Trophies;
-using Luminance.Common.Utilities;
-using Microsoft.Xna.Framework.Graphics;
-using Terrapain.Content.TUtilities.Kinematic;
-using ReLogic.Content;
 using static Terrapain.Content.Functions;
-using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
-using Terrapain.Common.Global;
 
 namespace Terrapain.Content.NPCs.Bosses.Scorspider
 {
     [AutoloadBossHead]
     public class ScorspiderBody : ModNPC
     {
-        //перейди на 422 строчку
+        //настроить баланс на 509 строку
+        //подобрать размер и длину хвоста на 196 строку
         int head;
         int sting;
         public float angularVelocity;
@@ -64,7 +69,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             LegBraces = new Vector2[8];
             for (int i = 0; i < 8; i++)
             {
-                LegBraces[i] = new Vector2(60 - 40 * (i % 4), i % 4 == 1 || i % 4 == 2? 30 : 20);
+                LegBraces[i] = new Vector2(60 - 40 * (i % 4), i % 4 == 1 || i % 4 == 2? 50 : 40);
             }
 
             NPC.width = 80;
@@ -92,19 +97,20 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         }
         SimulatedChain tail;
         Asset<Texture2D> TailTexture;
-        Vector2 tailPosition => NPC.Center + new Vector2(60 * NPC.spriteDirection, 0).RotatedBy(NPC.rotation);
-        public Vector2 HeadPosition => NPC.Center + new Vector2(-70 * NPC.spriteDirection, 5).RotatedBy(NPC.rotation);
-        public Vector2 StingPosition => tailPosition + new Vector2(110 * NPC.spriteDirection, -45);
+        Vector2 tailPosition => NPC.Center + new Vector2(60 * NPC.spriteDirection, 0).RotatedBy(NPC.rotation) * NPC.scale;
+        public Vector2 HeadPosition => NPC.Center + new Vector2(-70 * NPC.spriteDirection, 5).RotatedBy(NPC.rotation) * NPC.scale;
+        public Vector2 StingPosition => tailPosition + new Vector2(110 * NPC.spriteDirection, -45) * NPC.scale;
         public override void OnSpawn(IEntitySource source)
         {
             head = NPC.NewNPC(source, (int)HeadPosition.X, (int)HeadPosition.Y, ModContent.NPCType<ScorspiderHead>(), NPC.whoAmI,  NPC.whoAmI);
             sting = NPC.NewNPC(source, (int)StingPosition.X, (int)StingPosition.Y, ModContent.NPCType<ScorspiderSting>(), NPC.whoAmI, NPC.whoAmI, head);
             Main.npc[head].ai[1] = sting;
-            tail = new SimulatedChain(8, 26, tailPosition, 0, 1, 1.2f);
-            tail.Fragments[tail.Count - 1].length = 20;
+            tail = new SimulatedChain(8, 26, tailPosition, 0, 1, 1);
+            tail.Fragments[tail.Count - 1].length = 10;
             tail.Fragments[tail.Count - 1].draw = false;
             var list = tail.Fragments.ToList();
             list.Add(new(10, 1, tailPosition));
+            tail.Fragments = list.ToArray();
 
             TailTexture = ModContent.Request<Texture2D>("Terrapain/Content/NPCs/Bosses/Scorspider/ScorspiderTail");
             ShaderSystem.ScorspiderTimer = 20;
@@ -170,7 +176,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
 
         public static Vector2 FindGround(Vector2 position, Vector2 direction, NPC npc, out bool findGround)
         {
-            Vector2 end = position + direction * 230;
+            Vector2 end = position + direction * 230 * npc.scale;
             Vector2 result = RayColisionInTheWorld(position, end, !NPCLoader.CanFallThroughPlatforms(npc)?? true);
             findGround = result != Vector2.Zero && result != position;
             return findGround? result : Vector2.Zero;
@@ -186,11 +192,65 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         int RocketDamage = 21;
         float RocketKnockback = 8.5f;
         int oldDirection;
-
+        float tailFragmentLength;
         public override void AI()
         {
+            tailFragmentLength = 26;
+            NPC.scale = 1.5f;
+            NPC.height = (int)(80 * NPC.scale);
+            NPC.width = (int)(80 * NPC.scale);
+            LegBraces = new Vector2[8];
+            for (int i = 0; i < 8; i++)
+            {
+                LegBraces[i] = new Vector2(60 - 40 * (i % 4), i % 4 == 1 || i % 4 == 2 ? 20 : 10) * NPC.scale;
+            }
             if (sleep)
             {
+                {
+                    float targetRotation = 0;
+                    Vector2 averagePosition = Vector2.Zero;
+                    Vector2 mostRight = Vector2.Zero;
+                    Vector2 mostLeft = Vector2.Zero;
+                    int grounded = 0;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        if (Legs[i].Grounded)
+                        {
+                            if (i % 4 < 2)
+                            {
+                                if (mostRight == Vector2.Zero || mostRight.X < Legs[i].Leg.EndEffectorPosition.X)
+                                {
+                                    mostRight = Legs[i].Leg.EndEffectorPosition;
+                                }
+                            }
+                            else
+                            {
+                                if (mostLeft == Vector2.Zero || mostLeft.X > Legs[i].Leg.EndEffectorPosition.X)
+                                {
+                                    mostLeft = Legs[i].Leg.EndEffectorPosition;
+                                }
+                            }
+                            grounded++;
+                            averagePosition += Legs[i].Leg.EndEffectorPosition;
+                        }
+                    }
+                    if (grounded > 1)
+                    {
+                        if (mostRight == Vector2.Zero)
+                        {
+                            targetRotation = MathF.PI / 2.2f;
+                        }
+                        else if (mostLeft == Vector2.Zero)
+                        {
+                            targetRotation = -MathF.PI / 2.2f;
+                        }
+                        else
+                        {
+                            targetRotation = mostLeft.DirectionTo(mostRight).ToRotation();
+                        }
+                    }
+                    AngularAcceleration(ref angularVelocity, 0.02f, 0.08f, targetRotation, ref NPC.rotation);
+                }
                 NPC.life = Math.Min(NPC.life + NPC.lifeMax / 1000, NPC.lifeMax);
                 NPC.velocity.X *= 0.98f;
                 foreach (var leg in Legs)
@@ -359,7 +419,26 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         }
         void UpdateBody()
         {
+            Main.npc[head].scale = NPC.scale;
+            Main.npc[sting].scale = NPC.scale;
+            //if (Main.npc[sting].collideY)
+            //{
+            //    tail.Fragments[tail.Fragments.Length - 1].position = Main.npc[sting].Center;
+            //    if (Main.npc[sting].oldVelocity.Y != 0)
+            //    {
+            //        tail.Fragments[tail.Fragments.Length - 1].velocity.Y = Main.npc[sting].velocity.Y;
+            //    }
+            //}
+            //if (Main.npc[sting].collideX)
+            //{
+            //    tail.Fragments[tail.Fragments.Length - 1].position = Main.npc[sting].Center;
+            //    if (Main.npc[sting].oldVelocity.X != 0)
+            //    {
+            //        tail.Fragments[tail.Fragments.Length - 1].velocity.X = Main.npc[sting].velocity.X;
+            //    }
+            //}
             tail.Fragments[tail.Fragments.Length - 1].position = Main.npc[sting].Center;
+            tail.Fragments[tail.Fragments.Length - 1].velocity = Main.npc[sting].velocity;
             if (oldDirection != NPC.spriteDirection)
             {
                 for (int i = 0; i < tail.Count; i++)
@@ -374,19 +453,27 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     tail.Fragments[i].position = pos;
                 }
             }
-            for (int i = 0; i < tail.Count; i++)
-            {
-                tail.Fragments[i].velocity += (NPC.velocity - NPC.oldVelocity) * 0.95f;
-            }
-            //tail.Fragments[tail.Fragments.Length - 1].velocity = Main.npc[sting].velocity;
             if (!sleep)
             {
-                CommonTerrapainFlyingMovement(tail.Fragments[tail.Fragments.Length - 1].position, ref tail.Fragments[tail.Fragments.Length - 1].velocity, StingPosition, MathF.PI / 2, 15, 0.45f, 75);
+                CommonTerrapainFlyingMovement(tail.Fragments[tail.Fragments.Length - 1].position, ref tail.Fragments[tail.Fragments.Length - 1].velocity, StingPosition, MathF.PI / 2, 18, 0.55f, 45);
             }
+            else if (Main.npc[sting].Center.Distance(NPC.Center) < 180)
+            {
+                tail.Fragments[tail.Fragments.Length - 1].velocity += Main.npc[sting].Center.DirectionFrom(NPC.Center);
+            }
+            for (int i = 0; i < tail.Count; i++)
+            {
+                tail.Fragments[i].velocity += (NPC.velocity - NPC.oldVelocity) * 0.7f;
+            }
+            for (int i = 0; i < tail.Count - 2; i++)
+            {
+                tail.Fragments[i].length = tailFragmentLength * NPC.scale;
+            }
+            tail.Fragments[tail.Count - 2].length = 10 * NPC.scale;
             tail.Fragments[0].backwardRotation = NPC.rotation + (NPC.direction == 1? MathF.PI : 0);
             tail.Fragments[0].fixedAt = tailPosition;
             tail.Update();
-            Main.npc[sting].velocity = tail.Fragments[tail.Fragments.Length - 1].position - Main.npc[sting].Center;
+            Main.npc[sting].velocity = tail.Fragments[tail.Fragments.Length - 1].velocity;
             //if (Main.mouseLeft && Main.MouseWorld.X > NPC.position.X && Main.MouseWorld.X < NPC.TopRight.X && Main.MouseWorld.Y > NPC.position.Y && Main.MouseWorld.Y < NPC.BottomLeft.Y)
             //{
             //    NPC.velocity = Main.MouseWorld - NPC.Center;
@@ -700,6 +787,21 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         }
         void DoThirdPhase()
         {
+            float radius = 1000;
+            if (attackCounter == 0)
+            {
+                int time = Math.Max(mainTimer - 300, 0);
+                radius += time * time * 2;
+            }
+            if (attackCounter == attacks3.Length - 1)
+            {
+                int time = Math.Max(50 - mainTimer, 0);
+                radius += time * time * 2;
+            }
+            AuraHoldPlayer(radius, NPC.Center);
+            ShaderSystem.drawScorspiderAura = true;
+            ShaderSystem.AuraRadius = radius;
+            ShaderSystem.ScorspiderPosition = NPC.Center;
             switch (attack)
             {
                 case 0:
@@ -715,7 +817,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         Vector2 dir = Vector2.UnitX.RotatedBy(MathF.PI * 2 * progress - MathF.PI / 2);
                         float distance = 800;
                         float speed = 1.5f;
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.GetT().Target.Center + dir * 800, -dir * speed, Rocket, RocketDamage, RocketKnockback);
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.GetT().Target.Center + dir * distance, -dir * speed, Rocket, RocketDamage, RocketKnockback);
                         timer = 30;
                     }
                     if (mainTimer == 0)
@@ -907,7 +1009,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            tail.Draw(spriteBatch, TailTexture.Value, null, Color.White, true, TailTexture.Size() / 2, Vector2.One, NPC.spriteDirection == -1? SpriteEffects.None : SpriteEffects.FlipVertically, 1);
+            tail.Draw(spriteBatch, TailTexture.Value, null, Color.White, true, TailTexture.Size() / 2, Vector2.One * NPC.scale, NPC.spriteDirection == -1? SpriteEffects.None : SpriteEffects.FlipVertically, 1);
 
             for (int i = 4; i < 8; i++)
             {
