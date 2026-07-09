@@ -166,5 +166,9 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         {
             NPC.frame = new Rectangle(0, frame * frameHeight, NPC.frame.Width, frameHeight);
         }
+        public override bool CheckActive()
+        {
+            return false;
+        }
     }
 }

@@ -105,8 +105,8 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             AnimationMode = Accel;
             MaxLength = maxLength;
         }
-        public Vector2 LegCenter(ScorspiderBody owner) => owner.NPC.Center + owner.LegBraces[Index].RotatedBy(owner.NPC.rotation);
-        public Vector2 DefaultPosition(ScorspiderBody owner) => LegCenter(owner) + DefaultOffset + new Vector2(owner.NPC.velocity.X * 3.5f, 0);
+        public Vector2 LegCenter(ScorspiderBody owner) => owner.NPC.Center + owner.LegBraces[Index].RotatedBy(owner.NPC.rotation) * owner.NPC.scale;
+        public Vector2 DefaultPosition(ScorspiderBody owner) => LegCenter(owner) + (DefaultOffset + new Vector2(owner.NPC.velocity.X * 3.5f, 0) + (owner.sleep? new Vector2(DefaultOffset.X * 1.5f, 0) : Vector2.Zero)) * owner.NPC.scale;
         public void Update(NPC owner)
         {
             scale = owner.scale;
@@ -120,7 +120,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             Leg.UpdateEndEffector();
             float stepRange = MathF.Abs(owner.velocity.X) > 0.5f? 80 : 5;
             stepRange *= scale;
-            if (Leg.StartingPoint.Distance(Ground) > length - 10)
+            if (Leg.StartingPoint.Distance(Ground) > (length - 10) * scale)
             {
                 Grounded = false;
             }

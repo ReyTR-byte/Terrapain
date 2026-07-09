@@ -21,7 +21,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
             Projectile.friendly = false;
             Projectile.hostile = true;
             Projectile.knockBack = 0f;
-            Projectile.timeLeft = 500;
+            Projectile.timeLeft = 1000;
             Projectile.penetrate = -1;
             Projectile.tileCollide = true;
         }

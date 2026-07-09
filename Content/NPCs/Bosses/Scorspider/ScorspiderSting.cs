@@ -93,6 +93,8 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             }
             else
             {
+                NPC.collideY = false;
+                NPC.collideX = false;
                 NPC.noTileCollide = true;
             }
             if (NPC.ai[3] == 0)
@@ -170,6 +172,10 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         {
             Main.npc[Body].ModNPC.HitEffect(hit);
             NPC.life = Math.Max(NPC.life, 1);
+        }
+        public override bool CheckActive()
+        {
+            return false;
         }
         public override void OnKill()
         {
