@@ -12,6 +12,7 @@ using Terrapain.Content.Items.Bags;
 using Terrapain.Content.Items.DropRulls;
 using Terrapain.Content.Items.Placeable.Relics;
 using Terrapain.Content.Items.Placeable.Trophies;
+using Terrapain.Content.NPCs.Servants.Scorspider;
 using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
 using Terrapain.Content.TUtilities.Kinematic;
 using Terraria;
@@ -26,7 +27,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
     [AutoloadBossHead]
     public class ScorspiderBody : ModNPC
     {
-        //настроить баланс на 516 строку
+        //настроить баланс на 528 строку
         //подобрать размер и длину хвоста на 203 строку
         int head;
         int sting;
@@ -40,7 +41,8 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         int phase = 1;
         int[] attacks1 = [0, 1, 0, 2, 0, 3];
         int[] attacks2 = [0, 1, 0, 2, 0, 3];
-        int[] attacks3 = [1, 0, 2, 3, 1, 2];
+        int[] attacks3 = [1, 0, 2, 3, 1, 2, 0, 4, 5];
+        int[] attacks4 = [0, 1, 0, 2];
 
         public override void SetStaticDefaults()
         {
@@ -292,6 +294,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         DoSecondPhase();
                         break;
                     case 4:
+                        DoFourthPhase();
                         Main.npc[head].ai[3] = 1;
                         break;
                 }
@@ -377,7 +380,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                 if (jumpAnimation && !dash)
                 {
                     targetHeight -= MathF.Max(5, NPC.velocity.X * 1.2f) * NPC.scale;
-                    if (targetHeight < 60)
+                    if (targetHeight < 60 * NPC.scale)
                     {
                         NPC.velocity.Y = MathF.Max(NPC.velocity.Y - 5, -15);
                         NPC.velocity.X = maxSpeed * -NPC.spriteDirection;
@@ -385,7 +388,15 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                 }
                 else
                 {
-                    targetHeight = 150 * NPC.scale;
+                    Vector2 playerCenter = NPC.GetT().Target.Center;
+                    if (playerCenter.X > NPC.Left.X && playerCenter.X < NPC.Right.X && NPC.Bottom.Y < playerCenter.Y)
+                    {
+                        targetHeight = 40 * NPC.scale;
+                    }
+                    else
+                    {
+                        targetHeight = 150 * NPC.scale;
+                    }
                 }
                 if (!dash)
                 {
@@ -455,6 +466,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     pos += NPC.Center;
                     tail.Fragments[i].position = pos;
                 }
+                Main.npc[sting].Center = tail.Fragments[tail.Fragments.Length - 1].position;
             }
             if (!sleep)
             {
@@ -532,50 +544,43 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     }
                     break;
                 case 1:
-                    if (chat)
                     {
-                        Chatic(1);
-                    }
-                    float progress = (300 - mainTimer) / 300f;
-                    NPC Sting = Main.npc[sting];
-                    Sting.ai[3] = 1;
+                        if (chat)
+                        {
+                            Chatic(1);
+                        }
+                        float _progress = (300 - mainTimer) / 300f;
+                        ScorspiderSting Sting = (ScorspiderSting)Main.npc[sting].ModNPC;
+                        Sting.NPC.ai[3] = 1;
 
-                    //чем больше это число тем больше скорость вращения жала
-                    float rotationSpeed = 22;
-                    float value = progress * rotationSpeed % 4;
-                    if (value > 1)
-                    {
-                        value = 2 - value;
-                    }
-                    if (value < -1)
-                    {
-                        value = -2 - value;
-                    }
+                        //чем больше это число тем больше скорость вращения жала
+                        float rotationSpeed = 22;
+                        float value = _progress * rotationSpeed % 4;
+                        if (value > 1)
+                        {
+                            value = 2 - value;
+                        }
+                        if (value < -1)
+                        {
+                            value = -2 - value;
+                        }
 
-                    //чем больше это число тем больше угол вращения жала
-                    float rotationRange = 0.666f;
-                    Sting.rotation = NPC.DirectionTo(NPC.GetT().Target.Center).ToRotation() + MathF.Asin(value) * rotationRange;
-                    if (timer == 0)
-                    {
-                        //это скорость вылета шипов
-                        float speed = 25;
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), Sting.Center, Sting.rotation.ToRotationVector2() * speed, Spike, SpikeDamage, SpikeKnockback);
-                        //это чвстота вылета шипов в тиках
-                        timer = 10;
-                    }
-                    if (Sting.rotation > MathF.PI / 2 || Sting.rotation < -MathF.PI / 2)
-                    {
-                        Sting.rotation += MathF.PI;
-                        Sting.spriteDirection = -1;
-                    }
-                    else
-                    {
-                        Sting.spriteDirection = 1;
-                    }
-                    if (mainTimer == 0)
-                    {
-                        Sting.ai[3] = 0;
-                        NextAttack1();
+                        //чем больше это число тем больше угол вращения жала
+                        float rotationRange = 0.666f;
+                        Sting.TargetRotation = NPC.DirectionTo(NPC.GetT().Target.Center).ToRotation() + MathF.Asin(value) * rotationRange;
+                        if (timer == 0)
+                        {
+                            //это скорость вылета шипов
+                            float speed = 25;
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), Sting.NPC.Center, Sting.TargetRotation.ToRotationVector2() * speed, Spike, SpikeDamage, SpikeKnockback);
+                            //это чвстота вылета шипов в тиках
+                            timer = 10;
+                        }
+                        if (mainTimer == 0)
+                        {
+                            Sting.NPC.ai[3] = 0;
+                            NextAttack1();
+                        }
                     }
                     break;
                 case 2:
@@ -583,9 +588,13 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     {
                         Chatic(2);
                     }
+                    if (mainTimer > 120 && mainTimer <= 240)
+                    {
+                        Main.npc[sting].ai[3] = 1;
+                    }
                     if (timer == 0)
                     {
-                        Sting = Main.npc[sting];
+                        NPC Sting = Main.npc[sting];
                         float rotation = Sting.DirectionTo(NPC.GetT().Target.Center).ToRotation();
                         if (mainTimer > 240)
                         {
@@ -610,25 +619,36 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         }
                         else if (mainTimer > 120)
                         {
+                            ScorspiderSting ss = (ScorspiderSting)Sting.ModNPC;
+                            ss.TargetRotation = -MathF.PI / 2 + NPC.spriteDirection * -0.5f;
                             if (chat)
                             {
                                 Chatic("података 2");
                             }
                             float speed = 27;
                             //размах рандомного угла
-                            float range = 0.5f;
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), Sting.Center, (rotation + TGlobalNPC.random.NextFloat(-range, range)).ToRotationVector2() * speed, Spike, SpikeDamage, SpikeKnockback, -1, 0, 0, -1);
-                            timer = 7;
+                            float range = 0.1f;
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), Sting.Center, (ss.GetRotation() + TGlobalNPC.random.NextFloat(-range, range)).ToRotationVector2() * speed, Spike, SpikeDamage, SpikeKnockback, -1, NPC.target, 0, 9);
+                            timer = 14;
                         }
                         else
                         {
+                            Sting.ai[3] = 0;
                             if (chat)
                             {
                                 Chatic("података 3");
                             }
                             //начальная скорость вылета ракеты, она потом разгоняется сильно
-                            float speed = 3;
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), Sting.Center, rotation.ToRotationVector2() * speed, Rocket, RocketDamage, RocketKnockback);
+                            float startSpeed = 1.5f;
+                            //ускорение
+                            float acceleration = 0.25f;
+                            //максимальная скорость
+                            float maxSpeed = 19;
+                            //ускорение поворота
+                            float maxAngularVelocity = 0.03f;
+                            //максимальная скорость поворота
+                            float angularAcceleration = 0.003f;
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(acceleration.ToString()), Sting.Center, rotation.ToRotationVector2() * startSpeed, Rocket, RocketDamage, RocketKnockback, -1, angularAcceleration, maxSpeed, maxAngularVelocity);
                             timer = 25;
                         }
                     }
@@ -650,7 +670,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         NPC.velocity.Y = 0;
                         dash = true;
                     }
-                    progress = (400 - mainTimer) / 400f;
+                    float progress = (400 - mainTimer) / 400f;
                     if (mainTimer > 250 && timer == 0)
                     {
                         //количестро шипов которые вылетят из цветка
@@ -755,8 +775,13 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         }
                         else
                         {
-                            //атака рокетой
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, Vector2.UnitY * -1, Rocket, RocketDamage, RocketKnockback);
+                            float startSpeed = 1.5f;
+                            float acceleration = 0.25f;
+                            float maxSpeed = 19;
+                            float maxAngularVelocity = 0.03f;
+                            float angularAcceleration = 0.003f;
+                            //атака ракетой
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(acceleration.ToString()), NPC.Center, Vector2.UnitY * -startSpeed, Rocket, RocketDamage, RocketKnockback, -1, angularAcceleration, maxSpeed, maxAngularVelocity);
                             //время до атаки цветком
                             timer = 40;
                             NPC.ai[3] = 0;
@@ -823,8 +848,12 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     {
                         Vector2 dir = Vector2.UnitX.RotatedBy(MathF.PI * 2 * progress - MathF.PI / 2 + NPC.ai[3]);
                         float distance = 800;
-                        float speed = 1.5f;
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.GetT().Target.Center + dir * distance, -dir * speed, Rocket, RocketDamage, RocketKnockback);
+                        float startSpeed = 1.5f;
+                        float acceleration = 0.25f;
+                        float maxSpeed = 19;
+                        float maxAngularVelocity = 0.03f;
+                        float angularAcceleration = 0.003f;
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(acceleration.ToString()), NPC.GetT().Target.Center + dir * distance, -dir * startSpeed, Rocket, RocketDamage, RocketKnockback, -1, angularAcceleration, maxSpeed, maxAngularVelocity);
                         timer = 30;
                     }
                     if (mainTimer == 0)
@@ -840,7 +869,8 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         float speed = 6f;
                         float dist = 1500;
                         int anotherRange = 600;
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.GetT().Target.Center + new Vector2(TGlobalNPC.random.Next(-anotherRange, anotherRange + 1), -dist), dir * speed, Spike, SpikeDamage, SpikeKnockback, -1, 0, 0, -1);
+                        float maxFallSpeed = 15f;
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.GetT().Target.Center + new Vector2(TGlobalNPC.random.Next(-anotherRange, anotherRange + 1), -dist), dir * speed, Spike, SpikeDamage, SpikeKnockback, -1, maxFallSpeed, 0, 8);
                         timer = 6;
                     }
                     if (mainTimer == 0)
@@ -866,6 +896,138 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                     if (mainTimer == 0)
                     {
                         NextAttack3();
+                    }
+                    break;
+                case 4:
+                    if (timer == 0 && NPC.ai[3] > 0)
+                    {
+                        int bigSpidersCount = 2;
+                        float height = 1200;
+                        Point position = (NPC.GetT().Target.Center - Vector2.UnitY * height).ToPoint();
+                        if (NPC.ai[3] > bigSpidersCount)
+                        {
+                            int npc = NPC.NewNPC(NPC.GetSource_FromThis(), position.X, position.Y, ModContent.NPCType<ScorspiderLittleMinionSpidersCocoon>(), 0, position.Y + height + 20);
+                            Main.npc[npc].velocity.X = TGlobalNPC.random.Next(-2, 3);
+                        }
+                        else
+                        {
+                            int npc = NPC.NewNPC(NPC.GetSource_FromThis(), position.X, position.Y, ModContent.NPCType<ScorspiderBigMinionSpiderCocoon>(), 0, position.Y + height + 20);
+                            Main.npc[npc].velocity.X = TGlobalNPC.random.Next(-2, 3);
+                        }
+                        NPC.ai[3]--;
+                        timer = 40;
+                    }
+                    if (mainTimer == 0)
+                    {
+                        NextAttack3();
+                    }
+                    break;
+                case 5:
+                    if (timer == 0)
+                    {
+                        int count = 6;
+                        float distance = 250f;
+                        float speed = 10f;
+                        float startAngle = TGlobalNPC.random.NextFloat(MathF.PI * 2);
+                        float angle = MathF.PI * 2 / count;
+                        Vector2 pos = NPC.GetT().Target.Center;
+                        for (int i = 0; i < count; i++)
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), pos + Vector2.UnitX.RotatedBy(startAngle + angle * i) * distance, -Vector2.UnitX.RotatedBy(startAngle + angle * i) * speed, Spike, SpikeDamage, SpikeKnockback, -1, 0, 0, 7);
+                        }
+                        timer = 130;
+                    }
+                    if (mainTimer == 0)
+                    {
+                        NextAttack3();
+                    }
+                    break;
+            }
+        }
+        void DoFourthPhase()
+        {
+            switch (attack)
+            {
+                case 0:
+                    if (mainTimer == 0)
+                    {
+                        NextAttack4();
+                    }
+                    break;
+                case 1:
+                    float progress = 1 - mainTimer / 450f;
+                    if (timer == 0)
+                    {
+                        Vector2 dir = Vector2.UnitX.RotatedBy(MathF.PI * 2 * progress - MathF.PI / 2 + NPC.ai[3]);
+                        float rocketDistance = 800;
+                        float spikeDistance = 350;
+                        float spikeSpeed = 16f;
+                        float startSpeed = 1.5f;
+                        float acceleration = 0.25f;
+                        float maxSpeed = 19;
+                        float maxAngularVelocity = 0.03f;
+                        float angularAcceleration = 0.003f;
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(acceleration.ToString()), NPC.GetT().Target.Center + dir * rocketDistance, -dir * startSpeed, Rocket, RocketDamage, RocketKnockback, -1, angularAcceleration, maxSpeed, maxAngularVelocity);
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(acceleration.ToString()), NPC.GetT().Target.Center - dir * spikeDistance, dir * spikeSpeed, Spike, SpikeDamage, SpikeKnockback, -1, 0, 0, -1);
+                        timer = 45;
+                    }
+                    if (mainTimer == 0)
+                    {
+                        NextAttack4();
+                    }
+                    break;
+                case 2:
+                    if (timer == 0)
+                    {
+                        if (NPC.ai[3] == 0)
+                        {
+                            Vector2 pl = NPC.GetT().Target.Center;
+                            NPC.ai[0] = pl.X;
+                            NPC.ai[1] = pl.Y;
+                            NPC.ai[2] = TGlobalNPC.random.NextFloat(MathF.PI * 2);
+                        }
+                        Vector2 position = new Vector2(NPC.ai[0], NPC.ai[1]);
+                        float angle = NPC.ai[2]; 
+                        float distance = 450f;
+                        //количество снарядов в середине
+                        float count1 = 16;
+                        //количество снарядов в крайней части
+                        float count2 = 12;
+                        //растояние между снарядами в средней части
+                        float width1 = 12;
+                        //растояние между снарядами в крайней части
+                        float width2 = 140;
+                        float speed = 22;
+                        //время которое снаряды будут висеть в воздухе
+                        int time = 60;
+                        Vector2 dir = Vector2.UnitY.RotatedBy(angle);
+                        Vector2 dir2 = Vector2.UnitX.RotatedBy(angle);
+                        Vector2 start = position + dir2 * distance;
+                        Vector2 start1 = start + dir * (count1 - 1) / 2f * width1;
+                        Vector2 end = start - dir * (count1 - 1) / 2f * width1;
+                        if (NPC.ai[3] == 0)
+                        {
+                            for (int i = 0; i < count1; i++)
+                            {
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), start1 - dir * i * width1, -dir2 * speed, Spike, SpikeDamage, SpikeKnockback, -1, time, 0, 6);
+                            }
+                        }
+                        else
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), start1 + dir * NPC.ai[3] * width2, -dir2 * speed, Spike, SpikeDamage, SpikeKnockback, -1, time, 0, 6);
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), end - dir * NPC.ai[3] * width2, -dir2 * speed, Spike, SpikeDamage, SpikeKnockback, -1, time, 0, 6);
+                        }
+                        NPC.ai[3]++;
+                        timer = 3;
+                        if (NPC.ai[3] == count2)
+                        {
+                            NPC.ai[3] = 0;
+                            timer = 120;
+                        }
+                    }
+                    if (mainTimer == 0)
+                    {
+                        NextAttack4();
                     }
                     break;
             }
@@ -950,6 +1112,37 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                 case 3:
                     NPC.ai[3] = 4;
                     mainTimer = 300;
+                    break;
+                case 4:
+                    NPC.ai[3] = 5;
+                    mainTimer = 330;
+                    break;
+                case 5:
+                    mainTimer = 600;
+                    break;
+            }
+        }
+        void NextAttack4()
+        {
+            attackCounter++;
+            if (attackCounter > attacks4.Length - 1)
+            {
+                phase = 4;
+                attackCounter = 0;
+            }
+            attack = attacks4[attackCounter];
+            switch (attack)
+            {
+                case 0:
+                    mainTimer = 120;
+                    break;
+                case 1:
+                    NPC.ai[3] = TGlobalNPC.random.NextFloat(MathF.PI * 2);
+                    mainTimer = 350;
+                    break;
+                case 2:
+                    mainTimer = 500;
+                    NPC.ai[3] = 0;
                     break;
             }
         }

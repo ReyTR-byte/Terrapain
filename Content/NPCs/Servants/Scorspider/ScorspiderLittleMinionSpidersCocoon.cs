@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Common.Global;
 using Terrapain.Content.Dusts;
 using Terraria;
 using Terraria.DataStructures;
@@ -12,15 +13,10 @@ namespace Terrapain.Content.NPCs.Servants.Scorspider
 {
     public class ScorspiderLittleMinionSpidersCocoon : ModNPC
     {
-        private float VelocityX
+        private float TargetY
         {
             get => NPC.ai[0];
             set => NPC.ai[0] = value;
-        }
-        private float VelocityY
-        {
-            get => NPC.ai[1];
-            set => NPC.ai[1] = value;
         }
         public override void SetDefaults()
         {
@@ -33,18 +29,14 @@ namespace Terrapain.Content.NPCs.Servants.Scorspider
             NPC.knockBackResist = 0.8f;
             NPC.aiStyle = -1;
         }
+        float angularVelocity;
         public override void OnSpawn(IEntitySource source)
         {
-            if (VelocityX != float.NaN && VelocityY != float.NaN && (VelocityX != 0 || VelocityY != 0))
-            {
-                NPC.velocity.X = VelocityX;
-                NPC.velocity.Y = VelocityY;
-                NPC.velocity = Functions.Rotate(NPC.velocity, NPC.velocity.X);
-            }
+            angularVelocity = TGlobalNPC.random.NextFloat(-0.2f, 0.2f);
         }
         public override bool? CanFallThroughPlatforms()
         {
-            return true;
+            return NPC.Bottom.Y < TargetY;
         }
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
@@ -56,6 +48,7 @@ namespace Terrapain.Content.NPCs.Servants.Scorspider
             {
                 SpawnMinions();
             }
+            NPC.rotation += angularVelocity;
         }
         private void SpawnMinions()
         {

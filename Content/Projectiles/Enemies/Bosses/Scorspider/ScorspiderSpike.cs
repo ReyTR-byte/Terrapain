@@ -225,7 +225,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
                         memoryVelocity = Projectile.velocity;
                         Projectile.velocity = Vector2.Zero;
                     }
-                    if (timer == 20)
+                    if (timer == (int)Projectile.ai[0])
                     {
                         Projectile.velocity = memoryVelocity;
                     }
@@ -244,10 +244,22 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
                         gravity = true;
                     }
                     break;
+                case 9:
+                    if (timer == 60)
+                    {
+                        Projectile.Center = Main.player[(int)Projectile.ai[0]].Center + new Vector2(TGlobalNPC.random.Next(-215, 216), -1200);
+                        Projectile.velocity.Y = 1;
+                        Projectile.velocity.X *= 0.5f;
+                    }
+                    break;
             }
 
             if (gravity)
                 Projectile.velocity.Y += 0.15f;
+            if (attackStyle == 8)
+            {
+                Projectile.velocity.Y = MathF.Min(Projectile.velocity.Y, Projectile.ai[0]);
+            }
             /*if (count != 0 && timer == 80 && WorldDifficultySystem.suicide)
 			{
 				Vector2 target = Main.player[Player.FindClosest(Projectile.Center, 1, 1)].position;

@@ -29,12 +29,33 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
         }
 
         float angularVelocity;
+        float angularAcceleration = 0.003f;
+        float maxSpeed = 19f;
+        float MaxAngularVelocity = 0.03f;
+        float acceleration = 0.25f;
         public override void OnSpawn(IEntitySource source)
         {
-            float angel = Convert.ToSingle(Math.Acos(Projectile.velocity.X / Projectile.velocity.Length()));
-            if (Projectile.velocity.Y < 0)
-                angel = 2 * Convert.ToSingle(Math.PI) - angel;
-            Projectile.rotation = angel;
+            if (Projectile.velocity != Vector2.Zero)
+            {
+                Projectile.rotation = Projectile.velocity.ToRotation();
+            }
+            if (Projectile.ai[0] != 0)
+            {
+                angularAcceleration = Projectile.ai[0];
+            }
+            if (Projectile.ai[1] != 0)
+            {
+                maxSpeed = Projectile.ai[1];
+            }
+            if (Projectile.ai[2] != 0)
+            {
+                MaxAngularVelocity = Projectile.ai[2];
+            }
+            float num = Convert.ToSingle(source.Context);
+            if (num != 0)
+            {
+                acceleration = num;
+            }
         }
         public override void AI()
         {
@@ -59,45 +80,37 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
                 }
             }
 
-            Projectile.velocity = Projectile.rotation.ToRotationVector2() * (Projectile.velocity.Length() + (Projectile.velocity.Length() > 19? 0 : 0.25f));
+            Projectile.velocity = Projectile.rotation.ToRotationVector2() * (Projectile.velocity.Length() + (Projectile.velocity.Length() > maxSpeed? 0 : acceleration));
             if (player != null)
             {
                 float goalAngle = Projectile.AngleTo(player.Center);
-                goalAngle = goalAngle % (2f * (float)Math.PI);
-                if (goalAngle < 0)
-                {
-                    goalAngle += (float)Math.PI * 2;
-                }
-                Projectile.rotation = Projectile.rotation % (2f * (float)Math.PI);
-                if (Projectile.rotation < 0)
-                {
-                    Projectile.rotation += (float)Math.PI * 2;
-                }
+                goalAngle = Functions.NormalizeRotation(goalAngle);
+                Projectile.rotation = Functions.NormalizeRotation(Projectile.rotation);
 
                 if (goalAngle < (float)Math.PI)
                 {
                     if (Projectile.rotation > goalAngle && Projectile.rotation < goalAngle + Math.PI)
                     {
-                        if (angularVelocity > -0.03f)
-                            angularVelocity -= 0.003f;
+                        if (angularVelocity > -MaxAngularVelocity)
+                            angularVelocity -= angularAcceleration;
                     }
                     else
                     {
-                        if (angularVelocity < 0.03f)
-                            angularVelocity += 0.003f;
+                        if (angularVelocity < MaxAngularVelocity)
+                            angularVelocity += angularAcceleration;
                     }
                 }
                 else
                 {
                     if (Projectile.rotation < goalAngle && Projectile.rotation > goalAngle - Math.PI)
                     {
-                        if (angularVelocity < 0.03f)
-                            angularVelocity += 0.003f;
+                        if (angularVelocity < MaxAngularVelocity)
+                            angularVelocity += angularAcceleration;
                     }
                     else
                     {
-                        if (angularVelocity > -0.03f)
-                            angularVelocity -= 0.003f;
+                        if (angularVelocity > -MaxAngularVelocity)
+                            angularVelocity -= angularAcceleration;
                     }
                 }
                 Projectile.rotation += angularVelocity;

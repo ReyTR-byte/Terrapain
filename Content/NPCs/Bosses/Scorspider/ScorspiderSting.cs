@@ -80,6 +80,8 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         {
             return NPC.ai[3] != -1;
         }
+        float angularVelocity;
+        public float TargetRotation;
         public override void AI()
         {
             if (!Main.npc[Body].active || Main.npc[Body].type != ModContent.NPCType<ScorspiderBody>())
@@ -99,16 +101,28 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             }
             if (NPC.ai[3] == 0)
             {
-                NPC.rotation = NPC.DirectionTo(Main.npc[Body].GetT().Target.Center).ToRotation();
-                if (NPC.rotation > MathF.PI / 2 || NPC.rotation < -MathF.PI / 2)
-                {
-                    NPC.rotation += MathF.PI;
-                    NPC.spriteDirection = -1;
-                }
-                else
-                {
-                    NPC.spriteDirection = 1;
-                }
+                TargetRotation = NPC.DirectionTo(Main.npc[Body].GetT().Target.Center).ToRotation();
+            }
+            float r = GetRotation();
+            Functions.AngularAcceleration(ref angularVelocity, 0.008f, 0.08f, TargetRotation, ref r);
+            SetRotation(r);
+        }
+        public float GetRotation()
+        {
+            return NPC.rotation + (NPC.spriteDirection == 1? 0 : MathF.PI);
+        }
+        public void SetRotation(float rotation)
+        {
+            NPC.rotation = Functions.NormalizeRotation(rotation, false);
+
+            if (NPC.rotation > MathF.PI / 2 || NPC.rotation < -MathF.PI / 2)
+            {
+                NPC.rotation += MathF.PI;
+                NPC.spriteDirection = -1;
+            }
+            else
+            {
+                NPC.spriteDirection = 1;
             }
         }
         public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

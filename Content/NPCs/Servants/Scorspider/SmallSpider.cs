@@ -62,7 +62,7 @@ namespace Terrapain.Content.NPCs.Servants.Scorspider
         }
         public override bool? CanFallThroughPlatforms()
         {
-            return true;
+            return NPC.Bottom.Y < NPC.GetT().Target.Bottom.Y;
         }
 
         float jumpForce = 15;
