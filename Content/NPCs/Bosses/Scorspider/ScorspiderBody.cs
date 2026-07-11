@@ -2,6 +2,7 @@
 using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using Steamworks;
 using Terrapain.Assets.Extratextures;
 using Terrapain.Common.Config;
 using Terrapain.Common.DrawTasks;
@@ -42,7 +43,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
         int[] attacks1 = [0, 1, 0, 2, 0, 3];
         int[] attacks2 = [0, 1, 0, 2, 0, 3];
         int[] attacks3 = [1, 0, 2, 3, 1, 2, 0, 4, 5];
-        int[] attacks4 = [0, 1, 0, 2];
+        int[] attacks4 = [0, 1, 0, 2, 0, 3, 0, 4];
 
         public override void SetStaticDefaults()
         {
@@ -1030,6 +1031,76 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                         NextAttack4();
                     }
                     break;
+                case 3:
+                    if (timer == 0)
+                    {
+                        timer = 60;
+                        NPC.ai[3]++;
+                        Point position = Main.npc[sting].Center.ToPoint();
+                        Vector2 target = NPC.GetT().Target.Center;
+                        Vector2 dir = target.DirectionFrom(position.ToVector2());
+                        float rotation = dir.ToRotation();
+                        float adjustRotation = 1;
+                        if (rotation < -MathF.PI / 2 || rotation > MathF.PI / 2)
+                        {
+                            rotation += adjustRotation;
+                        }
+                        else
+                        {
+                            rotation -= adjustRotation;
+                        }
+                        dir = rotation.ToRotationVector2();
+                        float speed = 18;
+                        if (NPC.ai[3] % 2 == 0)
+                        {
+                            int npc = NPC.NewNPC(NPC.GetSource_FromThis(), position.X, position.Y, ModContent.NPCType<ScorspiderLittleMinionSpidersCocoon>(), 0, target.Y);
+                            Main.npc[npc].velocity = dir * speed;
+                        }
+                        else
+                        {
+                            int npc = NPC.NewNPC(NPC.GetSource_FromThis(), position.X, position.Y, ModContent.NPCType<ScorspiderBigMinionSpiderCocoon>(), 0, target.Y);
+                            Main.npc[npc].velocity = dir * speed;
+                        }
+                    }
+                    if (mainTimer == 0)
+                    {
+                        NextAttack4();
+                    }
+                    break;
+                case 4:
+                    if (timer == 0)
+                    {
+                        int count = 6;
+                        float distance = 250f;
+                        float speed = 10f;
+                        float startAngle = TGlobalNPC.random.NextFloat(MathF.PI * 2);
+                        float angle = MathF.PI * 2 / count;
+                        Vector2 pos = NPC.GetT().Target.Center;
+                        for (int i = 0; i < count; i++)
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), pos + Vector2.UnitX.RotatedBy(startAngle + angle * i) * distance, -Vector2.UnitX.RotatedBy(startAngle + angle * i) * speed, Spike, SpikeDamage, SpikeKnockback, -1, 0, 0, 7);
+                        }
+                        timer = 130;
+                        count = 25;
+                        distance = 450;
+                        speed = 20;
+                        float width = 12;
+                        int time = 60;
+                        angle = TGlobalNPC.random.Next(0, 4) * MathF.PI / 2;
+                        Vector2 dir2 = Vector2.UnitX.RotatedBy(angle);
+                        Vector2 dir = Vector2.UnitY.RotatedBy(angle);
+                        pos = NPC.GetT().Target.Center + dir2 * distance;
+                        Vector2 start = pos + dir * width * (count - 1) / 2f;
+                        for (int i = 0; i < count; i++)
+                        {
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), start - dir * i * width, -dir2 * speed, Spike, SpikeDamage, SpikeKnockback, -1, time, 0, 6);
+                        }
+                    }
+                    if (mainTimer == 0)
+                    {
+                        NextAttack4();
+                    }
+                    break;
             }
         }
         void NextAttack1()
@@ -1143,6 +1214,13 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                 case 2:
                     mainTimer = 500;
                     NPC.ai[3] = 0;
+                    break;
+                case 3:
+                    mainTimer = 500;
+                    NPC.ai[3] = 0;
+                    break;
+                case 4:
+                    mainTimer = 600;
                     break;
             }
         }
