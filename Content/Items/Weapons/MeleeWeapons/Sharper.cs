@@ -22,6 +22,7 @@ namespace Terrapain.Content.Items.Weapons.MeleeWeapons
 			Item.GetGlobalItem<TGlobalItem>().dust = DustID.Granite;
             Item.GetGlobalItem<TGlobalItem>().dustLight = new Vector3 (0.1f, 0.8f, 0.1f);
             Item.value = Item.buyPrice(gold: 8);
+			Item.GetT().StaminaUsage = 2;
         }
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {

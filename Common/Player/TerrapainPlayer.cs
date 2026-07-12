@@ -116,6 +116,7 @@ namespace Terrapain.Common.Player
 		}
 		public override void ResetEffects()
 		{
+			//Functions.Chatic(Stamina);
             lightnings = new List<Terrapain.LightningDrawInfo>();
 			bootsActiveAccessory = false;
 
@@ -127,10 +128,10 @@ namespace Terrapain.Common.Player
 			AcidCobwebBonus = false;
 			GranithShellChestplateBonus = false;
 
-			StaminaRegenerationTimerMax = 100;
-			StaminaRegenerationAcceleration = 0.2f;
-			MaxStaminaRegenerationSpeed = 3f;
-			StaminaRegenerationTimerMax = 600;
+			MaxStamina = 100;
+			StaminaRegenerationAcceleration = 0.02f;
+			MaxStaminaRegenerationSpeed = 0.8f;
+			StaminaRegenerationTimerMax = 300;
 			staminaUsageMultiplyer = 1;
 
 			if (AcidCobwebBonusReload > 0)
@@ -148,13 +149,16 @@ namespace Terrapain.Common.Player
 
 			if (StaminaRegenerationTimer > 0)
 			{
-				StaminaRegenerationTimer--;
+				if (!Player.ItemAnimationActive)
+				{
+					StaminaRegenerationTimer--;
+				}
 			}
 			else
 			{
 				StaminaRegeneration = MathF.Min(StaminaRegeneration + StaminaRegenerationAcceleration, MaxStaminaRegenerationSpeed);
 			}
-			Stamina = MathF.Min(Stamina + StaminaRegeneration, MaxStamina);
+			Stamina = MathHelper.Clamp(Stamina + StaminaRegeneration, 0, MaxStamina);
 			Player.GetDamage(DamageClass.Melee) *= StaminaDamageBuff;
 
 			_dash = null;

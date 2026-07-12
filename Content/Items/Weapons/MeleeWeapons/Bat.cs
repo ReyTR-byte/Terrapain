@@ -22,11 +22,11 @@ namespace Terrapain.Content.Items.Weapons.MeleeWeapons
             Item.height = 64;
             Item.knockBack = 15;
             Item.damage = 25;
-            Item.useTime = 50;
             Item.useAnimation = 50;
             Item.UseSound = SoundID.Item1;
             Item.useStyle = TGlobalItem.BatUseStyle;
             Item.value = Item.buyPrice(gold: 4, silver: 50);
+            Item.GetT().StaminaUsage = 3f;
         }
         public override bool AltFunctionUse(Player player)
         {

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Content;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Terrapain.Common.Global
@@ -12,7 +14,16 @@ namespace Terrapain.Common.Global
     {
         public override bool AppliesToEntity(Item entity, bool lateInstantiation)
         {
-            return base.AppliesToEntity(entity, lateInstantiation);
+            return entity.DamageType == DamageClass.Melee || entity.DamageType == DamageClass.MeleeNoSpeed;
+        }
+        public override void SetDefaults(Item entity)
+        {
+            switch (entity.type)
+            {
+                case ItemID.FieryGreatsword:
+                    entity.GetT().StaminaUsage = 3;
+                    break;
+            }
         }
     }
 }

@@ -156,14 +156,17 @@ namespace Terrapain.Common.Global
 			if (MassiveSwords.Contains(entity.type) || ((entity.pick > 0 || entity.axe > 0 || entity.hammer > 0) && entity.useStyle == ItemUseStyleID.Swing)) {
 				entity.useStyle = MassiveSwing;
 				entity.useTurn = false;
+				StaminaUsage = 2.5f;
 			}
 			else if (NormalSwords.Contains(entity.type)){
 				entity.useStyle = NormalSwing;
 				entity.useTurn = false;
+				StaminaUsage = 1.8f;
 			}
 			else if (LightSwords.Contains(entity.type)){
 				entity.useStyle = LightSwing;
 				entity.useTurn = false;
+				StaminaUsage = 1.2f;
 			}
             else if (Bows.Contains(entity.type))
             {
@@ -176,6 +179,7 @@ namespace Terrapain.Common.Global
 			else if (entity.useStyle == ItemUseStyleID.Shoot)
 			{
 				entity.useStyle = ShootOverride;
+				StaminaUsage = 0.8f;
             }
             switch (entity.type)
 			{
@@ -270,22 +274,26 @@ namespace Terrapain.Common.Global
 
         public override bool? UseItem(Item item, Terraria.Player player)
         {
-			if ((item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed) && player.itemAnimation == player.itemAnimationMax)
-			{
-				player.Custom().Stamina -= item.GetT().StaminaUsage * player.Custom().staminaUsageMultiplyer;
-				player.Custom().StaminaRegenerationTimer = player.Custom().StaminaRegenerationTimerMax;
-				player.Custom().StaminaRegeneration = 0;
-            }
 			return null;
         }
-        public override float UseAnimationMultiplier(Item item, Terraria.Player player)
+        public override float UseSpeedMultiplier(Item item, Terraria.Player player)
         {
-			if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
+            //Functions.Chatic("UseSpeedMultiplyer");
+            if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
                 return player.Custom().StaminaUseSpeedBuff;
 			return 1;
         }
         public override void UseAnimation(Item item, Terraria.Player player)
         {
+            if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
+            {
+                Functions.Chatic(player.Custom().Stamina);
+                Functions.Chatic(player.itemTimeMax);
+				Functions.Chatic(player.itemAnimationMax);
+                player.Custom().Stamina -= item.GetT().StaminaUsage * player.Custom().staminaUsageMultiplyer;
+                player.Custom().StaminaRegenerationTimer = player.Custom().StaminaRegenerationTimerMax;
+                player.Custom().StaminaRegeneration = 0;
+            }
             if (item.useStyle == ItemUseStyleID.Swing)
             {
                 player.ChangeDir(Math.Sign(Main.MouseWorld.X - player.MountedCenter.X));
@@ -318,7 +326,7 @@ namespace Terrapain.Common.Global
 						player.itemRotation = Functions.AngleFromVector(Vector2.UnitX * -1);
 					if (player.velocity.X != 0)
 						player.ChangeDir(player.velocity.X.NonZeroSign());
-					player.itemTime = player.itemAnimationMax + 1;
+					//player.itemTime = player.itemAnimationMax + 1;
                     player.itemAnimation = player.itemAnimationMax + 1;
 					timer++;
                 }
@@ -335,7 +343,7 @@ namespace Terrapain.Common.Global
 						}
                         SoundEngine.PlaySound(SoundID.Item1, player.Center);
                     }
-                    player.itemRotation += (float)Math.PI / player.itemAnimationMax * player.direction * swingDir;
+                    player.itemRotation += MathF.PI / player.itemAnimationMax * player.direction * swingDir;
 					resetTimer = true;
                 }
 				Vector2 offset = item.ModItem.HoldoutOffset().Value.RotatedBy(player.itemRotation * player.direction);

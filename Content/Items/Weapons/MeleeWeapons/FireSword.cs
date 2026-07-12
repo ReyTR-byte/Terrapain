@@ -37,6 +37,7 @@ namespace Terrapain.Content.Items.Weapons.MeleeWeapons
             Item.shoot = ModContent.ProjectileType<FireBall>();
             Item.shootSpeed = 8;
             Item.value = Item.buyPrice(gold: 6);
+            Item.GetT().StaminaUsage = 2.5f;
         }
         UnifiedRandom ur = new UnifiedRandom();
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

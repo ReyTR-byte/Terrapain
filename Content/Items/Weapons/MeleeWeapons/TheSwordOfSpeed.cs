@@ -35,6 +35,7 @@ namespace Terrapain.Content.Items.Weapons.MeleeWeapons
 			Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true;
             Item.value = Item.buyPrice(gold: 6);
+			Item.GetT().StaminaUsage = 0.5f;
         }
 
 		public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)

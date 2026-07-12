@@ -71,14 +71,14 @@ namespace Terrapain.Common.Global.UseStyles
                         if (/*v2.X > 0 || (v2.X == 0 && */player.direction == 1)
                         {
                             ms.angleBetween = NormalizeRotation(AngleBetweenVectors(v1, v2));
-                            player.itemAnimation = (int)(ms.angleBetween / MathF.PI * player.HeldItem.useAnimation / 4 * 3 + player.HeldItem.useAnimation / 4f) + 1;
+                            player.itemAnimation = (int)(ms.angleBetween / MathF.PI * player.itemAnimation / 4 * 3 + player.itemAnimation / 4f) + 1;
                             player.itemAnimationMax = player.itemAnimation;
                             ms.hitDir = -1;
                         }
                         else
                         {
                             ms.angleBetween = NormalizeRotation(AngleBetweenVectors(v2, v1));
-                            player.itemAnimation = (int)(ms.angleBetween / MathF.PI * player.HeldItem.useAnimation / 4 * 3 + player.HeldItem.useAnimation / 4f) + 1;
+                            player.itemAnimation = (int)(ms.angleBetween / MathF.PI * player.itemAnimation / 4 * 3 + player.itemAnimation / 4f) + 1;
                             player.itemAnimationMax = player.itemAnimation;
                             ms.hitDir = 1;
                         }
@@ -88,14 +88,14 @@ namespace Terrapain.Common.Global.UseStyles
                         if (/*v2.X > 0 || (v2.X == 0 && */player.direction == 1)
                         {
                             ms.angleBetween = NormalizeRotation(AngleBetweenVectors(v2, v1));
-                            player.itemAnimation = (int)(ms.angleBetween / MathF.PI * player.HeldItem.useAnimation / 4 * 3 + player.HeldItem.useAnimation / 4f) + 1;
+                            player.itemAnimation = (int)(ms.angleBetween / MathF.PI * player.itemAnimation / 4 * 3 + player.itemAnimation / 4f) + 1;
                             player.itemAnimationMax = player.itemAnimation;
                             ms.hitDir = 1;
                         }
                         else
                         {
                             ms.angleBetween = NormalizeRotation(AngleBetweenVectors(v1, v2));
-                            player.itemAnimation = (int)(ms.angleBetween / MathF.PI * player.HeldItem.useAnimation / 4 * 3 + player.HeldItem.useAnimation / 4f) + 1;
+                            player.itemAnimation = (int)(ms.angleBetween / MathF.PI * player.itemAnimation / 4 * 3 + player.itemAnimation / 4f) + 1;
                             player.itemAnimationMax = player.itemAnimation;
                             ms.hitDir = -1;
                         }
