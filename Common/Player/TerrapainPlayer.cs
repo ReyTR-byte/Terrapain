@@ -53,6 +53,19 @@ namespace Terrapain.Common.Player
 		public bool bootsActiveAccessory;
 		public int oldLifeRegen;
 
+		public float Stamina = 100;
+        public int StaminaRegenerationTimer;
+        public int StaminaRegenerationTimerMax;
+		public float StaminaRegeneration;
+		public float MaxStaminaRegenerationSpeed;
+		public float StaminaRegenerationAcceleration;
+		public float MaxStamina;
+		public float staminaUsageMultiplyer;
+
+		public float StaminaDamageBuff => Stamina / 100 * 1.5f + 0.2f;
+		public float MaxStaminaDamageBuff => MaxStamina / 100 * 1.5f + 0.2f;
+        public float StaminaUseSpeedBuff => Stamina / 100 * 1.1f + 0.5f;
+        public float MaxStaminaUseSpeedBuff => MaxStamina / 100 * 1.1f + 0.5f;
         public Dash Dash
 		{
 			get => _dash;
@@ -77,6 +90,7 @@ namespace Terrapain.Common.Player
         public override void Load()
         {
             On_Player.SpawnFastRunParticles += On_Player_SpawnFastRunParticles;
+			//On_Player.ApplyItemTime 
         }
         public override void Unload()
         {
@@ -113,6 +127,12 @@ namespace Terrapain.Common.Player
 			AcidCobwebBonus = false;
 			GranithShellChestplateBonus = false;
 
+			StaminaRegenerationTimerMax = 100;
+			StaminaRegenerationAcceleration = 0.2f;
+			MaxStaminaRegenerationSpeed = 3f;
+			StaminaRegenerationTimerMax = 600;
+			staminaUsageMultiplyer = 1;
+
 			if (AcidCobwebBonusReload > 0)
 			{ 
 				AcidCobwebBonusReload--;
@@ -125,6 +145,18 @@ namespace Terrapain.Common.Player
 			{
 				StarPowerSetReload--;
 			}
+
+			if (StaminaRegenerationTimer > 0)
+			{
+				StaminaRegenerationTimer--;
+			}
+			else
+			{
+				StaminaRegeneration = MathF.Min(StaminaRegeneration + StaminaRegenerationAcceleration, MaxStaminaRegenerationSpeed);
+			}
+			Stamina = MathF.Min(Stamina + StaminaRegeneration, MaxStamina);
+			Player.GetDamage(DamageClass.Melee) *= StaminaDamageBuff;
+
 			_dash = null;
 		}
 		public void ResetAbilities(string reason)

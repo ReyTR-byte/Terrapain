@@ -44,6 +44,7 @@ namespace Terrapain.Common.Global
 		public Vector2? DrawOrigin = null;
 		public bool[] hitList = new bool[Main.npc.Length];
 		float usedShootSpeedBonus;
+		public float StaminaUsage = 1;
 
 		public ActiveAccessory ActiveAccesoryModItem;
 		public VanillaItemActiveAccessory ActiveAccessoryVanillaItem;
@@ -53,11 +54,11 @@ namespace Terrapain.Common.Global
 			121,
 			//ItemID.CopperAxe,
 			//ItemID.GoldAxe,
-   //         ItemID.CopperPickaxe,
+			//ItemID.CopperPickaxe,
 			//ItemID.AcornAxe,
 			//ItemID.IronAxe,
 			//ItemID.LeadAxe,
-   //         ItemID.LucyTheAxe,
+			//ItemID.LucyTheAxe,
 			//ItemID.NebulaAxe,
 			//ItemID.PickaxeAxe,
 			//ItemID.PlatinumAxe,
@@ -85,16 +86,16 @@ namespace Terrapain.Common.Global
 			//ItemID.NebulaPickaxe,
 			//ItemID.NightmarePickaxe,
 			//ItemID.OrichalcumPickaxe,
-   //         ItemID.PalladiumPickaxe,
+			//ItemID.PalladiumPickaxe,
 			//ItemID.PlatinumPickaxe,
-   //         ItemID.SilverPickaxe,
-   //         ItemID.SolarFlarePickaxe,
-   //         ItemID.SpectrePickaxe,
-   //         ItemID.StardustPickaxe,
-   //         ItemID.TinPickaxe,
-   //         ItemID.TitaniumPickaxe,
+			//ItemID.SilverPickaxe,
+			//ItemID.SolarFlarePickaxe,
+			//ItemID.SpectrePickaxe,
+			//ItemID.StardustPickaxe,
+			//ItemID.TinPickaxe,
+			//ItemID.TitaniumPickaxe,
 			//ItemID.TungstenPickaxe,
-   //         ItemID.VortexPickaxe,
+			//ItemID.VortexPickaxe,
         };
         public int[] NormalSwords =
         {
@@ -267,6 +268,22 @@ namespace Terrapain.Common.Global
 		int swingDir;
 		bool resetTimer;
 
+        public override bool? UseItem(Item item, Terraria.Player player)
+        {
+			if ((item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed) && player.itemAnimation == player.itemAnimationMax)
+			{
+				player.Custom().Stamina -= item.GetT().StaminaUsage * player.Custom().staminaUsageMultiplyer;
+				player.Custom().StaminaRegenerationTimer = player.Custom().StaminaRegenerationTimerMax;
+				player.Custom().StaminaRegeneration = 0;
+            }
+			return null;
+        }
+        public override float UseAnimationMultiplier(Item item, Terraria.Player player)
+        {
+			if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
+                return player.Custom().StaminaUseSpeedBuff;
+			return 1;
+        }
         public override void UseAnimation(Item item, Terraria.Player player)
         {
             if (item.useStyle == ItemUseStyleID.Swing)
