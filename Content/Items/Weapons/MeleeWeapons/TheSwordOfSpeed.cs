@@ -26,7 +26,6 @@ namespace Terrapain.Content.Items.Weapons.MeleeWeapons
 			Item.DamageType = DamageClass.MeleeNoSpeed;
 			Item.width = 66;
 			Item.height = 66;
-			Item.useTime = speed;
 			Item.useAnimation = speed;
 			Item.useStyle = TGlobalItem.LightSwing;
 			Item.knockBack = 6;
@@ -43,7 +42,6 @@ namespace Terrapain.Content.Items.Weapons.MeleeWeapons
 			if (speed > maxspeed)
 			{
 				speed -= 1;
-				Item.useTime = speed;
 				Item.useAnimation = speed;
 			}
 			timer = timerrestart;

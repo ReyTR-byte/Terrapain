@@ -13,7 +13,6 @@ namespace Terrapain.Content.Items.Weapons.MeleeWeapons
 		public override void SetDefaults()
 		{
 			Item.damage = 20;
-			Item.useTime = 10;
 			Item.useAnimation = 10;
 			Item.DamageType = DamageClass.MeleeNoSpeed;
 			Item.width = 72;
