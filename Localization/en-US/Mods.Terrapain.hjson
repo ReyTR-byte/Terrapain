@@ -2,277 +2,150 @@
 
 Items: {
 	TheSwordOfSpeed: {
-		DisplayName: The Sword Of Speed
-		Tooltip:
-			'''
-			This sword getting faster with every attack
-			Sword will lose its speed if you dont attack
-			If you throw it, it will lose its speed immediately
-			'''
 	}
 
 	WoodenShield: {
-		DisplayName: Wooden Shield
-		Tooltip: Allow make dashes
 	}
 
 	PlatinumShield: {
-		DisplayName: Platinum Shield
-		Tooltip:
-			'''
-			+5% melee damage
-			Allow make dashes
-			'''
 	}
 
 	FlinxFurShield: {
-		DisplayName: Flinx Fur Shield
-		Tooltip:
-			'''
-			+10% summoner damage
-			Allow make dashes
-			'''
 	}
 
 	FossilShield: {
-		DisplayName: Fossil Shield
-		Tooltip:
-			'''
-			+10% ranged damage
-			Allow make dashes
-			'''
 	}
 
 	GoldenShield: {
-		DisplayName: Golden Shield
-		Tooltip:
-			'''
-			+5% melee damage
-			Allow make dashes
-			'''
 	}
 
 	JungleShield: {
-		DisplayName: Jungle Shield
-		Tooltip:
-			'''
-			+10% magic damage
-			Allow make dashes
-			'''
 	}
 
 	FlinxLeggins: {
-		Tooltip: ""
-		DisplayName: Flinx Leggins
 	}
 
 	FlinxHood: {
-		Tooltip: ""
-		DisplayName: Flinx Hood
 	}
 
 	ExplosiveSkull: {
-		Tooltip: ""
-		DisplayName: Explosive Skull
 	}
 
 	CursedSpray: {
-		DisplayName: Cursed Spray
-		Tooltip: ""
 	}
 
 	InfernalLazerShotgun: {
-		DisplayName: Infernal Lazer Shotgun
-		Tooltip: ""
 	}
 
 	GlassSword: {
-		DisplayName: Glass Sword
-		Tooltip: ""
 	}
 
 	FireSword: {
-		DisplayName: Fire Sword
-		Tooltip: ""
 	}
 
 	SlimeBow: {
-		DisplayName: Slime Bow
-		Tooltip: ""
 	}
 
 	SlimeBullet: {
-		DisplayName: Slime Bullet
-		Tooltip: ""
 	}
 
 	SlimeStuff: {
-		DisplayName: Slime Stuff
-		Tooltip: ""
 	}
 
 	DeerFur: {
-		DisplayName: Deer Fur
-		Tooltip: ""
 	}
 
 	MassiveLensSharp: {
-		DisplayName: Massive Lens Sharp
-		Tooltip: ""
 	}
 
 	SuperDenseGel: {
-		DisplayName: Super Dense Gel
-		Tooltip: ""
 	}
 
 	TheForestRipper: {
-		DisplayName: The Forest Ripper
-		Tooltip: ""
 	}
 
 	SomeBullet: {
-		Tooltip: ""
-		DisplayName: Some Bullet
 	}
 
 	Headband: {
-		Tooltip: ""
-		DisplayName: Headband
 	}
 
 	HealfullHeadband: {
-		Tooltip: ""
-		DisplayName: Healfull Headband
 	}
 
 	DeepniteOre: {
-		DisplayName: Deepnite Ore
-		Tooltip: ""
 	}
 
 	ScorspiderSummon: {
-		Tooltip: ""
-		DisplayName: Scorspider Summon
 	}
 
 	TheDropOfPain: {
-		DisplayName: The Drop Of Pain
-		Tooltip:
-			'''
-			Choose the level of pain youll feel
-
-			'''
 	}
 
 	GlassKnife: {
-		DisplayName: Glass Knife
-		Tooltip: ""
 	}
 
 	Reflector: {
-		DisplayName: Reflector
-		Tooltip: ""
 	}
 
 	GelHeart: {
-		Tooltip: ""
-		DisplayName: Gel Heart
 	}
 
 	HoneyHeart: {
-		Tooltip: ""
-		DisplayName: Honey Heart
 	}
 
 	HeartOfEvil: {
-		Tooltip: ""
-		DisplayName: Heart Of Evil
 	}
 
 	DemonEyeHeart: {
-		Tooltip: ""
-		DisplayName: Demon Eye Heart
 	}
 
 	DeerclopeHeart: {
-		Tooltip: ""
-		DisplayName: Deerclope Heart
 	}
 
 	Boss2Heart: {
-		Tooltip: ""
-		DisplayName: Boss2 Heart
 	}
 
 	ScorspiderHeart: {
-		Tooltip: ""
-		DisplayName: Boss1 Heart
 	}
 
 	BoneHeart: {
-		Tooltip: ""
-		DisplayName: Bone Heart
 	}
 
 	FireStuff: {
-		DisplayName: Fire Stuff
-		Tooltip: ""
 	}
 
 	SimonsGlasses: {
-		DisplayName: Simons Glasses
-		Tooltip: ""
 	}
 
 	KitansGlasses: {
-		Tooltip: ""
-		DisplayName: Kitans Glasses
 	}
 
 	KaminasGlasses: {
-		Tooltip: ""
-		DisplayName: Kaminas Glasses
 	}
 
 	ScorspiderShellShard: {
-		Tooltip: ""
-		DisplayName: Scorspider Shell Shard
 	}
 
 	ScorspiderCobweb: {
-		Tooltip: ""
-		DisplayName: Scorspider Cobweb
 	}
 
 	GranithShellChestplate: {
-		Tooltip: ""
-		DisplayName: Granith Shell Chestplate
 	}
 
 	GranithShellLeggings: {
-		Tooltip: ""
-		DisplayName: Granith Shell Leggings
 	}
 
 	GranithShellHelmet: {
-		Tooltip: ""
-		DisplayName: Granith Shell Helmet
 	}
 
 	GranithShellMask: {
-		Tooltip: ""
-		DisplayName: Granith Shell Mask
 	}
 
 	ScorspiderHook: {
-		DisplayName: Scorspider Hook
-		Tooltip: ""
 	}
 
 	ScorspiderTrophy: {
-		DisplayName: Scorspider Trophy
-		Tooltip: ""
 	}
 
 	ScorspiderPaw: {
@@ -281,138 +154,81 @@ Items: {
 	}
 
 	ScorspiderBag: {
-		DisplayName: Scorspider Bag
-		Tooltip: ""
 	}
 
 	AcidCobwebMask: {
-		Tooltip: ""
-		DisplayName: Acid Cobweb Mask
 	}
 
 	AcidCobwebLeggings: {
-		Tooltip: ""
-		DisplayName: Acid Cobweb Leggings
 	}
 
 	AcidCobwebHood: {
-		Tooltip: ""
-		DisplayName: Acid Cobweb Hood
 	}
 
 	AcidCobwebChestplate: {
-		DisplayName: Нагрудник токсичной паутины
-		Tooltip:
-			'''
-			Немного увеличивает регенерацию здоровь и маны
-			Когда вы получаете урон - стреляете паутиной во врага
-			Если ваше здоровье меньше 25% паутина выпускается постоянно
-			'''
 	}
 
 	GranithBook: {
-		Tooltip: ""
-		DisplayName: Granith Book
 	}
 
 	Sharper: {
-		DisplayName: Sharper
-		Tooltip: ""
 	}
 
 	PizdetsKrutayaPushka: {
-		DisplayName: Pizdets Krutaya Pushka
-		Tooltip: ""
 	}
 
 	GranithStuff: {
-		DisplayName: Granith Stuff
-		Tooltip: ""
 	}
 
 	Gardeneer: {
-		DisplayName: Gardeneer
-		Tooltip: ""
 	}
 
 	ScorspiderRelic: {
-		Tooltip: ""
-		DisplayName: Scorspider Relic
 	}
 
 	ScorspiderHeartAccesory: {
-		DisplayName: Scorspider Heart Accesory
-		Tooltip: ""
 	}
 
 	UnarmedContract: {
-		DisplayName: Unarmed Contract
-		Tooltip: ""
 	}
 
 	StarPowerChestplate: {
-		DisplayName: Star Power Chestplate
-		Tooltip: ""
 	}
 
 	StarPowerHelmet: {
-		DisplayName: Star Power Helmet
-		Tooltip: ""
 	}
 
 	StarPowerLegings: {
-		DisplayName: Star Power Legings
-		Tooltip: ""
 	}
 
 	StarPowerAlloy: {
-		DisplayName: Star Power Alloy
-		Tooltip: ""
 	}
 
 	Battery: {
-		DisplayName: Battery
-		Tooltip: ""
 	}
 
 	Bat: {
-		DisplayName: Bat
-		Tooltip: ""
 	}
 
 	StarFuryBracelet: {
-		Tooltip: ""
-		DisplayName: Star Fury Bracelet
 	}
 
 	BrokenHeartPotion: {
-		DisplayName: Broken Heart Potion
-		Tooltip: ""
 	}
 
 	ChaosPotion: {
-		DisplayName: Chaos Potion
-		Tooltip: ""
 	}
 
 	JungleBullet: {
-		DisplayName: Jungle Bullet
-		Tooltip: Have a little autoaim
 	}
 
 	JungleStuff: {
-		DisplayName: Jungle Stuff
-		Tooltip: ""
 	}
 
 	ArrivedHeart: {
-		DisplayName: Arrived Heart
-		Tooltip: ""
 	}
 
 	StarPowerShield: {
-		DisplayName: Star Power Shield
-		Tooltip: ""
 	}
 }
 
@@ -423,13 +239,9 @@ Buffs: {
 	}
 
 	GlassKnifeBuff: {
-		DisplayName: Glass Knife Buff
-		Description: Mods.terrapain.Buffs.GlassSwordBuff.Description
 	}
 
 	BandageSickness: {
-		Description: Mods.terrapain.Buffs.BandageSickness.Description
-		DisplayName: Bandage Sickness
 	}
 
 	BonusAcorns: {
@@ -438,163 +250,52 @@ Buffs: {
 	}
 
 	ScorspiderAcid: {
-		DisplayName: Scorspider Acid
-		Description: Mods.terrapain.Buffs.ScorspiderAcid.Description
 	}
 
 	ScorspiderStingBuff: {
-		DisplayName: Scorspider Sting Buff
-		Description: Mods.Terrapain.Buffs.ScorspiderStingBuff.Description
 	}
 
 	DaybloomInfection: {
-		Description: Mods.Terrapain.Buffs.DaybloomInfection.Description
-		DisplayName: Daybloom Infection
 	}
 
 	Shocked: {
-		DisplayName: Shocked
-		Description: Mods.Terrapain.Buffs.Shocked.Description
 	}
 
 	BrokenHeart: {
-		DisplayName: Broken Heart
-		Description: Mods.Terrapain.Buffs.BrokenHeart.Description
 	}
 
 	Chaos: {
-		DisplayName: Chaos
-		Description: Mods.Terrapain.Buffs.Chaos.Description
 	}
 
 	Slimed: {
-		DisplayName: Slimed
-		Description: Mods.Terrapain.Buffs.Slimed.Description
 	}
 }
 
 Projectiles: {
-	GlassBouble.DisplayName: Glass Bouble
-	Lazer.DisplayName: Lazer
-	GlassKnife.DisplayName: Glass Knife
-	SlimeBullet.DisplayName: Slime Bullet
-	SlimeBall.DisplayName: Slime Ball
 	FireSplash.DisplayName: Fire Splash
-	Acorn.DisplayName: Acorn
-	SomeBullet.DisplayName: Some Bullet
 	TheForestRipperProjectile.DisplayName: The Forest Ripper Projectile
 	TheForestRipperSword.DisplayName: The Forest Ripper Sword
 	ScorspiderLeg.DisplayName: Scorspider Leg
 	ScorspiderTail.DisplayName: Scorspider Tail
-	ScorspiderSpike.DisplayName: Scorspider Spike
-	ScorspiderShellShard.DisplayName: Scorspider Shell Shard
-	GlassSwordProjectile.DisplayName: Glass Sword Projectile
-	ChargedBlood.DisplayName: Charged Blood
-	DemonicEyeLazer.DisplayName: Demonic Eye Lazer
-	PetEye.DisplayName: Pet Eye
-	ScorspiderRocket.DisplayName: Scorspider Rocket
-	ExplosiveSkull.DisplayName: Explosive Skull
 	TestProjectile.DisplayName: Test Projectile
-	FireBall.DisplayName: Fire Ball
-	BigSpiderSpike.DisplayName: Big Spider Spike
-	ScorspiderWeb.DisplayName: Scorspider Web
-	ScorspiderFlower.DisplayName: Scorspider Flower
-	ScorspiderHookProjectile.DisplayName: Scorspider Hook Projectile
-	ScorspiderSting.DisplayName: Scorspider Sting
-	CobwebBullet.DisplayName: Cobweb Bullet
 	SharperProj.DisplayName: Sharper Proj
-	BiggerGranithBall.DisplayName: Bigger Granith Ball
-	GranithBall.DisplayName: Granith Ball
-	GranithBallShard.DisplayName: Granith Ball Shard
-	GranithStuffProjectile.DisplayName: Granith Stuff Projectile
-	BlinkrootPetal.DisplayName: Blinkroot Petal
-	BouquetArrow.DisplayName: Bouquet Arrow
-	DaybloomPetal.DisplayName: Daybloom Petal
-	DeathweedPetal.DisplayName: Deathweed Petal
-	FireblossomPetal.DisplayName: Fireblossom Petal
-	MoonglowPetal.DisplayName: Moonglow Petal
-	ShiverthornPetal.DisplayName: Shiverthorn Petal
-	WaterleafPetal.DisplayName: Waterleaf Petal
 	BloodyLaser.DisplayName: Bloody Laser
-	UVLaser.DisplayName: U V Laser
-	BatProjectile.DisplayName: Bat Projectile
 	EoCServantSoul.DisplayName: Eo C Servant Soul
-	EoCLaser.DisplayName: Eo C Laser
-	GhostServantofCthulhu.DisplayName: Ghost Servantof Cthulhu
-	ServantofCthulhuSoul.DisplayName: Servantof Cthulhu Soul
-	BloodSpike.DisplayName: Blood Spike
-	JungleBullet.DisplayName: Jungle Bullet
-	JungleSeed.DisplayName: Jungle Seed
-	SapphireSharp.DisplayName: Sapphire Sharp
-	RubySharp.DisplayName: Ruby Sharp
-	EmeraldSharp.DisplayName: Emerald Sharp
-	AmethystSharp.DisplayName: Amethyst Sharp
-	SapphireStaff.DisplayName: Sapphire Staff
-	DesertGore.DisplayName: Desert Gore
-	ArrivedHeartProjectile.DisplayName: Arrived Heart Projectile
-	DiamondStaffLaser.DisplayName: Diamond Staff Laser
-	SlimeWall.DisplayName: Slime Wall
-	KingSlimeBall.DisplayName: King Slime Ball
-	Shuriken.DisplayName: Shuriken
 	KingSlimeKrownLaser.DisplayName: King Slime Krown Laser
-	Kunai.DisplayName: Kunai
-	SmokeBomb.DisplayName: Smoke Bomb
-	SmokeBombSmoke.DisplayName: Smoke Bomb Smoke
-	KingSlimeKatana.DisplayName: King Slime Katana
-	SlimeProjectile.DisplayName: Slime Projectile
-	CrownGem.DisplayName: Crown Gem
-	KingSlimeCrownLaser.DisplayName: King Slime Crown Laser
-	KingSlimeCrownLaser2.DisplayName: King Slime Crown Laser2
 }
 
 NPCs: {
 	DeadMelee.DisplayName: Dead Melee
 	DeadWings.DisplayName: Dead Wings
 	Scorspider.DisplayName: Scorspider
-	ScorspiderSting.DisplayName: Scorspider Sting
-	ScorspiderHead.DisplayName: Scorspider Head
-	ScorspiderBody.DisplayName: Scorspider Body
-	Suicide.DisplayName: Suicide
-	Torture.DisplayName: Torture
-	ScorspiderLittleMinionSpidersCocoon.DisplayName: Scorspider Little Minion Spiders Cocoon
-	SmallSpider.DisplayName: Small Spider
-	BigSpider.DisplayName: Big Spider
-	ScorspiderBigMinionSpiderCocoon.DisplayName: Scorspider Big Minion Spider Cocoon
-	FireShooterServantofCthulhu.DisplayName: Fire Shooter Servantof Cthulhu
-	HealerServantofCthulhu.DisplayName: Healer Servantof Cthulhu
-	LaserServantofCthulhu.DisplayName: Laser Servantof Cthulhu
-	SheildedServantofCthulhu.DisplayName: Sheilded Servantof Cthulhu
 
 	DemonMerchant: {
-		DeathMessage: Mods.Terrapain.NPCs.DemonMerchant.DeathMessage
-		Upgraded: Mods.Terrapain.NPCs.DemonMerchant.Upgraded
-		DisplayName: Demon Merchant
-
 		TownNPCMood: {
-			Content: Я довольный.
-			NoHome: Терпеть не могу, когда у меня нет дома.
-			FarFromHome: Я слишком далеко от дома.
-			LoveSpace: Я люблю, когда так много пространства.
-			DislikeCrowded: Мне не нравится то, как здесь людно.
-			HateCrowded: Я ненавижу то, как здесь людно.
-			LikeBiome: Мне нравится {BiomeName}.
-			DislikeBiome: Мне не нравится {BiomeName}.
-			DislikeNPC: Мне не нравится {NPCName}.
-			HateNPC: Я ненавижу {NPCName}.
-			LikeNPC_Princess: Мне нравится {NPCName}.
-			Princess_LovesNPC: Мне нравится {NPCName}.
 		}
 	}
-
-	NinjaKingSlime.DisplayName: King Slime
-	CrownedKingSlime.DisplayName: King Slime
-	KingSlimeCrown.DisplayName: King Slime Crown
 }
 
 Tiles: {
-	DeepniteOre.MapEntry: Deepnite Ore
-	HardenedCrimtaneBrick.MapEntry: Hardened Crimtane Brick
-	HardenedDemoniteBrick.MapEntry: Hardened Demonite Brick
 }
 
 NetworkText: {
@@ -666,44 +367,23 @@ Warns.CantAddAllItems: Не удалось добавить все предме�
 BossDespawn.ScorspiderDespawn: Скорпаук вернется тобой и твоими жителями
 
 Keybinds: {
-	Dash.DisplayName: Dash
-	RealiseHookedNPC.DisplayName: Realise Hooked NPC
-	ActiveAccesory1.DisplayName: Active Accesory1
-	ActiveAccesory2.DisplayName: Active Accesory2
-	ActiveAccesory3.DisplayName: Active Accesory3
-	ActiveAccesory4.DisplayName: Active Accesory4
-	ActiveAccesory5.DisplayName: Active Accesory5
-	ActiveAccesory6.DisplayName: Active Accesory6
-	ActiveAccesory7.DisplayName: Active Accesory7
 }
 
 Configs: {
 	ClientConfig: {
-		DisplayName: Client Config
-
 		UseShaders: {
-			Label: Use Shaders
-			Tooltip: ""
 		}
 
 		drawHitbox: {
-			Label: draw Hitbox
-			Tooltip: ""
 		}
 
 		hitboxColor: {
-			Label: hitbox Color
-			Tooltip: ""
 		}
 
 		LimboSpeed: {
-			Label: Limbo Speed
-			Tooltip: ""
 		}
 
 		Tips: {
-			Label: Tips
-			Tooltip: ""
 		}
 
 		CameraTime: {
@@ -717,18 +397,12 @@ Configs: {
 		}
 
 		CutsceneCameraZoom: {
-			Label: Cutscene Camera Zoom
-			Tooltip: ""
 		}
 
 		CutsceneHideUI: {
-			Label: Cutscene Hide U I
-			Tooltip: ""
 		}
 
 		SkipDifficultyChangeAnimation: {
-			Label: Skip Difficulty Change Animation
-			Tooltip: ""
 		}
 	}
 }
@@ -764,7 +438,6 @@ SetBonus: {
 	StarPowerSet: На противников которых вы ранили с неба падают звезды
 }
 
-DamageClasses.Unarmed.DisplayName: unarmed damage
 Unarmed.SetBonus.CactusArmor: Unarmed: Gives Thorns effect
 
 Tips: {
