@@ -79,12 +79,12 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         }
                         npc.velocity += npc.DirectionTo(t.Target.Center) * 2;
                         npc.ai[2] = Functions.AngleFromVector(npc.DirectionTo(t.Target.Center) * npc.spriteDirection);
-                        if (npc.Distance(t.Target.Center) < 500 && npc.ai[3] <= 0 && !(WorldDifficultySystem.suicide && t.savedTarget > -1 && t.savedTarget < Main.player.Length && t.SavedTarget.active && !Functions.SimpleColision(npc.Center, t.SavedTarget.position, t.SavedTarget.width, t.SavedTarget.height)))
+                        if (npc.Distance(t.Target.Center) < 500 && npc.ai[3] <= 0 && !(WorldDifficultySystem.suicide && t.savedTarget > -1 && t.savedTarget < Main.player.Length && t.SavedTarget.active && !Functions.CanHit(npc.Center, t.SavedTarget.position, t.SavedTarget.width, t.SavedTarget.height)))
                         {
                             npc.ai[0] = 1;
                             npc.ai[1] = 0;
                         }
-                        if ((npc.Distance(t.Target.Center) < 200 || (WorldDifficultySystem.suicide && t.savedTarget > -1 && t.savedTarget < Main.player.Length && t.SavedTarget.active && !Functions.SimpleColision(npc.Center, t.SavedTarget.position, t.SavedTarget.width, t.SavedTarget.height) && npc.Distance(t.Target.Center) < 500)) && npc.ai[3] >= 0)
+                        if ((npc.Distance(t.Target.Center) < 200 || (WorldDifficultySystem.suicide && t.savedTarget > -1 && t.savedTarget < Main.player.Length && t.SavedTarget.active && !Functions.CanHit(npc.Center, t.SavedTarget.position, t.SavedTarget.width, t.SavedTarget.height) && npc.Distance(t.Target.Center) < 500)) && npc.ai[3] >= 0)
                         {
                             npc.ai[0] = 2;
                             npc.ai[1] = 0;
@@ -131,7 +131,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
                         }
                         npc.ai[2] = Functions.AngleFromVector(npc.velocity * npc.spriteDirection);
 
-                        if (WorldDifficultySystem.suicide && !Functions.SimpleColision(npc.Center, t.SavedTarget.position, t.SavedTarget.width, t.SavedTarget.height))
+                        if (WorldDifficultySystem.suicide && !Functions.CanHit(npc.Center, t.SavedTarget.position, t.SavedTarget.width, t.SavedTarget.height))
                         {
                             npc.noTileCollide = true;
                         }

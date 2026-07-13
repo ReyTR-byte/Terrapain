@@ -975,7 +975,7 @@ namespace Terrapain.Content
             //Functions.Chatic(true);
             return true;
         }
-        public static bool SimpleColision(Vector2 Pos, Vector2 target, int width, int height)
+        public static bool CanHit(Vector2 Pos, Vector2 target, int width, int height)
 		{
 			if (Pos.X >= target.X && Pos.X <= target.X + width && Pos.Y >= target.Y && Pos.Y <= target.Y + height)
 			{

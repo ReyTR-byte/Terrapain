@@ -8,5 +8,9 @@ namespace Terrapain.Common.UI.Assets.ChargeStrips
 {
     public class DefaultDashChargeStrip : ChargeStrip
     {
+        public DefaultDashChargeStrip ()
+        {
+            origin = new Vector2(-2, 6);
+        }
     }
 }

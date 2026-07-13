@@ -99,14 +99,14 @@ namespace Terrapain.Content.Projectiles.Friendly
         }
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (target.Center.Distance(Mouse) < 100)
+            if (target.Center.Distance(Mouse) < 50)
             {
                 modifiers.FinalDamage *= 2;
             }
         }
         public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
         {
-            if (target.Center.Distance(Mouse) < 100)
+            if (target.Center.Distance(Mouse) < 50)
             {
                 modifiers.FinalDamage *= 2;
             }

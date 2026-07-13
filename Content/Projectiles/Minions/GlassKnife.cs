@@ -143,7 +143,7 @@ namespace Terrapain.Content.Projectiles.Minions
                         float between = Vector2.Distance(npc.Center, Projectile.Center);
                         bool closest = Vector2.Distance(Projectile.Center, targetCenter) > between;
                         bool inRange = between < distanceFromTarget;
-                        bool lineOfSight = Functions.SimpleColision(Projectile.Center, npc.position, npc.width, npc.height) || Functions.SimpleColision(owner.Center, npc.position, npc.width, npc.height);
+                        bool lineOfSight = Functions.CanHit(Projectile.Center, npc.position, npc.width, npc.height) || Functions.CanHit(owner.Center, npc.position, npc.width, npc.height);
 
                         bool closeThroughWall = between < 100f;
 

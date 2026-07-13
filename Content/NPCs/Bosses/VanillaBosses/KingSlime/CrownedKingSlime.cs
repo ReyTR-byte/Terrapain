@@ -188,7 +188,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 {
                     teleporting = true;
                     teleportPosition = Target.Center + new Vector2((rand.Next() == 0 ? -1 : 1) * 300, (rand.Next() == 0 ? -1 : 1) * 200);
-                    if (!SimpleColision(teleportPosition, Target.position, Target.width, Target.height))
+                    if (!CanHit(teleportPosition, Target.position, Target.width, Target.height))
                     {
                         teleportPosition = Target.Center;
                     }

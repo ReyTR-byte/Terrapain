@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace Terrapain.Common.UI.Assets.EmptyStrips
 {
-    public class DefaultEmptyStrip : EmptyStrip
+    public class StaminaEmptyStrip : EmptyStrip
     {
-        public DefaultEmptyStrip()
-        {
-            origin = new Vector2(0, 8);
-        }
     }
 }

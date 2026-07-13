@@ -197,7 +197,7 @@ namespace Terrapain.Content.Projectiles.Friendly
                     float between = Vector2.Distance(npc.Center, Projectile.Center + Projectile.velocity * 30);
                     bool closest = Vector2.Distance(Projectile.Center + Projectile.velocity * 30, targetCenter) > between;
                     bool inRange = between < distanceFromTarget;
-                    bool lineOfSight = SimpleColision(Projectile.Center, npc.position - (npc.position - Projectile.Center) / (npc.position - Projectile.Center).Length() * 60, npc.width, npc.height);
+                    bool lineOfSight = CanHit(Projectile.Center, npc.position - (npc.position - Projectile.Center) / (npc.position - Projectile.Center).Length() * 60, npc.width, npc.height);
 
                     if (((closest && inRange) || !foundTarget) && lineOfSight)
                     {

@@ -3,6 +3,12 @@
 	<!-- Import tModLoader mod properties -->
 	<Import Project="..\tModLoader.targets" />
 	<ItemGroup>
+	  <AdditionalFiles Remove="Common\UI\ResourceDisplaySets\**" />
+	  <Compile Remove="Common\UI\ResourceDisplaySets\**" />
+	  <EmbeddedResource Remove="Common\UI\ResourceDisplaySets\**" />
+	  <None Remove="Common\UI\ResourceDisplaySets\**" />
+	</ItemGroup>
+	<ItemGroup>
 	  <AdditionalFiles Remove="Assets\AutoloadedEffects\Shaders\EoCShader.fx" />
 	  <AdditionalFiles Remove="Assets\AutoloadedEffects\Shaders\EyeofCthulhuLensShader.fx" />
 	</ItemGroup>
@@ -32,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\UI\ResourceDisplaySets\" />
     <Folder Include="Content\Items\Weapons\SummonerWeapons\Новая папка\" />
   </ItemGroup>
 </Project>

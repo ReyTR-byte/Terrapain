@@ -69,7 +69,7 @@ namespace Terrapain.Content.Items.Accessories.ActiveAccessories
                 {
                     float between = Vector2.Distance(npc.Center, player.Center);
                     bool inRange = between < 700;
-                    bool lineOfSight = Functions.SimpleColision(player.Center, npc.position, npc.width, npc.height);
+                    bool lineOfSight = Functions.CanHit(player.Center, npc.position, npc.width, npc.height);
 
                     if (inRange && lineOfSight)
                     {

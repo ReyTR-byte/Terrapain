@@ -588,6 +588,11 @@ Mods: {
 				DisplayName: Гранитный посох
 				Tooltip: Призывает гранитные туррели
 			}
+
+			Vozdukhan: {
+				// DisplayName: Vozdukhan
+				// Tooltip: ""
+			}
 		}
 
 		Projectiles: {
@@ -653,6 +658,7 @@ Mods: {
 			// PetEye.DisplayName: Pet Eye
 			ScorspiderSting.DisplayName: Жало Скорпаука
 			// ReflectorLaser.DisplayName: Reflector Laser
+			// VozdukhanProjectile.DisplayName: Vozdukhan Projectile
 		}
 
 		Configs: {

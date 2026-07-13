@@ -61,7 +61,7 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
                     float between = Vector2.Distance(npc.Center, projectile.Center + projectile.velocity * 30);
                     bool closest = Vector2.Distance(projectile.Center + projectile.velocity * 35, targetCenter) > between;
                     bool inRange = between < distanceFromTarget;
-                    bool lineOfSight = SimpleColision(projectile.Center, npc.position - (npc.position - projectile.Center) / (npc.position - projectile.Center).Length() * 60, npc.width, npc.height);
+                    bool lineOfSight = CanHit(projectile.Center, npc.position - (npc.position - projectile.Center) / (npc.position - projectile.Center).Length() * 60, npc.width, npc.height);
 
                     if (((closest && inRange) || !foundTarget) && lineOfSight)
                     {

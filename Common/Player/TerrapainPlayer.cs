@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Assets.Extratextures;
 using Terrapain.Common.Global;
 using Terrapain.Common.System;
+using Terrapain.Common.UI;
 using Terrapain.Content;
 using Terrapain.Content.Auras;
 using Terrapain.Content.Buffs;
@@ -160,6 +161,10 @@ namespace Terrapain.Common.Player
 			}
 			Stamina = MathHelper.Clamp(Stamina + StaminaRegeneration, 0, MaxStamina);
 			Player.GetDamage(DamageClass.Melee) *= StaminaDamageBuff;
+			if (Stamina < MaxStamina)
+			{
+                TerrapainUIManager.Open<Stamina>();
+            }
 
 			_dash = null;
 		}

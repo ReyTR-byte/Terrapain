@@ -482,6 +482,11 @@ Mods: {
 				DisplayName: Granith Stuff
 				Tooltip: ""
 			}
+
+			Vozdukhan: {
+				DisplayName: Vozdukhan
+				Tooltip: ""
+			}
 		}
 
 		Projectiles: {
@@ -547,6 +552,7 @@ Mods: {
 			PetEye.DisplayName: Pet Eye
 			ScorspiderSting.DisplayName: Scorspider Sting
 			ReflectorLaser.DisplayName: Reflector Laser
+			VozdukhanProjectile.DisplayName: Vozdukhan Projectile
 		}
 
 		Configs: {

@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace Terrapain.Common.UI.Assets.ChargeStrips
 {
-    public class DefaultAbilityChargeStrip : ChargeStrip
+    public class StaminaChargeStrip : ChargeStrip
     {
-        public DefaultAbilityChargeStrip()
-        {
-            origin = new Vector2(-2, 6);
-        }
     }
 }

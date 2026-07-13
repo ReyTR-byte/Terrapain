@@ -43,6 +43,7 @@ namespace Terrapain.Common.UI
         public static Asset<Texture2D> PresetCustomButton { get; private set; }
 
         public static Asset<Texture2D> ReloadButtonTexture { get; private set; }
+
         public static Asset<Texture2D> DisplayAllButtonTexture { get; private set; }
 
         public static Asset<Texture2D> OncomingMutantTexture { get; private set; }
