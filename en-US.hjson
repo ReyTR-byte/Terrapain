@@ -546,6 +546,7 @@ Mods: {
 			GranithStuffProjectile.DisplayName: Granith Stuff Projectile
 			PetEye.DisplayName: Pet Eye
 			ScorspiderSting.DisplayName: Scorspider Sting
+			ReflectorLaser.DisplayName: Reflector Laser
 		}
 
 		Configs: {

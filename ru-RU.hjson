@@ -652,6 +652,7 @@ Mods: {
 			GranithStuffProjectile.DisplayName: Гранитная ракетно-пусковая станция
 			// PetEye.DisplayName: Pet Eye
 			ScorspiderSting.DisplayName: Жало Скорпаука
+			// ReflectorLaser.DisplayName: Reflector Laser
 		}
 
 		Configs: {
