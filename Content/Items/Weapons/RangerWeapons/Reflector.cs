@@ -1,7 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Terrapain.Common.Global;
 using Terrapain.Content.Items.Ingredients;
 using Terrapain.Content.Projectiles.Enemies;
+using Terrapain.Content.Projectiles.Friendly;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -36,12 +38,12 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 
 			// Weapon Properties
 			Item.DamageType = DamageClass.Ranged; // Sets the damage type to ranged.
-			Item.damage = 11; // Sets the item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage added together.
+			Item.damage = 44; // Sets the item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage added together.
 			Item.knockBack = 6f; // Sets the item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback added together.
 			Item.noMelee = true; // So the item's animation doesn't do damage.
 
 			// Gun Properties
-			Item.shoot = ModContent.ProjectileType<DemonicEyeLazer>(); // For some reason, all the guns in the vanilla source have this.
+			Item.shoot = ModContent.ProjectileType<ReflectorLaser>(); // For some reason, all the guns in the vanilla source have this.
 			Item.shootSpeed = 15f; // The speed of the projectile (measured in pixels per frame.)
             Item.value = Item.buyPrice(gold: 7);
         }
@@ -52,19 +54,23 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 		{
 			const int NumProjectiles = 4; // The humber of projectiles that this gun will shoot.
 
-			int ai2 = rand.Next(10);
-		
-			for (int i = 0; i < NumProjectiles; i++)
+			int color = rand.Next(10);
+
+			Vector2 pos = player.MountedCenter + TGlobalItem.GetHandOffset(player);
+			Vector2 dir = pos.DirectionTo(Main.MouseWorld);
+            float rot = dir.ToRotation();
+			pos += dir * 60;
+			float width = 4.5f;
+            for (int i = 0; i < NumProjectiles; i++)
 			{
-				position = player.Center + velocity / velocity.Length() * 60;
-				position.X += (float)(6 - 3 * i) * (float)Math.Asin(velocity.Y / velocity.Length());
-				position.Y += (float)(6 - 3 * i) * (float)Math.Asin(velocity.X / velocity.Length());
+				position = pos;
+				position += (width * 1.5f - width * i) * dir.RotatedBy(MathF.PI / 2);
 				Vector2 newVelocity;
-				if ((Main.MouseWorld - player.Center).Length() > 75)
-					newVelocity = (Main.MouseWorld - position) / (Main.MouseWorld - position).Length() * velocity.Length();
+				if ((Main.MouseWorld - player.MountedCenter - TGlobalItem.GetHandOffset(player)).Length() > 75)
+					newVelocity = (Main.MouseWorld - position);
 				else
-					newVelocity = (player.Center + velocity / velocity.Length() * 75 - position) / (player.Center + velocity / velocity.Length() * 70 - position).Length() * velocity.Length();
-				Projectile.NewProjectileDirect(source, position, newVelocity, type, damage, knockback, player.whoAmI, Main.MouseWorld.X, Main.MouseWorld.Y, ai2);
+					newVelocity = (player.MountedCenter + TGlobalItem.GetHandOffset(player) + dir * 75 - position);
+				Projectile.NewProjectileDirect(source, position, newVelocity, type, damage, knockback, player.whoAmI, color, Main.MouseWorld.X, Main.MouseWorld.Y);
 			}
 			return false; // Return false because we don't want tModLoader to shoot projectile
 		}
@@ -78,7 +84,7 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 		}
         public override Vector2? HoldoutOrigin()
         {
-            return new Vector2(-16, 0);
+            return new Vector2(-16, 4);
         }
 	}
 }
