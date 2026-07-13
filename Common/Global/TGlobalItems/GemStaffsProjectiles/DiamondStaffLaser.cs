@@ -47,6 +47,7 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
             Projectile.penetrate = 1;
             Projectile.friendly = true;
             Projectile.extraUpdates = 1;
+            Projectile.ignoreWater = true;
             //Projectile.GetT().useVanillaDrawing = false;
         }
         public override bool? CanCutTiles()

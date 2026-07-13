@@ -11,7 +11,17 @@ namespace Terrapain.Content.Projectiles.Enemies
 {
 	public class DemonicEyeLazer : ModProjectile
 	{
-        Microsoft.Xna.Framework.Color[] colors = new Microsoft.Xna.Framework.Color[] { Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Blue, Microsoft.Xna.Framework.Color.Red, Microsoft.Xna.Framework.Color.Green, Microsoft.Xna.Framework.Color.Yellow, Microsoft.Xna.Framework.Color.Purple, Microsoft.Xna.Framework.Color.Orange, Microsoft.Xna.Framework.Color.Pink, Microsoft.Xna.Framework.Color.Turquoise };
+        Color[] colors = new Color[] { 
+            Color.White, 
+            Color.Blue, 
+            Color.Red, 
+            Color.Green, 
+            Color.Yellow, 
+            Color.Purple, 
+            Color.Orange, 
+            Color.Pink, 
+            Color.Turquoise 
+        };
         private float FocusX
         {
             get => Projectile.ai[0];
@@ -57,7 +67,7 @@ namespace Terrapain.Content.Projectiles.Enemies
             }
         }
 
-        public override bool PreDraw(ref Microsoft.Xna.Framework.Color lightColor)
+        public override bool PreDraw(ref Color lightColor)
         {
             lightColor = colors[color];
             return true;
