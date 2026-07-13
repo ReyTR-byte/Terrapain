@@ -24,7 +24,7 @@ namespace Terrapain.Common.Global
 		public override bool InstancePerEntity => true;
 		public bool activeAccessory;
         public bool dashAccessory;
-		public bool CanUse = true;
+		//public bool CanUse = true;
         public float ShootRotation;
 		public float ShootSpeedBonus;
 		public int dust = -1;
@@ -44,7 +44,7 @@ namespace Terrapain.Common.Global
 		public Vector2? DrawOrigin = null;
 		public bool[] hitList = new bool[Main.npc.Length];
 		float usedShootSpeedBonus;
-		public float StaminaUsage = 1;
+		public float StaminaUsage = 0;
 
 		public ActiveAccessory ActiveAccesoryModItem;
 		public VanillaItemActiveAccessory ActiveAccessoryVanillaItem;
@@ -150,23 +150,31 @@ namespace Terrapain.Common.Global
         {
 			ModLoad();
         }
-		public virtual void ModSetDefaults(Item entity) { }
         public override void SetDefaults(Item entity)
         {
 			if (MassiveSwords.Contains(entity.type) || ((entity.pick > 0 || entity.axe > 0 || entity.hammer > 0) && entity.useStyle == ItemUseStyleID.Swing)) {
 				entity.useStyle = MassiveSwing;
 				entity.useTurn = false;
-				StaminaUsage = 2.5f;
+				if (StaminaUsage == 0)
+				{
+					StaminaUsage = 6f;
+				}
 			}
 			else if (NormalSwords.Contains(entity.type)){
 				entity.useStyle = NormalSwing;
 				entity.useTurn = false;
-				StaminaUsage = 1.8f;
+				if (StaminaUsage == 0)
+				{
+					StaminaUsage = 2.3f;
+				}
 			}
 			else if (LightSwords.Contains(entity.type)){
 				entity.useStyle = LightSwing;
 				entity.useTurn = false;
-				StaminaUsage = 1.2f;
+				if (StaminaUsage == 0)
+				{
+					StaminaUsage = 1.6f;
+				}
 			}
             else if (Bows.Contains(entity.type))
             {
@@ -179,7 +187,10 @@ namespace Terrapain.Common.Global
 			else if (entity.useStyle == ItemUseStyleID.Shoot)
 			{
 				entity.useStyle = ShootOverride;
-				StaminaUsage = 0.8f;
+				if (StaminaUsage == 0)
+				{
+					StaminaUsage = 0.8f;
+				}
             }
             switch (entity.type)
 			{
@@ -189,7 +200,10 @@ namespace Terrapain.Common.Global
 					entity.consumable = false;
 					break;
 			}
-			ModSetDefaults(entity);
+			if (StaminaUsage == 0)
+			{
+				StaminaUsage = 1.2f;
+			}
         }
 		public override bool Shoot(Item item, Terraria.Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
@@ -291,7 +305,7 @@ namespace Terrapain.Common.Global
                 Functions.Chatic(player.itemTimeMax);
 				Functions.Chatic(player.itemAnimationMax);
                 player.Custom().Stamina -= item.GetT().StaminaUsage * player.Custom().staminaUsageMultiplyer;
-                player.Custom().StaminaRegenerationTimer = player.Custom().StaminaRegenerationTimerMax;
+                player.Custom().StaminaRegenerationTimer = (int)(player.Custom().StaminaRegenerationTimerMax * (1 + player.Custom().Stamina / 50));
                 player.Custom().StaminaRegeneration = 0;
             }
             if (item.useStyle == ItemUseStyleID.Swing)
@@ -589,13 +603,13 @@ namespace Terrapain.Common.Global
 
         public override bool CanUseItem(Item item, Terraria.Player player)
         {
+			if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
+			{
+				return StaminaUsage * player.Custom().staminaUsageMultiplyer < player.Custom().Stamina;
+			}
 			if (player.GetModPlayer<TerrapainPlayer>().unarmed && item.damage > 0 && item.pick == 0 && item.axe == 0 && item.hammer == 0 && !item.accessory && !Main.projHook[item.shoot])
 			{
 				return false;
-			}
-			if (!CanUse)
-			{
-				return false; 
 			}
 			return base.CanUseItem(item, player);
         }

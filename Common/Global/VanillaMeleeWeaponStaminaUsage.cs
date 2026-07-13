@@ -21,7 +21,7 @@ namespace Terrapain.Common.Global
             switch (entity.type)
             {
                 case ItemID.FieryGreatsword:
-                    entity.GetT().StaminaUsage = 3;
+                    entity.GetT().StaminaUsage = 7;
                     break;
             }
         }
