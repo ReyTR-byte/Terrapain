@@ -1483,7 +1483,7 @@ namespace Terrapain.Content
 		}
 		public static void RayCutTile(Vector2 start, Vector2 end, Player player)
 		{
-			bool[] tileCutIgnorance = player.GetTileCutIgnorance(true, false);
+			bool[] tileCutIgnorance = player.GetTileCutIgnorance(false, false);
             Vector2 crossPoint = Vector2.Zero;
             start /= 16;
             end /= 16;
@@ -1497,7 +1497,7 @@ namespace Terrapain.Content
             {
                 for (int h = 0; Math.Abs(h) <= Math.Abs(H); h += H == 0 ? 1 : Math.Sign(H))
                 {
-                    if (Main.tile[LeastX + w, LeastY + h].HasTile && Main.tileCut[Main.tile[LeastX + w, LeastY + h].TileType] && tileCutIgnorance[Main.tile[LeastX + w, LeastY + h].TileType] && WorldGen.CanCutTile(LeastX + w, LeastY + h, Terraria.Enums.TileCuttingContext.AttackProjectile))
+                    if (Main.tile[LeastX + w, LeastY + h].HasTile && Main.tileCut[Main.tile[LeastX + w, LeastY + h].TileType] && !tileCutIgnorance[Main.tile[LeastX + w, LeastY + h].TileType] && WorldGen.CanCutTile(LeastX + w, LeastY + h, Terraria.Enums.TileCuttingContext.AttackProjectile))
                     {
 						if (dir.Y != 0)
 						{
@@ -1534,11 +1534,15 @@ namespace Terrapain.Content
 							if (result != Vector2.Zero)
 							{
 								WorldGen.KillTile(LeastX + w, LeastY + h);
-							}
+                                if (Main.netMode != 0)
+                                    NetMessage.SendData(17, -1, -1, null, 0, LeastX + w, LeastY + h);
+                            }
 						}
 						else
 						{
                             WorldGen.KillTile(LeastX + w, LeastY + h);
+                            if (Main.netMode != 0)
+                                NetMessage.SendData(17, -1, -1, null, 0, LeastX + w, LeastY + h);
                         }
                     }
                 }
