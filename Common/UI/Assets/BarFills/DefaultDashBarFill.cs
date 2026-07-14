@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Terrapain.Common.UI.Assets.ChargeStrips
+namespace Terrapain.Common.UI.Assets.BarFills
 {
-    public class DefaultDashChargeStrip : ChargeStrip
+    public class DefaultDashBarFill : BarFill
     {
-        public DefaultDashChargeStrip ()
+        public DefaultDashBarFill ()
         {
             origin = new Vector2(-2, 6);
         }

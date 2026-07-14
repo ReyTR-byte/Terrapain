@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Terrapain.Common.UI.Assets.EmptyStrips
+namespace Terrapain.Common.UI.Assets.BarFills
 {
-    public class StaminaEmptyStrip : EmptyStrip
+    public class WidthStaminaBarFill : BarFill
     {
     }
 }

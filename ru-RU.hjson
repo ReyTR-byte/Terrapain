@@ -705,6 +705,63 @@ Mods: {
 					// Tooltip: ""
 				}
 			}
+
+			UIConfig: {
+				DisplayName: UI Config
+
+				sst: {
+					// Label: Stamina bar type
+					// Tooltip: ""
+				}
+
+				staminaBarType: {
+					Label: Вид шкалы выносливости
+					Tooltip: ""
+				}
+
+				EmptyColor: {
+					Label: Цвет пустой шкалы
+					Tooltip: Цвет, к которому стремится шкала при опустошении
+				}
+
+				FullColor: {
+					Label: Цвет полной шкалы
+					Tooltip: Цвет, к которому стремится шкала при заполнении
+				}
+
+				Offset: {
+					Label: Сдвиг
+					Tooltip: ""
+				}
+			}
+
+			StaminaStripType: {
+				// Tooltip: ""
+
+				Thin: {
+					// Label: Thin
+					// Tooltip: ""
+				}
+
+				Width: {
+					// Label: Width
+					// Tooltip: ""
+				}
+			}
+
+			StaminaBarType: {
+				Tooltip: ""
+
+				Thin: {
+					Label: Тонкий
+					Tooltip: ""
+				}
+
+				Width: {
+					Label: Широкий
+					Tooltip: ""
+				}
+			}
 		}
 	}
 }

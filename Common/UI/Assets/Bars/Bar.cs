@@ -4,9 +4,9 @@ using ReLogic.Content;
 using Terraria.ModLoader;
 using Terraria;
 
-namespace Terrapain.Common.UI.Assets.EmptyStrips
+namespace Terrapain.Common.UI.Assets.Bars
 {
-    public abstract class EmptyStrip
+    public abstract class Bar
     {
         public virtual Vector2 Offset => Vector2.Zero;
         public Vector2? origin = null;

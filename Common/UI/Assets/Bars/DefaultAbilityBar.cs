@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Terrapain.Common.UI.Assets.EmptyStrips
+namespace Terrapain.Common.UI.Assets.Bars
 {
-    public class DefaultEmptyStrip : EmptyStrip
+    public class DefaultAbilityBar : Bar
     {
-        public DefaultEmptyStrip()
+        public DefaultAbilityBar()
         {
             origin = new Vector2(0, 8);
         }

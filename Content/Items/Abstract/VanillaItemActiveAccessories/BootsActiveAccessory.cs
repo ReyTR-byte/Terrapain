@@ -1,5 +1,5 @@
 ﻿using Terrapain.Common.UI.Assets.AbilitiesIcons;
-using Terrapain.Common.UI.Assets.ChargeStrips;
+using Terrapain.Common.UI.Assets.BarFills;
 using Terrapain.Content.Dashes;
 using Terraria;
 using Terraria.GameContent.LootSimulation.LootSimulatorConditionSetterTypes;
@@ -30,7 +30,7 @@ namespace Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories
             hurtfull = Hurtfull;
             if (InfiniteFlightDuration != 0)
             {
-                abilityChargeStrip = new DoubleAbilityChargeStrip(1 - (float)infiniteFlightDuration / duration);
+                abilityChargeStrip = new DoubleAbilityBarFill(1 - (float)infiniteFlightDuration / duration);
             }
             abilityIcon = infiniteFlightDuration == 0? new BootIcon() : new BootIconInfiniteFly();
             DescriptionLinesCount = 1;

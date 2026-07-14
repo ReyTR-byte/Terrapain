@@ -1,8 +1,8 @@
 ﻿using Terrapain.Common.Player;
 using Terrapain.Common.UI.Assets.AbilitiesIcons;
 using Terrapain.Common.UI.Assets.AbilitiFrames;
-using Terrapain.Common.UI.Assets.ChargeStrips;
-using Terrapain.Common.UI.Assets.EmptyStrips;
+using Terrapain.Common.UI.Assets.BarFills;
+using Terrapain.Common.UI.Assets.Bars;
 using Terrapain.Common.UI.Assets.ItemFrames;
 using Terraria;
 
@@ -27,11 +27,11 @@ namespace Terrapain.Content.Items.Abstract
         public AbilityFrame abilityFrame = new DefaultAbilityFrame();
         public ItemFrame itemFrame = new DefaultItemFrame();
         public AbilityIcon abilityIcon = null;
-        public EmptyStrip abilityEmptyStrip = new DefaultEmptyStrip();
-        public ChargeStrip abilityChargeStrip = new DefaultAbilityChargeStrip();
+        public Bar abilityEmptyStrip = new DefaultAbilityBar();
+        public BarFill abilityChargeStrip = new DefaultAbilityBarFill();
         public AbilityIcon dashIcon = new DashIcon();
-        public EmptyStrip dashEmptyStrip = new DefaultEmptyStrip();
-        public ChargeStrip dashChargeStrip = new DefaultDashChargeStrip();
+        public Bar dashEmptyStrip = new DefaultAbilityBar();
+        public BarFill dashChargeStrip = new DefaultDashBarFill();
 
         public virtual void UpdateAccessory(Player player, Item item) { }
         public virtual bool CanUseAbility(Player player, Item item)

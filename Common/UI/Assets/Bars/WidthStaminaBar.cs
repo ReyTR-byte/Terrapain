@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Terrapain.Common.UI.Assets.ChargeStrips
+namespace Terrapain.Common.UI.Assets.Bars
 {
-    public class StaminaChargeStrip : ChargeStrip
+    public class WidthStaminaBar : Bar
     {
     }
 }

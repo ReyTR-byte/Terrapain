@@ -57,12 +57,14 @@ namespace Terrapain.Common.Player
 		public float Stamina = 100;
         public int StaminaRegenerationTimer;
         public int StaminaRegenerationTimerMax;
-		public float StaminaRegeneration;
+		public float StaminaRegenerationTimerCoefficient;
+        public float StaminaRegeneration;
 		public float MaxStaminaRegenerationSpeed;
 		public float StaminaRegenerationAcceleration;
 		public float MaxStamina;
 		public float staminaUsageMultiplyer;
 
+		public int GetStaminaTimer => (int)(StaminaRegenerationTimerMax * (Stamina / StaminaRegenerationTimerCoefficient + 1));
 		public float StaminaDamageBuff => Stamina / 100 * 1.5f + 0.2f;
 		public float MaxStaminaDamageBuff => MaxStamina / 100 * 1.5f + 0.2f;
         public float StaminaUseSpeedBuff => Stamina / 100 * 1.1f + 0.5f;
@@ -132,7 +134,7 @@ namespace Terrapain.Common.Player
 			MaxStamina = 100;
 			StaminaRegenerationAcceleration = 0.02f;
 			MaxStaminaRegenerationSpeed = 0.8f;
-			StaminaRegenerationTimerMax = 300;
+			StaminaRegenerationTimerMax = 150;
 			staminaUsageMultiplyer = 1;
 
 			if (AcidCobwebBonusReload > 0)
@@ -159,6 +161,7 @@ namespace Terrapain.Common.Player
 			{
 				StaminaRegeneration = MathF.Min(StaminaRegeneration + StaminaRegenerationAcceleration, MaxStaminaRegenerationSpeed);
 			}
+			StaminaRegenerationTimerCoefficient = 60;
 			Stamina = MathHelper.Clamp(Stamina + StaminaRegeneration, 0, MaxStamina);
 			Player.GetDamage(DamageClass.Melee) *= StaminaDamageBuff;
 			if (Stamina < MaxStamina)

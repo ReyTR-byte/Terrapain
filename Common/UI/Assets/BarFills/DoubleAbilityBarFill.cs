@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Terrapain.Common.UI.Assets.ChargeStrips
+namespace Terrapain.Common.UI.Assets.BarFills
 {
-    public class DoubleAbilityChargeStrip : ChargeStrip
+    public class DoubleAbilityBarFill : BarFill
     {
         public float Division;
-        public DoubleAbilityChargeStrip(float division)
+        public DoubleAbilityBarFill(float division)
         {
             Division = division;
         }
-        public override void Draw(SpriteBatch spriteBach, Vector2 position, Vector2 scale, float charge, float alpha = 1)
+        public override void Draw(SpriteBatch spriteBach, Vector2 position, Vector2 scale, float charge, float alpha = 1, Color? DrawColor = null)
         {
             Asset<Texture2D> texture = ModContent.Request<Texture2D>(Texture);
             int division = (int)(texture.Size().X * Division);

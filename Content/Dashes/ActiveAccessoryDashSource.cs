@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Common.UI.Assets.AbilitiesIcons;
 using Terrapain.Common.UI.Assets.AbilitiFrames;
-using Terrapain.Common.UI.Assets.ChargeStrips;
-using Terrapain.Common.UI.Assets.EmptyStrips;
+using Terrapain.Common.UI.Assets.BarFills;
+using Terrapain.Common.UI.Assets.Bars;
 using Terrapain.Common.UI.Assets.ItemFrames;
 using Terraria;
 using Terraria.DataStructures;
@@ -26,8 +26,8 @@ namespace Terrapain.Content.Dashes
         public AbilityIcon dashIcon { get => sourceItem.GetT().ActiveAccessoryVanillaItem.dashIcon; set => sourceItem.GetT().ActiveAccessoryVanillaItem.dashIcon = value; }
         public AbilityFrame abilityFrame { get => sourceItem.GetT().ActiveAccessoryVanillaItem.abilityFrame; set => sourceItem.GetT().ActiveAccessoryVanillaItem.abilityFrame = value; }
         public ItemFrame itemFrame { get => sourceItem.GetT().ActiveAccessoryVanillaItem.itemFrame; set => sourceItem.GetT().ActiveAccessoryVanillaItem.itemFrame = value; }
-        public ChargeStrip chargeStrip { get => sourceItem.GetT().ActiveAccessoryVanillaItem.dashChargeStrip; set => sourceItem.GetT().ActiveAccessoryVanillaItem.dashChargeStrip = value; }
-        public EmptyStrip emptyStrip { get => sourceItem.GetT().ActiveAccessoryVanillaItem.dashEmptyStrip; set => sourceItem.GetT().ActiveAccessoryVanillaItem.dashEmptyStrip = value; }
+        public BarFill chargeStrip { get => sourceItem.GetT().ActiveAccessoryVanillaItem.dashChargeStrip; set => sourceItem.GetT().ActiveAccessoryVanillaItem.dashChargeStrip = value; }
+        public Bar emptyStrip { get => sourceItem.GetT().ActiveAccessoryVanillaItem.dashEmptyStrip; set => sourceItem.GetT().ActiveAccessoryVanillaItem.dashEmptyStrip = value; }
 
         public bool CanUse(Player player, bool[] directions)
         {

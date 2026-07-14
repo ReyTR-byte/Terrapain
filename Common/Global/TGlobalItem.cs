@@ -204,6 +204,10 @@ namespace Terrapain.Common.Global
 			{
 				StaminaUsage = 1.2f;
 			}
+			if (entity.pick > 0 || entity.axe > 0 || entity.hammer > 0)
+			{
+				StaminaUsage = 1;
+			}
         }
 		public override bool Shoot(Item item, Terraria.Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
@@ -301,11 +305,8 @@ namespace Terrapain.Common.Global
         {
             if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
             {
-                Functions.Chatic(player.Custom().Stamina);
-                Functions.Chatic(player.itemTimeMax);
-				Functions.Chatic(player.itemAnimationMax);
                 player.Custom().Stamina -= item.GetT().StaminaUsage * player.Custom().staminaUsageMultiplyer;
-                player.Custom().StaminaRegenerationTimer = (int)(player.Custom().StaminaRegenerationTimerMax * (1 + player.Custom().Stamina / 50));
+                player.Custom().StaminaRegenerationTimer = player.Custom().GetStaminaTimer;
                 player.Custom().StaminaRegeneration = 0;
             }
             if (item.useStyle == ItemUseStyleID.Swing)
@@ -605,7 +606,7 @@ namespace Terrapain.Common.Global
         {
 			if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
 			{
-				return StaminaUsage * player.Custom().staminaUsageMultiplyer < player.Custom().Stamina;
+				return player.Custom().Stamina > 0;
 			}
 			if (player.GetModPlayer<TerrapainPlayer>().unarmed && item.damage > 0 && item.pick == 0 && item.axe == 0 && item.hammer == 0 && !item.accessory && !Main.projHook[item.shoot])
 			{

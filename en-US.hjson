@@ -599,6 +599,63 @@ Mods: {
 					Tooltip: ""
 				}
 			}
+
+			UIConfig: {
+				DisplayName: UI Config
+
+				sst: {
+					Label: Stamina bar type
+					Tooltip: ""
+				}
+
+				staminaBarType: {
+					Label: stamina Bar Type
+					Tooltip: ""
+				}
+
+				EmptyColor: {
+					Label: Empty Color
+					Tooltip: ""
+				}
+
+				FullColor: {
+					Label: Full Color
+					Tooltip: ""
+				}
+
+				Offset: {
+					Label: Offset
+					Tooltip: ""
+				}
+			}
+
+			StaminaStripType: {
+				Tooltip: ""
+
+				Thin: {
+					Label: Thin
+					Tooltip: ""
+				}
+
+				Width: {
+					Label: Width
+					Tooltip: ""
+				}
+			}
+
+			StaminaBarType: {
+				Tooltip: ""
+
+				Thin: {
+					Label: Thin
+					Tooltip: ""
+				}
+
+				Width: {
+					Label: Width
+					Tooltip: ""
+				}
+			}
 		}
 	}
 }

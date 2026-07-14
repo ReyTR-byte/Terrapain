@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Terrapain.Common.UI.Assets.ChargeStrips
+namespace Terrapain.Common.UI.Assets.BarFills
 {
-    public class DefaultAbilityChargeStrip : ChargeStrip
+    public class DefaultAbilityBarFill : BarFill
     {
-        public DefaultAbilityChargeStrip()
+        public DefaultAbilityBarFill()
         {
             origin = new Vector2(-2, 6);
         }
