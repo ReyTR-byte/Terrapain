@@ -2,6 +2,7 @@
 using ReLogic.Content;
 using Terrapain.Common.Global;
 using Terrapain.Common.Global.UseStyles;
+using Terrapain.Content;
 using Terrapain.Content.Projectiles.Ammo.Bouquet;
 using Terraria;
 using Terraria.DataStructures;
@@ -41,7 +42,7 @@ namespace Terrapain.Common.Player.DrawLayers
                     rotationAdd = -MathF.PI / 2;
                 }
 
-            Vector2 position = drawInfo.drawPlayer.MountedCenter + TGlobalItem.GetHandOffset(drawInfo.drawPlayer) - Vector2.UnitY.RotatedBy(drawInfo.drawPlayer.itemRotation + rotationAdd) * 30 - Main.screenPosition;
+            Vector2 position = drawInfo.drawPlayer.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(drawInfo.drawPlayer) - Vector2.UnitY.RotatedBy(drawInfo.drawPlayer.itemRotation + rotationAdd) * 30 - Main.screenPosition;
             position += Vector2.UnitY.RotatedBy(drawInfo.drawPlayer.itemRotation + rotationAdd) * MathF.Min((float)item.GetGlobalItem<BowsOverride>().bowTime / drawInfo.drawPlayer.itemAnimationMax, 5) * 3;
 
             if (item.GetGlobalItem<BowsOverride>().projectile == ModContent.ProjectileType<BouquetArrow>())

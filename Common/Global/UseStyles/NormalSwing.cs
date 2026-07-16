@@ -58,7 +58,7 @@ namespace Terrapain.Common.Global.UseStyles
                 }
                 player.HeldItem.GetT().drawDir = ns.hitDir * player.direction;
                 player.SetItemRotation(rotation + basicRotation * player.direction);
-                player.itemLocation = player.MountedCenter + TGlobalItem.GetHandOffset(player) + offset.RotatedBy(rotation);
+                player.itemLocation = player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player) + offset.RotatedBy(rotation);
                 player.SetCompositeArmFront(true, Terraria.Player.CompositeArmStretchAmount.Full, player.ToItemRotation(rotation) - 0.5f * (float)Math.PI * player.direction);
                 player.bodyFrame.Y = player.bodyFrame.Height;
                 player.HeldItem.GetGlobalItem<NormalSwing>().rotation = rotation;

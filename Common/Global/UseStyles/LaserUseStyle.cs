@@ -71,7 +71,7 @@ namespace Terrapain.Common.Global.UseStyles
             offset.Y *= player.direction;
             float basicRotation = player.HeldItem.GetT().spriteRotation ?? 0;
             player.SetItemRotation(rotation + basicRotation * player.direction);
-            player.itemLocation = player.MountedCenter + TGlobalItem.GetHandOffset(player) + offset.RotatedBy(rotation);
+            player.itemLocation = player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player) + offset.RotatedBy(rotation);
             player.SetCompositeArmFront(true, Terraria.Player.CompositeArmStretchAmount.Full, player.ToItemRotation(rotation) - 0.5f * (float)Math.PI * player.direction);
             player.bodyFrame.Y = player.bodyFrame.Height;
             player.HeldItem.GetGlobalItem<LaserUseStyle>().rotation = rotation;

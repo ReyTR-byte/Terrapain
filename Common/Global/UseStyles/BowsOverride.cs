@@ -36,7 +36,7 @@ namespace Terrapain.Common.Global.UseStyles
                 player.itemTime = 0;
             }
             player.itemAnimation = player.itemAnimationMax - 1;
-            float rotation = (Main.MouseWorld - (player.MountedCenter + TGlobalItem.GetHandOffset(player))).ToRotation();
+            float rotation = (Main.MouseWorld + player.velocity.GetInt() - (player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player))).ToRotation();
             player.ChangeDir((Main.MouseWorld - player.MountedCenter).X.NonZeroSign());
             Vector2 refOffset = Vector2.Zero;
             ItemLoader.HoldoutOrigin(player, ref refOffset);
@@ -47,7 +47,7 @@ namespace Terrapain.Common.Global.UseStyles
             offset.Y *= player.direction;
             float basicRotation = item.GetT().spriteRotation ?? 0;
             player.SetItemRotation(rotation + basicRotation * player.direction);
-            player.itemLocation = player.MountedCenter + TGlobalItem.GetHandOffset(player) + offset.RotatedBy(rotation);
+            player.itemLocation = player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player) + offset.RotatedBy(rotation);
             player.SetCompositeArmFront(true, Terraria.Player.CompositeArmStretchAmount.Full, player.ToItemRotation(rotation) - 0.5f * (float)Math.PI * player.direction);
             player.bodyFrame.Y = player.bodyFrame.Height;
             player.HeldItem.GetGlobalItem<BowsOverride>().bowTime++;
