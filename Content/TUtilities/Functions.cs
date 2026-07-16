@@ -43,7 +43,15 @@ namespace Terrapain.Content
 			}
 			return v;
 		}
-		public static bool IsAngleBetweenAngles(float angle1, float targetAngle, float angle2)
+		public static void ToInt(ref this Vector2 targetVector)
+		{
+			targetVector = new((int)targetVector.X, (int)targetVector.Y);
+		}
+        public static Vector2 GetInt(this Vector2 targetVector)
+        {
+            return new((int)targetVector.X, (int)targetVector.Y);
+        }
+        public static bool IsAngleBetweenAngles(float angle1, float targetAngle, float angle2)
 		{
 			targetAngle -= angle1;
 			targetAngle = NormalizeRotation(targetAngle, false);

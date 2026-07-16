@@ -103,7 +103,7 @@ namespace Terrapain.Common.Player
         {
 			if (self.Custom().bootsActiveAccessory)
 			{
-				int dust = Dust.NewDust(self.position + new Vector2(self.direction == 1 ? 0 : self.width, self.gravDir == 1 ? self.height : 0) - Vector2.One * 3, 6, 6, 16, self.velocity.X * -0.33f, -MathF.Abs(self.velocity.X * 0.33f), Scale: 2);
+				int dust = Dust.NewDust(self.position + new Vector2(self.direction == 1 ? 0 : self.width, self.gravDir == 1 ? self.height : 0) - Vector2.One * 3, 6, 6, DustID.Cloud, self.velocity.X * -0.33f, -MathF.Abs(self.velocity.X * 0.33f), Scale: 2);
 				Main.dust[dust].velocity.Y = playerRandom.NextFloat(Main.dust[dust].velocity.Y, 0);
                 Main.dust[dust].shader = GameShaders.Armor.GetSecondaryShader(self.cShoe, self);
             }
@@ -452,7 +452,7 @@ namespace Terrapain.Common.Player
         //      }
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
-			if (TGlobalItem.UseModDrawStyles.Contains(drawInfo.drawPlayer.HeldItem.useStyle) && drawInfo.drawPlayer.ItemAnimationActive)
+			if (TGlobalItem.UseDrawOverride.Contains(drawInfo.drawPlayer.HeldItem.useStyle) && drawInfo.drawPlayer.ItemAnimationActive)
 				drawInfo.heldItem.noUseGraphic = true;
         }
 		public void PostDrawPlayer(SpriteBatch sprite)
@@ -474,7 +474,6 @@ namespace Terrapain.Common.Player
 			float[] grades = new float[6];
 			int buff = playerRandom.Next(0, 6);
 			grades[buff] = 1;
-            Functions.Chatic(buff);
             buff = playerRandom.Next(0, 5);
 			for (int i = 0; i < grades.Length; i++)
 			{
@@ -487,7 +486,6 @@ namespace Terrapain.Common.Player
 				if (i == buff)
 				{
 					grades[i] = -0.75f;
-                    Functions.Chatic(i);
                 }
 			}
             buff = playerRandom.Next(0, 4);
@@ -501,7 +499,6 @@ namespace Terrapain.Common.Player
                 if (i == buff)
                 {
                     grades[i] = 2;
-                    Functions.Chatic(i);
                 }
             }
             buff = playerRandom.Next(0, 3);
@@ -515,7 +512,6 @@ namespace Terrapain.Common.Player
                 if (i == buff)
                 {
                     grades[i] = -1.5f;
-					Functions.Chatic(i);
                 }
             }
 			chaosRegen = (int)(2 * grades[0]);
@@ -524,7 +520,6 @@ namespace Terrapain.Common.Player
 			chaosSpeed = 0.25f * grades[3];
 			chaosAcceleration = 0.25f * grades[4];
 			Player.statLife += (int)(25 * grades[5]);
-			Functions.Chatic((int)(2 * grades[0]), 0.25f * grades[1], (int)(4 * grades[2]), 0.25f * grades[3], 0.25f * grades[4], (int)(25 * grades[5]));
 			if (Player.statLife < 0)
 			{
 				Player.KillMe(PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Mods.Terrapain.NetworkText.BadPotion")), 666, -Player.direction);

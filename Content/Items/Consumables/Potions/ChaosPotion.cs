@@ -43,7 +43,6 @@ namespace Terrapain.Content.Items.Consumables.Potions
         public override bool? UseItem(Player player)
         {
             player.Custom().NewChaosBuff();
-            Functions.Chatic("use");
             return base.UseItem(player);
         }
         public override bool CanUseItem(Player player)
