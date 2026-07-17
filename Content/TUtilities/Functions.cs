@@ -169,6 +169,36 @@ namespace Terrapain.Content
 		{
 			return player.GetModPlayer<TerrapainPlayer>();
 		}
+		public static Vector2 GetUnarmedDirection(this Player player, Vector2? position = null)
+		{
+			if (!player.Custom().unarmed || ClientConfig.Instance.UnarmedMouseAlwaysActive || player.Custom().UnarmedMouseActive)
+			{
+				return player.MountedCenter.DirectionTo(position ?? Main.MouseWorld);
+			}
+			int Y = 0;
+			int X = 0;
+			if (player.controlDown)
+			{
+				Y = 1;
+			}
+			if (player.controlUp)
+			{
+				Y--;
+			}
+			if (player.controlLeft)
+			{
+				X = -1;
+			}
+			if (player.controlRight)
+			{
+				X++;
+			}
+			if (X != 0 || Y != 0)
+			{
+				return new Vector2(X, Y).Normalized();
+			}
+            return player.Center.DirectionTo(position?? Main.MouseWorld);
+        }
 		public static void SetItemRotation(this Player player, float angle)
 		{
 			player.itemRotation = player.ToItemRotation(angle);

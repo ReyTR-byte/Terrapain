@@ -112,7 +112,8 @@ namespace Terrapain.Common.UI
             Color DrawColor = new Color(FullColor * progress + EmptyColor * (1 - progress));
 
             TerrapainPlayer pl = Main.LocalPlayer.Custom();
-            Vector2 pos = pl.Player.Bottom + Vector2.UnitY * 15 - Main.screenPosition + UIConfig.Instance.Offset;
+            Vector2 pos = pl.Player.Bottom + Vector2.UnitY * 15 + UIConfig.Instance.Offset - Main.screenPosition;
+            pos /= Main.UIScale;
             pos.ToInt();
 
             Bar s = null;
@@ -158,17 +159,12 @@ namespace Terrapain.Common.UI
             }
 
             // Рисуем готовый RenderTarget с прозрачностью Visibility
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.UIScaleMatrix);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, new Matrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
 
             if (_renderTarget != null)
             {
                 spriteBatch.Draw(_renderTarget, Vector2.Zero, Color.White * Visibility);
             }
-
-            spriteBatch.End();
-
-            // Восстанавливаем SpriteBatch для дальнейшего рендеринга
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Main.UIScaleMatrix);
         }
 
         private float _lastProgress = -1f;

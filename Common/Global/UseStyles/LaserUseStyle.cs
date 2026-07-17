@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Luminance.Common.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,10 +27,12 @@ namespace Terrapain.Common.Global.UseStyles
         public override void UseStyle(Item item, Terraria.Player player, Rectangle heldItemFrame)
         {
             LaserUseStyle ls = player.HeldItem.GetGlobalItem<LaserUseStyle>();
-            if ((player.MountedCenter + TGlobalItem.GetHandOffset(player)).X > Main.MouseWorld.X)
-                player.ChangeDir(-1);
-            else
-                player.ChangeDir(1);
+
+            if (MathF.Abs((Main.MouseWorld - player.MountedCenter).X) > 6)
+            {
+                player.ChangeDir((Main.MouseWorld - player.MountedCenter).X.NonZeroSign());
+            }
+
             float rotation;
             float rotationSpeed = ls.rotationSpeed;
             float targetRotation = (Main.MouseWorld - (player.MountedCenter + TGlobalItem.GetHandOffset(player))).ToRotation();

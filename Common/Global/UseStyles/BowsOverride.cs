@@ -37,7 +37,10 @@ namespace Terrapain.Common.Global.UseStyles
             }
             player.itemAnimation = player.itemAnimationMax - 1;
             float rotation = (Main.MouseWorld + player.velocity.GetInt() - (player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player))).ToRotation();
-            player.ChangeDir((Main.MouseWorld - player.MountedCenter).X.NonZeroSign());
+            if (MathF.Abs((Main.MouseWorld - player.MountedCenter).X) > 6)
+            {
+                player.ChangeDir((Main.MouseWorld - player.MountedCenter).X.NonZeroSign());
+            }
             Vector2 refOffset = Vector2.Zero;
             ItemLoader.HoldoutOrigin(player, ref refOffset);
             refOffset.X *= player.direction;

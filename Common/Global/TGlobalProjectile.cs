@@ -2,8 +2,11 @@ using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Assets.Extratextures;
+using Terrapain.Common.Player;
 using Terrapain.Content;
+using Terrapain.Content.DamageClasses;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -39,6 +42,19 @@ namespace Terrapain.Common.Global
         {
             drawCenter = entity.Hitbox.Size() / 2;
             oldFrame = new int[ProjectileID.Sets.TrailCacheLength[entity.type]];
+        }
+        public override void OnSpawn(Projectile projectile, IEntitySource source)
+        {
+            if (Main.projHook[projectile.type])
+            {
+                if (projectile.owner == -1)
+                    return;
+                Terraria.Player player = Main.player[projectile.owner];
+                if (player.Custom().unarmed)
+                {
+                    projectile.velocity = player.GetUnarmedDirection() * projectile.velocity.Length();
+                }
+            }
         }
         int afterimageTimer;
         public override bool PreDraw(Projectile projectile, ref Color lightColor)

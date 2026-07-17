@@ -50,6 +50,10 @@ namespace Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories
                     player.wingTime += 1;
                 }
                 player.Custom().Dash = new ActiveAccessoryDash(item) { DashDuration = DashDuration, damageType = item.DamageType, DashPower = DashPower, priority = dashPriority, penetrate = dashPenetrate, hurtfull = hurtfull };
+                if (MathF.Abs(player.velocity.X) > player.accRunSpeed)
+                {
+                    player.runAcceleration *= 0.2f;
+                }    
                 player.accRunSpeed *= velocityMultiplyer;
                 player.runAcceleration *= accelerationMultiplyer;
                 player.Custom().bootsActiveAccessory = true;

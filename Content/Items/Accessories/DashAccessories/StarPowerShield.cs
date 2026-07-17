@@ -23,7 +23,7 @@ namespace Terrapain.Content.Items.Accessories.DashAccessories
         {
             Item.width = 24;
             Item.height = 28;
-            Item.damage = 25;
+            Item.damage = 50;
             Item.value = Item.buyPrice(gold: 5);
             Item.rare = ItemRarityID.Green;
             Item.accessory = true;
@@ -38,7 +38,7 @@ namespace Terrapain.Content.Items.Accessories.DashAccessories
             bool hurtful = player.Custom().unarmed;
             int immune = player.Custom().unarmed? 10 : 0;
             player.GetDamage<Unarmed>() += 0.1f;
-            player.Custom().Dash = new ActiveAccessoryDash(Item) { DashPower = DashPower, DashDuration = DashDuration, damageType = Item.DamageType, hurtfull = hurtful, immune = immune};
+            player.Custom().Dash = new ActiveAccessoryDash(Item) { DashPower = DashPower, DashDuration = DashDuration, damageType = Item.DamageType, hurtfull = hurtful, immune = immune, penetrate = 1};
         }
         public override void AddRecipes()
         {

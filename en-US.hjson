@@ -598,6 +598,16 @@ Mods: {
 					Label: hitbox Color
 					Tooltip: ""
 				}
+
+				UnarmedMouseActiveTime: {
+					Label: Unarmed Mouse Active Time
+					Tooltip: ""
+				}
+
+				UnarmedMouseAlwaysActive: {
+					Label: Unarmed Mouse Always Active
+					Tooltip: ""
+				}
 			}
 
 			UIConfig: {

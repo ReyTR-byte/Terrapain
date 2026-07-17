@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Assets.Extratextures;
+using Terrapain.Common.Config;
 using Terrapain.Common.Global;
 using Terrapain.Common.System;
 using Terrapain.Common.UI;
@@ -53,6 +54,9 @@ namespace Terrapain.Common.Player
 		private Dash _dash = null;
 		public bool bootsActiveAccessory;
 		public int oldLifeRegen;
+
+		public int UnarmedMouseActiveTimer;
+		public bool UnarmedMouseActive => UnarmedMouseActiveTimer != 0;
 
 		public float Stamina = 100;
         public int StaminaRegenerationTimer;
@@ -130,6 +134,19 @@ namespace Terrapain.Common.Player
 			CactusSet = false;
 			AcidCobwebBonus = false;
 			GranithShellChestplateBonus = false;
+
+			if (unarmed && !ClientConfig.Instance.UnarmedMouseAlwaysActive)
+			{
+				if (UnarmedMouseActiveTimer > 0)
+				{
+					UnarmedMouseActiveTimer--;
+				}
+
+                if (Main.lastMouseX != Main.mouseX || Main.lastMouseY != Main.mouseY)
+				{
+					UnarmedMouseActiveTimer = (int)(ClientConfig.Instance.UnarmedMouseActiveTime * 60);
+				}
+			}
 
 			MaxStamina = 100;
 			StaminaRegenerationAcceleration = 0.02f;

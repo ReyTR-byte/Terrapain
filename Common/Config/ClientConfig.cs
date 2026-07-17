@@ -17,15 +17,6 @@ namespace Terrapain.Common.Config
         [DefaultValue(true)]
         public bool UseShaders;
 
-        [DefaultValue(false)]
-        public bool drawHitbox;
-
-        [DefaultValue(true)]
-        public bool Tips;
-
-        [DefaultValue(12)]
-        public int LimboSpeed;
-
         [Range(1f, 2.5f)]
         [Increment(0.1f)]
         [DefaultValue(2.5f)]
@@ -37,6 +28,22 @@ namespace Terrapain.Common.Config
         [DefaultValue(false)]
         public bool SkipDifficultyChangeAnimation;
 
+        [DefaultValue(true)]
+        public bool Tips;
+
+        [DefaultValue(1.5f)]
+        [Range(0f, 5f)]
+        public float UnarmedMouseActiveTime;
+
+        [DefaultValue(false)]
+        public bool UnarmedMouseAlwaysActive;
+
+        [DefaultValue(false)]
+        public bool drawHitbox;
+
         public Color hitboxColor;
+
+        [DefaultValue(12)]
+        public int LimboSpeed;
     }
 }
