@@ -1,20 +1,25 @@
-using Terraria;
-using Terraria.ModLoader;
-using Terraria.ID;
-using Terraria.Localization;
 using Microsoft.Xna.Framework;
-using Terraria.DataStructures;
-using Terraria.GameContent.ItemDropRules;
-using Terrapain.Content.Items.ItemDropRules;
+using System.Data;
 using System.Text.RegularExpressions;
 using Terrapain.Content.Items.Ingredients;
+using Terrapain.Content.Items.ItemDropRules;
 using Terrapain.Content.NPCs.Bosses.Scorspider;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using static Terraria.Collision;
 
 namespace Terrapain
 {
 	// Please read https://github.com/tModLoader/tModLoader/wiki/Basic-tModLoader-Modding-Guide#mod-skeleton-contents for more information about the various files in a mod.
 	public class Terrapain : Mod
     {
+        public static bool ignoreTiles;
+        public static bool ignorePlatforms;
+
         public static Color screenColor;
         public static bool vanillaHit = true;
         public struct LightningDrawInfo
@@ -67,6 +72,171 @@ namespace Terrapain
 
             DefaultRaretiesDropParameters = DefaultIngredientsDropParameters;
             DefaultRaretiesDropParameters.MultiplyByDifficulty = false;
+
+            On_Collision.TileCollision += On_Collision_TileCollision;
+            On_Collision.SlopeCollision += On_Collision_SlopeCollision;
+            On_Collision.WaterCollision += On_Collision_WaterCollision;
+            On_Collision.WetCollision += On_Collision_WetCollision;
+            On_Collision.SolidCollision_Vector2_int_int += On_Collision_SolidCollision_Vector2_int_int;
+            On_Collision.SolidCollision_Vector2_int_int_bool += On_Collision_SolidCollision_Vector2_int_int_bool;
+            On_Collision.LavaCollision += On_Collision_LavaCollision;
+            On_Collision.StickyTiles += On_Collision_StickyTiles;
+            On_Collision.DrownCollision += On_Collision_DrownCollision;
+            //On_Collision.AnyCollision += On_Collision_AnyCollision;
+            //On_Collision.AdvancedTileCollision += On_Collision_AdvancedTileCollision;
+            //On_Collision.AnyCollisionWithSpecificTiles += On_Collision_AnyCollisionWithSpecificTiles;
+            //On_Collision.noSlopeCollision += On_Collision_noSlopeCollision;
+            On_Collision.SolidTiles_int_int_int_int += On_Collision_SolidTiles_int_int_int_int;
+            On_Collision.SolidTilesVersatile += On_Collision_SolidTilesVersatile;
+            On_Collision.SwitchTiles_Entity_Vector2_int_int_Vector2_int += On_Collision_SwitchTiles_Entity_Vector2_int_int_Vector2_int;
+            On_Collision.HurtTiles += On_Collision_HurtTiles;
+            On_Collision.StepDown += On_Collision_StepDown;
+            On_Collision.StepUp += On_Collision_StepUp;
+        }
+        public override void Unload()
+        {
+            On_Collision.TileCollision -= On_Collision_TileCollision;
+            On_Collision.SlopeCollision -= On_Collision_SlopeCollision;
+            On_Collision.WaterCollision -= On_Collision_WaterCollision;
+            On_Collision.WetCollision -= On_Collision_WetCollision;
+            On_Collision.SolidCollision_Vector2_int_int -= On_Collision_SolidCollision_Vector2_int_int;
+            On_Collision.SolidCollision_Vector2_int_int_bool -= On_Collision_SolidCollision_Vector2_int_int_bool;
+            On_Collision.LavaCollision -= On_Collision_LavaCollision;
+            On_Collision.StickyTiles -= On_Collision_StickyTiles;
+            On_Collision.DrownCollision -= On_Collision_DrownCollision;
+            //On_Collision.AnyCollision -= On_Collision_AnyCollision;
+            //On_Collision.AdvancedTileCollision -= On_Collision_AdvancedTileCollision;
+            //On_Collision.AnyCollisionWithSpecificTiles -= On_Collision_AnyCollisionWithSpecificTiles;
+            //On_Collision.noSlopeCollision -= On_Collision_noSlopeCollision;
+            On_Collision.SolidTiles_int_int_int_int -= On_Collision_SolidTiles_int_int_int_int;
+            On_Collision.SolidTilesVersatile -= On_Collision_SolidTilesVersatile;
+            On_Collision.SwitchTiles_Entity_Vector2_int_int_Vector2_int -= On_Collision_SwitchTiles_Entity_Vector2_int_int_Vector2_int;
+            On_Collision.HurtTiles -= On_Collision_HurtTiles;
+            On_Collision.StepDown -= On_Collision_StepDown;
+            On_Collision.StepUp -= On_Collision_StepUp;
+        }
+
+        private void On_Collision_StepUp(On_Collision.orig_StepUp orig, ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir, bool holdsMatching, int specialChecksMode)
+        {
+            if (ignoreTiles)
+                return;
+            orig(ref position, ref velocity, width, height, ref stepSpeed, ref gfxOffY, gravDir, holdsMatching, specialChecksMode);
+        }
+
+        private void On_Collision_StepDown(On_Collision.orig_StepDown orig, ref Vector2 position, ref Vector2 velocity, int width, int height, ref float stepSpeed, ref float gfxOffY, int gravDir, bool waterWalk)
+        {
+            if (ignoreTiles)
+                return;
+            orig(ref position, ref velocity, width, height, ref stepSpeed, ref gfxOffY, gravDir, waterWalk);
+        }
+
+        private HurtTile On_Collision_HurtTiles(On_Collision.orig_HurtTiles orig, Vector2 Position, int Width, int Height, Player player)
+        {
+            if (ignoreTiles)
+            {
+                var result = default(HurtTile);
+                result.type = -1;
+                return result;
+            }
+            return orig(Position, Width, Height, player);
+        }
+
+        private bool On_Collision_SwitchTiles_Entity_Vector2_int_int_Vector2_int(On_Collision.orig_SwitchTiles_Entity_Vector2_int_int_Vector2_int orig, Entity entity, Vector2 Position, int Width, int Height, Vector2 oldPosition, int objType)
+        {
+            if (ignoreTiles)
+                return false;
+            return orig(entity, Position, Width, Height, oldPosition, objType);
+        }
+
+        private bool On_Collision_SolidTilesVersatile(On_Collision.orig_SolidTilesVersatile orig, int startX, int endX, int startY, int endY)
+        {
+            if (ignoreTiles)
+                return false;
+            return orig(startX, endX, startY, endY);
+        }
+
+        private bool On_Collision_SolidTiles_int_int_int_int(On_Collision.orig_SolidTiles_int_int_int_int orig, int startX, int endX, int startY, int endY)
+        {
+            if (ignoreTiles)
+                return false;
+            return orig(startX, endX, startY, endY);
+        }
+
+        private bool On_Collision_DrownCollision(On_Collision.orig_DrownCollision orig, Vector2 Position, int Width, int Height, float gravDir, bool includeSlopes)
+        {
+            if (ignoreTiles)
+                return false;
+            return orig(Position, Width, Height, gravDir, includeSlopes);
+        }
+        private Vector2 On_Collision_StickyTiles(On_Collision.orig_StickyTiles orig, Vector2 Position, Vector2 Velocity, int Width, int Height)
+        {
+            if (ignoreTiles)
+                return new(-1, -1);
+            return orig(Position, Velocity, Width, Height);
+        }
+        private bool On_Collision_LavaCollision(On_Collision.orig_LavaCollision orig, Vector2 Position, int Width, int Height)
+        {
+            if (ignoreTiles)
+                return false;
+            return orig(Position, Width, Height);
+        }
+        private bool On_Collision_SolidCollision_Vector2_int_int(On_Collision.orig_SolidCollision_Vector2_int_int orig, Vector2 Position, int Width, int Height)
+        {
+            if (ignoreTiles)
+                return false;
+            return orig(Position, Width, Height);
+        }
+        private bool On_Collision_SolidCollision_Vector2_int_int_bool(On_Collision.orig_SolidCollision_Vector2_int_int_bool orig, Vector2 Position, int Width, int Height, bool acceptTopSurfaces)
+        {
+            if (ignoreTiles)
+                return false;
+            return orig(Position, Width, Height, acceptTopSurfaces);
+        }
+        private bool On_Collision_WetCollision(On_Collision.orig_WetCollision orig, Vector2 Position, int Width, int Height)
+        {
+            if (ignoreTiles)
+            {
+                Collision.honey = false;
+                Collision.shimmer = false;
+                return false;
+            }
+            return orig(Position, Width, Height);
+        }
+        private Vector2 On_Collision_WaterCollision(On_Collision.orig_WaterCollision orig, Vector2 Position, Vector2 Velocity, int Width, int Height, bool fallThrough, bool fall2, bool lavaWalk)
+        {
+            if (ignoreTiles)
+            {
+                Collision.up = false;
+                Collision.down = false;
+                return Velocity;
+            }
+            fallThrough |= ignorePlatforms;
+            fall2 |= ignorePlatforms;
+            return orig(Position, Velocity, Width, Height, fallThrough, fall2, lavaWalk);
+        }
+        private Vector4 On_Collision_SlopeCollision(On_Collision.orig_SlopeCollision orig, Vector2 Position, Vector2 Velocity, int Width, int Height, float gravity, bool fall)
+        {
+            if (ignoreTiles)
+            {
+                Collision.sloping = false;
+                Collision.stair = false;
+                Collision.stairFall = false;
+                return new(Position, Velocity.X, Velocity.Y);
+            }
+            fall |= ignorePlatforms;
+            return orig(Position, Velocity, Width, Height, gravity, fall);
+        }
+        private Vector2 On_Collision_TileCollision(On_Collision.orig_TileCollision orig, Vector2 Position, Vector2 Velocity, int Width, int Height, bool fallThrough, bool fall2, int gravDir)
+        {
+            if (ignoreTiles)
+            {
+                Collision.up = false;
+                Collision.down = false;
+                return Velocity;
+            }
+            fallThrough |= ignorePlatforms;
+            fall2 |= ignorePlatforms;
+            return orig(Position, Velocity, Width, Height, fallThrough, fall2, gravDir);
         }
 
         public override void AddRecipeGroups()

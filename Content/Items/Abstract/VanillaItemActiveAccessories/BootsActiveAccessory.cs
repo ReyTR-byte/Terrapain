@@ -12,6 +12,7 @@ namespace Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories
         public float velocityMultiplyer;
         public int duration;
         public float accelerationMultiplyer;
+        public float curentMaxVelocity;
         public int infiniteFlightDuration;
         public float dashPriority;
         public int dashPenetrate;
@@ -49,14 +50,18 @@ namespace Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories
                 {
                     player.wingTime += 1;
                 }
-                player.Custom().Dash = new ActiveAccessoryDash(item) { DashDuration = DashDuration, damageType = item.DamageType, DashPower = DashPower, priority = dashPriority, penetrate = dashPenetrate, hurtfull = hurtfull };
-                if (MathF.Abs(player.velocity.X) > player.accRunSpeed)
+                if (MathF.Abs(player.velocity.X) + 0.5f > player.accRunSpeed)
                 {
-                    player.runAcceleration *= 0.2f;
-                }    
-                player.accRunSpeed *= velocityMultiplyer;
-                player.runAcceleration *= accelerationMultiplyer;
-                player.Custom().bootsActiveAccessory = true;
+                    player.accRunSpeed = MathHelper.Clamp(curentMaxVelocity + 0.02f, player.accRunSpeed, player.accRunSpeed * velocityMultiplyer);
+                    curentMaxVelocity = player.accRunSpeed;
+                    player.runAcceleration *= accelerationMultiplyer;
+                    player.Custom().bootsActiveAccessory = true;
+                }
+                else
+                {
+                    curentMaxVelocity = 0;
+                }
+                player.Custom().Dash = new ActiveAccessoryDash(item) { DashDuration = DashDuration, damageType = item.DamageType, DashPower = DashPower, priority = dashPriority, penetrate = dashPenetrate, hurtfull = hurtfull };
             }
         }
         float FloatAbilityReload;

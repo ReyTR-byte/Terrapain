@@ -79,8 +79,9 @@ namespace Terrapain.Content.Items.Abstract
 
         public virtual bool? CanUseAbility(Player player) { return null; }
         public virtual bool SetAbilityReload(Player player) { return true; }
-        public virtual void OnTryUseAbilty(Player player) { }
+        public virtual bool OnTryUseAbilty(Player player) { return false; }
         public virtual bool OnUseAbility(Player player) { return true; }
+        public virtual bool OnHoldAbility(Player player) { return true; }
         public virtual bool? CanUseDash(Player player, bool[] Directions) { return null; }
         public virtual void OnTryUseDash(Player player, bool[] Directions) { }
         public virtual bool OnUseDash(Player player, bool[] Directions) { return true; }

@@ -34,9 +34,11 @@ namespace Terrapain.Common.Global.TGlobalItems
             entity.knockBack = 3;
             entity.GetGlobalItem<TGlobalItem>().ActiveAccessoryVanillaItem = new Content.Items.Abstract.VanillaItemActiveAccessories.MagmaStone();
             entity.GetGlobalItem<TGlobalItem>().activeAccessory = true;
-            entity.GetGlobalItem<TGlobalItem>().ActiveAccessoryVanillaItem.AbilityReloadMax = 120;
+            entity.GetGlobalItem<TGlobalItem>().ActiveAccessoryVanillaItem.AbilityReloadMax = 400;
             entity.GetGlobalItem<TGlobalItem>().ActiveAccessoryVanillaItem.AbilityUnarmedOnly = true;
             entity.GetGlobalItem<TGlobalItem>().ActiveAccessoryVanillaItem.abilityIcon = new BlastIcon();
+            entity.GetT().ActiveAccessoryVanillaItem.HoldAbility = true;
+            entity.GetT().ActiveAccessoryVanillaItem.HoldConsumption = 2;
         }
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {

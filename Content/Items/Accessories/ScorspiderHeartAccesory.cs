@@ -63,7 +63,7 @@ namespace Terrapain.Content.Items.Accessories
             {
                 timer = 30;
             }
-            else 
+            else
             {
                 if (timer > 0)
                 {

@@ -409,13 +409,13 @@ namespace Terrapain.Common.Global
 
         public override bool CanUseItem(Item item, Terraria.Player player)
         {
-			if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
-			{
-				return player.Custom().Stamina > 0;
-			}
 			if (player.GetModPlayer<TerrapainPlayer>().unarmed && item.damage > 0 && item.pick == 0 && item.axe == 0 && item.hammer == 0 && !item.accessory && !Main.projHook[item.shoot])
 			{
 				return false;
+			}
+			if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
+			{
+				return player.Custom().Stamina > 0;
 			}
 			return base.CanUseItem(item, player);
         }

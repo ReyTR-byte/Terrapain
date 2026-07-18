@@ -220,14 +220,14 @@ namespace Terrapain.Common.Player
 				{
 					Player.armor[i + 3].GetGlobalItem<TGlobalItem>().slot = i;
 
-                    if (ActiveAccesoriesKeybinds[i].Current)
+                    if (ActiveAccesoriesKeybinds[i].Current || ActiveAccesoriesKeybinds[i].JustReleased)
 					{
 						//if (Player.armor[i + 3].GetGlobalItem<TGlobalItem>().ActiveAccesoryModItem != null)
 						//{
 						//	Player.armor[i + 3].GetGlobalItem<TGlobalItem>().ActiveAccesoryModItem.TryUseAbilty(Player); 
 						//}
 						{
-                            Player.armor[i + 3].GetGlobalItem<TGlobalItem>().ActiveAccessoryVanillaItem.TryUseAbilty(Player, Player.armor[i + 3]);
+                            Player.armor[i + 3].GetGlobalItem<TGlobalItem>().ActiveAccessoryVanillaItem.TryUseAbilty(Player, Player.armor[i + 3], ActiveAccesoriesKeybinds[i].JustReleased);
                         }
 					}
 				}

@@ -25,6 +25,7 @@ namespace Terrapain.Common.Player
         public float DashPower;
         public float DashDirection;
         public int DashDuration;
+        public bool DashActive => DashDuration > 0;
         public int DashImpulse;
         public int DashImmune;
         public NPC.HitModifiers? DashHitModifiers;
@@ -32,6 +33,7 @@ namespace Terrapain.Common.Player
         public bool DashNoGravity;
         public bool DashStraight;
         public List<int> HittenNPCByDash;
+        public bool tileCollide = true;
         public bool[] DashDirections 
         {
             get => [Player.controlDown && Player.releaseDown && Player.doubleTapCardinalTimer[0] < 15, 
@@ -42,6 +44,60 @@ namespace Terrapain.Common.Player
 
         Vector2 preUpdatePos;
         Vector2 preUpdateVelosity;
+
+        public override void Load()
+        {
+            On_Player.Update += On_Player_Update;
+            On_Player.StickyMovement += On_Player_StickyMovement;
+            On_Player.SlopingCollision += On_Player_SlopingCollision;
+            On_Player.SlopeDownMovement += On_Player_SlopeDownMovement;
+        }
+        public override void Unload()
+        {
+            On_Player.Update -= On_Player_Update;
+            On_Player.StickyMovement -= On_Player_StickyMovement;
+            On_Player.SlopingCollision -= On_Player_SlopingCollision;
+            On_Player.SlopeDownMovement -= On_Player_SlopeDownMovement;
+        }
+
+        private void On_Player_SlopeDownMovement(On_Player.orig_SlopeDownMovement orig, Terraria.Player self)
+        {
+            if (Terrapain.ignoreTiles)
+            {
+                return;
+            }
+            orig(self);
+        }
+
+        private void On_Player_SlopingCollision(On_Player.orig_SlopingCollision orig, Terraria.Player self, bool fallThrough, bool ignorePlats)
+        {
+            if (Terrapain.ignoreTiles)
+            {
+                return;
+            }
+            fallThrough |= Terrapain.ignorePlatforms;
+            ignorePlats |= Terrapain.ignorePlatforms;
+            orig(self, fallThrough, ignorePlats);
+        }
+
+        private void On_Player_StickyMovement(On_Player.orig_StickyMovement orig, Terraria.Player self)
+        {
+            if (Terrapain.ignoreTiles)
+            {
+                return;
+            }
+            orig(self);
+        }
+        private void On_Player_Update(On_Player.orig_Update orig, Terraria.Player self, int i)
+        {
+            Terrapain.ignoreTiles = !self.GetModPlayer<PlayerMovement>().tileCollide;
+            Terrapain.ignorePlatforms = self.GetModPlayer<PlayerMovement>().ShouldFallThroughtPlatforms && self.controlDown;
+            orig(self, i);
+            Functions.Chatic(self.wet, self.honeyWet, self.lavaWet, self.shimmerWet);
+            Terrapain.ignoreTiles = false;
+            Terrapain.ignorePlatforms = false;
+            ShouldFallThroughtPlatforms = false;
+        }
 
         public override void ResetEffects()
         {
@@ -117,19 +173,18 @@ namespace Terrapain.Common.Player
                 }
             }
             Player.Custom().stimulator = null;
-            if (ShouldFallThroughtPlatforms)
-            {
-                if (Player.velocity.Y >= 0)
-                {
-                    List<Vector2> tiles;
-                    if (!Functions.HitTiles(Player) && Functions.StairsColision(Player.Bottom, Player.width, 0, out tiles))
-                    {
-                        Player.position.Y = preUpdatePos.Y + preUpdateVelosity.Y/* + Player.gravity < Player.maxFallSpeed? preUpdateVelosity.Y + Player.gravity : (preUpdateVelosity.Y < Player.maxFallSpeed? Player.maxFallSpeed : preUpdateVelosity.Y))*/;
-                        Player.velocity.Y = preUpdateVelosity.Y/* + Player.gravity < Player.maxFallSpeed? preUpdateVelosity.Y + Player.gravity : (preUpdateVelosity.Y < Player.maxFallSpeed? Player.maxFallSpeed : preUpdateVelosity.Y)*/;
-                    }
-                }
-            }
-            ShouldFallThroughtPlatforms = false;
+            //if (ShouldFallThroughtPlatforms)
+            //{
+            //    if (Player.velocity.Y >= 0)
+            //    {
+            //        List<Vector2> tiles;
+            //        if (!Functions.HitTiles(Player) && Functions.StairsColision(Player.Bottom, Player.width, 0, out tiles))
+            //        {
+            //            Player.position.Y = preUpdatePos.Y + preUpdateVelosity.Y/* + Player.gravity < Player.maxFallSpeed? preUpdateVelosity.Y + Player.gravity : (preUpdateVelosity.Y < Player.maxFallSpeed? Player.maxFallSpeed : preUpdateVelosity.Y))*/;
+            //            Player.velocity.Y = preUpdateVelosity.Y/* + Player.gravity < Player.maxFallSpeed? preUpdateVelosity.Y + Player.gravity : (preUpdateVelosity.Y < Player.maxFallSpeed? Player.maxFallSpeed : preUpdateVelosity.Y)*/;
+            //        }
+            //    }
+            //}
         }
         UnifiedRandom random = new UnifiedRandom();
         /// <summary>

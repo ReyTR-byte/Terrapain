@@ -45,14 +45,12 @@ namespace Terrapain.Content.Items.Accessories.ActiveAccessories
                 AbilityReload = 0;
             if (AbilityReload > AbilityReloadMax)
                 AbilityReload = AbilityReloadMax;
-            if (AutoUse)
-                activeAccessory.TryUseAbilty(player, Item);
         }
         public override bool? CanUseAbility(Player player)
         {
             if (!AutoUse)
             {
-                return base.CanUseAbility(player);
+                return null;
             }
             else
             {
