@@ -41,7 +41,7 @@ namespace Terrapain.Content.Buffs
             player.GetDamage(DamageClass.Generic) *= 1.5f;
             Vector2 start = new Vector2(random.NextFloat(player.position.X - 10, player.Left.X + 10), random.NextFloat(player.position.Y - 10, player.Bottom.Y + 10));
             Vector2 end = new Vector2(random.NextFloat(player.position.X - 10, player.Left.X + 10), random.NextFloat(player.position.Y - 10, player.Bottom.Y + 10));
-            if (player.Custom().unarmed)
+            if (player.Custom().unarmed && !player.Custom().HasAura<LightningAura>())
             {
                 player.Custom().auras.Add(new LightningAura(player.whoAmI));
             }

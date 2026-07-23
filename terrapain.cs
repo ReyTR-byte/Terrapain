@@ -5,6 +5,7 @@ using Terrapain.Content.Items.Ingredients;
 using Terrapain.Content.Items.ItemDropRules;
 using Terrapain.Content.NPCs.Bosses.Scorspider;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -24,12 +25,50 @@ namespace Terrapain
         public static bool vanillaHit = true;
         public struct LightningDrawInfo
         {
-            public List<LightningPartInfo> lightningPartInfos;
+            public bool active;
+            public float speed;
+            public float progress;
+            public bool fullDraw;
+            public int timeLeft;
+            public bool playSound;
+            public SoundStyle? sound;
+            public List<LightningPartInfo> parts;
             public Color color;
             public float width;
             public Vector2 start;
             public Vector2 end;
+            public float TotalLength;
             public Vector2 dist => end - start;
+            public int Count => parts.Count;
+            public float GetWidth(float progress)
+            {
+                if (progress < 0 || progress > 1)
+                {
+                    return 0;
+                }
+                if (progress == 0)
+                {
+                    return parts[0].startWidth;
+                }
+                float length = progress * TotalLength;
+                progress = 0;
+                int targetPart = 0;
+                float partProgress = 0;
+                while (progress < length)
+                {
+                    partProgress = length - progress;
+                    progress += parts[targetPart].Length;
+                    targetPart++;
+                }
+                targetPart--;
+                var part = parts[targetPart];
+                if (part.Length == 0)
+                {
+                    return 0;
+                }
+                partProgress /= part.Length;
+                return MathHelper.Lerp(part.startWidth, part.endWidth, partProgress);
+            }
         }
         public struct LightningPartInfo
         {
@@ -37,6 +76,7 @@ namespace Terrapain
             public Vector2 end;
             public float startWidth;
             public float endWidth;
+            public float Length => start.Distance(end);
         }
         public static List<TitleLinkButton> terrapainTitleLinks = new List<TitleLinkButton>();
         public static DropOneByOne.Parameters SuicideTrophyDropParameters = new DropOneByOne.Parameters();

@@ -1,15 +1,21 @@
 ﻿using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Common.System;
 using Terrapain.Content.Buffs;
 using Terrapain.Content.DamageClasses;
 using Terrapain.Content.Dusts;
+using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static AssGen.Assets;
 
@@ -38,13 +44,22 @@ namespace Terrapain.Content.Auras
             internalColor.R /= 10;
             internalColor.G /= 10;
             internalColor.B /= 10;
-            timeLeft = 1;
+            timeLeft = 2;
         }
-        Terrapain.LightningDrawInfo? lighting = null;
-        public override void PostDraw(SpriteBatch sprite)
+        int soundTimer;
+        public override void PostUpdate()
         {
-            if (lighting.HasValue)
-                sprite.DrawLightning(lighting.Value);
+            if (owner.HasBuff<Shocked>())
+            {
+                timeLeft = 2;
+            }
+            Center = owner.Center;
+            if (soundTimer <= 0)
+            {
+                soundTimer = random.Next(35, 55);
+                SoundEngine.PlaySound(new SoundStyle("Terrapain/Assets/SoundEffects/ElectricField") { Volume = 1.2f, MaxInstances = 0 }, owner.Center);
+            }
+            soundTimer--;
         }
         public override void OnNPCInAura(NPC npc)
         {
@@ -55,7 +70,8 @@ namespace Terrapain.Content.Auras
                 float rotation = random.NextFloat(0, MathF.PI * 2);
                 Vector2 start = Center;//Functions.UnitVectorFromRotation(rotation) * random.NextFloat(0, radius);
                 //start += Center;
-                lighting = Functions.NewLightning(start, npc.Center, 16, fixedStart: true);
+                var lightning = Functions.NewLightning(start, npc.Center, 20, volume: 0.6f);
+                TunderSystem.NewLightning(lightning);
                 NPC.HitModifiers modifiers = new NPC.HitModifiers { DamageType = ModContent.GetInstance<Unarmed>(), HitDirection = (npc.position.X - Center.X).NonZeroSign() };
                 bool crit = owner.GetCritChance(modifiers.DamageType) > random.NextFloat(0, 100);
                 if (npc.knockBackResist == 0)

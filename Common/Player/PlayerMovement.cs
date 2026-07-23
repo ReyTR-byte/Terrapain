@@ -93,7 +93,6 @@ namespace Terrapain.Common.Player
             Terrapain.ignoreTiles = !self.GetModPlayer<PlayerMovement>().tileCollide;
             Terrapain.ignorePlatforms = self.GetModPlayer<PlayerMovement>().ShouldFallThroughtPlatforms && self.controlDown;
             orig(self, i);
-            Functions.Chatic(self.wet, self.honeyWet, self.lavaWet, self.shimmerWet);
             Terrapain.ignoreTiles = false;
             Terrapain.ignorePlatforms = false;
             ShouldFallThroughtPlatforms = false;

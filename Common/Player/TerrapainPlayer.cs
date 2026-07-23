@@ -14,6 +14,7 @@ using Terrapain.Content.Items.Weapons.SummonerWeapons;
 using Terrapain.Content.NPCs.Bosses.Scorspider;
 using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
 using Terrapain.Content.Stimulators;
+using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.UI.ResourceSets;
@@ -31,7 +32,6 @@ namespace Terrapain.Common.Player
 		public Vector2[] oldCenters = new Vector2[60];
 		public Vector2[] oldPositions = new Vector2[60];
 		public Vector2[] oldVelocities = new Vector2[60];
-		public List<Terrapain.LightningDrawInfo> lightnings = new List<Terrapain.LightningDrawInfo>();
         public List<Aura> auras = new List<Aura>();
         public bool RangerGranithShellArmorSet;
 		public bool CactusSet;
@@ -123,8 +123,6 @@ namespace Terrapain.Common.Player
 		}
 		public override void ResetEffects()
 		{
-			//Functions.Chatic(Stamina);
-            lightnings = new List<Terrapain.LightningDrawInfo>();
 			bootsActiveAccessory = false;
 
 			StarFuryBrasslet = false;
@@ -411,6 +409,17 @@ namespace Terrapain.Common.Player
 		{
 			unarmed = tag.Get<bool>("Unarmed");
         }
+		public bool HasAura<T>() where T : Aura
+		{
+			foreach (var aura in auras)
+			{
+				if (aura is T)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
         public override void PostUpdateBuffs()
         {
             for (int i = 0; i < auras.Count; i++)
@@ -453,33 +462,11 @@ namespace Terrapain.Common.Player
                 }
             }
         }
-        //int pp;
-        //  public override bool? CanHitNPCWithItem(Item item, NPC target)
-        //      {
-        //	pp++;
-        //	Functions.Chatic("pp", pp);
-        //	return true;
-        //      }
-        //int ll;
-        //      public override bool CanHitNPC(NPC target)
-        //      {
-        //	ll++;
-        //	Functions.Chatic("ll", ll);
-        //          return base.CanHitNPC(target);
-        //      }
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
 			if (TGlobalItem.UseDrawOverride.Contains(drawInfo.drawPlayer.HeldItem.useStyle) && drawInfo.drawPlayer.ItemAnimationActive)
 				drawInfo.heldItem.noUseGraphic = true;
         }
-		public void PostDrawPlayer(SpriteBatch sprite)
-		{
-			for (int i = 0; i < lightnings.Count; i++)
-			{
-				sprite.DrawLightning(lightnings[i]);
-            }
-			Texture2D texture = ExtraTextureRegistry.WhitePixel.Value;
-		}
 		public int chaosRegen;
 		public float chaosSpeed;
 		public float chaosAcceleration;

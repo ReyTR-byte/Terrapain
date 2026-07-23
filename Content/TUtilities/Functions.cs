@@ -1,5 +1,6 @@
 using Luminance.Common.Utilities;
 using Luminance.Core.Graphics;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terrapain.Assets.Extratextures;
@@ -8,6 +9,7 @@ using Terrapain.Common.Global;
 using Terrapain.Common.Player;
 using Terrapain.Content.Dusts;
 using Terraria;
+using Terraria.Audio;
 using Terraria.Chat;
 using Terraria.ID;
 using Terraria.Localization;
@@ -222,7 +224,7 @@ namespace Terrapain.Content
             }
             return targetFuturePosition;
         }
-		public static LightningDrawInfo NewLightning(Vector2 start, Vector2 end, float width, float widthSpread = 0.05f, float partLength = 0, float lengthSpread = 0.2f, float spread = 0.5f, bool fixedStart = false, Color? color = null, UnifiedRandom random = null)
+		public static LightningDrawInfo NewLightning(Vector2 start, Vector2 end, float width, float widthSpread = 0.05f, float partLength = 0, float lengthSpread = 0.2f, float spread = 0.5f, Color? color = null, UnifiedRandom random = null, float volume = 1)
 		{
 			if (random == null)
 			{
@@ -239,189 +241,92 @@ namespace Terrapain.Content
 			}
 			float lightningLength = (start - end).Length();
 			partLength /= lightningLength;
-			lightning.lightningPartInfos = new List<LightningPartInfo>();
+			lightning.parts = new List<LightningPartInfo>();
+			float oldRotation = 0;
+			lightning.active = true;
+			lightning.timeLeft = 3;
+			lightning.speed = 300;
+			lightning.playSound = true;
+			lightning.sound = new Terraria.Audio.SoundStyle("Terrapain/Assets/SoundEffects/TunderStrike") { Volume = volume, MaxInstances = 0 };
 			//float sqrt = MathF.Sqrt(2);
-			while (((lightning.lightningPartInfos.Count == 0 || lightning.lightningPartInfos[lightning.lightningPartInfos.Count - 1].end != Vector2.UnitX)) && lightning.lightningPartInfos.Count < 20)
+			while (((lightning.parts.Count == 0 || lightning.parts[lightning.parts.Count - 1].end != Vector2.UnitX)) && lightning.parts.Count < 20)
 			{
                 LightningPartInfo l = new LightningPartInfo();
-				if (lightning.lightningPartInfos.Count == 0)
+				if (lightning.parts.Count == 0)
 				{
 					l.start = Vector2.Zero;
-					if (!fixedStart)
-					{
-						l.start.Y = random.NextFloat(-spread, spread);
-					}
+					//if (!fixedStart)
+					//{
+					//	l.start.Y = random.NextFloat(-spread, spread);
+					//}
 					l.startWidth = random.NextFloat(1 - widthSpread, 1 + widthSpread) * width;
 				}
 				else
 				{
-					l.start = lightning.lightningPartInfos[lightning.lightningPartInfos.Count - 1].end;
-					l.startWidth = lightning.lightningPartInfos[lightning.lightningPartInfos.Count - 1].endWidth;
+					l.start = lightning.parts[lightning.parts.Count - 1].end;
+					l.startWidth = lightning.parts[lightning.parts.Count - 1].endWidth;
 
                 }
-				float rotation = random.NextFloat(-0.55f * MathF.PI, 0.55f * MathF.PI);
+				float rotation = random.NextFloat(-0.55f * MathF.PI, 0.55f * MathF.PI) + oldRotation;
+				rotation = NormalizeRotation(rotation, false);
+				float rotationToTarget = rotation - (Vector2.UnitX - l.start).ToRotation();
+                rotationToTarget = NormalizeRotation(rotationToTarget, false);
+                if (rotationToTarget > 0.55f)
+				{
+					rotation -= random.NextFloat(0, 0.25f * MathF.PI);
+                }
+				else if (rotationToTarget < -0.55f)
+				{
+                    rotation += random.NextFloat(0, 0.25f * MathF.PI);
+                }
 				float length = random.NextFloat(partLength * (1 - lengthSpread), partLength * (1 + lengthSpread));
 				l.end = l.start + UnitVectorFromRotation(rotation) * length;
 				if (MathF.Abs(l.end.Y) > spread)
 				{
 					l.end.Y = spread * l.end.Y.NonZeroSign();
 				}
-				l.endWidth = (1 - l.end.X) * random.NextFloat(1 - widthSpread, 1 + widthSpread) * width;
-				if (l.end.X >= 1)
+				l.endWidth = random.NextFloat(1 - widthSpread, 1 + widthSpread) * width;
+				if (l.end.X >= 0.95f || lightning.Count == 19)
 				{
 					l.endWidth = 0;
 					l.end = Vector2.UnitX;
 				}
-				lightning.lightningPartInfos.Add(l);
+				else
+				{
+					l.end.X = MathF.Max(l.end.X, -0.1f);
+					float val = 1 - l.end.X;
+					l.end.Y = MathHelper.Clamp(l.end.Y, -val, val);
+					oldRotation = (l.end - l.start).ToRotation();
+				}
+				lightning.parts.Add(l);
 			}
-			for (int i = 0; i < lightning.lightningPartInfos.Count; i++)
+			for (int i = 0; i < lightning.parts.Count; i++)
 			{
-				var part = lightning.lightningPartInfos[i];
+				var part = lightning.parts[i];
 				part.start *= lightning.dist.Length();
 				part.start.RotateBy(lightning.dist.ToRotation());
 				part.start += start;
 				part.end *= lightning.dist.Length();
                 part.end.RotateBy(lightning.dist.ToRotation());
                 part.end += start;
-				lightning.lightningPartInfos[i] = part;
+				lightning.TotalLength += part.Length;
+				lightning.parts[i] = part;
             }
-			return lightning;
-		}
-		public static void DrawLightning(this SpriteBatch sprite, LightningDrawInfo lightning)
-		{
-			if (!ClientConfig.Instance.UseShaders)
-			{
-				for (int i = 0; i < lightning.lightningPartInfos.Count; i++)
-				{
-					var l = lightning.lightningPartInfos[i];
-					Vector2 realStart = l.start;
-					Vector2 realEnd = l.end;
-					float length = (realStart - realEnd).Length();
-					float realRotation = AngleFromVector(realEnd - realStart);
-					float biggestWidth = Math.Max(l.startWidth, l.endWidth);
-					Texture2D texture = ExtraTextureRegistry.WhitePixel.Value;
-					Vector2 scale = new Vector2(length, biggestWidth);
-					sprite.Draw(texture, realStart - Main.screenPosition, null, lightning.color, realRotation, new Vector2(0, 0.5f), scale, SpriteEffects.None, 0);
-				}
-			}
-			else
-			{
-                Vector2 TopLeft = Vector2.Zero;
-                Vector2 BottomLeft = Vector2.Zero;
-				Vector2 TopRight = Vector2.Zero;
-				Vector2 BottomRight = Vector2.Zero;
-
-                ManagedShader shader = ShaderManager.GetShader("Terrapain.LightningShader");
-
-                Texture2D texture = ExtraTextureRegistry.WhitePixel.Value;
-                for (int i = 0; i < lightning.lightningPartInfos.Count; i++)
-                {
-                    var l = lightning.lightningPartInfos[i];
-                    float length = (l.start - l.end).Length();
-                    float rotation = AngleFromVector(l.end - l.start);
-                    float biggestWidth = Math.Max(l.startWidth, l.endWidth);
-					if (i == 0)
-					{
-                        ManagedShader HalfCircle = ShaderManager.GetShader("Terrapain.HalfCircle");
-                        sprite.End();
-                        sprite.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, HalfCircle.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
-                        sprite.Draw(texture, l.start - Main.screenPosition, null, lightning.color, rotation, new Vector2(0.5f, 0.5f), l.startWidth, SpriteEffects.None, 0);
-                        TopLeft = l.start - (Vector2.UnitY * l.startWidth / 2).RotatedBy(rotation);
-                        BottomLeft = l.start + (Vector2.UnitY * l.startWidth / 2).RotatedBy(rotation);
-                    }
-					else
-					{
-						TopLeft = TopRight;
-						BottomLeft = BottomRight;
-					}
-					if (i + 1 < lightning.lightningPartInfos.Count)
-					{
-						Vector2 TopRightCandidate = l.end - (Vector2.UnitY * l.endWidth / 2).RotatedBy(rotation);
-						var l1 = lightning.lightningPartInfos[i + 1];
-						float rotation1 = AngleFromVector(l1.end - l1.start);
-						Vector2 start2 = l1.start - (Vector2.UnitY * l1.startWidth / 2).RotatedBy(rotation1);
-						Vector2 end2 = l1.end - (Vector2.UnitY * l1.endWidth / 2).RotatedBy(rotation1);
-
-						TopRight = AlmostGarantedRayColision(TopLeft, TopRightCandidate, start2, end2)?? TopRightCandidate;
-
-                        Vector2 BottomRightCandidate = l.end + (Vector2.UnitY * l.endWidth / 2).RotatedBy(rotation);
-						start2 = l1.start + (Vector2.UnitY * l1.startWidth / 2).RotatedBy(rotation1);
-                        end2 = l1.end + (Vector2.UnitY * l1.endWidth / 2).RotatedBy(rotation1);
-
-						BottomRight = AlmostGarantedRayColision(BottomLeft, BottomRightCandidate, start2, end2)?? BottomRightCandidate;
-                    }
-					else
-					{
-                        TopRight = l.end + (Vector2.UnitY * l.endWidth / 2).RotatedBy(rotation);
-                        BottomRight = l.end + (Vector2.UnitY * -l.endWidth / 2).RotatedBy(rotation);
-						if (l.endWidth > 0)
-						{
-                            ManagedShader HalfCircle = ShaderManager.GetShader("Terrapain.HalfCircle");
-                            sprite.End();
-                            sprite.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, HalfCircle.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
-                            sprite.Draw(texture, l.start - Main.screenPosition, null, lightning.color, rotation, new Vector2(0.5f, 0.5f), (l.end - l.start).ToRotation(), SpriteEffects.None, 0);
-                        }
-                    }
-
-					Vector2 realStart = (l.startWidth > l.endWidth? l.start : l.end);
-					Vector2 realEnd = (l.startWidth <= l.endWidth ? l.start : l.end);
-					float realRotation = (realEnd - realStart).ToRotation();
-					Vector2[] points = new Vector2[6];
-					points[0] = realStart;
-					points[1] = realEnd;
-                    points[2] = (l.startWidth > l.endWidth ? TopLeft : BottomRight);
-                    points[3] = (l.startWidth > l.endWidth ? BottomLeft : TopRight);
-                    points[4] = (l.startWidth <= l.endWidth ? TopLeft : BottomRight);
-                    points[5] = (l.startWidth <= l.endWidth ? BottomLeft : TopRight);
-					for (int j = 0; j < 6; j++)
-					{
-						points[j] -= realStart;
-						points[j].RotateBy(-realRotation);
-					}
-					float halfedWidth = 0;
-					for (int j = 2; j < 6; j++)
-					{
-						halfedWidth = MathF.Max(halfedWidth, MathF.Abs(points[j].Y));
-					}
-					float minX = 0;
-					float maxX = 0;
-                    for (int j = 0; j < 6; j++)
-                    {
-						points[j].Y += halfedWidth;
-						points[j].Y /= halfedWidth * 2;
-						minX = MathF.Min(minX, points[j].X);
-                        maxX = MathF.Max(maxX, points[j].X);
-                    }
-					float _length = maxX - minX;
-                    for (int j = 0; j < 6; j++)
-                    {
-                        points[j].X -= minX;
-						points[j].X /= _length;
-                    }
-					shader.TrySetParameter("left", points[0]);
-					shader.TrySetParameter("leftTop", points[2]);
-                    shader.TrySetParameter("leftBottom", points[3]);
-                    shader.TrySetParameter("right", points[1]);
-                    shader.TrySetParameter("rightTop", points[5]);
-                    shader.TrySetParameter("rightBottom", points[4]);
-                    shader.TrySetParameter("widthLeft", (l.startWidth > l.endWidth ? l.startWidth : l.endWidth) / halfedWidth / 2);
-                    shader.TrySetParameter("widthRight", (l.startWidth <= l.endWidth? l.startWidth : l.endWidth) / halfedWidth / 2);
-					sprite.End();
-                    sprite.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, shader.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
-					Vector2 scale = new Vector2(_length, halfedWidth * 2);
-                    sprite.Draw(texture, realStart - Main.screenPosition, null, lightning.color, realRotation, points[0], scale, SpriteEffects.None, 0);
-					//sprite.DrawLine(l.start, TopLeft, Color.Red, 8);
-					//sprite.DrawLine(l.start, BottomLeft, Color.Blue, 8);
-					//sprite.DrawLine(BottomLeft, BottomRight, Color.Green, 8);
-					//sprite.DrawLine(TopLeft, TopRight, Color.Black, 8);
-					//sprite.DrawLine(l.end, TopRight, Color.White, 8);
-					//sprite.DrawLine(l.end, BottomRight, Color.Gray, 8);
-				}
-				sprite.End();
-			   	sprite.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+			float progress = 0;
+            for (int i = 0; i < lightning.parts.Count - 1; i++)
+            {
+                var part = lightning.parts[i];
+                var part2 = lightning.parts[i + 1];
+                progress += part.Length;
+				part.endWidth *= 1 - progress / lightning.TotalLength;
+				part2.startWidth = part.endWidth;
+                lightning.parts[i + 1] = part2;
+                lightning.parts[i] = part;
             }
+            return lightning;
 		}
-		public static Vector2 ToTextureCoords(Vector2 point, Vector2 LeftTop, Vector2 RightBottom, float rotation)
+
+        public static Vector2 ToTextureCoords(Vector2 point, Vector2 LeftTop, Vector2 RightBottom, float rotation)
 		{
 			point -= LeftTop;
 			RightBottom -= LeftTop;

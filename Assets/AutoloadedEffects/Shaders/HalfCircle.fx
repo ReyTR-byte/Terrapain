@@ -10,7 +10,12 @@ float4 PixelShaderFunction(float4 sampleColor : COLOR0, float2 uv : TEXCOORD0) :
         return float4(0, 0, 0, 0);
     }
     dist *= 2;
-    return sampleColor * 1 - (dist * dist * dist);
+    float num = (1 - dist * dist * dist) - 0.2;
+    if (num <= 0.02)
+        return float4(0, 0, 0, 0);
+    float num1 = 1 - dist;
+    float4 color = float4(num1, num1, num, num);
+    return sampleColor * color;
 }
 
 technique Technique1

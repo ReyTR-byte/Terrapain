@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
+using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.Utilities;
@@ -99,7 +101,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu
             lightning = new Terrapain.LightningDrawInfo()
             {
                 color = Color.Aquamarine,
-                lightningPartInfos = parts,
+                parts = parts,
                 start = Projectile.Center,
                 end = Points[Points.Count - 1],
                 width = 10,
@@ -115,9 +117,11 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu
         }
         public override bool PreDraw(ref Color lightColor)
         {
-            if (lightning.lightningPartInfos != null)
+            if (lightning.parts != null)
             {
-                Main.spriteBatch.DrawLightning(lightning);
+                Main.spriteBatch.End();
+                Graphics.DrawLightning(lightning);
+                Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
             }
             return false;
         }
