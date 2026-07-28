@@ -12,8 +12,8 @@ namespace Terrapain.Content.Projectiles.Friendly
     {
         public override void SetDefaults()
         {
-            Projectile.width = 14;
-            Projectile.height = 14;
+            Projectile.width = 18;
+            Projectile.height = 18;
             Projectile.aiStyle = -1;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Magic;

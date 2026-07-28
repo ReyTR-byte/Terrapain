@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Terrapain.Content;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Common.Config;
 using Terraria;
 using Terraria.DataStructures;
@@ -9,7 +7,7 @@ using Terraria.Utilities;
 using static Terrapain.Content.Functions;
 using Terrapain.Common.Global.TGlobalNPCs;
 
-namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
+namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
 {
 	public class BrainOfCthulhu : NPCBehaviour
 	{

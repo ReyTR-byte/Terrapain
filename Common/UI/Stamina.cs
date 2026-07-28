@@ -135,7 +135,7 @@ namespace Terrapain.Common.UI
             {
                 // Рисуем все слои с alpha = 1
                 s.Draw(spriteBatch, pos, Vector2.One, 1f);
-                c.Draw(spriteBatch, pos - Vector2.UnitX * 28, Vector2.One, progress, 1f, DrawColor);
+                c.Draw(spriteBatch, pos, Vector2.One, progress, 1f, DrawColor);
                 s.DrawOver(spriteBatch, pos, Vector2.One, 1f);
             }
 

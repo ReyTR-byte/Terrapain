@@ -7,11 +7,14 @@ using Terrapain.Common.Config;
 using Terrapain.Common.Global;
 using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Common.System;
+using Terrapain.Common.UI;
+using Terrapain.Common.UI.Assets.TerrapainBossBars.DefaultBossBar;
 using Terrapain.Content.Items.DropRulls;
 using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -22,7 +25,6 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
 {
     public class KingSlime : NPCBehaviour
     {
-
         public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
         {
             return lateInstantiation && entity.type == NPCID.KingSlime;
@@ -59,11 +61,16 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         }
         bool oldCollideY;
         UnifiedRandom rand => TGlobalNPC.random;
+        DefaultBossBar bossBar = new();
 
         public override void OnSpawn(NPC npc, IEntitySource source)
         {
             //Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, Vector2.UnitX * 2, SlimeWall, 0, 0, -1, 10);
             NextAttack1(npc);
+            bossBar.Phases = 4;
+            bossBar.boss = npc.whoAmI;
+            bossBar.bossType = npc.type;
+            TerrapainBossBarStyle.BossBar = bossBar;
         }
         public override void ModSetDefaults(NPC entity)
         {
@@ -98,9 +105,21 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             {
                 index = -1;
             }
+            if (index > 0)
+            {
+                bossBar.info.head = TextureAssets.NpcHeadBoss[index].Value;
+            }
+            else
+            {
+                bossBar.info.head = null;
+            }
         }
         public override bool ModPreAI(NPC npc)
         {
+            bossBar.info.Health = npc.life;
+            bossBar.info.MaxPhaseHealth = npc.lifeMax;
+            bossBar.info.MinPhaseHealth = 0;
+            bossBar.info.CurentPhase = 1;
             if (died)
             {
                 if (NinjaKingSlime != null && NinjaKingSlime.active && NinjaKingSlime.type == ModContent.NPCType<NinjaKingSlime>())

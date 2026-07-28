@@ -13,7 +13,7 @@ namespace Terrapain.Common.Global.TGlobalNPCs
         public override bool InstancePerEntity => true;
         public TGlobalNPC t;
         public UnifiedRandom random = new UnifiedRandom();
-        public virtual int type => 0;
+        public virtual int type => -1;
         public virtual bool condition => !WorldDifficultySystem.clasic;
         public override bool AppliesToEntity(NPC entity, bool lateInstantiation)
         {
