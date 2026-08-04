@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Content;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -18,10 +19,16 @@ namespace Terrapain.Common.Global.UseStyles
     {
         public int bowTime;
         public int projectile;
+        public SoundStyle? sound;
         public override bool InstancePerEntity => true;
         public override bool AppliesToEntity(Item entity, bool lateInstantiation)
         {
             return entity.useStyle == TGlobalItem.BowOverride;
+        }
+        public override void SetDefaults(Item entity)
+        {
+            sound = entity.UseSound;
+            entity.UseSound = null;
         }
         public override void UseStyle(Item item, Terraria.Player player, Rectangle heldItemFrame)
         {
@@ -79,6 +86,10 @@ namespace Terrapain.Common.Global.UseStyles
         UnifiedRandom random = new();
         public override bool Shoot(Item item, Terraria.Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
+            if (bowTime == 1)
+            {
+                return false;
+            }
             if (bowTime >= item.useAnimation * 5)
             {
                 switch (item.type)
@@ -94,10 +105,9 @@ namespace Terrapain.Common.Global.UseStyles
                         break;
                 }
             }
-            
-            if (bowTime == 1)
+            if (sound.HasValue)
             {
-                return false;
+                SoundEngine.PlaySound(sound, player.position);
             }
             return true;
         }

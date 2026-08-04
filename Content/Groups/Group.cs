@@ -22,6 +22,19 @@ namespace Terrapain.Content.Groups
         public List<float> sort = new List<float>();
         public int Count => members.Count;
         public bool active;
+
+        public Vector2 Center
+        {
+            get
+            {
+                Vector2 center = new Vector2();
+                foreach (var member in members)
+                {
+                    center += Main.npc[member].Center;
+                }
+                return center / Count;
+            }
+        }
         /// <summary>
         /// retun count of removed members
         /// </summary>

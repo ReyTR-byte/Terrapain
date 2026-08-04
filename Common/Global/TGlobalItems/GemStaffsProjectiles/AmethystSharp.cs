@@ -33,10 +33,13 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
             Projectile.tileCollide = true;
             Projectile.GetT().afterimage = true;
             Projectile.GetT().afterimagesCount = 5;
-            Projectile.GetT().drawTrail = true;
-            Projectile.GetT().trailColor = Color.Purple * 0.5f;
-            Projectile.GetT().trailLength = 10;
-            Projectile.GetT().trailWidth = 18;
+            Projectile.GetT().trail = new()
+            {
+                startColor = Color.Purple * 0.5f,
+                endColor = Color.Purple * 0.5f,
+                length = 10,
+                startWidth = 18
+            };
         }
         float angularVelocity;
         static UnifiedRandom ur = new UnifiedRandom();

@@ -11,6 +11,7 @@ using Terrapain.Content.Dusts;
 using Terraria;
 using Terraria.Audio;
 using Terraria.Chat;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
@@ -52,6 +53,20 @@ namespace Terrapain.Content
         public static Vector2 GetInt(this Vector2 targetVector)
         {
             return new((int)targetVector.X, (int)targetVector.Y);
+        }
+		public static int NextDir(this UnifiedRandom random)
+		{
+			return random.Next(2) == 0? -1 : 1;
+		}
+		public static int NewNPC(IEntitySource source, Vector2 position, Vector2 Velocity, int type, int start = 0, int ai0 = 0, int ai1 = 0, int ai2 = 0, int ai3 = 0, int target = 255)
+		{
+			int npc = NPC.NewNPC(source, (int)position.X, (int)position.Y, type, start, ai0, ai1, ai2, ai3, target);
+			Main.npc[npc].velocity = Velocity;
+			return npc;
+		}
+        public static int NewNPC(IEntitySource source, Vector2 position, int type, int start = 0, int ai0 = 0, int ai1 = 0, int ai2 = 0, int ai3 = 0, int target = 255)
+        {
+            return NPC.NewNPC(source, (int)position.X, (int)position.Y, type, start, ai0, ai1, ai2, ai3, target);
         }
         public static bool IsAngleBetweenAngles(float angle1, float targetAngle, float angle2)
 		{
@@ -367,6 +382,10 @@ namespace Terrapain.Content
 		}
         public static Vector2? AlmostGarantedRayColision(Vector2 start1, Vector2 end1, Vector2 start2, Vector2 end2)
         {
+			if (start1 == end1 || start2 == end2)
+			{
+				return null;
+			}
             Vector2 vec1 = end1 - start1;
             float rotation = AngleFromVector(vec1);
             vec1.RotateBy(-rotation);
@@ -392,11 +411,16 @@ namespace Terrapain.Content
 		}
 		public static void CommonTerrapainFlyingMovement(Entity entity, Vector2 targetPosition, float rotatingSpeed, float MaxSpeed, float acceleration, float BreakingZone)
 		{
+			if (entity.Center == targetPosition)
+			{
+				if (BreakingZone > 0)
+				{
+					entity.velocity = Vector2.Zero;
+				}
+				return;
+			}
             float maxVelocityMultyplier = 1;
-            if (targetPosition != entity.Center)
-            {
-                entity.velocity += entity.DirectionTo(targetPosition) * acceleration;
-            }
+            entity.velocity += entity.DirectionTo(targetPosition) * acceleration;
             if (entity.Distance(targetPosition) < MaxSpeed)
             {
                 maxVelocityMultyplier = 1 - (MaxSpeed - entity.Distance(targetPosition)) / MaxSpeed;

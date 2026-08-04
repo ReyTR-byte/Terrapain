@@ -64,10 +64,13 @@ namespace Terrapain.Content.Projectiles.Friendly
             Projectile.extraUpdates = 1;
             Projectile.GetGlobalProjectile<TGlobalProjectile>().afterimage = true;
             Projectile.GetGlobalProjectile<TGlobalProjectile>().afterimagesCount = 4;
-            Projectile.GetT().drawTrail = true;
-            Projectile.GetT().trailColor = Color.LightPink * 0.4f;
-            Projectile.GetT().trailWidth = 20;
-            Projectile.GetT().trailLength = 10;
+            Projectile.GetT().trail = new()
+            {
+                startColor = Color.LightPink * 0.4f,
+                endColor = Color.LightPink * 0.4f,
+                length = 10,
+                startWidth = 20
+            };
 
             //{
             //    int count = 20;

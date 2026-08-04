@@ -55,10 +55,13 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         }
         public override void BossHeadSlot(ref int index)
         {
+            KS.bossBar.crownAtCrownedKingSlime = false;
             if (KSCactive && KingSlimeCrown.ai[0] == -2)
             {
+                KS.bossBar.crownAtCrownedKingSlime = true;
                 index = 7;
             }
+            KS.bossBar.crownedKingSlimeInfo.head = index;
         }
         public int ninjaKingSlime;
         public NPC NinjaKingSlime => Main.npc[ninjaKingSlime];
@@ -133,6 +136,11 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             {
                 NPC.active = false;
             }
+            KS.bossBar.crownedKingSlimeActive = true;
+            KS.bossBar.crownedKingSlimeInfo.CurentPhase = 1;
+            KS.bossBar.crownedKingSlimeInfo.Health = NPC.life;
+            KS.bossBar.crownedKingSlimeInfo.MaxPhaseHealth = NPC.lifeMax;
+            KS.bossBar.crownedKingSlimeInfo.MinPhaseHealth = 0;
             NPC.defense = NPC.defDefense;
             NPC.immortal = false;
             NPC.TargetClosest();
@@ -585,6 +593,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         {
             if(KSactive)
             {
+                KS.bossBar.crownedKingSlimeActive = false;
                 KS.crownedKingSlimeKilled = true;
             }
         }

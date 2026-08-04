@@ -260,15 +260,12 @@ namespace Terrapain.Common.Global
 			}
             ModOnHitNPC(item, player, target, hit, damageDone);
         }
-		public virtual void ModUpdateInventory(Item item, Terraria.Player player) { }
 
         public override void UpdateInventory(Item item, Terraria.Player player)
 		{
 			usedShootSpeedBonus = ShootSpeedBonus;
 
 			ShootSpeedBonus = 0;
-
-			ModUpdateInventory(item, player);
 		}
         public override void UpdateAccessory(Item item, Terraria.Player player, bool hideVisual)
         {

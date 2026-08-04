@@ -113,6 +113,11 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             {
                 NPC.active = false;
             }
+            KS.bossBar.kingSlimeCrownActive = true;
+            KS.bossBar.kingSlimeCrownInfo.Health = NPC.life;
+            KS.bossBar.kingSlimeCrownInfo.MaxPhaseHealth = NPC.lifeMax;
+            KS.bossBar.kingSlimeCrownInfo.MinPhaseHealth = 0;
+            KS.bossBar.kingSlimeCrownInfo.CurentPhase = 1;
             NPC.TargetClosest();
             if (CKSactive)
             {
@@ -134,6 +139,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
                 }
                 else if (NPC.ai[0] == -2)
                 {
+                    KS.bossBar.kingSlimeCrownActive = false;
                     NPC.Center = CrownAtKingSlime;
                     NPC.velocity = Vector2.Zero;
                     NPC.rotation = 0;
@@ -358,6 +364,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         {
             if (KSactive)
             {
+                KS.bossBar.kingSlimeCrownActive = false;
                 KS.kingSlimeCrownKilled = true;
             }
             Gore.NewGore(NPC.GetSource_FromThis(), NPC.Center, NPC.velocity, GoreID.KingSlimeCrown);
@@ -368,6 +375,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             {
                 index = -1;
             }
+            KS.bossBar.kingSlimeCrownInfo.head = index;
         }
         public override void BossHeadRotation(ref float rotation)
         {

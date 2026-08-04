@@ -23,10 +23,13 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu
             Projectile.GetT().NonPremultiplied = true;
             Projectile.GetT().useModDrawingInPreDraw = true;
             Projectile.GetT().useVanillaDrawing = false;
-            Projectile.GetT().drawTrail = true;
-            Projectile.GetT().trailLength = 25;
-            Projectile.GetT().trailWidth = 25;
-            Projectile.GetT().trailColor = Color.Red * 25;
+            Projectile.GetT().trail = new()
+            {
+                startColor = Color.Red,
+                endColor = Color.Red,
+                length = 25,
+                startWidth = 25
+            };
         }
         static UnifiedRandom random = new UnifiedRandom();
         int variant;

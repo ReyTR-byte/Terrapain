@@ -19,7 +19,7 @@ namespace Terrapain.Common.UI.Assets.TerrapainBossBars.DefaultBossBar
             Size = texture.Size();
             PhaseBar = ModContent.Request<Texture2D>(PhaseBarAddress).Value;
             PhaseBarFill = ModContent.Request<Texture2D>(PhaseBarFillAddress).Value;
-            BarPosition = new Vector2(-8, -8) - BossBar.size / 2 + Size;
+            BarPosition = new Vector2(-8, -8) - ModContent.Request<Texture2D>(textureAddress + "Bar").Value.Size() / 2 + Size;
             PhaseBarPosition = new Vector2(-14, -28) - PhaseBar.Size() / 2 + Size;
             HeadPosition = new Vector2(24, 16);
             PhaseBarWidth = PhaseBar.Width - 2;

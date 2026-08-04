@@ -18,22 +18,13 @@ namespace Terrapain.Common.UI.Assets.BarFills
         public virtual Vector2 Offset => Vector2.Zero;
         public Vector2? origin = null;
         public virtual string Texture => this.GetPath();
-        Texture2D _texture = null;
-        public Texture2D texture
-        {
-            get
-            {
-                _texture ??= ModContent.Request<Texture2D>(Texture).Value;
-                return _texture;
-            }
-        }
-        public Vector2 size => texture.Size();
         public virtual void Draw(SpriteBatch spriteBach, Vector2 position, Vector2 scale, float charge, float alpha = 1, Color? DrawColor = null)
         {
+            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
             Rectangle frame = texture.Bounds;
             frame.Width = (int)(frame.Width * charge);
             frame.X = texture.Width - frame.Width;
-            Vector2 _origin = origin?? size / 2;
+            Vector2 _origin = origin?? texture.Size() / 2;
             Color drawColor = DrawColor?? Color.White;
             if (frame.Width > 0)
             {

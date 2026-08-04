@@ -105,6 +105,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         {
             return (Target.position.Y > NPC.Bottom.Y) && CurentAttack != 2;
         }
+        public override void BossHeadSlot(ref int index)
+        {
+            KS.bossBar.ninjaKingSlimeInfo.head = index;
+        }
         int SlimeWall => ModContent.ProjectileType<SlimeWall>();
 
         int SlimeBall => ModContent.ProjectileType<KingSlimeBall>();
@@ -138,6 +142,12 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             {
                 NPC.active = false;
             }
+            KS.bossBar.ninjaKingSlimeActive = true;
+            KS.bossBar.ninjaKingSlimeInfo.Health = NPC.life;
+            KS.bossBar.ninjaKingSlimeInfo.MaxPhaseHealth = NPC.lifeMax;
+            KS.bossBar.ninjaKingSlimeInfo.MinPhaseHealth = 0;
+            KS.bossBar.ninjaKingSlimeInfo.CurentPhase = 1;
+
             NPC.TargetClosest();
             NPC.noTileCollide = false;
             //switch (phase)
@@ -361,6 +371,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         {
             if (KSactive)
             {
+                KS.bossBar.ninjaKingSlimeActive = false;
                 KS.ninjaKingSlimeKilled = true;
             }
         }

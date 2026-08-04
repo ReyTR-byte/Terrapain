@@ -25,10 +25,13 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
             Projectile.GetT().NonPremultiplied = true;
             Projectile.GetT().useModDrawingInPreDraw = true;
             Projectile.GetT().useVanillaDrawing = false;
-            Projectile.GetT().drawTrail = true;
-            Projectile.GetT().trailColor = Color.Green * 0.5f;
-            Projectile.GetT().trailLength = 15;
-            Projectile.GetT().trailWidth = 13;
+            Projectile.GetT().trail = new()
+            {
+                startColor = Color.Green * 0.5f,
+                endColor = Color.Green * 0.5f,
+                length = 15,
+                startWidth = 13
+            };
             Projectile.GetT().afterimage = true;
             Projectile.GetT().afterimagesCount = 10;
             ProjectileID.Sets.TrailCacheLength[Type] = 15;

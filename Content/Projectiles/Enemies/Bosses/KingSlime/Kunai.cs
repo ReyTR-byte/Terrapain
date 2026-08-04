@@ -7,6 +7,12 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
 {
     public class Kunai : ModProjectile
     {
+        public override void SetStaticDefaults()
+        {
+            // DisplayName.SetDefault("Prisma Regalia");
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 16;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+        }
         public override void SetDefaults()
         {
             Projectile.width = 24;
@@ -20,6 +26,15 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             Projectile.GetT().useModDrawingInPreDraw = true;
             Projectile.GetT().useVanillaDrawing = false;
             Projectile.GetT().drawCenter = new Vector2(44, 13);
+            Projectile.GetT().trail = new()
+            {
+                startWidth = 19,
+                endWidth = 12,
+                length = 16,
+                startColor = Color.Blue * 0.65f,
+                smooth = false,
+                Offset = new Vector2(40, 0)
+            };
         }
         public override bool OnTileCollide(Vector2 oldVelocity)
         {

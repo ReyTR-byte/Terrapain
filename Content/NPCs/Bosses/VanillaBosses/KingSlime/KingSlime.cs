@@ -5,10 +5,12 @@ using System.Net.Security;
 using Terrapain.Assets.Extratextures;
 using Terrapain.Common.Config;
 using Terrapain.Common.Global;
+using Terrapain.Common.Global.TGlobalItems;
 using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Common.System;
 using Terrapain.Common.UI;
 using Terrapain.Common.UI.Assets.TerrapainBossBars.DefaultBossBar;
+using Terrapain.Common.UI.Assets.TerrapainBossBars.KingSlimeBossBar;
 using Terrapain.Content.Items.DropRulls;
 using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
 using Terraria;
@@ -61,7 +63,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         }
         bool oldCollideY;
         UnifiedRandom rand => TGlobalNPC.random;
-        DefaultBossBar bossBar = new();
+        public KingSlimeBossBar bossBar = new();
 
         public override void OnSpawn(NPC npc, IEntitySource source)
         {
@@ -105,23 +107,18 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
             {
                 index = -1;
             }
-            if (index > 0)
-            {
-                bossBar.info.head = TextureAssets.NpcHeadBoss[index].Value;
-            }
-            else
-            {
-                bossBar.info.head = null;
-            }
+            bossBar.info.head = index;
         }
         public override bool ModPreAI(NPC npc)
         {
+            bossBar.kingSlimeActive = true;
             bossBar.info.Health = npc.life;
             bossBar.info.MaxPhaseHealth = npc.lifeMax;
             bossBar.info.MinPhaseHealth = 0;
             bossBar.info.CurentPhase = 1;
             if (died)
             {
+                bossBar.kingSlimeActive = false;
                 if (NinjaKingSlime != null && NinjaKingSlime.active && NinjaKingSlime.type == ModContent.NPCType<NinjaKingSlime>())
                 {
                     npc.Center = NinjaKingSlime.Center;

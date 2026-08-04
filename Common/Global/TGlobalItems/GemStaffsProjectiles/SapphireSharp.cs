@@ -34,10 +34,13 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
             Projectile.DamageType = DamageClass.Magic;
             Projectile.timeLeft = 1200;
             Projectile.GetT().useVanillaDrawing = false;
-            Projectile.GetT().trailColor = Color.Blue * 0.6f;
-            Projectile.GetT().trailLength = 20;
-            Projectile.GetT().trailWidth = 15;
-            Projectile.GetT().drawTrail = true;
+            Projectile.GetT().trail = new()
+            {
+                startColor = Color.Blue * 0.6f,
+                endColor = Color.Blue * 0.6f,
+                length = 20,
+                startWidth = 15
+            };
             Projectile.tileCollide = false;
             Projectile.penetrate = -1;
         }
@@ -127,7 +130,7 @@ namespace Terrapain.Common.Global.TGlobalItems.GemStaffsProjectiles
             float val = MathF.Max((Projectile.velocity.Length() - 20) / 5, 0);
             if (Projectile.velocity.Length() > 20)
             {
-                float trailWidth = Projectile.GetT().trailWidth;
+                float trailWidth = Projectile.GetT().trail.startWidth;
                 Color trailColor = Color.LightBlue * val;
                 int trailLength = 7;
 

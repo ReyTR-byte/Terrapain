@@ -30,10 +30,13 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             Projectile.tileCollide = true;
             Projectile.GetT().useModDrawingInPreDraw = true;
             Projectile.GetT().useVanillaDrawing = false;
-            Projectile.GetT().drawTrail = true;
-            Projectile.GetT().trailColor = Color.Red * 0.5f;
-            Projectile.GetT().trailLength = 10;
-            Projectile.GetT().trailWidth = 17;
+            Projectile.GetT().trail = new()
+            {
+                startColor = Color.Red * 0.5f,
+                endColor = Color.Red * 0.5f,
+                length = 10,
+                startWidth = 17
+            };
         }
         public override void OnSpawn(IEntitySource source)
         {

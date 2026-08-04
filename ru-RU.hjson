@@ -593,6 +593,11 @@ Mods: {
 				// DisplayName: Vozdukhan
 				// Tooltip: ""
 			}
+
+			WormyBrain: {
+				// Tooltip: ""
+				// DisplayName: Wormy Brain
+			}
 		}
 
 		Projectiles: {
