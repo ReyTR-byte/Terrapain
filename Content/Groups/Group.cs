@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Common.Global;
 using Terraria;
 using static Terrapain.Content.Functions;
 
@@ -22,6 +23,7 @@ namespace Terrapain.Content.Groups
         public List<float> sort = new List<float>();
         public int Count => members.Count;
         public bool active;
+        public bool autoDisable = true;
 
         public Vector2 Center
         {
@@ -33,6 +35,18 @@ namespace Terrapain.Content.Groups
                     center += Main.npc[member].Center;
                 }
                 return center / Count;
+            }
+        }
+        public Vector2 AverageVelocity
+        {
+            get
+            {
+                Vector2 velocity = new Vector2();
+                foreach (var member in members)
+                {
+                    velocity += Main.npc[member].velocity;
+                }
+                return velocity / Count;
             }
         }
         /// <summary>
@@ -52,14 +66,31 @@ namespace Terrapain.Content.Groups
                     count++;
                 }
             }
-            if (members.Count == 0)
+            if (members.Count == 0 && autoDisable)
             {
-                Terrapain.group[whoAmI] = null;
+                Disable();
                 return count;
             }
             return count;
         }
+        public void CheckContainsGroup()
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                NPC member = Main.npc[members[i]];
+                if (!member.GetT().MyGroups.Contains(whoAmI))
+                {
+                    member.GetT().MyGroups.Add(whoAmI);
+                }
+            }
+        }
         public virtual void UpdateGroup()
+        {
+
+        }
+
+        public bool hasBeenDrawn;
+        public virtual void PreDrawFirstGroupNPC(SpriteBatch spriteBatch)
         {
 
         }
@@ -73,7 +104,8 @@ namespace Terrapain.Content.Groups
             {
                 members.Add(member);
                 sort.Add(0);
-                Main.npc[member].GetT().MyGroups.Add(whoAmI);
+                if (whoAmI != -1)
+                    Main.npc[member].GetT().MyGroups.Add(whoAmI);
             }
         }
         public void DelMember(int i)
@@ -84,6 +116,14 @@ namespace Terrapain.Content.Groups
             }
             members.RemoveAt(i);
             sort.RemoveAt(i);
+        }
+        public void Disable()
+        {
+            foreach (int mem in members)
+            {
+                Main.npc[mem].GetGlobalNPC<TGlobalNPC>().MyGroups.Remove(whoAmI);
+            }
+            Terrapain.group[whoAmI] = null;
         }
         int FindPivot(int minValue, int maxValue)
         {

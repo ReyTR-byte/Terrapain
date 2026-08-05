@@ -121,8 +121,14 @@ namespace Terrapain.Common.Global
         }
         public override void SetDefaults(NPC entity)
         {
-            if (drawCenter == Vector2.Zero) 
-                drawCenter = entity.Hitbox.Size() * 0.5f;
+            if (drawCenter == Vector2.Zero)
+            {
+                if (TextureAssets.Npc[entity.type] != null)
+                {
+                    Main.instance.LoadNPC(entity.type);
+                    drawCenter = TextureAssets.Npc[entity.type].Size() / 2;
+                }
+            }
         }
         public override void OnSpawn(NPC npc, IEntitySource source)
         {
@@ -170,6 +176,14 @@ namespace Terrapain.Common.Global
         //public virtual bool ModPreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, Texture2D texture) => true;
         public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            foreach(int group in MyGroups)
+            {
+                if (!Terrapain.group[group].hasBeenDrawn)
+                {
+                    Terrapain.group[group].PreDrawFirstGroupNPC(spriteBatch);
+                    Terrapain.group[group].hasBeenDrawn = true;
+                }
+            }
             Color col = npc.GetAlpha(Color.White);
             Color col2 = npc.GetColor(Color.White);
             if (npc.type == NPCID.YellowSlime)
@@ -376,6 +390,7 @@ namespace Terrapain.Common.Global
                 if (group != null)
                 {
                     group.PostDrawNPCs(Main.spriteBatch, Main.screenPosition);
+                    group.hasBeenDrawn = false;
                 }
             }
             foreach (var npc in Main.npc)

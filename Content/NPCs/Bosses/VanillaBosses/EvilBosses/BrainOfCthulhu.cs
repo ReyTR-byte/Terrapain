@@ -1,15 +1,15 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using Terrapain.Common.CameraModifiers;
 using Terrapain.Common.Config;
-using Terraria;
-using Terraria.DataStructures;
-using Terraria.ID;
-using Terraria.Utilities;
-using static Terrapain.Content.Functions;
 using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Common.System;
-using ILGPU.Runtime.Cuda;
-using Microsoft.Xna.Framework.Audio;
+using Terrapain.Content.Projectiles.Enemies.Bosses.EvilBosses;
+using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+using static Terrapain.Content.Functions;
 
 namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
 {
@@ -36,12 +36,17 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
 		}
         public int phase = 1;
         public int attack;
-        public int[] attacks1 = [0, 1, 0, 2];
+        public int[] attacks1 = [0, 1, 0, 2, 0, 3];
+        public int[] attacks2 = [0, 1, 0, 2, 0, 3];
         public int attackCounter;
         public int timer;
         public int mainTimerMax;
         public int MainTimer;
         public float progress;
+
+        int ichorSpike => ModContent.ProjectileType<IchorSpike>();
+        int ichoreSpikeDamage = 25;
+        float ichoreSpikeKnockback = 10;
 
 		bool limbo => phase == 4;
 		bool drawClons;
@@ -118,24 +123,47 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         
 		public override bool ModPreAI(NPC npc)
 		{
-            if (npc.immune[0] > 0)
+            if (EaterOfWorldsRealeseAnimation)
             {
-
+                if (timer == 0)
+                {
+                    npc.velocity = random.NextVector2Unit(-0.6f, 0.6f) * 20;
+                    npc.velocity *= random.NextDir();
+                    for (int i = 0; i < 25; i++)
+                    {
+                        Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, npc.velocity.X * 2, npc.velocity.Y * 2, Scale: 2);
+                    }
+                    timer = 60 - (int)(progress * 20);
+                }
+                CommonTerrapainFlyingMovement(npc, new Vector2(npc.ai[0], npc.ai[1]), 0.15f, 5, 0.375f, 70, false);
+                Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, Scale: 2);
+                if (MainTimer == 0)
+                {
+                    EaterOfWorldsRealeseAnimation = false;
+                    SetMainTimer(400);
+                }
             }
-
-            npc.TargetClosest();
-            npc.immortal = false;
-            maxSpeed = 10;
-            acceleration = 0.1f;
-			var t = npc.GetT();
-			switch (phase)
+            else
             {
-                case 1:
-                    DoFirstPhase(npc);
-                    break;
-                case 4:
-                    DoLimbo(npc);
-                    break;
+                npc.TargetClosest();
+                npc.immortal = false;
+                maxSpeed = 10;
+                acceleration = 0.1f;
+                var t = npc.GetT();
+                switch (phase)
+                {
+                    case 1:
+                        DoFirstPhase(npc);
+                        break;
+                    case 2:
+                        DoSecondPhase(npc);
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        DoLimbo(npc);
+                        break;
+                }
             }
             if (MainTimer > 0)
             {
@@ -183,6 +211,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
             {
                 case 0:
                     Movement(npc);
+                    CheckPhase(npc);
                     if (MainTimer == 0)
                     {
                         NextAttack1(npc);
@@ -193,10 +222,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     Movement(npc, TargetPosition);
                     if (timer == 0)
                     {
-                        int _timer = 60;
+                        int _timer = 80;
                         if (WorldDifficultySystem.suicide)
                         {
-                            float velocity = 18;
+                            float velocity = 25;
                             int count = 2;
                             float distance = 20;
                             Vector2 direction = random.NextVector2Unit() * distance;
@@ -204,31 +233,138 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                             for (int i = 0; i < count; i++)
                             {
                                 string context = i == count - 1? "MakeGroup" : null;
-                                oldnpc = NewNPC(npc.GetSource_FromThis(context), npc.Center + direction, npc.DirectionTo(t.Target.Center) * velocity, NPCID.Creeper, 0, oldnpc);
+                                oldnpc = NewNPC(npc.GetSource_FromThis(context), npc.Center + direction, npc.DirectionTo(t.Target.Center) * velocity, NPCID.Creeper, 0, oldnpc, 0, 60);
                                 direction.RotateBy(MathF.PI / count);
                             }
                         }
                         else
                         {
-                            float velocity = 17;
-                            NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * velocity, NPCID.Creeper);
+                            float velocity = 25;
+                            NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * velocity, NPCID.Creeper, 0, 0, 0, 60);
                         }
                         timer = _timer - (int)(progress * _timer / 2);
                         openTimer = 12;
                         SoundEngine.PlaySound(SoundID.Roar, npc.Center);
                     }
+                    CheckPhase(npc);
                     if (MainTimer == 0)
                     {
                         NextAttack1(npc);
                     }
                     break;
                 case 2:
+                    int time = 180;
+                    if (timer == 0)
+                    {
+                        Vector2 dir = npc.DirectionTo(t.Target.Center);
+                        npc.velocity = dir * 35;
+                        npc.ai[0] *= -1;
+                        int count = 5;
+                        float speed = 18;
+                        int _time = 20;
+                        float startAngle = MathF.PI / 2;
+                        if (count % 2 == 0)
+                        {
+                            startAngle += MathF.PI / count;
+                        }
+                        float angleBetween = MathF.PI * 2 / count;
+                        for (int i = 0; i < count; i++)
+                        {
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, (startAngle + angleBetween * i).ToRotationVector2() * speed, ichorSpike, ichoreSpikeDamage, ichoreSpikeKnockback, -1, _time, dir.X, dir.Y);
+                        }
+                        timer = time;
+                    }
+                    if (timer > time - 60)
+                    {
+                        npc.velocity = npc.velocity.Normalized() * (npc.velocity.Length() - 0.2f);
+                    }
+                    else
+                    {
+                        CheckPhase(npc);
+                        float p = 1 - MathF.Min(timer / 60f, 1);
+                        TargetPosition = t.Target.Center + npc.Center.DirectionFrom(t.Target.Center).RotatedBy(0.15f * npc.ai[0] * (1 - p)) * (350 + p * 65);
+                        Movement(npc, TargetPosition);
+                    }
+                    if (MainTimer == 0)
+                    {
+                        NextAttack1(npc);
+                    }
+                    break;
+                case 3:
+                    if (timer == 0)
+                    {
+                        time = 60;
+                        Vector2 dir = npc.DirectionTo(t.Target.Center);
+                        int count = 5;
+                        float speed = 18;
+                        int _time = 15;
+                        float startAngle = MathF.PI / 2;
+                        if (count % 2 == 0)
+                        {
+                            startAngle += MathF.PI / count;
+                        }
+                        float angleBetween = MathF.PI * 2 / count;
+                        for (int i = 0; i < count; i++)
+                        {
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, (startAngle + angleBetween * i).ToRotationVector2() * speed, ichorSpike, ichoreSpikeDamage, ichoreSpikeKnockback, -1, _time, dir.X, dir.Y);
+                        }
+                        timer = time;
+                    }
+                    float p1 = MathF.Min(mainTimerMax - MainTimer, 40) / 40;
+                    TargetPosition = t.Target.Center + npc.Center.DirectionFrom(t.Target.Center).RotatedBy(0.15f * npc.ai[0] * (1 + progress)) * (350 + p1 * 350);
+                    Movement(npc, TargetPosition);
+                    CheckPhase(npc);
                     if (MainTimer == 0)
                     {
                         NextAttack1(npc);
                     }
                     break;
             }
+        }
+        public void DoSecondPhase(NPC npc)
+        {
+            switch (attack)
+            {
+                case -1:
+                    Movement(npc, new Vector2(npc.ai[0], npc.ai[1]));
+                    CheckPhase(npc);
+                    if (MainTimer == mainTimerMax - 1)
+                    {
+                        NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead);
+                    }
+                    if (MainTimer == 0)
+                    {
+                        NextAttack2(npc);
+                    }
+                    break;
+                case 0:
+                    Movement(npc);
+                    CheckPhase(npc);
+                    if (MainTimer == 0)
+                    {
+                        NextAttack2(npc);
+                    }
+                    break;
+            }
+        }
+        public bool EaterOfWorldsRealeseAnimation;
+        public bool CheckPhase(NPC npc)
+        {
+            if (phase == 1 && npc.life < npc.lifeMax * 0.6f)
+            {
+                attack = -1;
+                phase = 2;
+                EaterOfWorldsRealeseAnimation = true;
+                attackCounter = 0;
+                SetMainTimer(600);
+                npc.ai[0] = npc.Center.X;
+                npc.ai[1] = npc.Center.Y;
+                Main.instance.CameraModifiers.Add(new SmoothMoovingCameraModifier() { AimTime = 30, OriginalCameraPosition = Main.screenPosition, TotalTime = MainTimer - 120, StartZoom = Main.GameZoomTarget, TargetZoom = ClientConfig.Instance.CutsceneCameraZoom, hideUI = ClientConfig.Instance.CutsceneHideUI });
+                SmoothMoovingCameraModifier.TargetPosition = npc.Center - Main.ScreenSize.ToVector2() / 2;
+                SmoothMoovingCameraModifier.Timer = 0;
+                return true;
+            }
+            return false;
         }
         public void SetMainTimer(int time)
         {
@@ -260,6 +396,45 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     {
                         npc.ai[0] = 1;
                     }
+                    break;
+                case 2:
+                    SetMainTimer(600);
+                    if (WorldDifficultySystem.suicide)
+                    {
+                        npc.ai[0] = random.NextDir() * 1.2f;
+                    }
+                    else
+                    {
+                        npc.ai[0] = -1;
+                    }
+                    break;
+                case 3:
+                    SetMainTimer(480);
+                    if (WorldDifficultySystem.suicide)
+                    {
+                        npc.ai[0] = random.NextDir() * 1.2f;
+                    }
+                    else
+                    {
+                        npc.ai[0] = -1;
+                    }
+                    break;
+            }
+        }
+        public void NextAttack2(NPC npc)
+        {
+            attackCounter++;
+            {
+                if (attackCounter >= attacks2.Length)
+                {
+                    attackCounter = 0;
+                }
+            }
+            attack = attacks2[attackCounter];
+            switch (attack)
+            {
+                case 0:
+                    SetMainTimer(200);
                     break;
             }
         }
@@ -404,15 +579,15 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         }
         public override bool? CanBeHitByItem(NPC npc, Player player, Item item)
         {
-            return !limbo && npc.immune[player.whoAmI] == 0;
+            return (limbo || EaterOfWorldsRealeseAnimation)? false : null;
         }
         public override bool CanBeHitByNPC(NPC npc, NPC attacker)
         {
-            return !limbo;
+            return !(limbo || EaterOfWorldsRealeseAnimation);
         }
         public override bool? CanBeHitByProjectile(NPC npc, Projectile projectile)
         {
-            return !limbo && (projectile.owner == -1 || npc.immune[projectile.owner] == 0);
+            return (limbo || EaterOfWorldsRealeseAnimation)? false : null;
         }
         public override void DrawBehind(NPC npc, int index)
         {

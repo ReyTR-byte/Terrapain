@@ -1,5 +1,4 @@
-﻿using ILGPU.Runtime.Cuda;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +7,12 @@ using Terrapain.Common.Global.TGlobalNPCs;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
-using static Terrapain.Content.Functions;
 
 namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
 {
-    public class EaterofWorldsHead : NPCBehaviour
+    public class EaterofWorldsTail : NPCBehaviour
     {
-        public override int type => NPCID.EaterofWorldsHead;
+        public override int type => NPCID.EaterofWorldsTail;
         public override void ModSetDefaults(NPC entity)
         {
             t.useModDrawingInPreDraw = true;
@@ -23,18 +21,16 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         }
         public override void OnSpawn(NPC npc, IEntitySource source)
         {
-            npc.ai[0] = -1;
-            npc.ai[1] = npc.Center.X;
-            npc.ai[2] = npc.Center.Y;
             base.OnSpawn(npc, source);
         }
         public override bool ModPreAI(NPC npc)
         {
-            if (npc.ai[0] == -1 && npc.Distance(new Vector2(npc.ai[1], npc.ai[2])) > npc.width)
-            {
-                npc.ai[0] = NewNPC(npc.GetSource_FromThis(), new Vector2(npc.ai[1], npc.ai[2]), NPCID.EaterofWorldsBody, npc.whoAmI, npc.whoAmI, 1);
-            }
-            npc.rotation = npc.velocity.ToRotation() + MathF.PI / 2;
+            NPC head = Main.npc[(int)npc.ai[0]];
+            Vector2 targetPosition = head.Center + Vector2.UnitY.RotatedBy(head.rotation) * (head.width / 2 - 2);
+            npc.rotation = npc.DirectionTo(targetPosition).ToRotation();
+            npc.velocity = Vector2.Zero;
+            npc.Center = targetPosition - Vector2.UnitX.RotatedBy(npc.rotation) * npc.width;
+            npc.rotation += MathF.PI / 2;
             return false;
         }
         public override bool CheckActive(NPC npc)

@@ -558,6 +558,7 @@ Mods: {
 			ScorspiderSting.DisplayName: Scorspider Sting
 			ReflectorLaser.DisplayName: Reflector Laser
 			VozdukhanProjectile.DisplayName: Vozdukhan Projectile
+			IchorSpike.DisplayName: Ichor Spike
 		}
 
 		Configs: {

@@ -58,13 +58,13 @@ namespace Terrapain.Content
 		{
 			return random.Next(2) == 0? -1 : 1;
 		}
-		public static int NewNPC(IEntitySource source, Vector2 position, Vector2 Velocity, int type, int start = 0, int ai0 = 0, int ai1 = 0, int ai2 = 0, int ai3 = 0, int target = 255)
+		public static int NewNPC(IEntitySource source, Vector2 position, Vector2 Velocity, int type, int start = 0, float ai0 = 0, float ai1 = 0, float ai2 = 0, float ai3 = 0, int target = 255)
 		{
 			int npc = NPC.NewNPC(source, (int)position.X, (int)position.Y, type, start, ai0, ai1, ai2, ai3, target);
 			Main.npc[npc].velocity = Velocity;
 			return npc;
 		}
-        public static int NewNPC(IEntitySource source, Vector2 position, int type, int start = 0, int ai0 = 0, int ai1 = 0, int ai2 = 0, int ai3 = 0, int target = 255)
+        public static int NewNPC(IEntitySource source, Vector2 position, int type, int start = 0, int ai0 = 0, float ai1 = 0, float ai2 = 0, float ai3 = 0, int target = 255)
         {
             return NPC.NewNPC(source, (int)position.X, (int)position.Y, type, start, ai0, ai1, ai2, ai3, target);
         }
@@ -409,21 +409,22 @@ namespace Terrapain.Content
 		{
 			vect = vect.RotatedBy(radians);
 		}
-		public static void CommonTerrapainFlyingMovement(Entity entity, Vector2 targetPosition, float rotatingSpeed, float MaxSpeed, float acceleration, float BreakingZone)
+		public static void CommonTerrapainFlyingMovement(Entity entity, Vector2 targetPosition, float rotatingSpeed, float MaxSpeed, float acceleration, float BreakingZone, bool instantBreak = true)
 		{
 			if (entity.Center == targetPosition)
 			{
 				if (BreakingZone > 0)
 				{
-					entity.velocity = Vector2.Zero;
-				}
+					if (instantBreak)
+						entity.velocity = Vector2.Zero;
+                }
 				return;
 			}
             float maxVelocityMultyplier = 1;
             entity.velocity += entity.DirectionTo(targetPosition) * acceleration;
-            if (entity.Distance(targetPosition) < MaxSpeed)
+            if (entity.Distance(targetPosition) < BreakingZone)
             {
-                maxVelocityMultyplier = 1 - (MaxSpeed - entity.Distance(targetPosition)) / MaxSpeed;
+                maxVelocityMultyplier = 1 - (BreakingZone - entity.Distance(targetPosition)) / BreakingZone;
             }
             Vector2 vectorToTargetPosition = targetPosition - entity.Center;
             float positiveRotation = AngleBetweenVectors(vectorToTargetPosition, entity.velocity);
@@ -440,7 +441,10 @@ namespace Terrapain.Content
             }
             if (entity.velocity.Length() > MaxSpeed * maxVelocityMultyplier)
             {
-                entity.velocity = entity.velocity.ToUnit() * MaxSpeed * maxVelocityMultyplier;
+                if (instantBreak)
+                    entity.velocity = entity.velocity.ToUnit() * MaxSpeed * maxVelocityMultyplier;
+                else if (entity.velocity.Length() > 0)
+                    entity.velocity = entity.velocity.Normalized() * MathF.Max(entity.velocity.Length() - acceleration * 2, MaxSpeed * maxVelocityMultyplier);
             }
         }
         public static void CommonTerrapainFlyingMovement(Vector2 position, ref Vector2 velocity, Vector2 targetPosition, float rotatingSpeed, float MaxSpeed, float acceleration, float BreakingZone)
@@ -944,6 +948,10 @@ namespace Terrapain.Content
         }
         public static bool CanHit(Vector2 Pos, Vector2 target, int width, int height)
 		{
+			if (float.IsNaN(target.X) || float.IsNaN(target.Y) || float.IsNaN(Pos.X) || float.IsNaN(Pos.Y))
+			{
+				return false;
+			}
 			if (Pos.X >= target.X && Pos.X <= target.X + width && Pos.Y >= target.Y && Pos.Y <= target.Y + height)
 			{
                 Pos /= 16;
@@ -1005,7 +1013,11 @@ namespace Terrapain.Content
 			}
 			Pos /= 16;
 			crossPoint /= 16;
-			int W = Math.Abs((int)Pos.X - (int)crossPoint.X);
+			Pos.X = MathHelper.Clamp(Pos.X, 0, Main.maxTilesX - 1);
+            Pos.Y = MathHelper.Clamp(Pos.Y, 0, Main.maxTilesY- 1);
+            crossPoint.X = MathHelper.Clamp(crossPoint.X, 0, Main.maxTilesX - 1);
+            crossPoint.Y = MathHelper.Clamp(crossPoint.Y, 0, Main.maxTilesY - 1);
+            int W = Math.Abs((int)Pos.X - (int)crossPoint.X);
 			int H = Math.Abs((int)Pos.Y - (int)crossPoint.Y);
 			int LeastX = Pos.X < crossPoint.X ? (int)Pos.X : (int)crossPoint.X;
 			int LeastY = Pos.Y < crossPoint.Y ? (int)Pos.Y : (int)crossPoint.Y;
@@ -1127,6 +1139,10 @@ namespace Terrapain.Content
 			start /= 16;
 			end /= 16;
 			Vector2 dir = (end - start).Normalized();
+            start.X = MathHelper.Clamp(start.X, 0, Main.maxTilesX - 1);
+            start.Y = MathHelper.Clamp(start.Y, 0, Main.maxTilesY - 1);
+            end.X = MathHelper.Clamp(end.X, 0, Main.maxTilesX - 1);
+            end.Y = MathHelper.Clamp(end.Y, 0, Main.maxTilesY - 1);
             int W = (int)end.X - (int)start.X;
             int H = (int)end.Y - (int)start.Y;
             int LeastX = (int)start.X;
@@ -1455,6 +1471,10 @@ namespace Terrapain.Content
             start /= 16;
             end /= 16;
             Vector2 dir = (end - start).Normalized();
+            start.X = MathHelper.Clamp(start.X, 0, Main.maxTilesX - 1);
+            start.Y = MathHelper.Clamp(start.Y, 0, Main.maxTilesY - 1);
+            end.X = MathHelper.Clamp(end.X, 0, Main.maxTilesX - 1);
+            end.Y = MathHelper.Clamp(end.Y, 0, Main.maxTilesY - 1);
             int W = (int)end.X - (int)start.X;
             int H = (int)end.Y - (int)start.Y;
             int LeastX = (int)start.X;

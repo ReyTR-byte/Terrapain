@@ -8,6 +8,7 @@ using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
 
 namespace Terrapain.Content.NPCs.Servants.EvilBosses
@@ -29,10 +30,10 @@ namespace Terrapain.Content.NPCs.Servants.EvilBosses
         {
             if (source.Context == "MakeGroup")
             {
-                Group.NewGroup(new Creepers(npc.whoAmI, (int)npc.ai[0], 0.6f));
+                Group.NewGroup(new Creepers(npc.whoAmI, (int)npc.ai[0], 0.25f));
             }
         }
-        float charge;
+        public float charge;
         float rotationSpeed;
         public override bool ModPreAI(NPC npc)
         {
@@ -54,7 +55,6 @@ namespace Terrapain.Content.NPCs.Servants.EvilBosses
                 }
                 if (charge >= 1)
                 {
-                    charge = 0;
                     npc.ai[2] = 60;
                     if (WorldDifficultySystem.suicide)
                     {
@@ -68,6 +68,7 @@ namespace Terrapain.Content.NPCs.Servants.EvilBosses
             }
             else
             {
+                charge = 0;
                 trailLength = Math.Min(trailLength + 1, Math.Min((int)npc.ai[2] - 1, 20));
                 npc.velocity = npc.velocity.Normalized() * MathF.Max(npc.velocity.Length() - 0.2f, 0);
             }
@@ -99,6 +100,10 @@ namespace Terrapain.Content.NPCs.Servants.EvilBosses
                 List<Vector2> points = new();
                 for (int i = 0; i < trailLength; i++)
                 {
+                    if (float.IsNaN(npc.oldPos[i].X))
+                    {
+                        return false;
+                    }
                     if (npc.oldPos[i] == Vector2.Zero)
                     {
                         break;
@@ -120,6 +125,10 @@ namespace Terrapain.Content.NPCs.Servants.EvilBosses
                 spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
             }
             return true;
+        }
+        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
+        {
+            npcLoot = new NPCLoot();
         }
     }
 }
