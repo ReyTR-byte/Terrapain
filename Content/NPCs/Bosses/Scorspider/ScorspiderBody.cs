@@ -1165,6 +1165,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             {
                 phase = 4;
                 attackCounter = 0;
+
             }
             attack = attacks3[attackCounter];
             switch (attack)
@@ -1244,6 +1245,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             NPC.immortal = false;
             if (NPC.life <= 0 && phase < 3)
             {
+                NPC.noGravity = false;
                 sleep = true;
                 phase = 3;
                 attackCounter = 0;

@@ -30,7 +30,7 @@ namespace Terrapain.Content.NPCs.Servants.EvilBosses
         {
             if (source.Context == "MakeGroup")
             {
-                Group.NewGroup(new Creepers(npc.whoAmI, (int)npc.ai[0], 0.25f));
+                Group.NewGroup(new Creepers(0.25f), npc.whoAmI, (int)npc.ai[0]);
             }
         }
         public float charge;

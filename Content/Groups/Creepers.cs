@@ -8,19 +8,20 @@ namespace Terrapain.Content.Groups
 {
     public class Creepers : Group
     {
-        public Creepers(int me, int anotherCreeper, float rotationSpeed) 
+        public Creepers(float rotationSpeed) 
         {
-            AddMember(me);
-            AddMember(anotherCreeper);
-            anotherCreeper = (int)Main.npc[anotherCreeper].ai[0];
-            while (anotherCreeper > 0)
-            {
-                AddMember(anotherCreeper);
-                anotherCreeper = (int)Main.npc[anotherCreeper].ai[0];
-            }
             this.rotationSpeed = rotationSpeed;
             maxRotationSpeed = rotationSpeed;
-            NPCType = [NPCID.Creeper];
+        }
+        public override void OnInitialize()
+        {
+            int creeper = (int)Main.npc[members[1]].ai[0];
+            while (creeper > 0)
+            {
+                AddMember(creeper);
+                creeper = (int)Main.npc[creeper].ai[0];
+            }
+            maxRotationSpeed = rotationSpeed;
             for (int i = 0; i < Count; i++)
             {
                 int mem1 = 0;
@@ -41,7 +42,9 @@ namespace Terrapain.Content.Groups
                 }
                 k.Add(new kishki(new SimulatedChain(10, 10, Main.npc[mem1].Center, 0, 1), mem1, mem2));
             }
+            autoDisable = false;
         }
+        public override int[] NPCType => [NPCID.Creeper];
         bool firstUpdate = true;
         float maxRotationSpeed;
         float rotationSpeed;
@@ -88,12 +91,6 @@ namespace Terrapain.Content.Groups
         List<kishki> k = new();
         public override void UpdateGroup()
         {
-            if (firstUpdate)
-            {
-                autoDisable = false;
-                CheckContainsGroup();
-                firstUpdate = false;
-            }
             if (k.Count == 0)
             {
                 Disable();
@@ -143,7 +140,7 @@ namespace Terrapain.Content.Groups
                 }
             }
         }
-        public override void PreDrawFirstGroupNPC(SpriteBatch spriteBatch)
+        public override void PreDrawFirstNPCInGroup(SpriteBatch spriteBatch)
         {
             for (int i = 0; i < k.Count; i++)
             {

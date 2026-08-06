@@ -7,10 +7,7 @@ namespace Terrapain.Content.Groups
 {
     public class SheildedServantofCthulhu : Group
     {
-        public SheildedServantofCthulhu()
-        {
-            NPCType = [ModContent.NPCType<NPCs.Servants.EyeofCthulhu.SheildedServantofCthulhu>()];
-        }
+        override public int[] NPCType => [ModContent.NPCType<NPCs.Servants.EyeofCthulhu.SheildedServantofCthulhu>()];
         public override void UpdateGroup()
         {
             List<NPC> defenders = AllNPCByType(ModContent.NPCType<NPCs.Servants.EyeofCthulhu.SheildedServantofCthulhu>());

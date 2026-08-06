@@ -14,10 +14,7 @@ namespace Terrapain.Content.Groups
         public int timer;
         public int target = -1;
         public float rotation;
-        public RingAIServantsofCthulhu()
-        {
-            NPCType = [5];
-        }
+        override public int[] NPCType => [5];
 
         public override void UpdateGroup()
         {

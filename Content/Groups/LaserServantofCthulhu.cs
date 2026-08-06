@@ -12,10 +12,7 @@ namespace Terrapain.Content.Groups
     public class LaserServantofCthulhu : Group
     {
         float startAngle = -1;
-        public LaserServantofCthulhu()
-        {
-            NPCType = [ModContent.NPCType<NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>()];
-        }
+        override public int[] NPCType => [ModContent.NPCType<NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>()];
         public override void UpdateGroup()
         {
             List<NPC> healers = AllNPCByType(ModContent.NPCType<NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>());

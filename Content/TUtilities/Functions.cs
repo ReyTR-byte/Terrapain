@@ -64,7 +64,7 @@ namespace Terrapain.Content
 			Main.npc[npc].velocity = Velocity;
 			return npc;
 		}
-        public static int NewNPC(IEntitySource source, Vector2 position, int type, int start = 0, int ai0 = 0, float ai1 = 0, float ai2 = 0, float ai3 = 0, int target = 255)
+        public static int NewNPC(IEntitySource source, Vector2 position, int type, int start = 0, float ai0 = 0, float ai1 = 0, float ai2 = 0, float ai3 = 0, int target = 255)
         {
             return NPC.NewNPC(source, (int)position.X, (int)position.Y, type, start, ai0, ai1, ai2, ai3, target);
         }

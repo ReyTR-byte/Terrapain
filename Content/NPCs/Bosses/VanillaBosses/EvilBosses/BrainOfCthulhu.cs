@@ -24,6 +24,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
             t.useVanillaDrawing = false;
             t.useModDrawingInPreDraw = true;
 			t.canBeHooked = false;
+            entity.knockBackResist = 0;
+            segmentsLifes = [];
         }
 		public override void HitEffect(NPC npc, NPC.HitInfo hit)
 		{
@@ -43,6 +45,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         public int mainTimerMax;
         public int MainTimer;
         public float progress;
+        public static List<int> segmentsLifes;
 
         int ichorSpike => ModContent.ProjectileType<IchorSpike>();
         int ichoreSpikeDamage = 25;
@@ -110,9 +113,16 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         public float maxSpeed;
         public float acceleration;
         public int openTimer;
+        int frame;
+        int animTimer;
         public override void FindFrame(NPC npc, int frameHeight)
         {
-            int frame = (npc.frame.Y / frameHeight) % 4;
+            if (animTimer <= 0)
+            {
+                frame = (frame + 1) % 4;
+                animTimer = 8;
+            }
+            animTimer--;
             npc.frame.Y = frame * frameHeight;
             if (openTimer > 0)
             {
@@ -127,11 +137,12 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
             {
                 if (timer == 0)
                 {
+                    SoundEngine.PlaySound(npc.HitSound, npc.Center);
                     npc.velocity = random.NextVector2Unit(-0.6f, 0.6f) * 20;
                     npc.velocity *= random.NextDir();
                     for (int i = 0; i < 25; i++)
                     {
-                        Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, npc.velocity.X * 2, npc.velocity.Y * 2, Scale: 2);
+                        Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood, npc.velocity.X * 0.75f, npc.velocity.Y * 0.75f, Scale: 2);
                     }
                     timer = 60 - (int)(progress * 20);
                 }
@@ -327,17 +338,65 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
             {
                 case -1:
                     Movement(npc, new Vector2(npc.ai[0], npc.ai[1]));
-                    CheckPhase(npc);
                     if (MainTimer == mainTimerMax - 1)
                     {
-                        NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead);
+                        int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead, 0, 80, -1);
+                        EaterofWorldsHead.Restart(eow);
+                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
                     }
+                    openTimer = 12;
                     if (MainTimer == 0)
                     {
                         NextAttack2(npc);
                     }
                     break;
                 case 0:
+                    Movement(npc);
+                    CheckPhase(npc);
+                    if (MainTimer == 0)
+                    {
+                        NextAttack2(npc);
+                    }
+                    break;
+                case 1:
+                    if (timer == 0 && segmentsLifes.Count > 0)
+                    {
+                        openTimer = 12;
+                        int num = 3;
+                        if (segmentsLifes.Count < 6)
+                        {
+                            num = segmentsLifes.Count;
+                        }
+                        int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead, 0, num, -1);
+                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                        timer = 60;
+                    }
+
+                    Movement(npc);
+                    CheckPhase(npc);
+                    if (MainTimer == 0)
+                    {
+                        NextAttack2(npc);
+                    }
+                    break;
+                case 2:
+                    Movement(npc, new Vector2(npc.ai[0], npc.ai[1]));
+                    if (MainTimer == mainTimerMax - 1)
+                    {
+                        int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead, 0, segmentsLifes.Count, -1);
+                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                    }
+                    openTimer = 12;
+                    if (MainTimer == 0)
+                    {
+                        NextAttack2(npc);
+                    }
+                    if (MainTimer == 0)
+                    {
+                        NextAttack2(npc);
+                    }
+                    break;
+                case 3:
                     Movement(npc);
                     CheckPhase(npc);
                     if (MainTimer == 0)
@@ -423,6 +482,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         }
         public void NextAttack2(NPC npc)
         {
+            Start:
             attackCounter++;
             {
                 if (attackCounter >= attacks2.Length)
@@ -434,6 +494,22 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
             switch (attack)
             {
                 case 0:
+                    SetMainTimer(200);
+                    break;
+                case 1:
+                    if (segmentsLifes.Count < 2)
+                    {
+                        goto Start; 
+                    }
+                    SetMainTimer(800);
+                    break;
+                case 2:
+                    npc.ai[0] = npc.Center.X;
+                    npc.ai[1] = npc.Center.Y;
+                    if (segmentsLifes.Count < 2)
+                    {
+                        goto Start;
+                    }
                     SetMainTimer(200);
                     break;
             }

@@ -7,16 +7,25 @@ using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Common.Global;
 using Terraria;
+using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
 
 namespace Terrapain.Content.Groups
 {
-    public abstract class Group
+    public abstract class Group : ILoadable
     {
+        public virtual void Load(Mod mod)
+        {
+
+        }
+        public virtual void Unload()
+        {
+
+        }
         public virtual string Name => GetType().Name;
         public int whoAmI = -1;
         // -1 is multitype
-        public int[] NPCType;
+        public virtual int[] NPCType => [];
         // -1 is no leader
         public int leader;
         public List<int> members = new List<int>();
@@ -90,7 +99,7 @@ namespace Terrapain.Content.Groups
         }
 
         public bool hasBeenDrawn;
-        public virtual void PreDrawFirstGroupNPC(SpriteBatch spriteBatch)
+        public virtual void PreDrawFirstNPCInGroup(SpriteBatch spriteBatch)
         {
 
         }
@@ -104,7 +113,7 @@ namespace Terrapain.Content.Groups
             {
                 members.Add(member);
                 sort.Add(0);
-                if (whoAmI != -1)
+                if (whoAmI != -1 && !Main.npc[member].GetT().MyGroups.Contains(whoAmI))
                     Main.npc[member].GetT().MyGroups.Add(whoAmI);
             }
         }
@@ -187,7 +196,7 @@ namespace Terrapain.Content.Groups
             Sort(minValue, pivot - 1);
             Sort(pivot + 1, maxValue);
         }
-        public static int NewGroup(Group group)
+        public static int NewGroup(Group group, params int[] members)
         {
             for (int i = 0; i < Terrapain.group.Length; i++)
             {
@@ -196,10 +205,19 @@ namespace Terrapain.Content.Groups
                     group.active = true;
                     group.whoAmI = i;
                     Terrapain.group[i] = group;
+                    foreach (var member in members)
+                    {
+                        Terrapain.group[i].AddMember(member);
+                    }
+                    Terrapain.group[i].OnInitialize();
                     return group.whoAmI;
                 }
             }
             return -1;
+        }
+        public virtual void OnInitialize()
+        {
+
         }
         public static List<int> FindGroup(string Name)
         {

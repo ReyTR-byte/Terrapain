@@ -6,10 +6,7 @@ namespace Terrapain.Content.Groups
 {
     public class FireShooterServantofCthulhu : Group
     {
-        public FireShooterServantofCthulhu()
-        {
-            NPCType = [ModContent.NPCType<NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>()];
-        }
+        public override int[] NPCType => [ModContent.NPCType<NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>()];
         public override void UpdateGroup()
         {
             List<NPC> healers = AllNPCByType(ModContent.NPCType<NPCs.Servants.EyeofCthulhu.FireShooterServantofCthulhu>());

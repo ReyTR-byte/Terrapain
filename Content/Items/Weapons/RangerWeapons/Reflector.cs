@@ -24,27 +24,23 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 		}
 
 		public override void SetDefaults() {
-			// Common Properties
-			Item.width = 44; // Hitbox width of the item.
-			Item.height = 18; // Hitbox height of the item.
-			Item.rare = ItemRarityID.Green; // The color that the item's name will be in-game.
+			Item.width = 44;
+			Item.height = 18;
+			Item.rare = ItemRarityID.Green;
 
-			// Use Properties
-			Item.useTime = 20; // The item's use time in ticks (60 ticks == 1 second.)
-			Item.useAnimation = 20; // The length of the item's use animation in ticks (60 ticks == 1 second.)
-			Item.useStyle = ItemUseStyleID.Shoot; // How you use the item (swinging, holding out, etc.)
-			Item.autoReuse = true; // Whether or not you can hold click to automatically use it again.
-			Item.UseSound = SoundID.Item36; // The sound that this item plays when used.
+			Item.useTime = 20;
+			Item.useAnimation = 20;
+			Item.useStyle = ItemUseStyleID.Shoot;
+			Item.autoReuse = true;
+			Item.UseSound = SoundID.Item36;
 
-			// Weapon Properties
-			Item.DamageType = DamageClass.Ranged; // Sets the damage type to ranged.
-			Item.damage = 44; // Sets the item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage added together.
-			Item.knockBack = 6f; // Sets the item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback added together.
-			Item.noMelee = true; // So the item's animation doesn't do damage.
+			Item.DamageType = DamageClass.Ranged;
+            Item.damage = 25;
+            Item.knockBack = 6f;
+			Item.noMelee = true;
 
-			// Gun Properties
-			Item.shoot = ModContent.ProjectileType<ReflectorLaser>(); // For some reason, all the guns in the vanilla source have this.
-			Item.shootSpeed = 15f; // The speed of the projectile (measured in pixels per frame.)
+			Item.shoot = ModContent.ProjectileType<ReflectorLaser>();
+			Item.shootSpeed = 15f;
             Item.value = Item.buyPrice(gold: 7);
         }
 
@@ -52,7 +48,8 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 
 		public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-			const int NumProjectiles = 4; // The humber of projectiles that this gun will shoot.
+			Item.damage = 25;
+			const int NumProjectiles = 4;
 
 			int color = rand.Next(10);
 
@@ -72,7 +69,7 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 					newVelocity = (player.MountedCenter + TGlobalItem.GetHandOffset(player) + dir * 75 - position);
 				Projectile.NewProjectileDirect(source, position, newVelocity, type, damage, knockback, player.whoAmI, color, Main.MouseWorld.X, Main.MouseWorld.Y);
 			}
-			return false; // Return false because we don't want tModLoader to shoot projectile
+			return false;
 		}
 		public override void AddRecipes()
 		{

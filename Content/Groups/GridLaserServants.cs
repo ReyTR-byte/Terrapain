@@ -15,10 +15,7 @@ namespace Terrapain.Content.Groups
 {
     public class GridLaserServants : Group
     {
-        public GridLaserServants()
-        {
-            NPCType = [ModContent.NPCType<NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>()];
-        }
+        override public int[] NPCType => [ModContent.NPCType<NPCs.Servants.EyeofCthulhu.LaserServantofCthulhu>()];
         public Player target;
         public bool buildGrid;
         public List<Vector2> points;
