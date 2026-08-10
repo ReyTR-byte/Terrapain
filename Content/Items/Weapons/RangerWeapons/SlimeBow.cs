@@ -5,6 +5,8 @@ using Terrapain.Common.Global.UseStyles;
 using Terrapain.Content.Items.Ingredients;
 using Terrapain.Content.Projectiles;
 using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
+using Terrapain.Content.Projectiles.Friendly;
+using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -24,31 +26,26 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 
 		public override void SetDefaults()
 		{
-			// Common Properties
-			Item.width = 30; // Hitbox width of the item.
-			Item.height = 48; // Hitbox height of the item.
+			Item.width = 30;
+			Item.height = 48;
 			Item.scale = 1f;
-			Item.rare = ItemRarityID.Green; // The color that the item's name will be in-game.
+			Item.rare = ItemRarityID.Green;
 
-			// Use Properties
-			Item.useTime = 14; // The item's use time in ticks (60 ticks == 1 second.)
-			Item.useAnimation = 14; // The length of the item's use animation in ticks (60 ticks == 1 second.)
-			Item.useStyle = TGlobalItem.BowOverride; // How you use the item (swinging, holding out, etc.)
-			Item.autoReuse = true; // Whether or not you can hold click to automatically use it again.
+			Item.useTime = 14;
+			Item.useAnimation = 14;
+			Item.useStyle = TGlobalItem.BowOverride;
+			Item.autoReuse = true;
 
-			// The sound that this item plays when used.
 			Item.UseSound = SoundID.Item5;
 
-			// Weapon Properties
-			Item.DamageType = DamageClass.Ranged; // Sets the damage type to ranged.
-			Item.damage = 8; // Sets the item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage added together.
-			Item.knockBack = 5f; // Sets the item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback added together.
-			Item.noMelee = true; // So the item's animation doesn't do damage.
+			Item.DamageType = DamageClass.Ranged;
+			Item.damage = 8;
+			Item.knockBack = 5f;
+			Item.noMelee = true;
 
-			// Gun Properties
-			Item.shoot = ProjectileID.PurificationPowder; // For some reason, all the guns in the vanilla source have this.
-			Item.shootSpeed = 16f; // The speed of the projectile (measured in pixels per frame.)
-			Item.useAmmo = AmmoID.Arrow; // The "ammo Id" of the ammo item that this weapon uses. Ammo IDs are magic numbers that usually correspond to the item id of one item that most commonly represent the ammo type.
+			Item.shoot = ProjectileID.PurificationPowder;
+			Item.shootSpeed = 16f;
+			Item.useAmmo = AmmoID.Arrow;
             Item.value = Item.buyPrice(gold: 6);
         }
 		UnifiedRandom rand = new UnifiedRandom();
@@ -56,18 +53,17 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 		{
             if (Item.GetGlobalItem<BowsOverride>().bowTime >= Item.useAnimation * 5)
 			{
-				for (int i = -1; i < 2; i++)
+				int count = 10;
+				float step = MathF.PI * 2 / count;
+				float startAngle = velocity.ToRotation() + (count % 2 == 0? step / 2 : 0);
+				for (int i = 0; i < count; i++)
 				{
-					float rotation = MathF.PI * 0.075f * i;
-					int p = Projectile.NewProjectile(source, position, velocity.Normalized().RotatedBy(rotation) * 15, ModContent.ProjectileType<KingSlimeBall>(), damage / 4, knockback, player.whoAmI);
-					Main.projectile[p].hostile = false;
-                    Main.projectile[p].friendly = true;
-                    Main.projectile[p].DamageType = DamageClass.Ranged;
-                }
+					Projectile.NewProjectile(source, position, (startAngle + step * i).ToRotationVector2() * 15, ModContent.ProjectileType<FriendlyCrownGem>(), (int)(damage * 0.75f), knockback, player.whoAmI, velocity.X, velocity.Y, 15);
+				}
 			}
 			for (int i = rand.Next(3, 7); i > 0; i--)
 			{
-				Dust.NewDust(player.Center + velocity / velocity.Length() + new Vector2(-3, -3), 6, 6, DustID.t_Slime, 0, 0, 0, Microsoft.Xna.Framework.Color.Blue);
+				Dust.NewDust(player.Center + velocity / velocity.Length() + new Vector2(-3, -3), 6, 6, DustID.t_Slime, 0, 0, 0, Color.LightBlue);
 			}
 			return true;
         }
@@ -78,7 +74,6 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
 			recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}
-		// This method lets you adjust position of the gun in the player's hands. Play with these values until it looks good with your graphics.
 		public override Vector2? HoldoutOffset() {
 			return new Vector2(2f, -2f);
 		}

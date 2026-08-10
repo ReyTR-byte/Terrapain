@@ -559,6 +559,8 @@ Mods: {
 			ReflectorLaser.DisplayName: Reflector Laser
 			VozdukhanProjectile.DisplayName: Vozdukhan Projectile
 			IchorSpike.DisplayName: Ichor Spike
+			CursedCloud.DisplayName: Cursed Cloud
+			FriendlyCrownGem.DisplayName: Friendly Crown Gem
 		}
 
 		Configs: {

@@ -203,10 +203,7 @@ namespace Terrapain.Common.Global
             }
             Color col = npc.GetAlpha(Color.White);
             Color col2 = npc.GetColor(Color.White);
-            if (npc.type == NPCID.YellowSlime)
-            {
 
-            }
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
             Texture2D texture;
@@ -266,7 +263,7 @@ namespace Terrapain.Common.Global
                 draw = true;
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-            return draw.Value? useVanillaDrawing : false;
+            return draw?? true && useVanillaDrawing;
         }
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {

@@ -9,6 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
 using static Terrapain.Content.TUtilities.Graphics.TrailSettings;
+using static Terraria.GameContent.Animations.IL_Actions.Sprites;
 
 namespace Terrapain.Content.TUtilities.Graphics
 {
@@ -300,7 +301,7 @@ namespace Terrapain.Content.TUtilities.Graphics
             //Main.instance.GraphicsDevice.Indices = IndexBuffer;
             //Main.instance.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, VerticesIndex, 0, VerticesIndex / 3);
         }
-        public static void RenderTrail(IEnumerable<Vector2> Points, TrailSettings settings)
+        public static void RenderTrail(IEnumerable<Vector2> Points, TrailSettings settings, int segmentsCount = 1, Vector2? dirIn = null, Vector2? dirOut = null, bool DebugPoints = false)
         {
             VerticesIndex = 0;
             IndicesIndex = 0;
@@ -321,15 +322,16 @@ namespace Terrapain.Content.TUtilities.Graphics
                     MainIndices[IndicesIndex++] = (short)(i * 2);
                     MainIndices[IndicesIndex++] = (short)(i * 2 + 1);
                     MainIndices[IndicesIndex++] = (short)(i * 2 - 1);
-                    length += Points.ElementAt(i).Distance(Points.ElementAt(i - 1));
-                    progress = length / totalLength;
+                    float distance = (Points.ElementAt(i).Distance(Points.ElementAt(i - 1)));
+                    length += distance;
+                    progress = length / totalLength * segmentsCount;
                 }
                 Color color = settings.ColorFunction(progress, length, totalLength, Points.ElementAt(i));
                 float Width = settings.WidthFunction(progress, length, totalLength, Points.ElementAt(i));
                 Vector2 dir = Vector2.Zero;
                 if (i == 0)
                 {
-                    dir = Points.ElementAt(0).DirectionTo(Points.ElementAt(1));
+                    dir = dirIn?? Points.ElementAt(0).DirectionTo(Points.ElementAt(1));
                     dir = new Vector2(dir.Y, -dir.X);
                 }
                 else if (i < Points.Count() - 1)
@@ -355,7 +357,7 @@ namespace Terrapain.Content.TUtilities.Graphics
                 }
                 else
                 {
-                    dir = Points.ElementAt(i).DirectionFrom(Points.ElementAt(i - 1));
+                    dir = dirOut?? Points.ElementAt(i).DirectionFrom(Points.ElementAt(i - 1));
                     dir = new Vector2(dir.Y, -dir.X);
                 }
 
@@ -363,8 +365,9 @@ namespace Terrapain.Content.TUtilities.Graphics
                 MainVertices[VerticesIndex++] = new(Points.ElementAt(i) - dir * Width - Main.screenPosition, color, new Vector2(progress, 0), 1);
             }
             Texture2D texture = ExtraTextureRegistry.WhitePixel.Value;
-            ManagedShader shader = ShaderManager.GetShader("Terrapain.TrailShader");
+            ManagedShader shader = settings.Shader?? ShaderManager.GetShader("Terrapain.TrailShader");
 
+            Main.instance.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
             Main.instance.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
             Main.instance.GraphicsDevice.RasterizerState.ScissorTestEnable = true;
             Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
@@ -383,6 +386,235 @@ namespace Terrapain.Content.TUtilities.Graphics
             Main.instance.GraphicsDevice.SetVertexBuffer(VertexBuffer);
             Main.instance.GraphicsDevice.Indices = IndexBuffer;
             Main.instance.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, VerticesIndex, 0, IndicesIndex / 3);
+            if (DebugPoints)
+            {
+                foreach(var point in Points)
+                {
+                    Main.spriteBatch.Draw(ExtraTextureRegistry.BlackPixel.Value, point - Main.screenPosition, null, Color.Black, 0, new Vector2(0.5f), 4, SpriteEffects.None, 0);
+                }
+            }
+        }
+        public static List<Vector2> SmoothTrail(List<Vector2> points, int targetDistance, Vector2? In = null, Vector2? Out = null, int screenBounds = 20)
+        {
+            Vector2 dir1 = Vector2.Zero;
+            Vector2 dir2 = Vector2.Zero;
+            List<Vector2> SmoothedPoints = [points[0]];
+            float scale = Main.GameZoomTarget;
+            if (points.Count < 3)
+            {
+                if (points.Count == 2 && In.HasValue || Out.HasValue)
+                {
+                    float _MinX = Main.screenPosition.X - screenBounds;
+                    float _MaxX = Main.screenPosition.X + Main.ScreenSize.X + screenBounds;
+                    float _MinY = Main.screenPosition.Y - screenBounds;
+                    float _MaxY = Main.screenPosition.Y + Main.ScreenSize.Y + screenBounds;
+                    dir1 = In?? Vector2.Zero;
+                    dir2 = -Out?? Vector2.Zero;
+                    if (points[0].X > _MinX && points[0].X < _MaxX && points[0].Y > _MinY && points[0].Y < _MaxY)
+                    {
+                        float distance = points[0].Distance(points[1]);
+                        int target = (int)(distance / targetDistance * scale);
+                        for (int j = 1; j < target + 1; j++)
+                        {
+                            float progress = (float)j / (target + 1);
+                            progress = 1 - (MathF.Cos(progress * MathF.PI) + 1) / 2;
+                            float k = (progress - 0.5f) * 2;
+                            k = MathF.Cos(MathF.Asin(k));
+                            Vector2 newPoint = points[0] * (1 - progress) + points[1] * progress;
+                            newPoint += (dir1 * MathF.Sqrt(1 - progress) + dir2 * MathF.Sqrt(progress)) * distance / 4 * k;
+                            SmoothedPoints.Add(newPoint);
+                        }
+                    }
+                    SmoothedPoints.Add(points[1]);
+                    return SmoothedPoints;
+                }
+                return points;
+            }
+            float MinX = Main.screenPosition.X - screenBounds;
+            float MaxX = Main.screenPosition.X + Main.ScreenSize.X + screenBounds;
+            float MinY = Main.screenPosition.Y - screenBounds;
+            float MaxY = Main.screenPosition.Y + Main.ScreenSize.Y + screenBounds;
+            
+            if (In.HasValue)
+            {
+                dir2 = -In.Value;
+            }
+            else
+            {
+                dir2 = points[1].DirectionTo(points[0]) + points[1].DirectionFrom(points[2]);
+                if (dir2 == Vector2.Zero)
+                {
+                    dir2 = points[1].DirectionTo(points[0]).RotatedBy(MathF.PI);
+                }
+                else
+                {
+                    dir2.Normalize();
+                }
+            }
+            for (int i = 0; i < points.Count - 2; i++)
+            {
+                dir1 = -dir2;
+                dir2 = points[i + 1].DirectionTo(points[i]) + points[i + 1].DirectionFrom(points[i + 2]);
+                if (dir2 == Vector2.Zero)
+                {
+                    dir2 = points[i + 1].DirectionTo(points[i]).RotatedBy(MathF.PI);
+                }
+                else
+                {
+                    dir2.Normalize();
+                }
+                if (points[i].X > MinX && points[i].X < MaxX && points[i].Y > MinY && points[i].Y < MaxY)
+                {
+                    float distance = points[i].Distance(points[i + 1]);
+                    int target = (int)(distance / targetDistance * scale);
+                    for (int j = 1; j < target + 1; j++)
+                    {
+                        float progress = (float)j / (target + 1);
+                        progress = 1 - (MathF.Cos(progress * MathF.PI) + 1) / 2;
+                        float k = (progress - 0.5f) * 2;
+                        k = MathF.Cos(MathF.Asin(k));
+                        Vector2 newPoint = points[i] * (1 - progress) + points[i + 1] * progress;
+                        newPoint += (dir1 * (1 - progress) + dir2 * (progress)) * distance / 4 * k;
+                        SmoothedPoints.Add(newPoint);
+                    }
+                }
+                SmoothedPoints.Add(points[i + 1]);
+            }
+            int c = points.Count - 2;
+            if (points[c].X > MinX && points[c].X < MaxX && points[c].Y > MinY && points[c].Y < MaxY)
+            {
+                dir1 = -dir2;
+                if (Out.HasValue)
+                {
+                    dir2 = -Out.Value;
+                }
+                else
+                {
+                    dir2 = points[c].DirectionFrom(points[c + 1]) + points[c].DirectionFrom(points[c - 1]);
+                    if (dir2 == Vector2.Zero)
+                    {
+                        dir2 = points[c + 1].DirectionTo(points[c]);
+                    }
+                    else
+                    {
+                        dir2.Normalize();
+                    }
+                }
+                float distance = points[c].Distance(points[c + 1]);
+                int target = (int)(distance / targetDistance * scale);
+                for (int j = 1; j < target + 1; j++)
+                {
+                    float progress = (float)j / (target + 1);
+                    progress = 1 - (MathF.Cos(progress * MathF.PI) + 1) / 2;
+                    float k = (progress - 0.5f) * 2;
+                    k = MathF.Cos(MathF.Asin(k));
+                    Vector2 newPoint = points[c] * (1 - progress) + points[c + 1] * progress;
+                    newPoint += (dir1 * MathF.Sqrt(1 - progress) + dir2 * MathF.Sqrt(progress)) * distance / 4 * k;
+                    SmoothedPoints.Add(newPoint);
+                }
+            }
+            SmoothedPoints.Add(points[c + 1]);
+
+            return SmoothedPoints;
+        }
+        public static void RenderSnakeBody(List<Vector2> SmoothedPoints, float HalfWidth, int SegmentsCount, Rectangle Frame, Texture2D SegmentTexture, List<Vector4> SegmentsGetAlphaColors = null, List<Vector4> SegmentsGetColorColors = null, Vector4? HeadAlpha = null, Vector4? HeadColor = null, Vector4? TailAlpha = null, Vector4? TailColor = null, ManagedShader Shader = null, Vector2? dirIn = null, Vector2? dirOut = null)
+        {
+            Main.instance.GraphicsDevice.Textures[1] = SegmentTexture;
+            float WidthFunction(float trailLengthInterpolant, float length, float totatlLength, Vector2 Position)
+            {
+                return HalfWidth;
+            }
+            Color AlphaFunction(float trailLengthInterpolant, float length, float totatlLength, Vector2 Position)
+            {
+                if (SegmentsCount != SegmentsGetAlphaColors.Count)
+                {
+                    trailLengthInterpolant /= SegmentsCount;
+                    trailLengthInterpolant *= SegmentsGetAlphaColors.Count;
+                }
+                if (trailLengthInterpolant < 0.5f)
+                {
+                    if (HeadAlpha.HasValue)
+                    {
+                        trailLengthInterpolant *= 2f;
+                        Vector4 color1 = HeadAlpha.Value;
+                        Vector4 color2 = SegmentsGetAlphaColors[0];
+                        return new Color(color1 * (1 - trailLengthInterpolant) + color2 * trailLengthInterpolant);
+                    }
+                    return new Color(SegmentsGetAlphaColors[0]);
+                }
+                trailLengthInterpolant -= 0.5f;
+                int s = (int)trailLengthInterpolant;
+                trailLengthInterpolant -= s;
+                if (s == SegmentsCount - 1)
+                {
+                    if (TailAlpha.HasValue)
+                    {
+                        trailLengthInterpolant *= 2f;
+                        Vector4 color1 = SegmentsGetAlphaColors[s];
+                        Vector4 color2 = TailAlpha.Value;
+                        return new Color(color1 * (1 - trailLengthInterpolant) + color2 * trailLengthInterpolant);
+                    }
+                    return new Color(SegmentsGetAlphaColors[s]);
+                }
+                {
+                    Vector4 color1 = SegmentsGetAlphaColors[s];
+                    Vector4 color2 = SegmentsGetAlphaColors[s + 1];
+                    return new Color(color1 * (1 - trailLengthInterpolant) + color2 * trailLengthInterpolant);
+                }
+            }
+            Color NullColor(float trailLengthInterpolant, float length, float totatlLength, Vector2 Position)
+            {
+                return Color.White;
+            }
+            ManagedShader shader = Shader?? ShaderManager.GetShader("Terrapain.SnakeShader");
+            Vector2 size = SegmentTexture.Size();
+            Vector4 frame = new Vector4(Frame.X / size.X, Frame.Y / size.Y, Frame.Width / size.X, Frame.Height / size.Y);
+            shader.TrySetParameter("frame", frame);
+            TrailSettings settings = new TrailSettings(WidthFunction, SegmentsGetAlphaColors == null || SegmentsGetAlphaColors.Count == 0? NullColor : AlphaFunction, Shader: shader);
+            RenderTrail(SmoothedPoints, settings, SegmentsCount, dirIn, dirOut);
+            if (SegmentsGetColorColors != null)
+            {
+                Color ColorFunction(float trailLengthInterpolant, float length, float totatlLength, Vector2 Position)
+                {
+                    if (SegmentsCount != SegmentsGetColorColors.Count)
+                    {
+                        trailLengthInterpolant /= SegmentsCount;
+                        trailLengthInterpolant *= SegmentsGetColorColors.Count;
+                    }
+                    if (trailLengthInterpolant < 0.5f)
+                    {
+                        if (HeadColor.HasValue)
+                        {
+                            trailLengthInterpolant *= 2f;
+                            Vector4 color1 = HeadColor.Value;
+                            Vector4 color2 = SegmentsGetColorColors[0];
+                            return new Color(color1 * (1 - trailLengthInterpolant) + color2 * trailLengthInterpolant);
+                        }
+                        return new Color(SegmentsGetColorColors[0]);
+                    }
+                    trailLengthInterpolant -= 0.5f;
+                    int s = (int)trailLengthInterpolant;
+                    trailLengthInterpolant -= s;
+                    if (s == SegmentsCount - 1)
+                    {
+                        if (TailColor.HasValue)
+                        {
+                            trailLengthInterpolant *= 2f;
+                            Vector4 color1 = SegmentsGetColorColors[s];
+                            Vector4 color2 = TailColor.Value;
+                            return new Color(color1 * (1 - trailLengthInterpolant) + color2 * trailLengthInterpolant);
+                        }
+                        return new Color(SegmentsGetColorColors[s]);
+                    }
+                    {
+                        Vector4 color1 = SegmentsGetColorColors[s];
+                        Vector4 color2 = SegmentsGetColorColors[s + 1];
+                        return new Color(color1 * (1 - trailLengthInterpolant) + color2 * trailLengthInterpolant);
+                    }
+                }
+                settings = new TrailSettings(WidthFunction, ColorFunction, Shader: shader);
+                RenderTrail(SmoothedPoints, settings, SegmentsCount, dirIn, dirOut);
+            }
         }
     }
     public record TrailSettings(VertexWidthFunction WidthFunction, VertexColorFunction ColorFunction, bool Smoothen = true, bool Pixelate = false,

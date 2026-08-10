@@ -3,6 +3,7 @@ using Terrapain.Content.NPCs.Servants.EvilBosses;
 using Terrapain.Content.TUtilities.Kinematic;
 using Terraria;
 using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace Terrapain.Content.Groups
 {
@@ -22,6 +23,7 @@ namespace Terrapain.Content.Groups
                 creeper = (int)Main.npc[creeper].ai[0];
             }
             maxRotationSpeed = rotationSpeed;
+            autoDisable = false;
             for (int i = 0; i < Count; i++)
             {
                 int mem1 = 0;
@@ -40,9 +42,8 @@ namespace Terrapain.Content.Groups
                     mem1 = members[i];
                     mem2 = members[i + 1];
                 }
-                k.Add(new kishki(new SimulatedChain(10, 10, Main.npc[mem1].Center, 0, 1), mem1, mem2));
+                k.Add(new kishki(new SimulatedChain(8, 16, Main.npc[mem1].Center, 0, 1), mem1, mem2));
             }
-            autoDisable = false;
         }
         public override int[] NPCType => [NPCID.Creeper];
         bool firstUpdate = true;
@@ -63,23 +64,25 @@ namespace Terrapain.Content.Groups
             }
             public void Update()
             {
-                if (Main.npc[owner1].active && Main.npc[owner1].type == NPCID.Creeper)
+                if (owner1 > -1 && Main.npc[owner1].active && Main.npc[owner1].type == NPCID.Creeper)
                 {
                     chain.Fragments[0].fixedAt = Main.npc[owner1].Center;
                 }
                 else
                 {
+                    owner1 = -1;
                     chain.Fragments[0].fixedAt = null;
                     timeLeft--;
                 }
-                if (Main.npc[owner2].active && Main.npc[owner2].type == NPCID.Creeper)
+                if (owner2 > -1 && Main.npc[owner2].active && Main.npc[owner2].type == NPCID.Creeper)
                 {
                     chain.Fragments[chain.Count - 1].fixedAt = Main.npc[owner2].Center;
                 }
                 else
                 {
+                    owner2 = -1;
                     chain.Fragments[chain.Count - 1].fixedAt = null;
-                    if (Main.npc[owner1].active && Main.npc[owner1].type == NPCID.Creeper)
+                    if (owner1 > -1 && Main.npc[owner1].active && Main.npc[owner1].type == NPCID.Creeper)
                     {
                         timeLeft--;
                     }
@@ -142,18 +145,20 @@ namespace Terrapain.Content.Groups
         }
         public override void PreDrawFirstNPCInGroup(SpriteBatch spriteBatch)
         {
+            Texture2D texture = ModContent.Request<Texture2D>("Terrapain/Content/Groups/kishka").Value;
             for (int i = 0; i < k.Count; i++)
             {
-                k[i].chain.DrawAsLines(spriteBatch, 6, Color.Red * k[i].progress);
+                k[i].chain.DrawSmoothed(spriteBatch, texture, null, Color.White * k[i].progress, true, 1);
             }
         }
         public override void PostDrawNPCs(SpriteBatch spriteBatch, Vector2 screenPosition)
         {
             if (Count == 0)
             {
+                Texture2D texture = ModContent.Request<Texture2D>("Terrapain/Content/Groups/kishka").Value;
                 for (int i = 0; i < k.Count; i++)
                 {
-                    k[i].chain.DrawAsLines(spriteBatch, 6, Color.Red * k[i].progress);
+                    k[i].chain.DrawSmoothed(spriteBatch, texture, null, Color.White * k[i].progress, true, 1);
                 }
             }
         }

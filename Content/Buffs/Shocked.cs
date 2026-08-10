@@ -29,7 +29,7 @@ namespace Terrapain.Content.Buffs
             npc.lifeRegen -= 12;
             npc.velocity *= 1 - 0.05f * npc.knockBackResist;
             if (random.Next(3) == 0)
-                Dust.NewDust(npc.position, npc.width, npc.height, ModContent.DustType<Lightning>());
+                Dust.NewDust(npc.position, npc.width, npc.height, ModContent.DustType<Sparcle>());
         }
         public override void Update(Player player, ref int buffIndex)
         {
@@ -47,7 +47,7 @@ namespace Terrapain.Content.Buffs
             }
             if (random.Next(3) == 0)
             {
-                Dust.NewDust(player.position, player.width, player.height, ModContent.DustType<Lightning>());
+                Dust.NewDust(player.position, player.width, player.height, ModContent.DustType<Sparcle>());
             }
         }
     }

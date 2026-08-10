@@ -14,6 +14,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <AdditionalFiles Include="Assets\AutoloadedEffects\Shaders\DiamondLaserGlowShader.fxc" />
+	  <AdditionalFiles Include="Assets\AutoloadedEffects\Shaders\Sparcle.fxc" />
 	  <AdditionalFiles Include="Assets\AutoloadedEffects\Shaders\EoCShader.fxc" />
 	  <AdditionalFiles Include="Assets\AutoloadedEffects\Shaders\EyeofCthulhuLensShader.fxc" />
 	</ItemGroup>

@@ -35,7 +35,8 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
                 startColor = Color.Red * 0.5f,
                 endColor = Color.Red * 0.5f,
                 length = 10,
-                startWidth = 17
+                startWidth = 17,
+                smooth = false
             };
         }
         public override void OnSpawn(IEntitySource source)

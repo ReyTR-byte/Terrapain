@@ -61,21 +61,37 @@ namespace Terrapain.Common.Global.Trails
             Vector2 dir1 = Vector2.Zero;
             if (points.Count > 3 && points[2] != points[3])
             {
-                dir1 = points[2].DirectionFrom(points[3]);
+                dir1 = points[2].DirectionTo(points[1]) + points[2].DirectionFrom(points[3]);
+                if (dir1 == Vector2.Zero)
+                {
+                    dir1 = points[2].DirectionTo(points[1]).RotatedBy(MathF.PI);
+                }
+                else
+                {
+                    dir1.Normalize();
+                }
             }
             Vector2 dir2 = Vector2.Zero;
             if (points[1] != points[0])
             {
-                dir2 = points[1].DirectionFrom(points[0]);
+                dir2 = points[1].DirectionTo(points[2]) + points[1].DirectionFrom(points[0]);
+                if (dir2 == Vector2.Zero)
+                {
+                    dir2 = points[1].DirectionTo(points[0]).RotatedBy(MathF.PI);
+                }
+                else
+                {
+                    dir2.Normalize();
+                }
             }
             for (int i = 1; i < target + 1; i++)
             {
                 float progress = (float)i / (target + 1);
-                float k = MathF.Abs(progress - 0.5f) * 2;
-                k *= k * k;
-                k = 1 - k;
+                progress = 1 - (MathF.Cos(progress * MathF.PI) + 1) / 2;
+                float k = (progress - 0.5f) * 2;
+                k = MathF.Cos(MathF.Asin(k));
                 Vector2 newPoint = points[2] * (1 - progress) + points[1] * progress;
-                newPoint += (dir1 * (MathF.Sqrt(1 - progress)) + dir2 * MathF.Sqrt(progress * progress)) * distance / 7 * k;
+                newPoint += (dir1 * (1 - progress) + dir2 * (progress)) * distance / 4 * k;
                 trailCache.Insert(i + start, newPoint);
                 trailCacheIndexes.Add(0);
             }
@@ -86,21 +102,17 @@ namespace Terrapain.Common.Global.Trails
             PointsToReturn.Add(trailCache[trailCache.Count - 1]);
             PointsToReturn.Add(points[0]);
             distance = points[0].Distance(points[1]);
-            dir1 = Vector2.Zero;
+            dir1 = -dir2;
             dir2 = Vector2.Zero;
-            if (points[1] != points[0])
-            {
-                dir2 = points[1].DirectionFrom(points[2]);
-            }
             target = (int)(distance / targetDistance * scale);
             for (int i = 1; i < target + 1; i++)
             {
                 float progress = (float)i / (target + 1);
-                float k = MathF.Abs(progress - 0.5f) * 2;
-                k *= k * k;
-                k = 1 - k;
+                progress = 1 - (MathF.Cos(progress * MathF.PI) + 1) / 2;
+                float k = (progress - 0.5f) * 2;
+                k = MathF.Cos(MathF.Asin(k));
                 Vector2 newPoint = points[1] * (1 - progress) + points[0] * progress;
-                newPoint += (dir1 * MathF.Sqrt(progress) + dir2 * MathF.Sqrt(1 - progress)) * distance / 7 * k;
+                newPoint += (dir1 * (1 - progress) + dir2 * (progress)) * distance / 4 * k;
                 PointsToReturn.Insert(i + start, newPoint);
             }
             PointsToReturn.RemoveAt(0);

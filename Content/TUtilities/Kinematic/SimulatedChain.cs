@@ -1,13 +1,6 @@
-﻿using Luminance.Common.Easings;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
-using Terraria.ID;
-using static Terraria.GameContent.Animations.IL_Actions.Sprites;
 
 namespace Terrapain.Content.TUtilities.Kinematic
 {
@@ -23,8 +16,13 @@ namespace Terrapain.Content.TUtilities.Kinematic
         }
         public int Count => Fragments.Length;
         public SimulatedJoint[] Fragments;
+        public List<Vector2> SoothedPoints;
+        public List<Vector4> Colors;
+
+        public bool needsRebuildSmoothedPoints;
         public void Update()
         {
+            needsRebuildSmoothedPoints = true;
             for (int i = 0; i < Fragments.Length; i++)
             {
                 if (!Fragments[i].fixedAt.HasValue)
@@ -231,6 +229,37 @@ namespace Terrapain.Content.TUtilities.Kinematic
                     sprite.DrawLine(start, end, color, Width);
                 }
             }
+        }
+        public void DrawSmoothed(SpriteBatch spriteBatch, Texture2D texture2D, Rectangle? frame, Color color, bool light, float scale, int count = -1)
+        {
+            if (needsRebuildSmoothedPoints)
+            {
+                List<Vector2> points = [];
+                foreach (var j in Fragments)
+                {
+                    points.Add(j.position);
+                }
+                SoothedPoints = Graphics.Graphics.SmoothTrail(points, 4);
+                Colors = [];
+                if (light)
+                {
+                    for (int i = 0; i < Count - 1; i++)
+                    {
+                        Color lighting = Lighting.GetColor(((points[i] + points[i + 1]) / 2).ToTileCoordinates());
+                        Colors.Add(lighting.ToVector4() * color.ToVector4());
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < Count - 1; i++)
+                    {
+                        Colors.Add(color.ToVector4());
+                    }
+                }
+                needsRebuildSmoothedPoints = false;
+            }
+            Rectangle f = frame?? texture2D.Bounds;
+            Graphics.Graphics.RenderSnakeBody(SoothedPoints, texture2D.Height / 2, count > 0? count : Count - 1, f, texture2D, Colors);
         }
     }
 }

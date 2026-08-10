@@ -1,12 +1,15 @@
-﻿using System;
+﻿using ILGPU.Frontend;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Content.Dusts;
 using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 using static Terrapain.Terrapain;
 
 namespace Terrapain.Common.System
@@ -26,8 +29,10 @@ namespace Terrapain.Common.System
             }
             return -1;
         }
+        UnifiedRandom random = new UnifiedRandom();
         public override void PreUpdateProjectiles()
         {
+            UnifiedRandom random = new UnifiedRandom();
             for (int i = 0; i < lightnings.Length; i++)
             {
                 LightningDrawInfo light = lightnings[i];
@@ -52,7 +57,10 @@ namespace Terrapain.Common.System
                             prog1 -= light.parts[j].Length;
                             j++;
                         }
-
+                        if(random.NextBool(8))
+                        {
+                            Dust.NewDust(pos, 0, 0, ModContent.DustType<Sparcle>());
+                        }
                         Lighting.AddLight(pos, light.color.ToVector3() * 1.5f);
                     }
                     if (light.progress >= light.TotalLength)
