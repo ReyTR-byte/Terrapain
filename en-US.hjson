@@ -561,6 +561,8 @@ Mods: {
 			IchorSpike.DisplayName: Ichor Spike
 			CursedCloud.DisplayName: Cursed Cloud
 			FriendlyCrownGem.DisplayName: Friendly Crown Gem
+			CursedFire.DisplayName: Cursed Fire
+			CursedFireSpirit.DisplayName: Cursed Fire Spirit
 		}
 
 		Configs: {
@@ -614,6 +616,11 @@ Mods: {
 
 				UnarmedMouseAlwaysActive: {
 					Label: Unarmed Mouse Always Active
+					Tooltip: ""
+				}
+
+				hotAirPower: {
+					Label: hot Air Power
 					Tooltip: ""
 				}
 			}

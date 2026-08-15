@@ -1,7 +1,7 @@
 using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Content.Buffs;
 using Terrapain.Content.NPCs.Bosses.Scorspider;
 using Terraria;

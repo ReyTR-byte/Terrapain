@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Common.Global;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Common.UI.Assets.AbilitiesIcons;
 using Terrapain.Common.UI.Assets.AbilitiFrames;
 using Terrapain.Common.UI.Assets.BarFills;

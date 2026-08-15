@@ -18,7 +18,6 @@ namespace Terrapain.Common.Global.UseStyles
         float rotation;
         float MaxRotationSpeed = 0.1f;
         bool New = true;
-        bool Old = true;
         public override bool InstancePerEntity => true;
         public override bool AppliesToEntity(Item entity, bool lateInstantiation)
         {
@@ -26,60 +25,61 @@ namespace Terrapain.Common.Global.UseStyles
         }
         public override void UseStyle(Item item, Terraria.Player player, Rectangle heldItemFrame)
         {
-            LaserUseStyle ls = player.HeldItem.GetGlobalItem<LaserUseStyle>();
-
-            if (MathF.Abs((Main.MouseWorld - player.MountedCenter).X) > 6)
+            if (player.HeldItem.TryGetGlobalItem<LaserUseStyle>(out var ls))
             {
-                player.ChangeDir((Main.MouseWorld - player.MountedCenter).X.NonZeroSign());
-            }
-
-            float rotation;
-            float rotationSpeed = ls.rotationSpeed;
-            float targetRotation = (Main.MouseWorld - (player.MountedCenter + TGlobalItem.GetHandOffset(player))).ToRotation();
-            if (ls.New)
-            {
-                rotation = (Main.MouseWorld - (player.MountedCenter + TGlobalItem.GetHandOffset(player))).ToRotation();
-                rotationSpeed = 0; 
-            }
-            else
-            {
-                rotation = ls.rotation;
-            }
-            float positiveRotation = targetRotation - rotation;
-            positiveRotation = Functions.NormalizeRotation(positiveRotation);
-            float negativeRotation = rotation - targetRotation;
-            negativeRotation = Functions.NormalizeRotation(negativeRotation);
-            if (positiveRotation > negativeRotation)
-            {
-                rotationSpeed -= angularAxeleration;
-                rotationSpeed = MathF.Min(rotationSpeed, MaxRotationSpeed * MathF.Max(1, negativeRotation * 2f));
-                if (negativeRotation < -rotationSpeed)
+                if (MathF.Abs((Main.MouseWorld - player.MountedCenter).X) > 6)
                 {
-                    rotation = targetRotation;
-                    rotationSpeed = 0;
+                    player.ChangeDir((Main.MouseWorld - player.MountedCenter).X.NonZeroSign());
                 }
-            }
-            else
-            {
-                rotationSpeed += angularAxeleration;
-                rotationSpeed = MathF.Min(rotationSpeed, MaxRotationSpeed * MathF.Max(1, positiveRotation * 2f));
-                if (positiveRotation < rotationSpeed)
+
+                float rotation;
+                float rotationSpeed = ls.rotationSpeed;
+                float targetRotation = (Main.MouseWorld - (player.MountedCenter + TGlobalItem.GetHandOffset(player))).ToRotation();
+                if (ls.New)
                 {
-                    rotation = targetRotation;
-                    rotationSpeed = 0;
+                    rotation = (Main.MouseWorld - (player.MountedCenter + TGlobalItem.GetHandOffset(player))).ToRotation();
+                    rotationSpeed = 0; 
                 }
+                else
+                {
+                    rotation = ls.rotation;
+                }
+                float positiveRotation = targetRotation - rotation;
+                positiveRotation = Functions.NormalizeRotation(positiveRotation);
+                float negativeRotation = rotation - targetRotation;
+                negativeRotation = Functions.NormalizeRotation(negativeRotation);
+                if (positiveRotation > negativeRotation)
+                {
+                    rotationSpeed -= angularAxeleration;
+                    rotationSpeed = MathF.Min(rotationSpeed, MaxRotationSpeed * MathF.Max(1, negativeRotation * 2f));
+                    if (negativeRotation < -rotationSpeed)
+                    {
+                        rotation = targetRotation;
+                        rotationSpeed = 0;
+                    }
+                }
+                else
+                {
+                    rotationSpeed += angularAxeleration;
+                    rotationSpeed = MathF.Min(rotationSpeed, MaxRotationSpeed * MathF.Max(1, positiveRotation * 2f));
+                    if (positiveRotation < rotationSpeed)
+                    {
+                        rotation = targetRotation;
+                        rotationSpeed = 0;
+                    }
+                }
+                rotation += rotationSpeed;
+                Vector2 offset = TGlobalItem.basicOffset + (item.ModItem?.HoldoutOffset() ?? Vector2.Zero);
+                offset.Y *= player.direction;
+                float basicRotation = player.HeldItem.GetT().spriteRotation ?? 0;
+                player.SetItemRotation(rotation + basicRotation * player.direction);
+                player.itemLocation = player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player) + offset.RotatedBy(rotation);
+                player.SetCompositeArmFront(true, Terraria.Player.CompositeArmStretchAmount.Full, player.ToItemRotation(rotation) - 0.5f * (float)Math.PI * player.direction);
+                player.bodyFrame.Y = player.bodyFrame.Height;
+                player.HeldItem.GetGlobalItem<LaserUseStyle>().rotation = rotation;
+                player.HeldItem.GetGlobalItem<LaserUseStyle>().rotationSpeed = rotationSpeed;
+                player.HeldItem.GetGlobalItem<LaserUseStyle>().New = false;
             }
-            rotation += rotationSpeed;
-            Vector2 offset = TGlobalItem.basicOffset + (item.ModItem?.HoldoutOffset() ?? Vector2.Zero);
-            offset.Y *= player.direction;
-            float basicRotation = player.HeldItem.GetT().spriteRotation ?? 0;
-            player.SetItemRotation(rotation + basicRotation * player.direction);
-            player.itemLocation = player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player) + offset.RotatedBy(rotation);
-            player.SetCompositeArmFront(true, Terraria.Player.CompositeArmStretchAmount.Full, player.ToItemRotation(rotation) - 0.5f * (float)Math.PI * player.direction);
-            player.bodyFrame.Y = player.bodyFrame.Height;
-            player.HeldItem.GetGlobalItem<LaserUseStyle>().rotation = rotation;
-            player.HeldItem.GetGlobalItem<LaserUseStyle>().rotationSpeed = rotationSpeed;
-            player.HeldItem.GetGlobalItem<LaserUseStyle>().New = false;
         }
         public override void UpdateInventory(Item item, Terraria.Player player)
         {

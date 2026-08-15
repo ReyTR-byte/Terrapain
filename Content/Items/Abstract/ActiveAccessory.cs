@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Common.Global;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Common.UI.Assets.AbilitiesIcons;
 using Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories;
 using Terraria;

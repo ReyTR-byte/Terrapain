@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 using Terraria.Chat;
 using Terrapain.Common.System;
 using Luminance.Common.Utilities;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Common.Config;
 
 namespace Terrapain.Content.NPCs

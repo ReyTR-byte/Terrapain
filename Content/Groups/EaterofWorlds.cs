@@ -41,11 +41,19 @@ namespace Terrapain.Content.Groups
             {
                 NPC npc = Main.npc[members[i]];
                 NPC head = Main.npc[members[i - 1]];
+                if (i == members.Count - 1 && !DrawOverBrain)
+                {
+                    npc.ai[3] = members[0];
+                }
                 if (i == members.Count - 1 && DrawOverBrain)
                 {
                     if (npc.Distance(BrainPosition) > 120)
                     {
                         DrawOverBrain = false;
+                    }
+                    if (npc.Distance(BrainPosition) < 60)
+                    {
+                        brain.GetGlobalNPC<BrainOfCthulhu>().openTimer = 12;
                     }
                 }
                 Vector2 targetPosition = head.Center - Vector2.UnitX.RotatedBy(head.rotation - adjustRotation) * SegmentLength * head.scale;
@@ -80,6 +88,7 @@ namespace Terrapain.Content.Groups
                 if (inTheBrain > 0)
                 {
                     brain.GetGlobalNPC<BrainOfCthulhu>().openTimer = 12;
+                    
                 }
                 NPC head = Main.npc[members[0]];
                 if (head.Distance(BrainPosition) < SegmentLength * head.scale)

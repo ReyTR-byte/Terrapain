@@ -667,6 +667,8 @@ Mods: {
 			// IchorSpike.DisplayName: Ichor Spike
 			// CursedCloud.DisplayName: Cursed Cloud
 			// FriendlyCrownGem.DisplayName: Friendly Crown Gem
+			// CursedFire.DisplayName: Cursed Fire
+			// CursedFireSpirit.DisplayName: Cursed Fire Spirit
 		}
 
 		Configs: {
@@ -732,6 +734,11 @@ Mods: {
 						можно было пользоваться в таких условиях, я немного переделал их логику, теперь направление
 						им можно задать с помощью клавишь передвижения.
 						'''
+				}
+
+				hotAirPower: {
+					// Label: hot Air Power
+					// Tooltip: ""
 				}
 			}
 

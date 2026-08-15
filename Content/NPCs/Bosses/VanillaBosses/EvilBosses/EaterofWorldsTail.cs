@@ -8,6 +8,7 @@ using Terrapain.Content.Groups;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
 
 namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses

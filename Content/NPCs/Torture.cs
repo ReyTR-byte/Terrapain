@@ -2,7 +2,7 @@ using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Terrapain.Common.Config;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Common.System;
 using Terraria;
 using Terraria.Chat;

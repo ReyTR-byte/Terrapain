@@ -25,7 +25,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 
-namespace Terrapain.Common.Player
+namespace Terrapain.Common.TerrapainModPlayer
 {
 	public class TerrapainPlayer : ModPlayer
 	{
@@ -117,8 +117,8 @@ namespace Terrapain.Common.Player
 		{
 			for (int i = 0; i < oldCenters.Length; i++)
 			{
-				oldCenters[i] = Player.Center;
-				oldPositions[i] = Player.position;
+                oldCenters[i] = Player.Center;
+                oldPositions[i] = Player.position;
 			}
 		}
 		public override void ResetEffects()
@@ -169,7 +169,7 @@ namespace Terrapain.Common.Player
 			{
 				if (!Player.ItemAnimationActive)
 				{
-					StaminaRegenerationTimer--;
+                    StaminaRegenerationTimer--;
 				}
 			}
 			else
@@ -178,7 +178,7 @@ namespace Terrapain.Common.Player
 			}
 			StaminaRegenerationTimerCoefficient = 60;
 			Stamina = MathHelper.Clamp(Stamina + StaminaRegeneration, 0, MaxStamina);
-			Player.GetDamage(DamageClass.Melee) *= StaminaDamageBuff;
+            Player.GetDamage(DamageClass.Melee) *= StaminaDamageBuff;
 			if (Stamina < MaxStamina)
 			{
                 TerrapainUIManager.Open<Stamina>();
@@ -188,7 +188,7 @@ namespace Terrapain.Common.Player
 		}
 		public void ResetAbilities(string reason)
 		{
-			List<Item> accessoties = Functions.GetActiveAccessories(Player);
+            List<Item> accessoties = Functions.GetActiveAccessories(Player);
 			foreach (var item in accessoties)
 			{
 				item.GetT().ActiveAccessoryVanillaItem.ResetAbilities(reason);
@@ -202,9 +202,9 @@ namespace Terrapain.Common.Player
 				oldPositions[i] = oldPositions[i - 1];
 				oldVelocities[i] = oldVelocities[i - 1];
 			}
-			oldCenters[0] = Player.Center;
-			oldPositions[0] = Player.position;
-			oldVelocities[0] = Player.velocity;
+            oldCenters[0] = Player.Center;
+            oldPositions[0] = Player.position;
+            oldVelocities[0] = Player.velocity;
 			if (Player.statLife <= Player.statLifeMax2 * 0.25f && AcidCobwebBonusReload == 0 && AcidCobwebBonus)
 			{
                 int proj = Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Functions.UnitVectorFromRotation(playerRandom.NextFloat() * (float)Math.PI * 2 - (float)Math.PI) * (playerRandom.NextFloat() + 2.5f), ModContent.ProjectileType<ScorspiderWeb>(), 6, 0, Player.whoAmI);
@@ -216,7 +216,7 @@ namespace Terrapain.Common.Player
 			{
 				if (Player.armor[i + 3].active && Player.armor[i + 3].GetGlobalItem<TGlobalItem>().activeAccessory)
 				{
-					Player.armor[i + 3].GetGlobalItem<TGlobalItem>().slot = i;
+                    Player.armor[i + 3].GetGlobalItem<TGlobalItem>().slot = i;
 
                     if (ActiveAccesoriesKeybinds[i].Current || ActiveAccesoriesKeybinds[i].JustReleased)
 					{
@@ -245,7 +245,7 @@ namespace Terrapain.Common.Player
 		}
 		public override void PostUpdate()
 		{
-			oldLifeRegen = Player.lifeRegen;
+            oldLifeRegen = Player.lifeRegen;
 			if (ExplosiveSkullReload > 0)
 			{
 				ExplosiveSkullReload--;
@@ -256,13 +256,13 @@ namespace Terrapain.Common.Player
             }
             if (unarmed)
 			{
-				Player.maxMinions = 0;
-				Player.maxTurrets = 0;
-				Player.UpdateMaxTurrets();
+                Player.maxMinions = 0;
+                Player.maxTurrets = 0;
+                Player.UpdateMaxTurrets();
 			}
             if (brokenHeartLevel > 0)
             {
-				PlayerStatsSnapshot snapshot = new(Player);
+                PlayerStatsSnapshot snapshot = new(Player);
 
                 float oneHeart = 1f / snapshot.AmountOfLifeHearts;
                 int life = (int)(Player.statLifeMax2 * oneHeart);
@@ -281,7 +281,7 @@ namespace Terrapain.Common.Player
         {
             if (StarPowerSet && StarPowerSetReload == 0)
 			{
-				ShootingStars(25, 5, (int)Player.GetDamage<Unarmed>().ApplyTo(20), 3, 10, ModContent.GetInstance<Unarmed>(), target.Center + Vector2.UnitY * -800, target.Center, false, false);
+                ShootingStars(25, 5, (int)Player.GetDamage<Unarmed>().ApplyTo(20), 3, 10, ModContent.GetInstance<Unarmed>(), target.Center + Vector2.UnitY * -800, target.Center, false, false);
 				StarPowerSetReload = 90;
 			}
         }
@@ -437,18 +437,18 @@ namespace Terrapain.Common.Player
 			}
 			if (!Player.HasBuff(ModContent.BuffType<BrokenHeart>()))
 			{
-				brokenHeartLevel = 0;
+                brokenHeartLevel = 0;
 			}
 			if (brokenHeartLevel > 0)
 			{
-				Player.lifeRegen += 4;
+                Player.lifeRegen += 4;
 				if (brokenHeartLevel >= 2)
 				{
-					Player.GetCritChance(DamageClass.Generic) += 4;
+                    Player.GetCritChance(DamageClass.Generic) += 4;
 				}
 				if (brokenHeartLevel == 3)
 				{
-					Player.GetDamage(DamageClass.Generic) *= 1.1f;
+                    Player.GetDamage(DamageClass.Generic) *= 1.1f;
 				}
             }
         }
@@ -523,19 +523,19 @@ namespace Terrapain.Common.Player
 			chaosDefense = (int)(4 * grades[2]);
 			chaosSpeed = 0.25f * grades[3];
 			chaosAcceleration = 0.25f * grades[4];
-			Player.statLife += (int)(25 * grades[5]);
+            Player.statLife += (int)(25 * grades[5]);
 			if (Player.statLife < 0)
 			{
-				Player.KillMe(PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Mods.Terrapain.NetworkText.BadPotion")), 666, -Player.direction);
+                Player.KillMe(PlayerDeathReason.ByCustomReason(NetworkText.FromKey("Mods.Terrapain.NetworkText.BadPotion")), 666, -Player.direction);
 			}
         }
 		public void UpdateChaosBuff()
 		{
-			Player.lifeRegen += chaosRegen;
-			Player.maxRunSpeed *= 1 + chaosSpeed;
-			Player.runAcceleration *= 1 + chaosAcceleration;
-			Player.statDefense += chaosDefense;
-			Player.GetDamage(DamageClass.Generic) *= 1 + chaosDamage;
+            Player.lifeRegen += chaosRegen;
+            Player.maxRunSpeed *= 1 + chaosSpeed;
+            Player.runAcceleration *= 1 + chaosAcceleration;
+            Player.statDefense += chaosDefense;
+            Player.GetDamage(DamageClass.Generic) *= 1 + chaosDamage;
 		}
 		public int brokenHeartLevel;
     }

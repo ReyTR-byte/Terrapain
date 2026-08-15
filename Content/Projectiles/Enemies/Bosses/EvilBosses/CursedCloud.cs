@@ -1,12 +1,15 @@
 ﻿using Luminance.Common.Utilities;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Common.Global;
 using Terrapain.Content.Auras;
 using Terrapain.Content.Dusts;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ModLoader;
 
 namespace Terrapain.Content.Projectiles.Enemies.Bosses.EvilBosses
@@ -53,7 +56,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.EvilBosses
                 }
                 else
                 {
-                    distance *= 1.2f;
+                    distance *= 1.5f;
                 }
                 distance /= 400;
                 distance = distance * distance * distance.NonZeroSign();
@@ -64,6 +67,13 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.EvilBosses
         {
             aura.Draw(Main.spriteBatch);
             return false;
+        }
+        public override Color? GetAlpha(Color lightColor)
+        {
+            float prog = (MathF.Sin(Projectile.ai[0]) + 1) / 2;
+            float prog2 = prog * 0.2f;
+            Color newColor = new Color(Color.Yellow.ToVector4() * prog + Color.White.ToVector4() * (1 - prog));
+            return new Color((lightColor.ToVector4() * (1 - prog) * newColor.ToVector4()) * (1 - prog2) + newColor.ToVector4() * prog2);
         }
     }
 }

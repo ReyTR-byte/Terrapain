@@ -1,4 +1,4 @@
-﻿using Terrapain.Common.Player;
+﻿using Terrapain.Common.TerrapainModPlayer;
 using Terraria;
 using Terraria.ModLoader;
 

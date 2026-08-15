@@ -1,5 +1,5 @@
 using Terrapain.Common.Global;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Content.Items.Ingredients;
 using Terraria;
 using Terraria.GameContent.Creative;

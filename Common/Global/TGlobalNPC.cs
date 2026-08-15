@@ -259,11 +259,13 @@ namespace Terrapain.Common.Global
             {
                 TDrawNPC(spriteBatch, npc, texture);
             }
-            if (draw == null)
-                draw = true;
+            if (npc.type == NPCID.EaterofWorldsBody)
+            {
+
+            }
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-            return draw?? true && useVanillaDrawing;
+            return (draw?? true) && useVanillaDrawing;
         }
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
@@ -290,7 +292,6 @@ namespace Terrapain.Common.Global
         {
             NPCBehaviour?.PostDrawNPCs(npc, spriteBatch, screenPos);
         }
-        int timer;
         public override bool PreAI(NPC npc)
         {
             if (FirstTick)
@@ -331,7 +332,69 @@ namespace Terrapain.Common.Global
             oldFrame[0] = npc.frame;
             oldDirections[0] = npc.spriteDirection;
         }
-        
+        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
+        {
+            switch (npc.type)
+            {
+                case NPCID.EaterofWorldsHead:
+                case NPCID.EaterofWorldsBody:
+                case NPCID.EaterofWorldsTail:
+                case NPCID.Creeper:
+                    foreach (var loot in npcLoot.Get(false))
+                    {
+                        npcLoot.Remove(loot);
+                    }
+                    break;
+                case NPCID.KingSlime:
+                    foreach (var loot in npcLoot.Get(false))
+                    {
+                        if (loot is ItemDropWithConditionRule)
+                        {
+                            if (((ItemDropWithConditionRule)loot).itemId == ItemID.KingSlimeTrophy)
+                            {
+                                npcLoot.Remove(loot);
+                                break;
+                            }
+                        }
+                    }
+                    LeadingConditionRule suicide = new(new SuicideDropRule());
+                    suicide.OnSuccess(new DropOneByOne(ItemID.KingSlimeTrophy, Terrapain.SuicideTrophyDropParameters));
+                    npcLoot.Add(suicide);
+
+                    LeadingConditionRule notSuicide = new(new NotSuicideDropRule());
+                    notSuicide.OnSuccess(new DropOneByOne(ItemID.KingSlimeTrophy, Terrapain.NormalTrophyDropParameters));
+                    npcLoot.Add(notSuicide);
+
+                    LeadingConditionRule Torture = new(new TortureDropRule());
+                    Torture.OnSuccess(new DropOneByOne(4929 /*King slime relic*/, Terrapain.SuicideTrophyDropParameters));
+                    npcLoot.Add(Torture);
+                    break;
+                case NPCID.EyeofCthulhu:
+                    foreach (var loot in npcLoot.Get(false))
+                    {
+                        if (loot is ItemDropWithConditionRule)
+                        {
+                            if (((ItemDropWithConditionRule)loot).itemId == ItemID.EyeofCthulhuTrophy)
+                            {
+                                npcLoot.Remove(loot);
+                                break;
+                            }
+                        }
+                    }
+                    suicide = new(new SuicideDropRule());
+                    suicide.OnSuccess(new DropOneByOne(ItemID.EyeofCthulhuTrophy, Terrapain.SuicideTrophyDropParameters));
+                    npcLoot.Add(suicide);
+
+                    notSuicide = new(new NotSuicideDropRule());
+                    notSuicide.OnSuccess(new DropOneByOne(ItemID.EyeofCthulhuTrophy, Terrapain.NormalTrophyDropParameters));
+                    npcLoot.Add(notSuicide);
+
+                    Torture = new(new TortureDropRule());
+                    Torture.OnSuccess(new DropOneByOne(4924 /*Eye of Cthulhu relic*/, Terrapain.SuicideTrophyDropParameters));
+                    npcLoot.Add(Torture);
+                    break;
+            }
+        }
         public override bool InstancePerEntity => true;
     }
     public class TGlobalNPCSystem : ModSystem

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Luminance.Core.Graphics;
+using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Common.CameraModifiers;
 using Terrapain.Common.Config;
 using Terrapain.Common.Global.TGlobalNPCs;
@@ -26,6 +27,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
 			t.canBeHooked = false;
             t.canselDeathHitEffect = true;
             entity.knockBackResist = 0;
+            entity.lifeMax = (int)(entity.lifeMax * 2.5f);
             segmentsLifes = [];
         }
 		public override void HitEffect(NPC npc, NPC.HitInfo hit)
@@ -177,6 +179,24 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                         break;
                 }
             }
+            if (WavePower > 0)
+            {
+                WaveRadius1 += 1.5f * WavePower;
+                WaveRadius2 += 1.495f * WavePower;
+
+                ManagedScreenFilter filter = ShaderManager.GetFilter("Terrapain.Wave");
+
+                filter.TrySetParameter("w", Main.screenWidth);
+                filter.TrySetParameter("h", Main.screenHeight);
+                filter.TrySetParameter("center", WaveCenter - Main.screenPosition);
+                filter.TrySetParameter("radius1", WaveRadius1);
+                filter.TrySetParameter("radius2", WaveRadius2);
+                filter.TrySetParameter("power", WavePower);
+
+                filter.Activate();
+
+                WavePower -= 0.05f;
+            }
             if (MainTimer > 0)
             {
                 MainTimer--;
@@ -215,7 +235,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         }
         public void Movement(NPC npc, Vector2 TargetPosition)
         {
-            CommonTerrapainFlyingMovement(npc, TargetPosition, MathF.PI * 0.15f, maxSpeed, acceleration, 75);
+            CommonTerrapainFlyingMovement(npc, TargetPosition, MathF.PI * 0.15f, maxSpeed, acceleration, 150, false);
         }
         public void DoFirstPhase(NPC npc)
         {
@@ -333,14 +353,44 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     break;
             }
         }
+        float WavePower;
+        Vector2 WaveCenter;
+        float WaveRadius1;
+        float WaveRadius2;
         public void DoSecondPhase(NPC npc)
         {
             switch (attack)
             {
+                case -2:
+                    Movement(npc);
+                    CheckPhase(npc);
+                    if (EaterofWorldsHead.attack == 4 && EaterofWorldsHead.MainTimer == EaterofWorldsHead.MainTimerMax - 1)
+                    {
+                        float velocity = 15;
+                        int count = 10;
+                        float distance = 20;
+                        Vector2 direction = random.NextVector2Unit() * distance;
+                        int oldnpc = -1;
+                        for (int i = 0; i < count; i++)
+                        {
+                            string context = i == count - 1? "MakeGroup" : null;
+                            oldnpc = NewNPC(npc.GetSource_FromThis(context), npc.Center + direction, npc.DirectionTo(t.Target.Center) * velocity, NPCID.Creeper, 0, oldnpc, 0, 0, 1);
+                            direction.RotateBy(MathF.PI / count);
+                        }
+                    }
+                    if (!NPC.AnyNPCs(NPCID.EaterofWorldsHead))
+                    {
+                        NextAttack2(npc);
+                    }
+                    break;
                 case -1:
                     Movement(npc, new Vector2(npc.ai[0], npc.ai[1]));
                     if (MainTimer == mainTimerMax - 1)
                     {
+                        WavePower = 10;
+                        WaveCenter = npc.Center;
+                        WaveRadius1 = 0;
+                        WaveRadius2 = -200;
                         int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead, 0, 0, -80);
                         EaterofWorldsHead.BrainofCthulhu = npc.whoAmI;
                         EaterofWorldsHead.Restart(eow);
@@ -361,7 +411,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     }
                     break;
                 case 1:
-                    if (timer == 0 && segmentsLifes.Count > 0)
+                    if (timer == 0 && segmentsLifes.Count > 0 && MainTimer > 400)
                     {
                         openTimer = 12;
                         int num = 3;
@@ -371,29 +421,29 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                         }
                         int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead, 0, 0, -num);
                         SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                        npc.velocity += npc.DirectionFrom(t.Target.Center) * 10;
                         timer = 60;
+                    }
+                    if (MainTimer == 200)
+                    {
+                        WavePower = 10;
+                        WaveCenter = npc.Center;
+                        WaveRadius1 = 0;
+                        WaveRadius2 = -200;
+                        int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead, 0, 0, -segmentsLifes.Count);
+                        Main.npc[eow].GetGlobalNPC<EaterofWorldsHead>().NextAttack1(Main.npc[eow]);
+                        npc.velocity += npc.DirectionFrom(t.Target.Center) * 15;
+                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
                     }
 
                     Movement(npc);
                     CheckPhase(npc);
                     if (MainTimer == 0)
                     {
-                        NextAttack2(npc);
+                        attack = -2;
                     }
                     break;
                 case 2:
-                    Movement(npc, new Vector2(npc.ai[0], npc.ai[1]));
-                    if (MainTimer == mainTimerMax - 1)
-                    {
-                        int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead, 0, 0, -segmentsLifes.Count);
-                        Main.npc[eow].GetGlobalNPC<EaterofWorldsHead>().NextAttack1(Main.npc[eow]);
-                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
-                    }
-                    openTimer = 12;
-                    if (MainTimer == 0)
-                    {
-                        NextAttack2(npc);
-                    }
                     if (MainTimer == 0)
                     {
                         NextAttack2(npc);
@@ -449,37 +499,13 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     SetMainTimer(200);
                     break;
                 case 1:
-                    SetMainTimer(400);
-                    if (WorldDifficultySystem.suicide)
-                    {
-                        npc.ai[0] = random.NextDir() * 1.2f;
-                    }
-                    else
-                    {
-                        npc.ai[0] = 1;
-                    }
+                    SetMainTimer(700);
                     break;
                 case 2:
                     SetMainTimer(600);
-                    if (WorldDifficultySystem.suicide)
-                    {
-                        npc.ai[0] = random.NextDir() * 1.2f;
-                    }
-                    else
-                    {
-                        npc.ai[0] = -1;
-                    }
                     break;
                 case 3:
                     SetMainTimer(480);
-                    if (WorldDifficultySystem.suicide)
-                    {
-                        npc.ai[0] = random.NextDir() * 1.2f;
-                    }
-                    else
-                    {
-                        npc.ai[0] = -1;
-                    }
                     break;
             }
         }
@@ -500,7 +526,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     SetMainTimer(200);
                     break;
                 case 1:
-                    if (segmentsLifes.Count < 2)
+                    if (segmentsLifes.Count < 2 || EaterofWorldsHead.attack == 1)
                     {
                         goto Start; 
                     }

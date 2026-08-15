@@ -120,25 +120,29 @@ namespace Terrapain.Content.Groups
             {
                 if (Smoothing && members.Count - hideHead - hideTail > 2)
                 {
+                    spriteBatch.End();
+                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
                     NPC head = Main.npc[members[hideHead]];
-                    Texture2D texture;
-                    if (head.type < NPCID.Count)
-                    {
-                        texture = TextureAssets.Npc[head.type].Value;
-                    }
-                    else
-                    {
-                        texture = ModContent.Request<Texture2D>(ModContent.GetModNPC(head.type).Texture).Value;
-                    }
-                    head.GetT().TDrawNPC(spriteBatch, head, texture);
-
-
-                    Vector4 tailAlpha = hideTail > 0? Vector4.Zero : head.GetAlpha(Lighting.GetColor(head.Center.ToTileCoordinates())).ToVector4();
-                    Vector4 tailColor = hideTail > 0? Vector4.Zero : head.GetColor(Lighting.GetColor(head.Center.ToTileCoordinates())).ToVector4();
                     NPC tail = Main.npc[members[members.Count - 1 - hideTail]];
-                    Vector4 headAlpha = hideHead > 0? Vector4.Zero : tail.GetAlpha(Lighting.GetColor(tail.Center.ToTileCoordinates())).ToVector4();
-                    Vector4 headColor = hideHead > 0? Vector4.Zero : tail.GetColor(Lighting.GetColor(tail.Center.ToTileCoordinates())).ToVector4();
-                    int segmentsCount = members.Count - 2 - hideHead - hideTail;
+                    Texture2D texture;
+                    if (hideTail == 0)
+                    {
+                        if (tail.type < NPCID.Count)
+                        {
+                            texture = TextureAssets.Npc[tail.type].Value;
+                        }
+                        else
+                        {
+                            texture = ModContent.Request<Texture2D>(ModContent.GetModNPC(tail.type).Texture).Value;
+                        }
+                        tail.GetT().TDrawNPC(spriteBatch, tail, texture);
+                    }
+
+
+                    Vector4 headAlpha = hideHead > 0? Vector4.Zero : head.GetAlpha(Lighting.GetColor(head.Center.ToTileCoordinates())).ToVector4();
+                    Vector4 headColor = hideHead > 0? Vector4.Zero : head.GetColor(Lighting.GetColor(head.Center.ToTileCoordinates())).ToVector4();
+                    Vector4 tailAlpha = hideTail > 0? Vector4.Zero : tail.GetAlpha(Lighting.GetColor(tail.Center.ToTileCoordinates())).ToVector4();
+                    Vector4 tailColor = hideTail > 0? Vector4.Zero : tail.GetColor(Lighting.GetColor(tail.Center.ToTileCoordinates())).ToVector4();
                     float adjustRotation = VerticalSprites ? MathF.PI / 2 : 0;
                     Vector2 dirIn = (tail.rotation - adjustRotation).ToRotationVector2();
                     Vector2 dirOut = (head.rotation - adjustRotation).ToRotationVector2();
@@ -154,7 +158,7 @@ namespace Terrapain.Content.Groups
                         GetAlphaColors = [];
                         GetColorColors = [];
                         bool GetColorisNotNull = false;
-                        for (int i = members.Count - hideTail - 2; i > hideHead; i--)
+                        for (int i = Math.Min(members.Count - 2, members.Count - hideTail - 1); i > Math.Max(hideHead - 1, 0); i--)
                         {
                             NPC mem = Main.npc[members[i]];
                             Color lightColor = Lighting.GetColor(mem.Center.ToTileCoordinates());
@@ -172,7 +176,7 @@ namespace Terrapain.Content.Groups
                         }
                     }
                     NPC body = Main.npc[members[hideHead + 1]];
-                    if (tail.type < NPCID.Count)
+                    if (body.type < NPCID.Count)
                     {
                         texture = TextureAssets.Npc[body.type].Value;
                     }
@@ -195,16 +199,23 @@ namespace Terrapain.Content.Groups
                     {
                         shader = ShaderManager.GetShader("Terrapain.VerticalSnake");
                     }
-                    Graphics.RenderSnakeBody(SmoothPoints, halfWidth, members.Count - hideHead - hideTail - 2, BodyFrame, texture, GetAlphaColors, GetColorColors, headAlpha, headColor, tailAlpha, tailColor, shader, dirIn, dirOut);
-                    if (tail.type < NPCID.Count)
+                    Graphics.RenderSnakeBody(SmoothPoints, halfWidth, GetAlphaColors.Count, BodyFrame, texture, GetAlphaColors, GetColorColors, tailAlpha, tailColor, headAlpha, headColor, shader, dirIn, dirOut);
+
+
+                    spriteBatch.End();
+                    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                    if (hideHead == 0)
                     {
-                        texture = TextureAssets.Npc[tail.type].Value;
+                        if (head.type < NPCID.Count)
+                        {
+                            texture = TextureAssets.Npc[head.type].Value;
+                        }
+                        else
+                        {
+                            texture = ModContent.Request<Texture2D>(ModContent.GetModNPC(head.type).Texture).Value;
+                        }
+                        head.GetT().TDrawNPC(spriteBatch, head, texture);
                     }
-                    else
-                    {
-                        texture = ModContent.Request<Texture2D>(ModContent.GetModNPC(tail.type).Texture).Value;
-                    }
-                    tail.GetT().TDrawNPC(spriteBatch, tail, texture);
                 }
                 else
                 {

@@ -5,9 +5,9 @@ using Terraria.DataStructures;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
-namespace Terrapain.Common.Player
+namespace Terrapain.Common.TerrapainModPlayer
 {
-    public class PlayerOrganismOverload : ModPlayer
+    public class PlayerOrganismOverload : Terraria.ModLoader.ModPlayer
     {
         public int load;
         public int overload;

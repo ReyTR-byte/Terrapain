@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Common.Config;
 using Terrapain.Common.Global;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Common.UI.Assets.BarFills;
 using Terrapain.Common.UI.Assets.Bars;
 using Terrapain.Content;

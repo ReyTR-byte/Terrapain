@@ -3,7 +3,7 @@ using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terraria.ID;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Microsoft.Xna.Framework;
 
 namespace Terrapain.Content.Items.Accessories

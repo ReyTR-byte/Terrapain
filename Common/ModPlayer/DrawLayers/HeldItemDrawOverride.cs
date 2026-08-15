@@ -15,7 +15,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using static AssGen.Assets;
 
-namespace Terrapain.Common.Player.DrawLayers
+namespace Terrapain.Common.TerrapainModPlayer.DrawLayers
 {
     public class HeldItemDrawOverride : PlayerDrawLayer
     {

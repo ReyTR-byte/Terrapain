@@ -258,7 +258,5 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
             Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
             return false;
         }
-        public float WidthFunction(float value) => 12f;
-        public Color ColorFunction(float value) => Color.LightBlue;
     }
 }

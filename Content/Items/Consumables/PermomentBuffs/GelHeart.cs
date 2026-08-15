@@ -2,7 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terrapain.Content.Items.Ingredients;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 
 namespace Terrapain.Content.Items.Consumables.PermomentBuffs
 {

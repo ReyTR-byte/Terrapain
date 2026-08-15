@@ -30,41 +30,44 @@ namespace Terrapain.Common.Global.UseStyles
             sound = entity.UseSound;
             entity.UseSound = null;
         }
-        public override void UseStyle(Item item, Terraria.Player player, Rectangle heldItemFrame)
+        public override void UseStyle(Item item, Player player, Rectangle heldItemFrame)
         {
-            if (player.itemAnimation == 1 || player.itemAnimation == 0)
+            if(player.HeldItem.TryGetGlobalItem<BowsOverride>(out var bow))
             {
-                return;
-            }
-            player.itemTime = player.itemAnimationMax - 1;
-            if (player.itemAnimation == player.itemAnimationMax)
-            {
-                player.HeldItem.GetGlobalItem<BowsOverride>().bowTime = 0;
-                player.itemTime = 0;
-            }
-            player.itemAnimation = player.itemAnimationMax - 1;
-            float rotation = (Main.MouseWorld + player.velocity.GetInt() - (player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player))).ToRotation();
-            if (MathF.Abs((Main.MouseWorld - player.MountedCenter).X) > 6)
-            {
-                player.ChangeDir((Main.MouseWorld - player.MountedCenter).X.NonZeroSign());
-            }
-            Vector2 refOffset = Vector2.Zero;
-            ItemLoader.HoldoutOrigin(player, ref refOffset);
-            refOffset.X *= player.direction;
-            refOffset.Y *= player.gravDir;
-            refOffset.Y += TextureAssets.Item[item.type].Value.Height / 2f / (Main.itemAnimations[item.type]?.FrameCount ?? 1);
-            Vector2 offset = TGlobalItem.basicOffset + refOffset * item.scale;
-            offset.Y *= player.direction;
-            float basicRotation = item.GetT().spriteRotation ?? 0;
-            player.SetItemRotation(rotation + basicRotation * player.direction);
-            player.itemLocation = player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player) + offset.RotatedBy(rotation);
-            player.SetCompositeArmFront(true, Terraria.Player.CompositeArmStretchAmount.Full, player.ToItemRotation(rotation) - 0.5f * (float)Math.PI * player.direction);
-            player.bodyFrame.Y = player.bodyFrame.Height;
-            player.HeldItem.GetGlobalItem<BowsOverride>().bowTime++;
-            if (!player.controlUseItem)
-            {
-                player.itemTime = 0;
-                player.itemAnimation = 1;
+                if (player.itemAnimation == 1 || player.itemAnimation == 0)
+                {
+                    return;
+                }
+                player.itemTime = player.itemAnimationMax - 1;
+                if (player.itemAnimation == player.itemAnimationMax)
+                {
+                    player.HeldItem.GetGlobalItem<BowsOverride>().bowTime = 0;
+                    player.itemTime = 0;
+                }
+                player.itemAnimation = player.itemAnimationMax - 1;
+                float rotation = (Main.MouseWorld + player.velocity.GetInt() - (player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player))).ToRotation();
+                if (MathF.Abs((Main.MouseWorld - player.MountedCenter).X) > 6)
+                {
+                    player.ChangeDir((Main.MouseWorld - player.MountedCenter).X.NonZeroSign());
+                }
+                Vector2 refOffset = Vector2.Zero;
+                ItemLoader.HoldoutOrigin(player, ref refOffset);
+                refOffset.X *= player.direction;
+                refOffset.Y *= player.gravDir;
+                refOffset.Y += TextureAssets.Item[item.type].Value.Height / 2f / (Main.itemAnimations[item.type]?.FrameCount ?? 1);
+                Vector2 offset = TGlobalItem.basicOffset + refOffset * item.scale;
+                offset.Y *= player.direction;
+                float basicRotation = item.GetT().spriteRotation ?? 0;
+                player.SetItemRotation(rotation + basicRotation * player.direction);
+                player.itemLocation = player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player) + offset.RotatedBy(rotation);
+                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.ToItemRotation(rotation) - 0.5f * (float)Math.PI * player.direction);
+                player.bodyFrame.Y = player.bodyFrame.Height;
+                bow.bowTime++;
+                if (!player.controlUseItem)
+                {
+                    player.itemTime = 0;
+                    player.itemAnimation = 1;
+                }
             }
         }
         public override void ModifyShootStats(Item item, Terraria.Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)

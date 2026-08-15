@@ -3,9 +3,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Assets.Extratextures;
 using Terrapain.Common.Global.Trails;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Content;
 using Terrapain.Content.DamageClasses;
+using Terrapain.Content.NPCs;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -74,6 +75,16 @@ namespace Terrapain.Common.Global
             }
         }
         int afterimageTimer;
+        public void TDrawProjectile(Projectile projectile, Texture2D texture, Color lightColor)
+        {
+            Vector2 DrawCenter = drawCenter;
+            if (projectile.spriteDirection == -1)
+            {
+                DrawCenter.X = texture.Width - DrawCenter.X;
+            }
+            Color color = projectile.GetAlpha(lightColor);
+            Main.EntitySpriteDraw(texture, projectile.Center - Main.screenPosition + drawOffcet, new Rectangle(0, projectile.frame * texture.Height / Main.projFrames[projectile.type], texture.Width, texture.Height / Main.projFrames[projectile.type]), color, projectile.rotation, DrawCenter, 1, projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
+        }
         public override bool PreDraw(Projectile projectile, ref Color lightColor)
         {
             if (NonPremultiplied)
@@ -102,122 +113,6 @@ namespace Terrapain.Common.Global
                     Main.spriteBatch.End();
                     Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
                 }
-                //int realLength = 0;
-                //for (int i = 1; i < length; i++)
-                //{
-                //    if (projectile.oldPos[i] == Vector2.Zero)
-                //    {
-                //        break;
-                //    }
-                //    realLength++;
-                //}
-                //Vector2[] positions = new Vector2[45];
-                //float[] radius = new float[45];
-                //Vector4[] color = new Vector4[45];
-                //float totatlLength = 0;
-                //for (int i = 0; i < realLength; i++)
-                //{
-                //    positions[i] = projectile.oldPos[i] + projectile.Size / 2;
-                //    if (i > 0)
-                //    {
-                //        totatlLength += positions[i].Distance(positions[i - 1]);
-                //    }
-                //    radius[i] = trailWidth * MathHelper.Lerp(1, 0, (float)i / length);
-                //    color[i] = trailColor.ToVector4();
-                //}
-
-                    //float WidthFunction(float progress)
-                    //{
-                    //    return (1 - progress) * trailWidth / 2;
-                    //}
-                    //Color ColorFunction(float progress)
-                    //{
-                    //    return trailColor;
-                    //}
-                    //ManagedShader shader = ShaderManager.GetShader("Terrapain.TrailShader");
-                    //TrailSettings primitiveSettings = new TrailSettings(WidthFunction, ColorFunction, Shader: shader);
-                    //PrimitiveRenderer.RenderTrail(positions, primitiveSettings);
-                    //ManagedShader startShader = ShaderManager.GetShader("Terrapain.TrailStart");
-                    //var blackTile = ExtraTextureRegistry.BlackPixel;
-                    //float rotation = positions[1].DirectionTo(positions[0]).ToRotation();
-                    //Main.spriteBatch.End();
-                    //Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, startShader.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
-                    //Main.spriteBatch.Draw(blackTile.Value, positions[0] - Main.screenPosition, null, trailColor, rotation, new Vector2(0, 0.5f), new Vector2(trailWidth / 2, trailWidth), SpriteEffects.None, 0);
-                    //if (NonPremultiplied)
-                    //{
-                    //    Main.spriteBatch.End();
-                    //    Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-                    //}
-                    //else
-                    //{
-                    //    Main.spriteBatch.End();
-                    //    Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-                    //}
-                    //var blackTile = ExtraTextureRegistry.BlackPixel;
-                    //ManagedShader trailShader = ShaderManager.GetShader("Terrapain.TrailingShader");
-                    //int w = projectile.width / 2;
-                    //int h = projectile.height / 2;
-                    //float top = projectile.Center.Y - trailWidth;
-                    //float bottom = projectile.Center.Y + trailWidth;
-                    //float left = projectile.Center.X - trailWidth;
-                    //float right = projectile.Center.X + trailWidth;
-                    //int realLength = 0;
-                    //for (int i = 1; i < length; i++)
-                    //{
-                    //    if (projectile.oldPos[i] == Vector2.Zero)
-                    //    {
-                    //        break;
-                    //    }
-                    //    realLength++;
-                    //    float rad = trailWidth * MathHelper.Lerp(1, 0, (float)i / length);
-                    //    top = MathF.Min(top, projectile.oldPos[i].Y + h - rad);
-                    //    bottom = MathF.Max(bottom, projectile.oldPos[i].Y + h + rad);
-                    //    left = MathF.Min(left, projectile.oldPos[i].X + w - rad);
-                    //    right = MathF.Max(right, projectile.oldPos[i].X + w + rad);
-                    //}
-                    //Vector2[] normals = new Vector2[44];
-                    //Vector2[] positions = new Vector2[45];
-                    //float[] radius = new float[45];
-                    //Vector4[] color = new Vector4[45];
-                    //for (int i = 0; i < realLength; i++)
-                    //{
-                    //    positions[i] = projectile.oldPos[i] + projectile.Size / 2;
-                    //    if (i < realLength - 1)
-                    //    {
-                    //        if (positions[i] != projectile.oldPos[i + 1] + projectile.Size)
-                    //        {
-                    //            normals[i] = positions[i].DirectionTo(projectile.oldPos[i + 1] + projectile.Size).RotatedBy(MathF.PI / 2);
-                    //        }
-                    //        else
-                    //        {
-                    //            normals[i] = Vector2.UnitY;
-                    //        }
-                    //    }
-                    //    radius[i] = trailWidth * MathHelper.Lerp(1, 0, (float)i / length);
-                    //    color[i] = trailColor.ToVector4();
-                    //}
-                    //Rectangle rectangle = new Rectangle((int)left, (int)top, (int)right - (int)left, (int)bottom - (int)top);
-                    //rectangle.Location -= Main.screenPosition.ToPoint();
-                    //trailShader.TrySetParameter("positions", positions);
-                    //trailShader.TrySetParameter("scales", radius);
-                    //trailShader.TrySetParameter("colors", color);
-                    //trailShader.TrySetParameter("count", realLength);
-                    //trailShader.TrySetParameter("normals", normals);
-                    //trailShader.TrySetParameter("screenPosition", Main.screenPosition + rectangle.Location.ToVector2());
-                    //trailShader.TrySetParameter("screenSize", rectangle.Size());
-                    //Main.spriteBatch.End();
-                    //Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, trailShader.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
-                    //Main.spriteBatch.Draw(blackTile.Value, rectangle, null, Color.Black/*, 0f, blackTile.Value.Size() * 0.5f, 0, 1f*/);
-                    //if (NonPremultiplied)
-                    //{
-                    //    Main.spriteBatch.End();
-                    //    Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-                    //}
-                    //else
-                    //{
-                    //    Main.spriteBatch.End();
-                    //    Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-                    //}
             }
             if (afterimage || afterimageTimer > 0)
             {
@@ -240,7 +135,7 @@ namespace Terrapain.Common.Global
                         spriteDir = projectile.oldSpriteDirection[i];
                     }
 
-                    Color color = Lighting.GetColor((int)(projectile.position.X + DrawCenter.X) / 16, (int)(projectile.position.Y + DrawCenter.Y) / 16);
+                    Color color = Lighting.GetColor(projectile.Center.ToTileCoordinates());
                     color *= (afterimagesCount - i) / (float)afterimagesCount * 0.5f;
                     Main.EntitySpriteDraw(texture, projectile.oldPos[i] - Main.screenPosition + projectile.Size / 2 + drawOffcet, new Rectangle(0, oldFrame[i] * texture.Height / Main.projFrames[projectile.type], texture.Width, texture.Height / Main.projFrames[projectile.type]), color, rotation, DrawCenter, 1, spriteDir == 1? SpriteEffects.None : SpriteEffects.FlipHorizontally);  
                 }
@@ -251,14 +146,7 @@ namespace Terrapain.Common.Global
             }
             if (useModDrawingInPreDraw)
             {
-                Vector2 DrawCenter = drawCenter;
-                if (projectile.spriteDirection == -1)
-                {
-                    DrawCenter.X = texture.Width - DrawCenter.X;
-                }
-                Color color = lightColor;
-                color.A = (byte)(255 - projectile.alpha);
-                Main.EntitySpriteDraw(texture, projectile.Center - Main.screenPosition + drawOffcet, new Rectangle(0, projectile.frame * texture.Height / Main.projFrames[projectile.type], texture.Width, texture.Height / Main.projFrames[projectile.type]), color, projectile.rotation, DrawCenter, 1, projectile.spriteDirection == 1? SpriteEffects.None : SpriteEffects.FlipHorizontally);  
+                TDrawProjectile(projectile, texture, lightColor);
             }
             return useVanillaDrawing;
         }
@@ -284,20 +172,7 @@ namespace Terrapain.Common.Global
 
             if (useModDrawingInPostDraw)
             {
-                Vector2 DrawCenter = drawCenter;
-                if (projectile.spriteDirection == -1)
-                {
-                    DrawCenter.X = texture.Width - DrawCenter.X;
-                }
-                Color color = lightColor;
-                if (NonPremultiplied){
-                    color.A = (byte)(255 - projectile.alpha);
-                }
-                else
-                {
-                    color *= (255 - projectile.alpha) / 255f;
-                }
-                Main.EntitySpriteDraw(texture, projectile.Center - Main.screenPosition + drawOffcet, new Rectangle(0, projectile.frame * texture.Height / Main.projFrames[projectile.type], texture.Width, texture.Height / Main.projFrames[projectile.type]), color, projectile.rotation, DrawCenter, 1, projectile.spriteDirection == 1? SpriteEffects.None : SpriteEffects.FlipHorizontally);  
+                TDrawProjectile(projectile, texture, lightColor);
             }
             if (NonPremultiplied)
             {

@@ -1,6 +1,6 @@
 using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Content.Items.Ingredients;
 using Terrapain.Content.NPCs.Bosses.Scorspider;
 using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;

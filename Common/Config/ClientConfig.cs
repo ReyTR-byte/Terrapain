@@ -34,6 +34,7 @@ namespace Terrapain.Common.Config
         [DefaultValue(1.5f)]
         [Range(0f, 5f)]
         public float UnarmedMouseActiveTime;
+        public float hotAirPower;
 
         [DefaultValue(false)]
         public bool UnarmedMouseAlwaysActive;

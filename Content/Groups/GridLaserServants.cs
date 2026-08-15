@@ -103,7 +103,7 @@ namespace Terrapain.Content.Groups
             }
             if (members.Count == 0)
             {
-                Terrapain.group[whoAmI] = null;
+                Disable();
             }
         }
         public override void PostDrawNPCs(SpriteBatch spriteBatch, Vector2 screenPosition)

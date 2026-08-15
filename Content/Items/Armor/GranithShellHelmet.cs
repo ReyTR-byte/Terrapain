@@ -5,7 +5,7 @@ using Terraria.GameContent.Creative;
 using Terrapain.Content.Items.Ingredients;
 using Terrapain.Content.Buffs;
 using Microsoft.Xna.Framework;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terraria.Localization;
 using Terrapain.Content.Projectiles.Minions;
 

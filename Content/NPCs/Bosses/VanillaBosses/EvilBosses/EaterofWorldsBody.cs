@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Content.Groups;
+using Terrapain.Content.Projectiles.Enemies.Bosses.EvilBosses;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
 
 namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
@@ -70,6 +72,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                         int newHead = NewNPC(npc.GetSource_FromThis(), npc.Center, NPCID.EaterofWorldsHead, 0, 0, npc.ai[1]);
                         tail.ai[0] = newHead;
                         Main.npc[newHead].rotation = npc.rotation;
+                        Main.npc[newHead].velocity = npc.position - npc.oldPosition;
                         npc.active = false;
                         for (int i = 0; i < t.MyGroups.Count; i++)
                         {
@@ -113,27 +116,11 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                 }
             }
             DoFirstPhase(npc);
+            
             return false;
         }
         public void DoFirstPhase(NPC npc)
         {
-            if(EaterofWorldsHead.attack == 4)
-            {
-                float distance = npc.Distance(EaterofWorldsHead.savedVector);
-                if (distance > 400 && distance < 540 && EaterofWorldsHead.timer == 1)
-                {
-                    Vector2 direction = npc.DirectionTo(EaterofWorldsHead.savedVector);
-                    float progress = EaterofWorldsHead.progress;
-                    progress *= progress;
-                    float rotation = direction.ToRotation() + progress * MathF.PI * 6;
-                    rotation = NormalizeRotation(rotation, false);
-                    rotation = Math.Abs(rotation);
-                    float force = MathF.Cos(MathF.Abs(rotation - MathF.PI / 2) + MathF.PI / 2) + 1;
-                    force = force * 0.8f + 0.2f;
-                    int p = Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, direction * force * 10, ProjectileID.FlamesTrap, 20, 3);
-                    Main.projectile[p].friendly = false;
-                }
-            }
         }
         public void NextAttack(NPC npc, int oldAttack, int newAttack)
         {

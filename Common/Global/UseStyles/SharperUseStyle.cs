@@ -26,70 +26,72 @@ namespace Terrapain.Common.Global.UseStyles
         bool resetTimer;
         public override void UseStyle(Item item, Terraria.Player player, Rectangle heldItemFrame)
         {
-            bool swing = false;
-            if (player.itemAnimation == player.itemAnimationMax && Main.mouseLeft)
+            if (player.HeldItem.TryGetGlobalItem<SharperUseStyle>(out var sus))
             {
-                if (resetTimer)
+                bool swing = false;
+                if (player.itemAnimation == player.itemAnimationMax && Main.mouseLeft)
                 {
-                    timer = 0;
-                    resetTimer = false;
-                }
-                if (player.velocity == Vector2.Zero)
-                    player.itemRotation = Functions.AngleFromVector(Vector2.UnitX * -1);
-                else
-                    player.itemRotation = (-player.velocity * player.direction).ToRotation();
-
-                if (player.velocity.X != 0)
-                    player.ChangeDir(player.velocity.X.NonZeroSign());
-                //player.itemTime = player.itemAnimationMax + 1;
-                player.itemAnimation = player.itemAnimationMax + 1;
-                timer++;
-            }
-            else
-            {
-                swing = true;
-                if (player.itemAnimation == player.itemAnimationMax)
-                {
-                    player.HeldItem.GetGlobalItem<SharperUseStyle>().hitTimer = timer;
-                    swingDir = 1;
-                    if (player.velocity.Length() != 0)
+                    if (resetTimer)
                     {
-                        swingDir = (player.velocity.Y / player.velocity.Length() + 0.8f).NonZeroSign();
+                        timer = 0;
+                        resetTimer = false;
                     }
-                    SoundEngine.PlaySound(SoundID.Item1, player.Center);
+                    if (player.velocity == Vector2.Zero)
+                        player.itemRotation = Functions.AngleFromVector(Vector2.UnitX * -1);
+                    else
+                        player.itemRotation = (-player.velocity * player.direction).ToRotation();
+
+                    if (player.velocity.X != 0)
+                        player.ChangeDir(player.velocity.X.NonZeroSign());
+                    //player.itemTime = player.itemAnimationMax + 1;
+                    player.itemAnimation = player.itemAnimationMax + 1;
+                    timer++;
                 }
-                player.itemRotation += MathF.PI / player.itemAnimationMax * player.direction * swingDir;
-                resetTimer = true;
-            }
-            Vector2 offset = item.ModItem.HoldoutOffset().Value.RotatedBy(player.itemRotation * player.direction);
-            offset.X *= player.direction;
-            player.itemLocation = player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player) + offset;
-            player.SetCompositeArmFront(true, Terraria.Player.CompositeArmStretchAmount.Full, player.itemRotation - 0.5f * (float)Math.PI * player.direction);
-            player.bodyFrame.Y = player.bodyFrame.Height;
-
-            UnifiedRandom random = new UnifiedRandom();
-
-            if (item.GetT().dust != -1 && random.Next(2) == 0 && timer >= 100)
-            {
-                bool oldNormalHitbox = normalHitbox;
-                Rectangle miniHitbox = new Rectangle(0, 0, player.itemWidth, player.itemHeight);
-                bool noHitbox = false;
-                normalHitbox = true;
-                UseItemHitbox(item, player, ref miniHitbox, ref noHitbox);
-                normalHitbox = oldNormalHitbox;
-                Vector2 aditiveVelocity = Vector2.Zero;
-                if (swing)
+                else
                 {
-                    Vector2 center = miniHitbox.Location.ToVector2() + miniHitbox.Size() / 2;
-                    Vector2 aboutPlayer = center - player.MountedCenter - TGlobalItem.GetHandOffset(player);
-                    aditiveVelocity = aboutPlayer.RotatedBy((float)Math.PI / player.itemAnimationMax * player.direction * swingDir) - aboutPlayer;
+                    swing = true;
+                    if (player.itemAnimation == player.itemAnimationMax)
+                    {
+                        sus.hitTimer = timer;
+                        swingDir = 1;
+                        if (player.velocity.Length() != 0)
+                        {
+                            swingDir = (player.velocity.Y / player.velocity.Length() + 0.8f).NonZeroSign();
+                        }
+                        SoundEngine.PlaySound(SoundID.Item1, player.Center);
+                    }
+                    player.itemRotation += MathF.PI / player.itemAnimationMax * player.direction * swingDir;
+                    resetTimer = true;
                 }
-                int d = Dust.NewDust(miniHitbox.Location.ToVector2(), miniHitbox.Width, miniHitbox.Height, item.GetT().dust, player.velocity.X + aditiveVelocity.X, player.velocity.Y + aditiveVelocity.Y);
-                TGlobalDust.dustLights[d] = item.GetT().dustLight;
+                Vector2 offset = item.ModItem.HoldoutOffset().Value.RotatedBy(player.itemRotation * player.direction);
+                offset.X *= player.direction;
+                player.itemLocation = player.MountedCenter.GetInt() + TGlobalItem.GetHandOffset(player) + offset;
+                player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation - 0.5f * (float)Math.PI * player.direction);
+                player.bodyFrame.Y = player.bodyFrame.Height;
+
+                UnifiedRandom random = new UnifiedRandom();
+
+                if (item.GetT().dust != -1 && random.Next(2) == 0 && timer >= 100)
+                {
+                    bool oldNormalHitbox = normalHitbox;
+                    Rectangle miniHitbox = new Rectangle(0, 0, player.itemWidth, player.itemHeight);
+                    bool noHitbox = false;
+                    normalHitbox = true;
+                    UseItemHitbox(item, player, ref miniHitbox, ref noHitbox);
+                    normalHitbox = oldNormalHitbox;
+                    Vector2 aditiveVelocity = Vector2.Zero;
+                    if (swing)
+                    {
+                        Vector2 center = miniHitbox.Location.ToVector2() + miniHitbox.Size() / 2;
+                        Vector2 aboutPlayer = center - player.MountedCenter - TGlobalItem.GetHandOffset(player);
+                        aditiveVelocity = aboutPlayer.RotatedBy((float)Math.PI / player.itemAnimationMax * player.direction * swingDir) - aboutPlayer;
+                    }
+                    int d = Dust.NewDust(miniHitbox.Location.ToVector2(), miniHitbox.Width, miniHitbox.Height, item.GetT().dust, player.velocity.X + aditiveVelocity.X, player.velocity.Y + aditiveVelocity.Y);
+                    TGlobalDust.dustLights[d] = item.GetT().dustLight;
+                }
             }
         }
         List<int> dusts = new List<int>();
-        int _Dust = -1;
         bool normalHitbox = true;
         public override bool? CanHitNPC(Item item, Terraria.Player player, NPC target)
         {

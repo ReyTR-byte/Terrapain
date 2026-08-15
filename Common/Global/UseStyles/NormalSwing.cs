@@ -21,9 +21,8 @@ namespace Terrapain.Common.Global.UseStyles
         }
         public override void UseStyle(Item item, Terraria.Player player, Rectangle heldItemFrame)
         {
-            if (player.HeldItem.type != ItemID.None)
+            if (player.HeldItem.TryGetGlobalItem<NormalSwing>(out var ns))
             {
-                NormalSwing ns = player.HeldItem.GetGlobalItem<NormalSwing>();
                 player.attackCD = 0;
                 rotation = 0;
                 if (player.itemAnimation == player.itemAnimationMax)

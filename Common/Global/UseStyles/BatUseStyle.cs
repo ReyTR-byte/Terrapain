@@ -29,11 +29,10 @@ namespace Terrapain.Common.Global.UseStyles
         {
             return entity.useStyle == TGlobalItem.BatUseStyle;
         }
-        public override void UseStyle(Item item, Terraria.Player player, Rectangle heldItemFrame)
+        public override void UseStyle(Item item, Player player, Rectangle heldItemFrame)
         {
-            if (player.HeldItem.type != ItemID.None)
+            if (player.HeldItem.TryGetGlobalItem<BatUseStyle>(out var bus))
             {
-                BatUseStyle bus = player.HeldItem.GetGlobalItem<BatUseStyle>();
                 player.attackCD = 0;
                 bus.rotation = 0;
                 if (player.itemAnimation == player.itemAnimationMax)

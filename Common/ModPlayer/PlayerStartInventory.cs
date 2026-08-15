@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terrapain.Content.Items.System;
 
-namespace Terrapain.Common.Player
+namespace Terrapain.Common.TerrapainModPlayer
 {
-    public class playerStartInventory : ModPlayer
+    public class playerStartInventory : Terraria.ModLoader.ModPlayer
     {
         bool forTheFirstTime = true; 
         public static List<int>StarterItems = [ModContent.ItemType<TheDropOfPain>()];

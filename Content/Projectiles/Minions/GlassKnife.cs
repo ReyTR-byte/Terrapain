@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terrapain.Content.Buffs;
 using Iced.Intel;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Common.Global;
 
 namespace Terrapain.Content.Projectiles.Minions

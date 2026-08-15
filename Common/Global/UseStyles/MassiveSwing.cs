@@ -15,7 +15,6 @@ namespace Terrapain.Common.Global.UseStyles
         public float targetRotation;
         public float angleBetween;
         public float startRotation;
-        public float finishRotation;
         public float rotation;
         public int hitDir;
         public bool useAgain;
@@ -26,9 +25,8 @@ namespace Terrapain.Common.Global.UseStyles
         }
         public override void UseStyle(Item item, Terraria.Player player, Rectangle heldItemFrame)
         {
-            if (player.HeldItem.type != ItemID.None)
+            if (player.HeldItem.TryGetGlobalItem<MassiveSwing>(out var ms))
             {
-                MassiveSwing ms = player.HeldItem.GetGlobalItem<MassiveSwing>();
                 player.attackCD = 0;
                 ms.rotation = 0;
                 if (player.itemAnimation == player.itemAnimationMax)

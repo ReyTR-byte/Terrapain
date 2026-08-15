@@ -1,4 +1,4 @@
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Content;
 using Terrapain.Content.Buffs;
 using Terrapain.Content.Projectiles.Friendly;

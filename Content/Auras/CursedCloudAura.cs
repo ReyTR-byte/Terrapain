@@ -22,7 +22,7 @@ namespace Terrapain.Content.Auras
         {
             checkNPC = false;
             checkPlayer = true;
-            Radius = 550;
+            Radius = 500;
             InternalRadius = 300;
             dustCountMin = 0;
             dustCountMax = 2;
@@ -60,8 +60,19 @@ namespace Terrapain.Content.Auras
             CatchPlayer = true;
             if (!recharge)
             {
-                player.AddBuff(ModContent.BuffType<Shocked>(), 10);
                 Charge += 0.012f;
+                for (int i = 0; i < 3; i++)
+                {
+                    if (random.NextFloat() < Charge)
+                    {
+                        float progress = random.NextFloat();
+                        Dust.NewDust(Center * progress + player.Center * (1 - progress) - new Vector2(3, 3), 6, 6, dust);
+                    }
+                }
+                if (Charge > 0.8f)
+                {
+                    player.AddBuff(ModContent.BuffType<Shocked>(), 10);
+                }
                 if (Charge > 1)
                 {
                     recharge = true;

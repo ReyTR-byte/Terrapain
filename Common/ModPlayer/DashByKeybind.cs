@@ -1,9 +1,9 @@
 using Terrapain.Content;
 using Terraria.ModLoader;
 
-namespace Terrapain.Common.Player
+namespace Terrapain.Common.TerrapainModPlayer
 {
-    public class DashByKeybind : ModPlayer
+    public class DashByKeybind : Terraria.ModLoader.ModPlayer
     {
         public override void ResetEffects()
         {

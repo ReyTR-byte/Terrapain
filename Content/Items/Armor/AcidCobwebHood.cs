@@ -1,5 +1,5 @@
 using Microsoft.Xna.Framework;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Content.Buffs;
 using Terrapain.Content.Items.Ingredients;
 using Terrapain.Content.Projectiles;

@@ -7,9 +7,9 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace Terrapain.Common.Player
+namespace Terrapain.Common.TerrapainModPlayer
 {
-    public class MaxLifeCristalCheck : ModPlayer
+    public class MaxLifeCristalCheck : Terraria.ModLoader.ModPlayer
     {
         public override void Load()
         {

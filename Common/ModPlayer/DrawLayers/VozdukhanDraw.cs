@@ -13,7 +13,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 
-namespace Terrapain.Common.Player.DrawLayers
+namespace Terrapain.Common.TerrapainModPlayer.DrawLayers
 {
     public class VozdukhanDraw : PlayerDrawLayer
     {
@@ -39,7 +39,6 @@ namespace Terrapain.Common.Player.DrawLayers
             int dir = drawInfo.drawPlayer.direction;
 
             SpriteEffects effects = SpriteEffects.None;
-            float rotationAdd = 0;
             Vector2 origin = new Vector2(2, t.Height() / 2 - 2);
             if (dir == -1)
             {

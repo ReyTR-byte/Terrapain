@@ -1,4 +1,5 @@
 using Luminance.Common.Easings;
+using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework;
 using Terrapain.Common.Global;
 using Terrapain.Common.Global.UseStyles;

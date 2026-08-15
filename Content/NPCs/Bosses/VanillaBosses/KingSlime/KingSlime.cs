@@ -657,31 +657,6 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
         {
             return !died;
         }
-        public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
-        {
-            foreach (var loot in npcLoot.Get(false))
-            {
-                if (loot is ItemDropWithConditionRule)
-                {
-                    if (((ItemDropWithConditionRule)loot).itemId == ItemID.KingSlimeTrophy)
-                    {
-                        npcLoot.Remove(loot);
-                        break;
-                    }
-                }
-            }
-            LeadingConditionRule suicide = new(new SuicideDropRule());
-            suicide.OnSuccess(new DropOneByOne(ItemID.KingSlimeTrophy, Terrapain.SuicideTrophyDropParameters));
-            npcLoot.Add(suicide);
-
-            LeadingConditionRule notSuicide = new(new NotSuicideDropRule());
-            notSuicide.OnSuccess(new DropOneByOne(ItemID.KingSlimeTrophy, Terrapain.NormalTrophyDropParameters));
-            npcLoot.Add(notSuicide);
-
-            LeadingConditionRule Torture = new(new TortureDropRule());
-            Torture.OnSuccess(new DropOneByOne(4929 /*King slime relic*/, Terrapain.SuicideTrophyDropParameters));
-            npcLoot.Add(Torture);
-        }
         public override void OnKill(NPC npc)
         {
             BossDownedSystem.BossDowned(0);

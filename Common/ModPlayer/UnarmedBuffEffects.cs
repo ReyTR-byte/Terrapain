@@ -10,9 +10,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
-namespace Terrapain.Common.Player
+namespace Terrapain.Common.TerrapainModPlayer
 {
-    public class UnarmedBuffEffects : ModPlayer
+    public class UnarmedBuffEffects : Terraria.ModLoader.ModPlayer
     {
         public override void PostUpdateBuffs()
         {

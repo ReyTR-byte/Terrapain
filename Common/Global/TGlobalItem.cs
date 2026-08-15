@@ -1,7 +1,7 @@
 using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Terrapain.Common.Global;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Common.System;
 using Terrapain.Common.UI;
 using Terrapain.Content;

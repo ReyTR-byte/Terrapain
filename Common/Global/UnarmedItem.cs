@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;

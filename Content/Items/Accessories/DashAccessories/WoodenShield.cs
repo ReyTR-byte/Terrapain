@@ -1,7 +1,7 @@
 using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework;
 using Terrapain.Common.Global;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Content.DamageClasses;
 using Terrapain.Content.Dashes;
 using Terrapain.Content.Items.Abstract;

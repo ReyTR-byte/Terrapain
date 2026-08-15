@@ -231,5 +231,17 @@ namespace Terrapain.Content.Groups
             }
             return groups;
         }
+        public static List<T> FindGroup<T>() where T : Group
+        {
+            List<T> groups = new List<T>();
+            foreach (var group in Terrapain.group)
+            {
+                if (group != null && group is T)
+                {
+                    groups.Add((T)group);
+                }
+            }
+            return groups;
+        }
     }
 }

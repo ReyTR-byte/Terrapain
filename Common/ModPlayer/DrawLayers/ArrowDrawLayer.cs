@@ -9,7 +9,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 
-namespace Terrapain.Common.Player.DrawLayers
+namespace Terrapain.Common.TerrapainModPlayer.DrawLayers
 {
     public class ArrowDrawLayer : PlayerDrawLayer
     {

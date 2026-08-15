@@ -10,9 +10,9 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terraria.WorldBuilding;
 
-namespace Terrapain.Common.Player
+namespace Terrapain.Common.TerrapainModPlayer
 {
-    public class PlayerMovement : ModPlayer
+    public class PlayerMovement : Terraria.ModLoader.ModPlayer
     {
         public int DownMovementTimer;
         public int LeftMovementTimer;
@@ -36,9 +36,9 @@ namespace Terrapain.Common.Player
         public bool tileCollide = true;
         public bool[] DashDirections 
         {
-            get => [Player.controlDown && Player.releaseDown && Player.doubleTapCardinalTimer[0] < 15, 
-                Player.controlUp && Player.releaseUp && Player.doubleTapCardinalTimer[1] < 15, 
-                Player.controlRight && Player.releaseRight && Player.doubleTapCardinalTimer[2] < 15, 
+            get => [Player.controlDown && Player.releaseDown && Player.doubleTapCardinalTimer[0] < 15,
+                Player.controlUp && Player.releaseUp && Player.doubleTapCardinalTimer[1] < 15,
+                Player.controlRight && Player.releaseRight && Player.doubleTapCardinalTimer[2] < 15,
                 Player.controlLeft && Player.releaseLeft && Player.doubleTapCardinalTimer[3] < 15] ;
         }
 

@@ -2,9 +2,9 @@ using Terrapain.Content;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Terrapain.Common.Player
+namespace Terrapain.Common.TerrapainModPlayer
 {
-    public class PlayerReeespawn : ModPlayer
+    public class PlayerReeespawn : Terraria.ModLoader.ModPlayer
     {
         public override void UpdateDead()
         {

@@ -5,7 +5,7 @@ using Luminance.Common.Utilities;
 using Terraria.ID;
 using Terraria.GameContent;
 using Terraria.Utilities;
-using Terrapain.Common.Player;
+using Terrapain.Common.TerrapainModPlayer;
 
 namespace Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime
 {
