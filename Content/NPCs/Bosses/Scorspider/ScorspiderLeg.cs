@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Content.Dusts;
+using Terrapain.Content.TUtilities;
 using Terrapain.Content.TUtilities.Kinematic;
 using Terraria;
 using Terraria.Audio;
@@ -154,7 +155,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             if (findGround)
             {
                 Vector2 futureLegPoint = Leg.EndEffectorPosition;
-                Functions.CommonTerrapainFlyingMovement(futureLegPoint, ref velocity, Ground, 0.4f + MathF.Abs(owner.velocity.X) / 6, 100, 4f, 50);
+                AIHelper.CommonTerrapainFlyingMovement(futureLegPoint, ref velocity, Ground, 0.4f + MathF.Abs(owner.velocity.X) / 6, 100, 4f, 50);
 
                 if (Ground.Distance(futureLegPoint) < velocity.Length() * 1.5f)
                 {
@@ -253,7 +254,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
             else
             {
                 float targetRotation = new Vector2(40 * DefaultOffset.X.NonZeroSign() - owner.velocity.X * 0.5f, owner.velocity.Y * -1 - 40).ToRotation();
-                if (Functions.AngularAcceleration(ref angularVelocity1, 0.03f, 0.3f, targetRotation, ref Leg[0].Rotation))
+                if (AIHelper.AngularAcceleration(ref angularVelocity1, 0.03f, 0.3f, targetRotation, ref Leg[0].Rotation))
                 {
                     notNormalPosition = false;
                 }
@@ -285,7 +286,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                 {
                     float fall = MathHelper.Clamp(-owner.velocity.Y / 5 + 1, -1, 1);
                     targetRotation = new Vector2(owner.velocity.X * fall * -1 - DefaultOffset.X.NonZeroSign() * 6, 35 - owner.velocity.Y).ToRotation();
-                    Functions.AngularAcceleration(ref angularVelocity2, 0.03f, 0.3f, targetRotation, ref Leg[1].Rotation);
+                    AIHelper.AngularAcceleration(ref angularVelocity2, 0.03f, 0.3f, targetRotation, ref Leg[1].Rotation);
                 }
                 Leg.UpdateEndEffector();
             }    

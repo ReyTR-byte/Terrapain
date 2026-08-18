@@ -1,19 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Common.Global;
 using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Common.UI.Assets.AbilitiesIcons;
-using Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories;
+using Terrapain.Common.UI.Assets.AbilitiFrames;
+using Terrapain.Common.UI.Assets.BarFills;
+using Terrapain.Common.UI.Assets.Bars;
+using Terrapain.Common.UI.Assets.ItemFrames;
 using Terraria;
-using Terraria.ModLoader;
+using Terraria.DataStructures;
 
 namespace Terrapain.Content.Items.Abstract
 {
-    public abstract class ActiveAccessory : ModItem
+    public abstract class VanillaItemActiveAccessory : VanillaItemRework, IActiveAccessory
     {
+        public virtual bool? CanUseAbility(Player player, Item item) { return null; }
+        public virtual bool SetAbilityReload(Player player, Item item) { return true; }
+        public virtual bool OnTryUseAbilty(Player player, Item item) { return false; }
+        public virtual void OnUseAbility(Player player, Item item) { }
+        public virtual void OnHoldAbility(Player player, Item item) { }
+        public virtual bool? CanUseDash(Player player, Item item, bool[] Directions) { return null; }
+        public virtual void OnTryUseDash(Player player, Item item, bool[] Directions) { }
+        public virtual bool OnUseDash(Player player, Item item, bool[] Directions) { return true; }
+        public virtual bool Countdown(Player player, Item item) { return true; }
+        public virtual bool ResetAbilities(Player player, Item item, string reason) { return true; }
+        public virtual string AbilityDescription => null;
+
+        public ActiveAccessory activeAccessory;
         public bool AutoUse
         {
             get => activeAccessory.AutoUse;
@@ -29,7 +39,6 @@ namespace Terrapain.Content.Items.Abstract
             get => activeAccessory.DescriptionLinesCount;
             set => activeAccessory.DescriptionLinesCount = value;
         }
-        public virtual string AbilityDescription => $"Mods.Terrapain.AbilityDescription.{this.GetType().Name}";
         public int AbilityReload 
         {
             get => activeAccessory.AbilityReload;
@@ -65,7 +74,6 @@ namespace Terrapain.Content.Items.Abstract
             get => activeAccessory.DashPower;
             set => activeAccessory.DashPower = value;
         }
-        public VanillaItemActiveAccessory activeAccessory;
         public AbilityIcon abilityIcon
         {
             get => activeAccessory.abilityIcon;
@@ -75,31 +83,6 @@ namespace Terrapain.Content.Items.Abstract
         {
             get => activeAccessory.dashIcon;
             set => activeAccessory.dashIcon = value;
-        }
-
-        public virtual bool? CanUseAbility(Player player) { return null; }
-        public virtual bool SetAbilityReload(Player player) { return true; }
-        public virtual bool OnTryUseAbilty(Player player) { return false; }
-        public virtual bool OnUseAbility(Player player) { return true; }
-        public virtual bool OnHoldAbility(Player player) { return true; }
-        public virtual bool? CanUseDash(Player player, bool[] Directions) { return null; }
-        public virtual void OnTryUseDash(Player player, bool[] Directions) { }
-        public virtual bool OnUseDash(Player player, bool[] Directions) { return true; }
-        public virtual void ModUpdateAccessory(Player player, bool hideVisual) { }
-        public override void UpdateAccessory(Player player, bool hideVisual)
-        {
-            ModUpdateAccessory(player, hideVisual);
-            activeAccessory.activeAccessory = this;
-            Item.GetGlobalItem<TGlobalItem>().ActiveAccessoryVanillaItem = activeAccessory;
-        }
-        public virtual void ModSetDefaults() { }
-        public override void SetDefaults()
-        {
-            Item.accessory = true;
-            activeAccessory = new DefaultActiveAccessory();
-            ModSetDefaults();
-            activeAccessory.activeAccessory = this;
-            Item.GetGlobalItem<TGlobalItem>().ActiveAccessoryVanillaItem = activeAccessory;
         }
     }
 }

@@ -14,7 +14,7 @@ using Terraria.ModLoader;
 
 namespace Terrapain.Content.Items.Accessories.ActiveAccessories
 {
-    public class Battery : ActiveAccessory
+    public class Battery : ModItemActiveAccessory
     {
         public override void SetStaticDefaults()
         {

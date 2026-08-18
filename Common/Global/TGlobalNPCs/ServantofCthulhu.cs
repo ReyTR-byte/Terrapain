@@ -1,18 +1,14 @@
-﻿using ILGPU.IR;
-using JetBrains.Annotations;
-using Microsoft.CodeAnalysis;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Common.System;
 using Terrapain.Content;
 using Terrapain.Content.Groups;
-using Terrapain.Content.Items.ItemDropRules;
-using Terrapain.Content.NPCs.Servants.EyeofCthulhu;
 using Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
+using static Terrapain.Content.TUtilities.AIHelper;
 
 namespace Terrapain.Common.Global.TGlobalNPCs
 {

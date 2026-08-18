@@ -14,6 +14,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using static Terrapain.Content.Functions;
+using static Terrapain.Content.TUtilities.AIHelper;
 
 namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.KingSlime
 {

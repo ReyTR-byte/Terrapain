@@ -669,11 +669,13 @@ Mods: {
 			// FriendlyCrownGem.DisplayName: Friendly Crown Gem
 			// CursedFire.DisplayName: Cursed Fire
 			// CursedFireSpirit.DisplayName: Cursed Fire Spirit
+			// Nugget.DisplayName: Nugget
+			// IchorBomb.DisplayName: Ichor Bomb
 		}
 
 		Configs: {
 			ClientConfig: {
-				DisplayName: Client Config
+				DisplayName: Основное
 
 				UseShaders: {
 					Label: Использовать шейдеры
@@ -743,7 +745,7 @@ Mods: {
 			}
 
 			UIConfig: {
-				DisplayName: UI Config
+				DisplayName: Настройки интерфейса
 
 				sst: {
 					// Label: Stamina bar type
@@ -796,6 +798,54 @@ Mods: {
 				Width: {
 					Label: Широкий
 					Tooltip: ""
+				}
+			}
+
+			GraphicsConfig: {
+				DisplayName: Настройки графики
+
+				shaders: {
+					Label: Уровень шейдеров
+					// Tooltip: ""
+				}
+
+				filters: {
+					Label: Уровень фильтров
+					// Tooltip: ""
+				}
+
+				smoothing: {
+					Label: Применять сглаживание
+					// Tooltip: ""
+				}
+			}
+
+			GraphicsLevel: {
+				// Tooltip: ""
+
+				Potato: {
+					Label: Картошка
+					// Tooltip: ""
+				}
+
+				Low: {
+					Label: Низкий
+					// Tooltip: ""
+				}
+
+				Medium: {
+					Label: Средний
+					// Tooltip: ""
+				}
+
+				High: {
+					Label: Высокий
+					// Tooltip: ""
+				}
+
+				Ultra: {
+					Label: Ультра
+					// Tooltip: ""
 				}
 			}
 		}

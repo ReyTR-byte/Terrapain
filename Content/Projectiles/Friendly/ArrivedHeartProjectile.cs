@@ -1,4 +1,5 @@
 ﻿using Terrapain.Common.Global;
+using Terrapain.Content.DamageClasses;
 using Terrapain.Content.Dusts;
 using Terraria;
 using Terraria.Audio;
@@ -50,6 +51,7 @@ namespace Terrapain.Content.Projectiles.Friendly
                     HeartVertices[i] = vec;
                 }
             }
+            ProjectileID.Sets.TrailCacheLength[Type] = 10;
             ProjectileID.Sets.TrailingMode[Type] = 2;
         }
         public override void SetDefaults()
@@ -58,7 +60,7 @@ namespace Terrapain.Content.Projectiles.Friendly
             Projectile.height = 20;
             Projectile.aiStyle = -1;
             Projectile.friendly = true;
-            Projectile.DamageType = DamageClass.Magic;
+            Projectile.DamageType = ModContent.GetInstance<Unarmed>();
             Projectile.timeLeft = 600;
             Projectile.tileCollide = true;
             Projectile.extraUpdates = 1;
@@ -133,18 +135,18 @@ namespace Terrapain.Content.Projectiles.Friendly
                 if (Main.npc[target].active)
                 {
                     Vector2 vectorToTargetPosition = Main.npc[target].Center - Projectile.Center;
-                    Projectile.velocity += vectorToTargetPosition.Normalized() * (0.015f + Projectile.velocity.Length());
+                    Projectile.velocity = Projectile.velocity.Normalized() * (0.15f + Projectile.velocity.Length());
                     float positiveRotation = AngleBetweenVectors(vectorToTargetPosition, Projectile.velocity);
                     positiveRotation = NormalizeRotation(positiveRotation);
                     float negativeRotation = AngleBetweenVectors(Projectile.velocity, vectorToTargetPosition);
                     negativeRotation = NormalizeRotation(negativeRotation);
                     if (positiveRotation > negativeRotation)
                     {
-                        Projectile.velocity.RotateBy(MathF.Max(-negativeRotation, -0.025f));
+                        Projectile.velocity.RotateBy(MathF.Max(-negativeRotation, -0.25f));
                     }
                     else
                     {
-                        Projectile.velocity.RotateBy(MathF.Min(positiveRotation, 0.025f));
+                        Projectile.velocity.RotateBy(MathF.Min(positiveRotation, 0.25f));
                     }
                     if (Projectile.velocity.Length() > 15)
                     {
@@ -154,7 +156,6 @@ namespace Terrapain.Content.Projectiles.Friendly
             }
             else
             {
-                Projectile.velocity = Projectile.DirectionTo(Main.player[Projectile.owner].Center) * 0.5f;
                 if (Projectile.timeLeft % 6 == 0)
                 {
                     AISearchForTarget(out FoundTarget, out target);

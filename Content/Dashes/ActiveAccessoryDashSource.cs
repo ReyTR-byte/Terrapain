@@ -21,22 +21,22 @@ namespace Terrapain.Content.Dashes
             sourceItem = item;
         }
 
-        public int reloadMax { get => sourceItem.GetT().ActiveAccessoryVanillaItem.DashReloadMax; set => sourceItem.GetT().ActiveAccessoryVanillaItem.DashReloadMax = value; }
-        public int reload { get => sourceItem.GetT().ActiveAccessoryVanillaItem.DashReload; set => sourceItem.GetT().ActiveAccessoryVanillaItem.DashReload = value; }
-        public AbilityIcon dashIcon { get => sourceItem.GetT().ActiveAccessoryVanillaItem.dashIcon; set => sourceItem.GetT().ActiveAccessoryVanillaItem.dashIcon = value; }
-        public AbilityFrame abilityFrame { get => sourceItem.GetT().ActiveAccessoryVanillaItem.abilityFrame; set => sourceItem.GetT().ActiveAccessoryVanillaItem.abilityFrame = value; }
-        public ItemFrame itemFrame { get => sourceItem.GetT().ActiveAccessoryVanillaItem.itemFrame; set => sourceItem.GetT().ActiveAccessoryVanillaItem.itemFrame = value; }
-        public BarFill chargeStrip { get => sourceItem.GetT().ActiveAccessoryVanillaItem.dashChargeStrip; set => sourceItem.GetT().ActiveAccessoryVanillaItem.dashChargeStrip = value; }
-        public Bar emptyStrip { get => sourceItem.GetT().ActiveAccessoryVanillaItem.dashEmptyStrip; set => sourceItem.GetT().ActiveAccessoryVanillaItem.dashEmptyStrip = value; }
+        public int reloadMax { get => sourceItem.GetT().ActiveAccessory.DashReloadMax; set => sourceItem.GetT().ActiveAccessory.DashReloadMax = value; }
+        public int reload { get => sourceItem.GetT().ActiveAccessory.DashReload; set => sourceItem.GetT().ActiveAccessory.DashReload = value; }
+        public AbilityIcon dashIcon { get => sourceItem.GetT().ActiveAccessory.dashIcon; set => sourceItem.GetT().ActiveAccessory.dashIcon = value; }
+        public AbilityFrame abilityFrame { get => sourceItem.GetT().ActiveAccessory.abilityFrame; set => sourceItem.GetT().ActiveAccessory.abilityFrame = value; }
+        public ItemFrame itemFrame { get => sourceItem.GetT().ActiveAccessory.itemFrame; set => sourceItem.GetT().ActiveAccessory.itemFrame = value; }
+        public BarFill chargeStrip { get => sourceItem.GetT().ActiveAccessory.dashChargeStrip; set => sourceItem.GetT().ActiveAccessory.dashChargeStrip = value; }
+        public Bar emptyStrip { get => sourceItem.GetT().ActiveAccessory.dashEmptyStrip; set => sourceItem.GetT().ActiveAccessory.dashEmptyStrip = value; }
 
         public bool CanUse(Player player, bool[] directions)
         {
-            return sourceItem.GetT().ActiveAccessoryVanillaItem.CanUseDash(player, directions, sourceItem);
+            return sourceItem.GetT().ActiveAccessory.CanUseDash(player, directions, sourceItem);
         }
 
         public void OnUse(Player player, bool[] directions)
         {
-            sourceItem.GetT().ActiveAccessoryVanillaItem.OnUseDash(player, directions, sourceItem);
+            sourceItem.GetT().ActiveAccessory.OnUseDash(player, directions, sourceItem);
         }
 
         public Item TryGetDashItem()

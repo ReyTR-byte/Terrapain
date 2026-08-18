@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terrapain.Common.Config;
 using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
 using Terraria.GameContent;
@@ -118,7 +119,7 @@ namespace Terrapain.Content.Groups
         {
             if (Draw)
             {
-                if (Smoothing && members.Count - hideHead - hideTail > 2)
+                if (Smoothing && members.Count - hideHead - hideTail > 2 && GraphicsConfig.Instance.smoothing)
                 {
                     spriteBatch.End();
                     spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);

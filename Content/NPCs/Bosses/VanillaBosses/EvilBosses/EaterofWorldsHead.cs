@@ -22,6 +22,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
+using static Terrapain.Content.TUtilities.AIHelper;
 
 namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
 {
@@ -274,7 +275,6 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                 case 1:
                     if (npc.Distance(t.Target.Center) > 300 && localTimer == 0)
                     {
-                        int direction = (npc.Center.X - t.Target.Center.X).NonZeroSign();
                         targetPosition = t.Target.Center + npc.DirectionFrom(t.Target.position) * 300;
                         Movement(npc, targetPosition);
                     }
@@ -331,7 +331,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                         float progress = EaterofWorldsHead.progress;
                         progress = 0.3f + progress * 0.7f;
                         progress *= progress;
-                        float ro = progress * MathF.PI * 6;
+                        float ro = progress * MathF.PI * 5;
                         
 
                         var creps = Group.FindGroup<Creepers>();
@@ -572,6 +572,9 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     }
                     if (MainTimer == 0 && MainHead == npc.whoAmI)
                     {
+                        renderTarget.Dispose();
+                        saveScreenRenderTarget.Dispose();
+
                         lines = [];
                         AuraDisposing = true;
                         NextAttack1(npc);
@@ -690,6 +693,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         {
             if (renderTarget == null || renderTarget.Height != Main.screenHeight || renderTarget.Width != Main.screenWidth)
             {
+                renderTarget?.Dispose();
                 renderTarget = new RenderTarget2D(
                     Main.graphics.GraphicsDevice,
                     Main.screenWidth,
@@ -703,6 +707,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
             }
             if (saveScreenRenderTarget == null || saveScreenRenderTarget.Height != Main.screenHeight || saveScreenRenderTarget.Width != Main.screenWidth)
             {
+                saveScreenRenderTarget?.Dispose();
                 saveScreenRenderTarget = new RenderTarget2D(
                     Main.graphics.GraphicsDevice,
                     Main.screenWidth,
@@ -736,7 +741,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     spriteBatch.End();
                     spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
                     Texture2D tex = null;
-                    if (!ClientConfig.Instance.UseShaders)
+                    if (GraphicsConfig.Instance.shaders == GraphicsConfig.GraphicsLevel.Potato)
                     {
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
@@ -785,7 +790,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                                     p3 = _p3;
                                 }
                             }
-                            if (ClientConfig.Instance.UseShaders)
+                            if (GraphicsConfig.Instance.shaders != GraphicsConfig.GraphicsLevel.Potato)
                             {
                                 ManagedShader Shade = ShaderManager.GetShader("Terrapain.LaserShader");
                                 Shade.TrySetParameter("lenght", 900);
@@ -796,7 +801,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                             spriteBatch.DrawLine(p3 + Main.screenPosition, p2 + Main.screenPosition, line.color, 8, tex);
                         }
                     }
-                    if (ClientConfig.Instance.UseShaders)
+                    if (GraphicsConfig.Instance.shaders != GraphicsConfig.GraphicsLevel.Potato)
                     {
                         spriteBatch.End();
                         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);

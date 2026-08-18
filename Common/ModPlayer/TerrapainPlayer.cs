@@ -191,7 +191,7 @@ namespace Terrapain.Common.TerrapainModPlayer
             List<Item> accessoties = Functions.GetActiveAccessories(Player);
 			foreach (var item in accessoties)
 			{
-				item.GetT().ActiveAccessoryVanillaItem.ResetAbilities(reason);
+				item.GetT().ActiveAccessory.ResetAbilities(Player, item, reason);
 			}
 		}
 		public override void PreUpdate()
@@ -225,7 +225,7 @@ namespace Terrapain.Common.TerrapainModPlayer
 						//	Player.armor[i + 3].GetGlobalItem<TGlobalItem>().ActiveAccesoryModItem.TryUseAbilty(Player); 
 						//}
 						{
-                            Player.armor[i + 3].GetGlobalItem<TGlobalItem>().ActiveAccessoryVanillaItem.TryUseAbilty(Player, Player.armor[i + 3], ActiveAccesoriesKeybinds[i].JustReleased);
+                            Player.armor[i + 3].GetGlobalItem<TGlobalItem>().ActiveAccessory.TryUseAbilty(Player, Player.armor[i + 3], ActiveAccesoriesKeybinds[i].JustReleased);
                         }
 					}
 				}

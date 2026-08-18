@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Content.Projectiles.Enemies.Bosses.KingSlime;
+using Terrapain.Content.TUtilities;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -32,7 +33,7 @@ namespace Terrapain.Content.Projectiles.Friendly
             if (Projectile.ai[2] < 0)
             {
                 Projectile.rotation = Projectile.velocity.ToRotation();
-                Functions.CommonTerrapainFlyingMovement(Projectile, Projectile.Center + new Vector2(Projectile.ai[0], Projectile.ai[1]), 0.1f, MaxVelocity, 0.5f, 0);
+                AIHelper.CommonTerrapainFlyingMovement(Projectile, Projectile.Center + new Vector2(Projectile.ai[0], Projectile.ai[1]), 0.1f, MaxVelocity, 0.5f, 0);
             }
         }
     }

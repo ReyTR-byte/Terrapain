@@ -1,22 +1,16 @@
-using Luminance.Common.Utilities;
-using Microsoft.Xna.Framework;
 using Terrapain.Common.Global;
 using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Content.DamageClasses;
 using Terrapain.Content.Dashes;
 using Terrapain.Content.Items.Abstract;
-using Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories;
 using Terraria;
-using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.Utilities;
-using Terraria.WorldBuilding;
 
 namespace Terrapain.Content.Items.Accessories.DashAccessories
 {
 	[AutoloadEquip(EquipType.Shield)] // Load the spritesheet you create as a shield for the player when it is equipped.
-	public class WoodenShield : ActiveAccessory
+	public class WoodenShield : ModItemActiveAccessory
 	{
 		public override void ModSetDefaults() {
 			Item.width = 24;
@@ -29,7 +23,7 @@ namespace Terrapain.Content.Items.Accessories.DashAccessories
 			Item.knockBack = 2;
             Item.defense = 1;
 			Item.GetGlobalItem<TGlobalItem>().dashAccessory = true;
-            activeAccessory = new ClasicDashAccessory();
+            activeAccessory = new ActiveAccessory(this);
             DashDuration = 10;
 			DashPower = 9;
 			DashReloadMax = 110;

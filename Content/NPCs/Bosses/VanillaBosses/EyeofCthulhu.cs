@@ -1,27 +1,23 @@
 ﻿using Luminance.Common.Utilities;
 using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Graphics;
-using System.Diagnostics;
 using Terrapain.Assets.Extratextures;
 using Terrapain.Common.CameraModifiers;
 using Terrapain.Common.Config;
 using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Common.System;
-using Terrapain.Content;
 using Terrapain.Content.Dusts;
 using Terrapain.Content.Groups;
-using Terrapain.Content.Items.DropRulls;
 using Terrapain.Content.Projectiles.Enemies;
 using Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static AssGen.Assets;
 using static Terrapain.Content.Functions;
+using static Terrapain.Content.TUtilities.AIHelper;
 
 namespace Terrapain.Content.NPCs.Bosses.VanillaBosses
 {

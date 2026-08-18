@@ -54,7 +54,7 @@ namespace Terrapain.Common.UI
             foreach (Item item in items)
             {
                 TGlobalItem titem = item.GetGlobalItem<TGlobalItem>();
-                VanillaItemActiveAccessory accessory = titem.ActiveAccessoryVanillaItem;
+                ActiveAccessory accessory = titem.ActiveAccessory;
                 ItemReloadDrawInfo info = new ItemReloadDrawInfo()
                 {
                     item = item,
@@ -65,7 +65,7 @@ namespace Terrapain.Common.UI
                     abilityCharge = accessory.AbilityCharge(),
                     abilityIcon = accessory.abilityIcon,
                     abilityEmptyStrip = accessory.abilityEmptyStrip,
-                    abilityChargeStrip = accessory.abilityChargeStrip,
+                    abilityChargeStrip = accessory.abilityChargeBar,
                 };
                 if (Main.LocalPlayer.Custom().Dash?.dashSource.TryGetDrawItem() == item)
                 {

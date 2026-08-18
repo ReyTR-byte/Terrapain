@@ -2,16 +2,14 @@ using Microsoft.Xna.Framework;
 using Terrapain.Common.Global;
 using Terrapain.Content.Dashes;
 using Terrapain.Content.Items.Abstract;
-using Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories;
 using Terraria;
-using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Terrapain.Content.Items.Accessories.DashAccessories
 {
 	[AutoloadEquip(EquipType.Shield)] // Load the spritesheet you create as a shield for the player when it is equipped.
-	public class GoldenShield : ActiveAccessory
+	public class GoldenShield : ModItemActiveAccessory
 	{
         public override void ModSetDefaults()
         {
@@ -23,7 +21,10 @@ namespace Terrapain.Content.Items.Accessories.DashAccessories
 
             Item.defense = 3;
             Item.GetGlobalItem<TGlobalItem>().dashAccessory = true;
-            activeAccessory = new ClasicDashAccessory();
+            activeAccessory = new ActiveAccessory(this);
+            DashDuration = 15;
+            DashPower = 11;
+            DashReloadMax = 90;
         }
 
 		public override void ModUpdateAccessory(Player player, bool hideVisual)

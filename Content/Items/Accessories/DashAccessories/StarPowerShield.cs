@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Common.Global;
+﻿using Terrapain.Common.Global;
 using Terrapain.Content.DamageClasses;
 using Terrapain.Content.Dashes;
 using Terrapain.Content.Items.Abstract;
-using Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories;
 using Terrapain.Content.Items.Ingredients;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terrapain.Content.Functions;
 
 namespace Terrapain.Content.Items.Accessories.DashAccessories
 {
     [AutoloadEquip(EquipType.Shield)]
-    public class StarPowerShield : ActiveAccessory
+    public class StarPowerShield : ModItemActiveAccessory
     {
         public override void ModSetDefaults()
         {
@@ -30,7 +23,10 @@ namespace Terrapain.Content.Items.Accessories.DashAccessories
 
             Item.defense = 2;
             Item.GetGlobalItem<TGlobalItem>().dashAccessory = true;
-            activeAccessory = new ClasicDashAccessory();
+            activeAccessory = new ActiveAccessory(this);
+            DashDuration = 15;
+            DashPower = 11;
+            DashReloadMax = 90;
         }
 
         public override void ModUpdateAccessory(Player player, bool hideVisual)

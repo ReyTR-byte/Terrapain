@@ -9,6 +9,7 @@ using Terrapain.Assets.Extratextures;
 using Terrapain.Common.Config;
 using Terrapain.Common.System;
 using Terrapain.Content.Buffs;
+using Terrapain.Content.TUtilities;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -104,7 +105,7 @@ namespace Terrapain.Content.NPCs.Bosses.Scorspider
                 TargetRotation = NPC.DirectionTo(Main.npc[Body].GetT().Target.Center).ToRotation();
             }
             float r = GetRotation();
-            Functions.AngularAcceleration(ref angularVelocity, 0.008f, 0.08f, TargetRotation, ref r);
+            AIHelper.AngularAcceleration(ref angularVelocity, 0.008f, 0.08f, TargetRotation, ref r);
             SetRotation(r);
         }
         public float GetRotation()

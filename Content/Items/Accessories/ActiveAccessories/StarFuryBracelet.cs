@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace Terrapain.Content.Items.Accessories.ActiveAccessories
 {
-    public class StarFuryBracelet : ActiveAccessory
+    public class StarFuryBracelet : ModItemActiveAccessory
     {
         public override void ModSetDefaults()
         {

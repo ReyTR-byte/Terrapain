@@ -1,11 +1,6 @@
 ﻿using Luminance.Common.Utilities;
-using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using Steamworks;
-using Terrapain.Assets.Extratextures;
-using Terrapain.Common.Config;
-using Terrapain.Common.DrawTasks;
 using Terrapain.Common.Global;
 using Terrapain.Common.System;
 using Terrapain.Content.Buffs;
@@ -22,6 +17,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
+using static Terrapain.Content.TUtilities.AIHelper;
 
 namespace Terrapain.Content.NPCs.Bosses.Scorspider
 {

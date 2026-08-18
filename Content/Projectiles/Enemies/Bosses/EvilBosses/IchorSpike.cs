@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terraria;
+﻿using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terrapain.Common.Global.Trails;
+using Terrapain.Content.TUtilities;
 
 namespace Terrapain.Content.Projectiles.Enemies.Bosses.EvilBosses
 {
@@ -48,7 +44,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.EvilBosses
             }
             else
             {
-                Functions.CommonTerrapainFlyingMovement(Projectile, Projectile.Center + new Vector2(Projectile.ai[1], Projectile.ai[2]), 0.1f, MaxSpeed, 0.2f, 0);
+                AIHelper.CommonTerrapainFlyingMovement(Projectile, Projectile.Center + new Vector2(Projectile.ai[1], Projectile.ai[2]), 0.1f, MaxSpeed, 0.2f, 0);
             }
             Projectile.rotation = Projectile.velocity.ToRotation();
         }

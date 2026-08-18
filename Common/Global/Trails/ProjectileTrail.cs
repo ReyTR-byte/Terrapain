@@ -1,15 +1,10 @@
-﻿using Humanizer;
-using log4net.Plugin;
-using Luminance.Common.Utilities;
+﻿using Luminance.Common.Utilities;
 using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Graphics;
-using rail;
 using Terrapain.Assets.Extratextures;
-using Terrapain.Content;
+using Terrapain.Common.Config;
 using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
-using Terraria.ModLoader.IO;
-using static Terrapain.Content.Functions;
 
 namespace Terrapain.Common.Global.Trails
 {
@@ -29,7 +24,6 @@ namespace Terrapain.Common.Global.Trails
         public Vector2 Offset;
         public List<Vector2> Smooth(List<Vector2> points, float targetDistance, float scale)
         {
-
             if (points.Count <= 2)
             {
                 return points.ToList();
@@ -122,6 +116,7 @@ namespace Terrapain.Common.Global.Trails
         Vector2 oldOffset;
         public void Update()
         {
+            smooth &= GraphicsConfig.Instance.smoothing;
             var proj = Main.projectile[projectile];
             if (smooth)
             {
@@ -198,15 +193,6 @@ namespace Terrapain.Common.Global.Trails
             }
             if (points.Count > 1)
             {
-                //proj.oldPos[2] = proj.position - Vector2.One * 400;
-                //proj.oldPos[1] = proj.position - Vector2.UnitX * 200;
-                //spriteBatch.DrawLine(proj.Center, proj.oldPos[1] + proj.Size / 2, Color.White, 5);
-                //spriteBatch.DrawLine(proj.oldPos[1] + proj.Size / 2, proj.oldPos[2] + proj.Size / 2, Color.Red, 5);
-                //spriteBatch.DrawLine(proj.Center, pos2, Color.White, 5);
-                //spriteBatch.DrawLine(proj.oldPos[1] + proj.Size / 2, pos2, Color.Red, 5);
-                //spriteBatch.DrawLine(proj.oldPos[1] + proj.Size / 2, pos1, Color.Blue, 5);
-                //spriteBatch.DrawLine(proj.oldPos[1] + proj.Size / 2, proj.oldPos[1] + proj.Size / 2 + d * 40, Color.Black, 5);
-                //spriteBatch.DrawLine(proj.oldPos[2] + proj.Size / 2, pos1, Color.Green, 5);
                 ManagedShader shader = ShaderManager.GetShader("Terrapain.TrailShader");
                 TrailSettings ts = trailSettings?? new TrailSettings(WidthFunction, ColorFunction, Shader: shader);
                 Graphics.RenderTrail(points, ts);
@@ -217,10 +203,6 @@ namespace Terrapain.Common.Global.Trails
                 {
                     rotation = points[points.Count - 2].DirectionTo(points[points.Count - 1]).ToRotation();
                 }
-                //foreach (var point in points)
-                //{
-                //    spriteBatch.Draw(blackTile.Value, point - Main.screenPosition, null, startColor, 0, new Vector2(0.5f, 0.5f), 2, SpriteEffects.None, 0);
-                //}
                 int num = smooth ? points.Count - 1 : 0;
                 Vector2 pos = points[num];
                 spriteBatch.End();

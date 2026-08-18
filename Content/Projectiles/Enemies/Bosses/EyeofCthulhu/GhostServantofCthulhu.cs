@@ -2,6 +2,7 @@
 using Terraria.DataStructures;
 using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
+using static Terrapain.Content.TUtilities.AIHelper;
 
 namespace Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu
 {

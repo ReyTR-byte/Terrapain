@@ -8,8 +8,12 @@ using Terraria;
 
 namespace Terrapain.Content.Items.Abstract
 {
-    public abstract class VanillaItemActiveAccessory
+    public class ActiveAccessory
     {
+        public ActiveAccessory(IActiveAccessory i)
+        {
+            activeAccessory = i;
+        }
         public bool AutoUse;
         public bool CanAutoUse;
         public int AbilityReload;
@@ -25,23 +29,22 @@ namespace Terrapain.Content.Items.Abstract
         public int HoldConsumption = 5;
         public bool HoldCanUse;
 
-        public virtual string AbilityDescription => activeAccessory != null? activeAccessory.AbilityDescription : $"Mods.Terrapain.AbilityDescription.{this.GetType().Name}";
+        public virtual string AbilityDescription => activeAccessory.AbilityDescription?? $"Mods.Terrapain.AbilityDescription.{this.GetType().Name}";
 
-        public ActiveAccessory activeAccessory = null;
+        public IActiveAccessory activeAccessory;
 
         public AbilityFrame abilityFrame = new DefaultAbilityFrame();
         public ItemFrame itemFrame = new DefaultItemFrame();
         public AbilityIcon abilityIcon = null;
         public Bar abilityEmptyStrip = new DefaultAbilityBar();
-        public BarFill abilityChargeStrip = new DefaultAbilityBarFill();
+        public BarFill abilityChargeBar = new DefaultAbilityBarFill();
         public AbilityIcon dashIcon = new DashIcon();
         public Bar dashEmptyStrip = new DefaultAbilityBar();
         public BarFill dashChargeStrip = new DefaultDashBarFill();
 
-        public virtual void UpdateAccessory(Player player, Item item) { }
         public virtual bool CanUseAbility(Player player, Item item)
         {
-            bool? canUse = activeAccessory?.CanUseAbility(player);
+            bool? canUse = activeAccessory.CanUseAbility(player, item);
             if (canUse.HasValue)
                 return canUse.Value;
 
@@ -57,7 +60,7 @@ namespace Terrapain.Content.Items.Abstract
         }
         public virtual void SetAbilityReload(Player player, Item item)
         {
-            if (activeAccessory?.SetAbilityReload(player)?? true)
+            if (activeAccessory.SetAbilityReload(player, item))
             {
                 if (HoldAbility)
                 {
@@ -71,7 +74,7 @@ namespace Terrapain.Content.Items.Abstract
         }
         public virtual void TryUseAbilty(Player player, Item item, bool release)
         {
-            if (activeAccessory?.OnTryUseAbilty(player)?? false)
+            if (activeAccessory.OnTryUseAbilty(player, item))
                 return;
 
             if (CanUseAbility(player, item))
@@ -80,26 +83,21 @@ namespace Terrapain.Content.Items.Abstract
                 {
                     if (HoldAbility && !release && AbilityReloadMax - AbilityReload > HoldConsumption)
                     {
-                        if (activeAccessory?.OnHoldAbility(player)?? true)
-                            OnHoldAbility(player, item);
+                        activeAccessory.OnHoldAbility(player, item);
                     }
                     else
                     {
-                        if (activeAccessory?.OnUseAbility(player)?? true)
-                            OnUseAbility(player, item);
+                        activeAccessory.OnUseAbility(player, item);
                         HoldCanUse = false;
                     }
                 }
                 else if (!release)
                 {
-                    if (activeAccessory?.OnUseAbility(player)?? true)
-                        OnUseAbility(player, item);
+                    activeAccessory.OnUseAbility(player, item);
                 }
                 SetAbilityReload(player, item);
             }
         }
-        public virtual void OnUseAbility(Player player, Item item) { }
-        public virtual void OnHoldAbility(Player player, Item item) { }
         public virtual float AbilityCharge()
         {
             if (AbilityReloadMax == 0)
@@ -123,12 +121,11 @@ namespace Terrapain.Content.Items.Abstract
         }
         public virtual void TryUseDash(Player player, bool[] Directions, Item item)
         {
-            if (activeAccessory != null)
-                activeAccessory.OnTryUseDash(player, Directions);
+            activeAccessory.OnTryUseDash(player, item, Directions);
 
             if (CanUseDash(player, Directions, item))
             {
-                    if (activeAccessory?.OnUseDash(player, Directions)?? true)
+                    if (activeAccessory.OnUseDash(player, item, Directions))
                         OnUseDash(player, Directions, item);
             }
         }
@@ -138,6 +135,9 @@ namespace Terrapain.Content.Items.Abstract
         }
         public virtual void Countdown(Player player, Item item)
         {
+            if (!activeAccessory.Countdown(player, item))
+                return;
+
             if (DashReload > 0)
             {
                 DashReload--;
@@ -155,8 +155,10 @@ namespace Terrapain.Content.Items.Abstract
                 HoldCanUse = true;
             }
         }
-        public virtual void ResetAbilities(string reason)
+        public virtual void ResetAbilities(Player player, Item item, string reason)
         {
+            if (activeAccessory.ResetAbilities(player, item, reason))
+
             //switch (reason)
             //{
             //    case "Dead":

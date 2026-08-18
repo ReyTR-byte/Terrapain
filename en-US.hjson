@@ -563,6 +563,8 @@ Mods: {
 			FriendlyCrownGem.DisplayName: Friendly Crown Gem
 			CursedFire.DisplayName: Cursed Fire
 			CursedFireSpirit.DisplayName: Cursed Fire Spirit
+			Nugget.DisplayName: Nugget
+			IchorBomb.DisplayName: Ichor Bomb
 		}
 
 		Configs: {
@@ -678,6 +680,54 @@ Mods: {
 
 				Width: {
 					Label: Width
+					Tooltip: ""
+				}
+			}
+
+			GraphicsConfig: {
+				DisplayName: Graphics Config
+
+				shaders: {
+					Label: shaders
+					Tooltip: ""
+				}
+
+				filters: {
+					Label: filters
+					Tooltip: ""
+				}
+
+				smoothing: {
+					Label: smoothing
+					Tooltip: ""
+				}
+			}
+
+			GraphicsLevel: {
+				Tooltip: ""
+
+				Potato: {
+					Label: Potato
+					Tooltip: ""
+				}
+
+				Low: {
+					Label: Low
+					Tooltip: ""
+				}
+
+				Medium: {
+					Label: Medium
+					Tooltip: ""
+				}
+
+				High: {
+					Label: High
+					Tooltip: ""
+				}
+
+				Ultra: {
+					Label: Ultra
 					Tooltip: ""
 				}
 			}

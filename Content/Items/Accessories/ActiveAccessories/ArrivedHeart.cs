@@ -13,7 +13,7 @@ using Terraria.ModLoader;
 
 namespace Terrapain.Content.Items.Accessories.ActiveAccessories
 {
-    public class ArrivedHeart : ActiveAccessory
+    public class ArrivedHeart : ModItemActiveAccessory
     {
         public override void ModSetDefaults()
         {
@@ -27,14 +27,16 @@ namespace Terrapain.Content.Items.Accessories.ActiveAccessories
             Item.knockBack = 0.5f;
             AutoUse = true;
             CanAutoUse = true;
+            abilityIcon = new ArrivedHeartIcon();
             //abilityIcon = new LightningIcon();
         }
         public override bool OnUseAbility(Player player)
         {
             Vector2 vector = (player.velocity == Vector2.Zero? new Vector2(-player.direction, 0) : -player.velocity.Normalized()) * 75;
-            Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center - player.velocity + vector, Vector2.Zero, ModContent.ProjectileType<ArrivedHeartProjectile>(), (int)player.GetTotalDamage<Unarmed>().ApplyTo(Item.damage), Item.knockBack, player.whoAmI);
-            Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center - player.velocity + vector.RotatedBy(MathF.PI * 0.25f), Vector2.Zero, ModContent.ProjectileType<ArrivedHeartProjectile>(), (int)player.GetTotalDamage<Unarmed>().ApplyTo(Item.damage), Item.knockBack, player.whoAmI);
-            Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center - player.velocity + vector.RotatedBy(MathF.PI * -0.25f), Vector2.Zero, ModContent.ProjectileType<ArrivedHeartProjectile>(), (int)player.GetTotalDamage<Unarmed>().ApplyTo(Item.damage), Item.knockBack, player.whoAmI);
+            float speed = 5;
+            Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center - player.velocity + vector, vector.Normalized() * speed, ModContent.ProjectileType<ArrivedHeartProjectile>(), (int)player.GetTotalDamage<Unarmed>().ApplyTo(Item.damage), Item.knockBack, player.whoAmI);
+            Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center - player.velocity + vector.RotatedBy(MathF.PI * 0.25f), vector.RotatedBy(MathF.PI * 0.25f).Normalized() * speed, ModContent.ProjectileType<ArrivedHeartProjectile>(), (int)player.GetTotalDamage<Unarmed>().ApplyTo(Item.damage), Item.knockBack, player.whoAmI);
+            Projectile.NewProjectile(Item.GetSource_FromThis(), player.Center - player.velocity + vector.RotatedBy(MathF.PI * -0.25f), vector.RotatedBy(MathF.PI * -0.25f).Normalized() * speed, ModContent.ProjectileType<ArrivedHeartProjectile>(), (int)player.GetTotalDamage<Unarmed>().ApplyTo(Item.damage), Item.knockBack, player.whoAmI);
             return false;
         }
         public override void UpdateAccessory(Player player, bool hideVisual)

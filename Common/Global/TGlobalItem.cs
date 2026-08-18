@@ -1,16 +1,10 @@
-using Luminance.Common.Utilities;
-using Microsoft.Xna.Framework;
-using Terrapain.Common.Global;
 using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Common.System;
 using Terrapain.Common.UI;
 using Terrapain.Content;
 using Terrapain.Content.Items.Abstract;
-using Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories;
-using Terrapain.Content.NPCs.Bosses.Scorspider;
 using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
@@ -46,8 +40,9 @@ namespace Terrapain.Common.Global
 		float usedShootSpeedBonus;
 		public float StaminaUsage = 0;
 
-		public ActiveAccessory ActiveAccesoryModItem;
-		public VanillaItemActiveAccessory ActiveAccessoryVanillaItem;
+		public ActiveAccessory ActiveAccessory;
+		public VanillaItemRework rework;
+		public static VanillaItemRework[] instances = new VanillaItemRework[ItemID.Count];
 
 		public int[] MassiveSwords =
 		{
@@ -208,8 +203,13 @@ namespace Terrapain.Common.Global
 			{
 				StaminaUsage = 1;
 			}
+			if (entity.type < ItemID.Count)
+			{
+				rework = instances[entity.type]?.GetNewInstance(entity);
+			}
+			rework?.ModSetDefaults(entity);
         }
-		public override bool Shoot(Item item, Terraria.Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
 			if (item.DamageType == DamageClass.Ranged && player.GetModPlayer<TerrapainPlayer>().RangerGranithShellArmorSet)
 			{
@@ -239,18 +239,18 @@ namespace Terrapain.Common.Global
 				velocity = Vector2.Zero;
 			}
 			
-			return base.Shoot(item, player, source, position, velocity, type, damage, knockback);
+			return rework?.Shoot(item, player, source, position, velocity, type, damage, knockback)?? true;
 		}
-		public override void ModifyShootStats(Item item, Terraria.Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+		public override void ModifyShootStats(Item item, Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
 		{
 			if (velocity != Vector2.Zero)
 			{
 				velocity.Normalize();
 				velocity *= item.shootSpeed + usedShootSpeedBonus;
 			}
+			rework?.ModifyShootStats(item, player, ref position, ref velocity, ref type, ref damage, ref knockback);
 		}
-		public virtual void ModOnHitNPC(Item item, Terraria.Player player, NPC target, NPC.HitInfo hit, int damageDone) { }
-        public override void OnHitNPC(Item item, Terraria.Player player, NPC target, NPC.HitInfo hit, int damageDone)
+        public override void OnHitNPC(Item item, Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
 			hitList[target.whoAmI] = true;
 			if (player.magmaStone && dashAccessory)
@@ -258,38 +258,44 @@ namespace Terrapain.Common.Global
 				UnifiedRandom random = new UnifiedRandom();
 				target.AddBuff(BuffID.OnFire, random.Next(8) < 2 ? 360 : (random.Next(8) < 5? 240 : 120));
 			}
-            ModOnHitNPC(item, player, target, hit, damageDone);
+			rework?.OnHitNPC(item, player, target, hit, damageDone);
+        }
+        public override void OnHitPvp(Item item, Player player, Player target, Player.HurtInfo hurtInfo)
+        {
+            rework?.OnHitPvp(item, player, target, hurtInfo);
         }
 
-        public override void UpdateInventory(Item item, Terraria.Player player)
+        public override void UpdateInventory(Item item, Player player)
 		{
 			usedShootSpeedBonus = ShootSpeedBonus;
 
 			ShootSpeedBonus = 0;
+
+			rework?.UpdateInventory(item, player);
 		}
-        public override void UpdateAccessory(Item item, Terraria.Player player, bool hideVisual)
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
-			if (ActiveAccessoryVanillaItem != null)
+			if (ActiveAccessory != null)
 			{
-                ActiveAccessoryVanillaItem.UpdateAccessory(player, item);
-                ActiveAccessoryVanillaItem.Countdown(player, item);
+                ActiveAccessory.Countdown(player, item);
             }
 			if (dashAccessory || activeAccessory)
 			{
 				TerrapainUIManager.Open<AccessoriesReloadUI>();
 			}
+			rework?.UpdateAccessory(item, player, hideVisual);
         }
 		//offset from mounted center
-		public static Vector2 GetHandOffset(Terraria.Player player) => new Vector2(-4 * player.direction, -2);
+		public static Vector2 GetHandOffset(Player player) => new Vector2(-4 * player.direction, -2);
 
-        public override float UseSpeedMultiplier(Item item, Terraria.Player player)
+        public override float UseSpeedMultiplier(Item item, Player player)
         {
             //Functions.Chatic("UseSpeedMultiplyer");
             if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
                 return player.Custom().StaminaUseSpeedBuff;
 			return 1;
         }
-        public override void UseAnimation(Item item, Terraria.Player player)
+        public override void UseAnimation(Item item, Player player)
         {
             if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
             {
@@ -302,13 +308,13 @@ namespace Terrapain.Common.Global
                 player.ChangeDir(Math.Sign(Main.MouseWorld.X - player.MountedCenter.X));
             }
         }
-        public override void UseItemFrame(Item item, Terraria.Player player)
+        public override void UseItemFrame(Item item, Player player)
         {
             if (item.useStyle == ItemUseStyleID.Swing)
             {
                 if (item.DamageType != DamageClass.SummonMeleeSpeed)
                 {
-                    player.SetCompositeArmFront(true, Terraria.Player.CompositeArmStretchAmount.Full, player.itemRotation + MathHelper.ToRadians(-135 * player.direction));
+                    player.SetCompositeArmFront(true, Player.CompositeArmStretchAmount.Full, player.itemRotation + MathHelper.ToRadians(-135 * player.direction));
                 }
             }
         }
@@ -316,28 +322,29 @@ namespace Terrapain.Common.Global
 		public int slot;
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
-            if (activeAccessory && (!ActiveAccessoryVanillaItem.AbilityUnarmedOnly || Main.LocalPlayer.Custom().unarmed))
+			rework?.ModifyTooltips(item, tooltips);	
+            if (activeAccessory && (!ActiveAccessory.AbilityUnarmedOnly || Main.LocalPlayer.Custom().unarmed))
 			{
-				if (ActiveAccessoryVanillaItem.DescriptionLinesCount > 0)
+				if (ActiveAccessory.DescriptionLinesCount > 0)
 				{
-					TooltipLine line = new TooltipLine(Mod, "Ability", NetworkText.FromKey("Mods.Terrapain.Ability") + ": " + NetworkText.FromKey(ActiveAccessoryVanillaItem.AbilityDescription + "_0"));
+					TooltipLine line = new TooltipLine(Mod, "Ability", NetworkText.FromKey("Mods.Terrapain.Ability") + ": " + NetworkText.FromKey(ActiveAccessory.AbilityDescription + "_0"));
 					tooltips.Add(line);
-					for (int i = 1; i < ActiveAccessoryVanillaItem.DescriptionLinesCount; i++)
+					for (int i = 1; i < ActiveAccessory.DescriptionLinesCount; i++)
 					{
-						line = new TooltipLine(Mod, $"Ability{i}", NetworkText.FromKey(ActiveAccessoryVanillaItem.AbilityDescription + $"_{i}").ToString());
+						line = new TooltipLine(Mod, $"Ability{i}", NetworkText.FromKey(ActiveAccessory.AbilityDescription + $"_{i}").ToString());
 						tooltips.Add(line);
 					}
 				}
-				if (slot > -1 && slot < 7 && !ActiveAccessoryVanillaItem.AutoUse)
+				if (slot > -1 && slot < 7 && !ActiveAccessory.AutoUse)
 				{
                     TooltipLine line = new TooltipLine(Mod, "PressXToActivate", NetworkText.FromKey("Mods.Terrapain.PressXToActivate", KeybindSystem.ActiveAccesories[slot].GetAssignedKeys()[0]).ToString());
 					tooltips.Add(line);
 				}
-			    if (ActiveAccessoryVanillaItem.CanAutoUse)
+			    if (ActiveAccessory.CanAutoUse)
 				{
-					if (ActiveAccessoryVanillaItem.AutoUse)
+					if (ActiveAccessory.AutoUse)
 					{
-						if (slot > -1 && slot < 7 && !ActiveAccessoryVanillaItem.AutoUse)
+						if (slot > -1 && slot < 7 && !ActiveAccessory.AutoUse)
 						{
 							TooltipLine line = new TooltipLine(Mod, "AutoUse", NetworkText.FromKey("Mods.Terrapain.AutoUseIsOn", KeybindSystem.ActiveAccesories[slot].GetAssignedKeys()[0]).ToString());
 							tooltips.Add(line);
@@ -358,14 +365,14 @@ namespace Terrapain.Common.Global
         }
         public override bool CanRightClick(Item item)
         {
-			return ActiveAccessoryVanillaItem?.CanAutoUse?? false;
+			return ActiveAccessory?.CanAutoUse?? false;
         }
-        public override void RightClick(Item item, Terraria.Player player)
+        public override void RightClick(Item item, Player player)
         {
-			if (ActiveAccessoryVanillaItem != null && ActiveAccessoryVanillaItem.CanAutoUse)
-				ActiveAccessoryVanillaItem.AutoUse = !ActiveAccessoryVanillaItem.AutoUse;
+			if (ActiveAccessory != null && ActiveAccessory.CanAutoUse)
+				ActiveAccessory.AutoUse = !ActiveAccessory.AutoUse;
         }
-        public override void UseItemHitbox(Item item, Terraria.Player player, ref Rectangle hitbox, ref bool noHitbox)
+        public override void UseItemHitbox(Item item, Player player, ref Rectangle hitbox, ref bool noHitbox)
         {
 
 			//for (int i = 0; i < dusts.Count; i++)
@@ -404,7 +411,7 @@ namespace Terrapain.Common.Global
 
 		}
 
-        public override bool CanUseItem(Item item, Terraria.Player player)
+        public override bool CanUseItem(Item item, Player player)
         {
 			if (player.GetModPlayer<TerrapainPlayer>().unarmed && item.damage > 0 && item.pick == 0 && item.axe == 0 && item.hammer == 0 && !item.accessory && !Main.projHook[item.shoot])
 			{
@@ -414,7 +421,7 @@ namespace Terrapain.Common.Global
 			{
 				return player.Custom().Stamina > 0;
 			}
-			return base.CanUseItem(item, player);
+			return base.CanUseItem(item, player) && (rework?.CanUseItem(item, player)?? true);
         }
 	}
 }

@@ -10,6 +10,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using static Terrapain.Content.Functions;
+using static Terrapain.Content.TUtilities.AIHelper;
 
 namespace Terrapain.Content.NPCs.Servants.EvilBosses
 {
@@ -32,7 +33,7 @@ namespace Terrapain.Content.NPCs.Servants.EvilBosses
             {
                 Group.NewGroup(new Creepers(0.25f, (int)npc.ai[3]), npc.whoAmI, (int)npc.ai[0]);
             }
-            if ((int)npc.ai[0] == 1)
+            if ((int)npc.ai[3] == 1)
             {
                 npc.immortal = true;
             }
@@ -50,7 +51,7 @@ namespace Terrapain.Content.NPCs.Servants.EvilBosses
                     Vector2 targetPosition = t.Target.Center + npc.DirectionFrom(t.Target.Center).RotatedBy(0.05f * (1 - charge2)) * (210 + charge2 * 40);
                     rotationSpeed += 0.001f;
                     rotationSpeed = MathF.Min(0.1f, rotationSpeed);
-                    CommonTerrapainFlyingMovement(npc, targetPosition, rotationSpeed, 16, 0.08f, 10);
+                    CommonTerrapainFlyingMovement(npc, targetPosition, rotationSpeed, 16, 0.2f, 10);
                     if (npc.Distance(t.Target.Center) < 275)
                     {
                         charge += 0.02f;
@@ -111,7 +112,7 @@ namespace Terrapain.Content.NPCs.Servants.EvilBosses
                     charge -= MathF.Max(charge - 0.02f, 0);
                     trailLength = 0;
                     NPC brain = Main.npc[EaterofWorldsHead.BrainofCthulhu];
-                    CommonTerrapainFlyingMovement(npc, brain.Center, rotationSpeed, 16, 0.08f, 10);
+                    CommonTerrapainFlyingMovement(npc, brain.Center, 0.2f, 16, 0.2f, 10);
                     if (npc.Distance(brain.Center) < 30)
                     {
                         npc.active = false;

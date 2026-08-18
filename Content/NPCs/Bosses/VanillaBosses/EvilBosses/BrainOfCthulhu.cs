@@ -1,9 +1,10 @@
-﻿using Luminance.Core.Graphics;
+﻿using System.Net.Http.Headers;
 using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Common.CameraModifiers;
 using Terrapain.Common.Config;
 using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Common.System;
+using Terrapain.Common.System.Filters;
 using Terrapain.Content.Projectiles.Enemies.Bosses.EvilBosses;
 using Terraria;
 using Terraria.Audio;
@@ -11,6 +12,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
+using static Terrapain.Content.TUtilities.AIHelper;
 
 namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
 {
@@ -50,9 +52,13 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         public float progress;
         public static List<int> segmentsLifes;
 
-        int ichorSpike => ModContent.ProjectileType<IchorSpike>();
-        int ichoreSpikeDamage = 25;
-        float ichoreSpikeKnockback = 10;
+        public static int ichorSpike => ModContent.ProjectileType<IchorSpike>();
+        public static int ichoreSpikeDamage = 25;
+        public static float ichoreSpikeKnockback = 10;
+
+        public static int ichorBomb => ModContent.ProjectileType<IchorBomb>();
+        public static int ichoreBombDamage = 35;
+        public static float ichoreBombKnockback = 10;
 
 		bool limbo => phase == 4;
 		bool drawClons;
@@ -179,24 +185,6 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                         break;
                 }
             }
-            if (WavePower > 0)
-            {
-                WaveRadius1 += 1.5f * WavePower;
-                WaveRadius2 += 1.495f * WavePower;
-
-                ManagedScreenFilter filter = ShaderManager.GetFilter("Terrapain.Wave");
-
-                filter.TrySetParameter("w", Main.screenWidth);
-                filter.TrySetParameter("h", Main.screenHeight);
-                filter.TrySetParameter("center", WaveCenter - Main.screenPosition);
-                filter.TrySetParameter("radius1", WaveRadius1);
-                filter.TrySetParameter("radius2", WaveRadius2);
-                filter.TrySetParameter("power", WavePower);
-
-                filter.Activate();
-
-                WavePower -= 0.05f;
-            }
             if (MainTimer > 0)
             {
                 MainTimer--;
@@ -235,7 +223,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         }
         public void Movement(NPC npc, Vector2 TargetPosition)
         {
-            CommonTerrapainFlyingMovement(npc, TargetPosition, MathF.PI * 0.15f, maxSpeed, acceleration, 150, false);
+            CommonTerrapainFlyingMovement(npc, TargetPosition, 0.2f, maxSpeed, acceleration, 150, false);
         }
         public void DoFirstPhase(NPC npc)
         {
@@ -353,10 +341,6 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     break;
             }
         }
-        float WavePower;
-        Vector2 WaveCenter;
-        float WaveRadius1;
-        float WaveRadius2;
         public void DoSecondPhase(NPC npc)
         {
             switch (attack)
@@ -387,10 +371,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     Movement(npc, new Vector2(npc.ai[0], npc.ai[1]));
                     if (MainTimer == mainTimerMax - 1)
                     {
-                        WavePower = 10;
-                        WaveCenter = npc.Center;
-                        WaveRadius1 = 0;
-                        WaveRadius2 = -200;
+                        EffectsSystem.AddFilter(new StrikeWaveFilter() {WavePower = 10, disposingSpeed = 0.05f, multiplySpeedByWavePower = true, speed1 = 1.5f, speed2 = 1.495f, WaveCenter = npc.Center, WaveRadius2 = -200});
+
                         int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead, 0, 0, -80);
                         EaterofWorldsHead.BrainofCthulhu = npc.whoAmI;
                         EaterofWorldsHead.Restart(eow);
@@ -399,7 +381,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     openTimer = 12;
                     if (MainTimer == 0)
                     {
-                        NextAttack2(npc);
+                        attack = -2;
                     }
                     break;
                 case 0:
@@ -426,10 +408,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     }
                     if (MainTimer == 200)
                     {
-                        WavePower = 10;
-                        WaveCenter = npc.Center;
-                        WaveRadius1 = 0;
-                        WaveRadius2 = -200;
+                        EffectsSystem.AddFilter(new StrikeWaveFilter() { WavePower = 10, disposingSpeed = 0.05f, multiplySpeedByWavePower = true, speed1 = 1.5f, speed2 = 1.495f, WaveCenter = npc.Center, WaveRadius2 = -200 });
+
                         int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead, 0, 0, -segmentsLifes.Count);
                         Main.npc[eow].GetGlobalNPC<EaterofWorldsHead>().NextAttack1(Main.npc[eow]);
                         npc.velocity += npc.DirectionFrom(t.Target.Center) * 15;
@@ -444,14 +424,54 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     }
                     break;
                 case 2:
+                    maxSpeed = 15;
+                    acceleration = 0.3f;
+                    Vector2 TargetPosition = t.Target.Center + npc.Center.DirectionFrom(t.Target.Center).RotatedBy(0.42f * npc.ai[0]) * 350;
+                    Movement(npc, TargetPosition);
+                    if (timer == 0)
+                    {
+                        int proj = Projectile.NewProjectile(npc .GetSource_FromThis(), npc.Center, (npc.velocity.Normalized() + npc.DirectionTo(t.Target.Center)).Normalized() * 15, ichorBomb, ichoreBombDamage, ichoreBombKnockback, -1, npc.target, 25, 7);
+                        Main.projectile[proj].timeLeft = 30;
+                        proj = Projectile.NewProjectile(npc .GetSource_FromThis(), npc.Center, (-npc.velocity.Normalized() + npc.DirectionTo(t.Target.Center)).Normalized() * 15, ichorBomb, ichoreBombDamage, ichoreBombKnockback, -1, npc.target, 25, 7);
+                        Main.projectile[proj].timeLeft = 30;
+                        timer = 80;
+                    }
                     if (MainTimer == 0)
                     {
                         NextAttack2(npc);
                     }
                     break;
                 case 3:
-                    Movement(npc);
-                    CheckPhase(npc);
+                    int time = 180;
+                    if (timer == 0)
+                    {
+                        Vector2 dir = npc.DirectionTo(t.Target.Center);
+                        npc.velocity = dir * 35;
+                        npc.ai[0] *= random.NextDir() * 1.2f;
+                        npc.ai[0] = MathHelper.Clamp(npc.ai[0], -1.6f, 1.6f);
+                        int count = 5;
+                        float speed = 25;
+                        int _time = 20;
+                        float angleBetween = MathF.PI * 0.75f / count;
+                        float startAngle = (-dir).ToRotation() - angleBetween * count / 2;
+                        for (int i = 0; i < count; i++)
+                        {
+                            int proj = Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, (startAngle + angleBetween * i).ToRotationVector2() * speed, ichorBomb, ichoreBombDamage, ichoreBombKnockback, -1, npc.target, _time, 5);
+                            Main.projectile[proj].timeLeft = 30;
+                        }
+                        timer = time;
+                    }
+                    if (timer > time - 40)
+                    {
+                        npc.velocity = npc.velocity.Normalized() * (npc.velocity.Length() - 0.1f);
+                    }
+                    else
+                    {
+                        CheckPhase(npc);
+                        float p = 1 - MathF.Min(timer / 60f, 1);
+                        TargetPosition = t.Target.Center + npc.Center.DirectionFrom(t.Target.Center).RotatedBy(0.15f * npc.ai[0] * (1 - p)) * (350 + p * 65);
+                        Movement(npc, TargetPosition);
+                    }
                     if (MainTimer == 0)
                     {
                         NextAttack2(npc);
@@ -502,9 +522,25 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     SetMainTimer(700);
                     break;
                 case 2:
+                    if (WorldDifficultySystem.suicide)
+                    {
+                        npc.ai[0] = random.NextDir() * 1.2f;
+                    }
+                    else
+                    {
+                        npc.ai[0] = 0;
+                    }
                     SetMainTimer(600);
                     break;
                 case 3:
+                    if (WorldDifficultySystem.suicide)
+                    {
+                        npc.ai[0] = random.NextDir() * 1.2f;
+                    }
+                    else
+                    {
+                        npc.ai[0] = 1;
+                    }
                     SetMainTimer(480);
                     break;
             }
@@ -533,13 +569,12 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     SetMainTimer(800);
                     break;
                 case 2:
-                    npc.ai[0] = npc.Center.X;
-                    npc.ai[1] = npc.Center.Y;
-                    if (segmentsLifes.Count < 2)
-                    {
-                        goto Start;
-                    }
-                    SetMainTimer(200);
+                    npc.ai[0] = random.NextDir() * (WorldDifficultySystem.suicide? 1.2f : 1f);
+                    SetMainTimer(800);
+                    break;
+                case 3:
+                    npc.ai[0] = random.NextDir() * (WorldDifficultySystem.suicide? 1.2f : 1f);
+                    SetMainTimer(800);
                     break;
             }
         }

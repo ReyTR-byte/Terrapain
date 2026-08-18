@@ -6,26 +6,63 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Terrapain.Common.TerrapainModPlayer;
+using Terrapain.Common.UI.Assets.AbilitiesIcons;
+using Terrapain.Content.DamageClasses;
 using Terrapain.Content.Dashes;
+using Terrapain.Content.Items.Abstract;
 using Terrapain.Content.Projectiles.Enemies;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories
+namespace Terrapain.Content.Items.Accessories.ActiveAccessories.VanillaItemActiveAccessories
 {
     public class EoCShield : VanillaItemActiveAccessory
     {
-        public EoCShield()
+        public override VanillaItemRework GetNewInstance(Item item)
         {
+            return new EoCShield();
+        }
+        public override void ModSetDefaults(Item entity)
+        {
+            entity.GetT().dashAccessory = true;
+            DashPower = 15;
+            DashDuration = 15;
+            DashReloadMax = 60;
+            AbilityReloadMax = 150;
+            abilityIcon = new SuperDashIcon();
+            entity.GetT().activeAccessory = true;
+            activeAccessory = new ActiveAccessory(this);
+            entity.GetT().ActiveAccessory = activeAccessory;
             DescriptionLinesCount = 1;
         }
-        public override void OnUseDash(Player player, bool[] Directions, Item item)
+        public override void OnHitNPC(Item item, Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            base.OnUseDash(player, Directions, item);
+            if (player.GetModPlayer<TerrapainPlayer>().unarmed)
+            {
+                if (player.GetModPlayer<PlayerMovement>().DashPower > activeAccessory.DashPower)
+                {
+                    activeAccessory.AbilityReload = 30;
+                }
+                activeAccessory.DashReload = 30;
+            }
+        }
+        public override void UpdateInventory(Item item, Player player)
+        {
+            if (player.GetModPlayer<TerrapainPlayer>().unarmed)
+            {
+                item.DamageType = ModContent.GetInstance<Unarmed>();
+            }
+            else
+            {
+                item.DamageType = DamageClass.Melee;
+            }
+        }
+        public override bool OnUseDash(Player player, Item item, bool[] Directions)
+        {
             if (Directions[2] && Directions[3])
             {
                 DashReload = 0;
-                return;
+                return false;
             }
             if (player.GetModPlayer<TerrapainPlayer>().unarmed)
             {
@@ -33,18 +70,27 @@ namespace Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories
                 {
                     int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, Vector2.UnitX * 5, ModContent.ProjectileType<DemonicEyeLazer>(), item.damage, item.knockBack);
                     Main.projectile[proj].DamageType = item.DamageType;
-                    return;
+                    return false;
                 }
                 if (Directions[3])
                 {
                     int proj = Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, -Vector2.UnitX * 5, ModContent.ProjectileType<DemonicEyeLazer>(), item.damage, item.knockBack);
                     Main.projectile[proj].DamageType = item.DamageType;
-                    return;
+                    return false;
                 }
             }
+            return false;
         }
-        public override void UpdateAccessory(Player player, Item item)
+        public override void UpdateAccessory(Item item, Player player, bool hideVisual)
         {
+            if (player.GetModPlayer<TerrapainPlayer>().unarmed)
+            {
+                item.DamageType = ModContent.GetInstance<Unarmed>();
+            }
+            else
+            {
+                item.DamageType = DamageClass.Melee;
+            }
             player.Custom().Dash = new ActiveAccessoryDash(item) { damageType = item.DamageType, immune = 10, DashDuration = DashDuration, DashPower = DashPower, penetrate = 1, priority = 1, hurtfull = true };
         }
         public override void OnUseAbility(Player player, Item item)
@@ -55,7 +101,7 @@ namespace Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories
                 AbilityReload = 0;
                 return; 
             }
-            if (!CanUseDash(player, Directions, item))
+            if (!activeAccessory.CanUseDash(player, Directions, item))
             {
                 AbilityReload = 0;
                 return;

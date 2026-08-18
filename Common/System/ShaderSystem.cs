@@ -1,16 +1,11 @@
 using Luminance.Core.Graphics;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Assets.Extratextures;
 using Terrapain.Common.Config;
 using Terrapain.Common.DrawTasks;
 using Terrapain.Common.Global;
-using Terrapain.Content;
 using Terraria;
-using Terraria.DataStructures;
 using Terraria.ModLoader;
-using XPT.Core.Audio.MP3Sharp.Decoding.Decoders.LayerIII;
-using static Terrapain.Terrapain;
 
 namespace Terrapain.Common.System
 {

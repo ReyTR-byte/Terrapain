@@ -1,6 +1,12 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Luminance.Core.Graphics;
+using Microsoft.Xna.Framework.Graphics;
+using Terrapain.Assets.Extratextures;
+using Terrapain.Common.Config;
+using Terrapain.Common.Global;
+using Terrapain.Common.System;
 using Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses;
 using Terrapain.Content.NPCs.Servants.EvilBosses;
+using Terrapain.Content.TUtilities;
 using Terrapain.Content.TUtilities.Kinematic;
 using Terraria;
 using Terraria.ID;
@@ -141,13 +147,21 @@ namespace Terrapain.Content.Groups
                 {
                     if (Main.npc[members[0]].ai[2] <= 0)
                     {
+                        if (lines.Count != Count)
+                        {
+                            lines = new();
+                            for (int i = 0; i < Count; i++)
+                            {
+                                lines.Add(new Lines());
+                            }
+                        }
                         float minCharge = -1;
                         for (int i = 0; i < Count; i++)
                         {
                             NPC mem = Main.npc[members[i]];
                             float rot = rotation + MathF.PI * 2 * i / Count;
                             Vector2 targetPosition = EaterofWorldsHead.savedVector + Vector2.UnitX.RotatedBy(rot) * (500 + mem.GetGlobalNPC<Creeper>().charge * 60);
-                            Functions.CommonTerrapainFlyingMovement(mem, targetPosition, 3f, 30, 1f, 75);
+                            AIHelper.CommonTerrapainFlyingMovement(mem, targetPosition, 3f, 30, 1f, 75);
                             if(minCharge == -1)
                             {
                                 minCharge = mem.GetGlobalNPC<Creeper>().charge;
@@ -156,9 +170,14 @@ namespace Terrapain.Content.Groups
                             {
                                 minCharge = MathF.Min(mem.GetGlobalNPC<Creeper>().charge, minCharge);
                             }
+                            Lines l = lines[i];
+                            l.start = mem.Center;
+                            l.direction = mem.DirectionTo(EaterofWorldsHead.savedVector);
+                            lines[i] = l;
                         }
                         if (attackCount == 2)
                         {
+                            lines = new();
                             minCharge = 0;
                         }
 
@@ -169,17 +188,25 @@ namespace Terrapain.Content.Groups
                         }
                         rotation += 0.03f * (1 - (minCharge * minCharge * minCharge));
                     }
-                    else if (Main.npc[members[0]].ai[2] == 1)
+                    else
                     {
-                        attackCount++;
-                        List<int> newMembers = new List<int>(members);
-                        for (int i = 0; i < members.Count; i++)
+                        lines = new();
+                        if (Main.npc[members[0]].ai[2] == 1)
                         {
-                            int index = (i + Count / 2) % Count;
-                            newMembers[index] = members[i];
+                            attackCount++;
+                            List<int> newMembers = new List<int>(members);
+                            for (int i = 0; i < members.Count; i++)
+                            {
+                                int index = (i + Count / 2) % Count;
+                                newMembers[index] = members[i];
+                            }
+                            members = newMembers;
                         }
-                        members = newMembers;
-                    }
+                    } 
+                }
+                else
+                {
+                    lines = new();
                 }
             }
             for (int i = 0; i < k.Count; i++)
@@ -202,7 +229,59 @@ namespace Terrapain.Content.Groups
                 k[i].chain.DrawSmoothed(spriteBatch, texture, null, Color.White * k[i].progress, true, 1);
             }
         }
-        public override void PostDrawNPCs(SpriteBatch spriteBatch, Vector2 screenPosition)
+        struct Lines
+        {
+            public Vector2 start;
+            public Vector2 direction;
+            public Color color;
+            static Color[] colors = [Color.Red, Color.Yellow, Color.Green];
+            public Lines(Vector2 Start, Vector2 dir)
+            {
+                start = Start;
+                direction = dir;
+                color = colors[TGlobalNPC.random.Next(3)];
+            }
+            public Lines()
+            {
+                color = colors[TGlobalNPC.random.Next(3)];
+            }
+        }
+        static float LinesAlpha;
+        static List<Lines> lines = new();
+
+
+        static RenderTarget2D renderTarget;
+        static RenderTarget2D saveScreenRenderTarget;
+        void updateTarget()
+        {
+            if (renderTarget == null || renderTarget.Height != Main.screenHeight || renderTarget.Width != Main.screenWidth)
+            {
+                renderTarget = new RenderTarget2D(
+                    Main.graphics.GraphicsDevice,
+                    Main.screenWidth,
+                    Main.screenHeight,
+                    false,
+                    Main.graphics.GraphicsDevice.PresentationParameters.BackBufferFormat,
+                    DepthFormat.None,
+                    0,
+                    RenderTargetUsage.PreserveContents
+                );
+            }
+            if (saveScreenRenderTarget == null || saveScreenRenderTarget.Height != Main.screenHeight || saveScreenRenderTarget.Width != Main.screenWidth)
+            {
+                saveScreenRenderTarget = new RenderTarget2D(
+                    Main.graphics.GraphicsDevice,
+                    Main.screenWidth,
+                    Main.screenHeight,
+                    false,
+                    Main.graphics.GraphicsDevice.PresentationParameters.BackBufferFormat,
+                    DepthFormat.None,
+                    0,
+                    RenderTargetUsage.PreserveContents
+                );
+            }
+        }
+        public override void PostDrawNPCs(SpriteBatch spriteBatch, Vector2 screenPos)
         {
             if (Count == 0)
             {
@@ -212,6 +291,114 @@ namespace Terrapain.Content.Groups
                     k[i].chain.DrawSmoothed(spriteBatch, texture, null, Color.White * k[i].progress, true, 1);
                 }
             }
+            if (lines.Count > 0)
+                {
+                    var originalRenderTargets = Main.graphics.GraphicsDevice.GetRenderTargets();
+                    if (WorldDifficultySystem.suicide)
+                    {
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, new Matrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+                        updateTarget();
+                        Main.graphics.GraphicsDevice.SetRenderTarget(saveScreenRenderTarget);
+                        Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+                        spriteBatch.Draw(originalRenderTargets[0].RenderTarget as RenderTarget2D, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
+                        Main.graphics.GraphicsDevice.SetRenderTarget(renderTarget);
+                        Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+                    }
+                    spriteBatch.End();
+                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                    Texture2D tex = null;
+                    if (GraphicsConfig.Instance.shaders == GraphicsConfig.GraphicsLevel.Potato)
+                    {
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                        tex = ExtraTextureRegistry.CubedGradient10Mirrored.Value;
+                    }
+                    foreach (var line in lines)
+                    {
+                        Vector2 p1 = line.start - screenPos;
+                        float? num1 = line.direction.X == 0? null : (20 - p1.X) / line.direction.X;
+                        float? num2 = line.direction.Y == 0? null : (20 - p1.Y) / line.direction.Y;
+                        float? num3 = line.direction.X == 0? null : (Main.screenWidth - 20 - p1.X) / line.direction.X;
+                        float? num4 = line.direction.Y == 0? null : (Main.screenHeight - 20 - p1.Y) / line.direction.Y;
+                        Vector2 p2 = Vector2.Zero;
+                        Vector2 p3 = Vector2.Zero;
+                        if (num1.HasValue)
+                        {
+                            Vector2 _p2 = p1 + line.direction * num1.Value;
+                            if (_p2.Y > 20 && _p2.Y < Main.screenHeight - 20)
+                            {
+                                p2 = _p2;
+                            }
+                        }
+                        if (num2.HasValue && p2 == Vector2.Zero)
+                        {
+                            Vector2 _p2 = p1 + line.direction * num2.Value;
+                            if (_p2.X > 20 && _p2.Y < Main.screenWidth - 20)
+                            {
+                                p2 = _p2;
+                            }
+                        }
+                        if (p2 != Vector2.Zero)
+                        {
+                            if (num3.HasValue)
+                            {
+                                Vector2 _p3 = p1 + line.direction * num3.Value;
+                                if (_p3.Y > 20 && _p3.Y < Main.screenHeight - 20)
+                                {
+                                    p3 = _p3;
+                                }
+                            }
+                            if (num4.HasValue && p3 == Vector2.Zero)
+                            {
+                                Vector2 _p3 = p1 + line.direction * num4.Value;
+                                if (_p3.X > 20 && _p3.X < Main.screenWidth - 20)
+                                {
+                                    p3 = _p3;
+                                }
+                            }
+                            if (GraphicsConfig.Instance.shaders != GraphicsConfig.GraphicsLevel.Potato)
+                            {
+                                ManagedShader Shade = ShaderManager.GetShader("Terrapain.LaserShader");
+                                Shade.TrySetParameter("lenght", 900);
+                                Shade.TrySetParameter("width", 8);
+                                spriteBatch.End();
+                                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, Shade.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
+                            }
+                            spriteBatch.DrawLine(p3 + Main.screenPosition, p2 + Main.screenPosition, line.color, 8, tex);
+                        }
+                    }
+                    if (GraphicsConfig.Instance.shaders != GraphicsConfig.GraphicsLevel.Potato)
+                    {
+                        spriteBatch.End();
+                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                    }
+                    if (WorldDifficultySystem.suicide)
+                    {
+                        spriteBatch.End();
+                        Main.graphics.GraphicsDevice.SetRenderTargets(originalRenderTargets);
+
+                        if (saveScreenRenderTarget != null)
+                        {
+                            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, new Matrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+                            spriteBatch.Draw(saveScreenRenderTarget, Vector2.Zero, Color.White);
+                            spriteBatch.End();
+                        }
+                        if (renderTarget != null)
+                        {
+                            ManagedShader shader = ShaderManager.GetShader("Terrapain.PlayerMask");
+                            shader.TrySetParameter("player", Main.LocalPlayer.Center - screenPos);
+                            shader.TrySetParameter("w", Main.screenWidth);
+                            shader.TrySetParameter("h", Main.screenHeight);
+                            shader.TrySetParameter("radius1", 100f);
+                            shader.TrySetParameter("radius2", 150f);
+                            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, shader.WrappedEffect, new Matrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+                            spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);
+                            spriteBatch.End();
+                        }
+                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                    }
+                }
         }
     }
 }

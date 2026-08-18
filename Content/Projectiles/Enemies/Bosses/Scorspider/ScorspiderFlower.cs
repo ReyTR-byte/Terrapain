@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Content.Buffs;
+using Terrapain.Content.TUtilities;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -45,7 +46,7 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider
             if (followPlayer)
             {
                 Player player = Main.player[Player.FindClosest(Projectile.position, Projectile.width, Projectile.height)];
-                Functions.CommonTerrapainFlyingMovement(Projectile, player.Center, 0.075f, Projectile.velocity.Length(), 0, 0);
+                AIHelper.CommonTerrapainFlyingMovement(Projectile, player.Center, 0.075f, Projectile.velocity.Length(), 0, 0);
                 if (speed > 0.3f)
                 {
                     speed -= 0.3f;

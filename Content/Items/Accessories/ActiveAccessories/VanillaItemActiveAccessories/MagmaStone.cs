@@ -6,27 +6,44 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terrapain.Common.TerrapainModPlayer;
+using Terrapain.Common.UI.Assets.AbilitiesIcons;
 using Terrapain.Content.DamageClasses;
+using Terrapain.Content.Items.Abstract;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
-namespace Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories
+namespace Terrapain.Content.Items.Accessories.ActiveAccessories.VanillaItemActiveAccessories
 {
     public class MagmaStone : VanillaItemActiveAccessory
     {
-        public MagmaStone()
+        public override VanillaItemRework GetNewInstance(Item item)
         {
+            return new MagmaStone();
+        }
+        public override int[] Items => [ItemID.MagmaStone];
+        UnifiedRandom random = new UnifiedRandom();
+        public override void ModSetDefaults(Item item)
+        {
+            item.damage = 40;
+            item.DamageType = ModContent.GetInstance<Unarmed>();
+            item.knockBack = 3;
+            activeAccessory = new ActiveAccessory(this);
+            activeAccessory.AbilityReloadMax = 400;
+            activeAccessory.AbilityUnarmedOnly = true;
+            activeAccessory.abilityIcon = new BlastIcon();
+            activeAccessory.HoldAbility = true;
+            activeAccessory.HoldConsumption = 2;
+            item.GetT().activeAccessory = true;
+            item.GetT().ActiveAccessory = activeAccessory;
             DescriptionLinesCount = 1;
         }
-        UnifiedRandom random = new UnifiedRandom();             
         public override void OnUseAbility(Player player, Item item)
         {
-            HoldConsumption = 2;
             AbilityReloadMax = 400;
-            float power = 1 + (1 - AbilityCharge()) * 5;
+            float power = 1 + (1 - activeAccessory.AbilityCharge()) * 5;
             if (power < 2)
             {
                 return;
@@ -73,13 +90,23 @@ namespace Terrapain.Content.Items.Abstract.VanillaItemActiveAccessories
         }
         public override void OnHoldAbility(Player player, Item item)
         {
-            if (random.NextBool(1 - AbilityCharge()))
+            if (random.NextBool(1 - activeAccessory.AbilityCharge()))
             {
                 int dust = Dust.NewDust(player.position, player.width, player.height, DustID.Torch, Scale: 2f);
                 Main.dust[dust].velocity.Y = -5.5f;
                 Main.dust[dust].velocity.X *= 2f;
             }
-            player.velocity.X *= 0.9f;
+            player.velocity.X *= 0.98f;
         }
+        public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
+        {
+            foreach(TooltipLine line in tooltips)
+            {
+                if ((line.Name == "Damage" || line.Name == "Knockback") && !Main.player[Main.myPlayer].GetModPlayer<TerrapainPlayer>().unarmed)
+                {
+                    line.Text = "";
+                }
+            }
+        } 
     }
 }
