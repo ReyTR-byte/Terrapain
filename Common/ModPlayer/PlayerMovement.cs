@@ -1,18 +1,13 @@
 using Luminance.Common.Utilities;
-using Microsoft.Xna.Framework;
-using Terrapain.Common.Global;
 using Terrapain.Content;
-using Terrapain.Content.DamageClasses;
 using Terraria;
-using Terraria.GameContent.Creative;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using Terraria.WorldBuilding;
 
 namespace Terrapain.Common.TerrapainModPlayer
 {
-    public class PlayerMovement : Terraria.ModLoader.ModPlayer
+    public class PlayerMovement : ModPlayer
     {
         public int DownMovementTimer;
         public int LeftMovementTimer;

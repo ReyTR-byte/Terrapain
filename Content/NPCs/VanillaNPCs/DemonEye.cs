@@ -1,14 +1,12 @@
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Common.System;
-using Terrapain.Content;
 using Terrapain.Content.Projectiles.Enemies;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
 
-namespace Terrapain.Common.Global.TGlobalNPCs
+namespace Terrapain.Content.NPCs.VanillaNPCs
 {
     public class DemonEye : NPCBehaviour
     {

@@ -123,7 +123,7 @@ namespace Terrapain.Common.UI
         protected override void DrawSelf(SpriteBatch spriteBatch)
         {
             spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, null, null, null, Main.UIScaleMatrix);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.UIScaleMatrix);
             Vector2 scale = Vector2.One;
             for(int i = itemReloadDrawInfos.Count - 1; i > -1; i--)
             {

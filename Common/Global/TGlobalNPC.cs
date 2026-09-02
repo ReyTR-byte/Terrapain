@@ -1,22 +1,19 @@
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoMod.RuntimeDetour;
 using Terrapain.Assets.Extratextures;
 using Terrapain.Common.Config;
 using Terrapain.Common.DrawTasks;
-using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Content;
 using Terrapain.Content.Items.DropRulls;
-using Terrapain.Content.NPCs;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Terrapain.Content.NPCs.Bosses.VanillaBosses.EyeofCthulhu;
 using static Terrapain.Content.Functions;
 using Terraria.Utilities;
+using ReLogic.Content;
+using Terrapain.Content.NPCs.VanillaNPCs;
 
 namespace Terrapain.Common.Global
 {
@@ -65,6 +62,7 @@ namespace Terrapain.Common.Global
         public float defenderTakesDamage;
         public bool fallThroughtPlatforms;
         public bool canselDeathHitEffect;
+        public bool despawnLikeABoss;
 
         
         public static List<DrawTask> PreDrawNPCsDrawTasks = new List<DrawTask>();
@@ -173,6 +171,23 @@ namespace Terrapain.Common.Global
         {
             NPCBehaviour?.PreDrawNPCs(npc, spriteBatch, screenPos);
         }
+        public Asset<Texture2D> TGetTexture()
+        {
+            Asset<Texture2D> texture = null;
+            if (NPCBehaviour?.OverrideTexture(ref texture)?? false)
+            {
+                return texture;
+            }
+            int type = Main.npc[npcid].type;
+            if (type < NPCID.Count)
+            {
+                return texture = TextureAssets.Npc[type];
+            }
+            else
+            {
+                return texture = ModContent.Request<Texture2D>(ModContent.GetModNPC(type).Texture);
+            }
+        }
         public void TDrawNPC(SpriteBatch spriteBatch, NPC npc, Texture2D texture)
         {
             Color color = Lighting.GetColor(npc.Center.ToTileCoordinates());
@@ -206,15 +221,7 @@ namespace Terrapain.Common.Global
 
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-            Texture2D texture;
-            if (npc.type < NPCID.Count)
-            {
-                texture = TextureAssets.Npc[npc.type].Value;
-            }
-            else
-            {
-                texture = ModContent.Request<Texture2D>(ModContent.GetModNPC(npc.type).Texture).Value;
-            }
+            Texture2D texture = TGetTexture().Value;
 
             if (afterimage || afterimageTimer > 0)
             {
@@ -271,15 +278,7 @@ namespace Terrapain.Common.Global
         {
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-            Texture2D texture;
-            if (npc.type < NPCID.Count)
-            {
-                texture = TextureAssets.Npc[npc.type].Value;
-            }
-            else
-            {
-                texture = ModContent.Request<Texture2D>(ModContent.GetModNPC(npc.type).Texture).Value;
-            }
+            Texture2D texture = TGetTexture().Value;
             if (useModDrawingInPostDraw)
             {
                 TDrawNPC(spriteBatch, npc, texture);
@@ -292,12 +291,20 @@ namespace Terrapain.Common.Global
         {
             NPCBehaviour?.PostDrawNPCs(npc, spriteBatch, screenPos);
         }
+        public void DrawToRenderTarget(NPC npc)
+        {
+            NPCBehaviour?.DrawToRenderTarget(npc);
+        }
         public override bool PreAI(NPC npc)
         {
             if (FirstTick)
             {
                 NPCBehaviour?.OnFirstTick(npc);
                 FirstTick = false;
+            }
+            if (npc.type == NPCID.Harpy)
+            {
+                
             }
             return NPCBehaviour?.ModPreAI(npc)?? true;
         }
@@ -404,12 +411,36 @@ namespace Terrapain.Common.Global
             On_Main.DoDraw_WallsTilesNPCs += On_Main_DoDraw_WallsTilesNPCs;
             On_Main.DrawItems += On_Main_DrawItems;
             On_Main.DrawInfernoRings += On_Main_DrawInfernoRings;
+            On_Main.EnsureRenderTargetContent += On_Main_Draw;
         }
         public override void Unload()
         {
             On_Main.DoDraw_WallsTilesNPCs -= On_Main_DoDraw_WallsTilesNPCs;
             On_Main.DrawItems -= On_Main_DrawItems;
             On_Main.DrawInfernoRings -= On_Main_DrawInfernoRings;
+            On_Main.EnsureRenderTargetContent -= On_Main_Draw;
+        }
+
+        private void On_Main_Draw(On_Main.orig_EnsureRenderTargetContent orig, Main self)
+        {
+            foreach (var npc in Main.npc)
+            {
+                if (npc.active)
+                {
+                    if (npc.TryGetGlobalNPC<TGlobalNPC>(out var result))
+                    {
+                        result.DrawToRenderTarget(npc);
+                    }
+                }
+            }
+            foreach (var Group in Terrapain.group)
+            {
+                if (Group?.active?? false)
+                {
+                    Group.DrawToRenderTarget();
+                }
+            }
+            orig(self);
         }
         private void On_Main_DrawInfernoRings(On_Main.orig_DrawInfernoRings orig, Main self)
         {

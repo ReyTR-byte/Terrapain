@@ -1,5 +1,6 @@
 ﻿using Luminance.Common.Utilities;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,6 +100,10 @@ namespace Terrapain.Content.Groups
         }
 
         public bool hasBeenDrawn;
+        public virtual void DrawToRenderTarget()
+        {
+            
+        }
         public virtual void PreDrawFirstNPCInGroup(SpriteBatch spriteBatch)
         {
 

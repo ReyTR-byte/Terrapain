@@ -3,6 +3,7 @@ using Luminance.Common.Utilities;
 using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Assets.Extratextures;
+using Terrapain.Common.Config;
 using Terraria;
 
 namespace Terrapain.Common.System.Filters
@@ -19,17 +20,38 @@ namespace Terrapain.Common.System.Filters
         public bool multiplySpeedByWavePower;
         public Vector2 WaveCenter;
         public static RenderTarget2D map;
+        static GraphicsDevice mapDevice;
         static uint oldUpdate;
-        void updateTarget()
+        public void updateTarget()
         {
-            if (map == null || map.IsDisposed || map.Width != Main.screenWidth || map.Height != Main.screenHeight)
+            Point resolution = Point.Zero;
+            switch (GraphicsConfig.Instance.filters)
+            {
+                case GraphicsConfig.GraphicsLevel.Potato:
+                case GraphicsConfig.GraphicsLevel.Low:
+                    resolution.X = Main.screenWidth / 2;
+                    resolution.Y = Main.screenHeight / 2;
+                    break;
+                case GraphicsConfig.GraphicsLevel.Medium:
+                    resolution.X = (int)(Main.screenWidth / 1.5f);
+                    resolution.Y = (int)(Main.screenHeight / 1.5f);
+                    break;
+                case GraphicsConfig.GraphicsLevel.High:
+                case GraphicsConfig.GraphicsLevel.Ultra:
+                    resolution.X = Main.screenWidth;
+                    resolution.Y = Main.screenHeight;
+                    break;
+            }
+
+            GraphicsDevice graphicsDevice = Main.graphics.GraphicsDevice;
+            if (map == null || map.IsDisposed || mapDevice != graphicsDevice || map.Width != resolution.X || map.Height != resolution.Y)
             {
                 map?.Dispose();
 
                 map = new RenderTarget2D(
-                    Main.graphics.GraphicsDevice,
-                    Main.screenWidth,
-                    Main.screenHeight,
+                    graphicsDevice,
+                    resolution.X,
+                    resolution.Y,
                     false,
                     SurfaceFormat.Vector2,                    
                     //Main.graphics.GraphicsDevice.PresentationParameters.BackBufferFormat,
@@ -37,18 +59,28 @@ namespace Terrapain.Common.System.Filters
                     0,
                     RenderTargetUsage.PreserveContents
                 );
+                mapDevice = graphicsDevice;
             }
         }
-        public void Apply()
+        public void Apply(int i)
         {
-            if (oldUpdate != Main.GameUpdateCount)
+            bool isFirst = true;
+            for (int j = 0; j < i; j++)
+            {
+                if (EffectsSystem.filters[i] is StrikeWaveFilter)
+                {
+                    isFirst = false;
+                    break;
+                }
+            }
+            if (isFirst)//oldUpdate != Main.GameUpdateCount)
             {
                 updateTarget();
                 Main.graphics.GraphicsDevice.SetRenderTarget(map);
                 Main.graphics.GraphicsDevice.Clear(Color.Transparent);
                 oldUpdate = Main.GameUpdateCount;
                 ManagedScreenFilter filter = ShaderManager.GetFilter("Terrapain.Wave");
-                filter.SetTexture(map, 1);
+                filter.SetTexture(map, 1, SamplerState.LinearClamp);
 
                 filter.Activate();
             }
@@ -66,7 +98,7 @@ namespace Terrapain.Common.System.Filters
             shader.TrySetParameter("power", WavePower);
 
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, shader.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
-            Rectangle rekt = new(Main.screenWidth / 2, Main.screenHeight / 2, Main.screenWidth, Main.screenHeight);
+            Rectangle rekt = new(map.Width / 2, map.Height / 2, map.Width, map.Height);
             Main.spriteBatch.Draw(ExtraTextureRegistry.WhitePixel.Value, rekt, null, Color.White, 0f, ExtraTextureRegistry.WhitePixel.Value.Size() * 0.5f, 0, 1f);
             Main.spriteBatch.End();
 
@@ -92,7 +124,7 @@ namespace Terrapain.Common.System.Filters
             map.Dispose();
         }
 
-        public bool Update()
+        public bool Update(int i)
         {
             if (multiplySpeedByWavePower)
             {

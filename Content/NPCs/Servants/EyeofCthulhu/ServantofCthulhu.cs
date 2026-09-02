@@ -2,6 +2,7 @@
 using Terrapain.Common.System;
 using Terrapain.Content;
 using Terrapain.Content.Groups;
+using Terrapain.Content.NPCs.VanillaNPCs;
 using Terrapain.Content.Projectiles.Enemies.Bosses.EyeofCthulhu;
 using Terraria;
 using Terraria.DataStructures;
@@ -10,7 +11,7 @@ using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
 using static Terrapain.Content.TUtilities.AIHelper;
 
-namespace Terrapain.Common.Global.TGlobalNPCs
+namespace Terrapain.Content.NPCs.Servants
 {
     public class ServantofCthulhu : NPCBehaviour
     {

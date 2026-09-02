@@ -3,4 +3,4 @@ author = ReyTR
 version = 0.0.4.1
 buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, .git\*, Folders to Port\*, Luminance.dll, compile_temp
 modReferences = Luminance@1.0.3
-dllReferences = StructureHelper, ILGPU, ILGPU.Algorithms
+dllReferences = StructureHelper, ILGPU, ILGPU.Algorithms, AlgoLib

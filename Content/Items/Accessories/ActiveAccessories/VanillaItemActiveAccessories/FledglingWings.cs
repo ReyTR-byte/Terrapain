@@ -27,7 +27,7 @@ namespace Terrapain.Content.Items.Accessories.ActiveAccessories.VanillaItemActiv
             activeAccessory = new ActiveAccessory(this);
             activeAccessory.AbilityReloadMax = 75;
             activeAccessory.AbilityUnarmedOnly = true;
-            activeAccessory.abilityIcon = new BlastIcon();
+            activeAccessory.abilityIcon = new FledglingWingsAbilityIcon();
             item.GetT().activeAccessory = true;
             item.GetT().ActiveAccessory = activeAccessory;
             DescriptionLinesCount = 1;

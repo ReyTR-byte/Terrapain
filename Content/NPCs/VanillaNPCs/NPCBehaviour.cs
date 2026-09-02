@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using Terrapain.Content;
 using Terraria.Utilities;
 using Terrapain.Common.System;
+using ReLogic.Content;
+using Terrapain.Common.Global;
 
-namespace Terrapain.Common.Global.TGlobalNPCs
+namespace Terrapain.Content.NPCs.VanillaNPCs
 {
     public abstract class NPCBehaviour : GlobalNPC
     {
@@ -35,12 +35,11 @@ namespace Terrapain.Common.Global.TGlobalNPCs
         public virtual void OnFirstTick(NPC npc) { }
         public virtual bool ModPreAI(NPC npc) { return true; }
         public virtual void ModPostAI(NPC npc) { }
-        public virtual bool ModPreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, Texture2D texture)
-        {
-            return true; 
-        }
+        public virtual void DrawToRenderTarget(NPC npc) { }
+        public virtual bool ModPreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, Texture2D texture) { return true; }
         public virtual void ModPostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor, Texture2D texture) { }
         public virtual void PreDrawNPCs(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos) { }
         public virtual void PostDrawNPCs(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos) { }
+        public virtual bool OverrideTexture(ref Asset<Texture2D> texture) { return false; }
     }
 }

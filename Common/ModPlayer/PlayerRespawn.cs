@@ -15,7 +15,7 @@ namespace Terrapain.Common.TerrapainModPlayer
             bool bossAlive = false;
             foreach (var npc in Main.npc)
             {
-                if (npc.active && npc.boss)
+                if (npc.active && (npc.boss || npc.GetT().despawnLikeABoss))
                 {
                     if (Player.respawnTimer == 1)
                     {

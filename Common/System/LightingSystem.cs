@@ -1,14 +1,8 @@
 ﻿using ILGPU;
-using ILGPU.Algorithms;
-using ILGPU.IR;
-using ILGPU.IR.Analyses;
 using ILGPU.Runtime;
-using ILGPU.Runtime.CPU;
-using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Graphics.Light;
 using Terraria.ModLoader;
-using UtfUnknown.Core.Models.SingleByte.Thai;
 
 namespace Terrapain.Common.System
 {

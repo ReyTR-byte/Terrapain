@@ -20,5 +20,8 @@
     <Reference Include="StructureHelper">
       <HintPath>StructureHelper.dll</HintPath>
     </Reference>
+    <Reference Include="AlgoLib">
+      <HintPath>AlgoLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

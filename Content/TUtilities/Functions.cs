@@ -46,6 +46,10 @@ namespace Terrapain.Content
 			}
 			return v;
 		}
+		public static bool IsSolid(this Tile tile)
+		{
+			return tile.HasTile && Main.tileSolid[tile.TileType] && !Main.tileSolidTop[tile.TileType];
+		}
 		public static void ToInt(ref this Vector2 targetVector)
 		{
 			targetVector = new((int)targetVector.X, (int)targetVector.Y);

@@ -1,10 +1,10 @@
 ﻿using Luminance.Core.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Assets.Extratextures;
-using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Common.System;
 using Terrapain.Content.Groups;
 using Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses;
+using Terrapain.Content.NPCs.VanillaNPCs;
 using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
 using Terraria.DataStructures;
@@ -88,7 +88,7 @@ namespace Terrapain.Content.NPCs.Servants.EvilBosses
                     {
                         if (npc.Distance(EaterofWorldsHead.savedVector) < 600)
                         {
-                            charge += 0.01f;
+                            charge += 0.015f;
                         }
                         else
                         {
@@ -111,7 +111,7 @@ namespace Terrapain.Content.NPCs.Servants.EvilBosses
                 {
                     charge -= MathF.Max(charge - 0.02f, 0);
                     trailLength = 0;
-                    NPC brain = Main.npc[EaterofWorldsHead.BrainofCthulhu];
+                    NPC brain = Main.npc[EaterofWorldsHead.brainofCthulhu];
                     CommonTerrapainFlyingMovement(npc, brain.Center, 0.2f, 16, 0.2f, 10);
                     if (npc.Distance(brain.Center) < 30)
                     {

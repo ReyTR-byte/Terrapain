@@ -40,7 +40,7 @@ namespace Terrapain.Content.NPCs.TownNPCs
 
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[Type] = 25; // The total amount of frames the NPC has
+            Main.npcFrameCount[Type] = 23; // The total amount of frames the NPC has
 
             NPCID.Sets.ExtraFramesCount[Type] = 9; // Generally for Town NPCs, but this is how the NPC does extra things such as sitting in a chair and talking to other NPCs. This is the remaining frames after the walking frames.
             NPCID.Sets.AttackFrameCount[Type] = 4; // The amount of frames in the attacking animation.

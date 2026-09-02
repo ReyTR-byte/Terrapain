@@ -1,10 +1,9 @@
-﻿using System.Net.Http.Headers;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Common.CameraModifiers;
 using Terrapain.Common.Config;
-using Terrapain.Common.Global.TGlobalNPCs;
 using Terrapain.Common.System;
 using Terrapain.Common.System.Filters;
+using Terrapain.Content.NPCs.VanillaNPCs;
 using Terrapain.Content.Projectiles.Enemies.Bosses.EvilBosses;
 using Terraria;
 using Terraria.Audio;
@@ -59,6 +58,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         public static int ichorBomb => ModContent.ProjectileType<IchorBomb>();
         public static int ichoreBombDamage = 35;
         public static float ichoreBombKnockback = 10;
+
+        public static int fakeBrain => ModContent.ProjectileType<FakeBrain>();
+        public static int fakeBrainDamage = 30;
+        public static float fakeBrainKnockback = 12;
 
 		bool limbo => phase == 4;
 		bool drawClons;
@@ -179,6 +182,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                         DoSecondPhase(npc);
                         break;
                     case 3:
+                        DoThirdPhase(npc);
                         break;
                     case 4:
                         DoLimbo(npc);
@@ -341,6 +345,8 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     break;
             }
         }
+        int[] fakeBrains;
+        int[] fakeBrainsLegendary;
         public void DoSecondPhase(NPC npc)
         {
             switch (attack)
@@ -351,7 +357,7 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     if (EaterofWorldsHead.attack == 4 && EaterofWorldsHead.MainTimer == EaterofWorldsHead.MainTimerMax - 1)
                     {
                         float velocity = 15;
-                        int count = 10;
+                        int count = 8;
                         float distance = 20;
                         Vector2 direction = random.NextVector2Unit() * distance;
                         int oldnpc = -1;
@@ -368,17 +374,24 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     }
                     break;
                 case -1:
-                    Movement(npc, new Vector2(npc.ai[0], npc.ai[1]));
                     if (MainTimer == mainTimerMax - 1)
                     {
                         EffectsSystem.AddFilter(new StrikeWaveFilter() {WavePower = 10, disposingSpeed = 0.05f, multiplySpeedByWavePower = true, speed1 = 1.5f, speed2 = 1.495f, WaveCenter = npc.Center, WaveRadius2 = -200});
-
-                        int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead, 0, 0, -80);
-                        EaterofWorldsHead.BrainofCthulhu = npc.whoAmI;
+                        EaterofWorldsHead.Phase = 1;
+                        int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 20, NPCID.EaterofWorldsHead, 0, 0, -EaterofWorldsHead.SegmentsCount1);
+                        EaterofWorldsHead.brainofCthulhu = npc.whoAmI;
                         EaterofWorldsHead.Restart(eow);
                         SoundEngine.PlaySound(SoundID.Roar, npc.Center);
                     }
-                    openTimer = 12;
+                    if (NPC.AnyNPCs(NPCID.EaterofWorldsTail))
+                    {
+                        Movement(npc);
+                        CheckPhase(npc);    
+                    }
+                    else
+                    {
+                        Movement(npc, new Vector2(npc.ai[0], npc.ai[1]));
+                    }
                     if (MainTimer == 0)
                     {
                         attack = -2;
@@ -443,15 +456,18 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                     break;
                 case 3:
                     int time = 180;
+                    int time1 = time - 40;
                     if (timer == 0)
                     {
+                        openTimer = 25;
+                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
                         Vector2 dir = npc.DirectionTo(t.Target.Center);
-                        npc.velocity = dir * 35;
+                        npc.velocity = dir * 25;
                         npc.ai[0] *= random.NextDir() * 1.2f;
                         npc.ai[0] = MathHelper.Clamp(npc.ai[0], -1.6f, 1.6f);
-                        int count = 5;
+                        int count = 4;
                         float speed = 25;
-                        int _time = 20;
+                        int _time = 35;
                         float angleBetween = MathF.PI * 0.75f / count;
                         float startAngle = (-dir).ToRotation() - angleBetween * count / 2;
                         for (int i = 0; i < count; i++)
@@ -460,21 +476,210 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                             Main.projectile[proj].timeLeft = 30;
                         }
                         timer = time;
+
+                        for (int i = 0; i < fakeBrains.Length; i++)
+                        {
+                            Projectile proj = Main.projectile[fakeBrains[i]];
+                            if (!proj.active || proj.type != fakeBrain)
+                            {
+                                Projectile.NewProjectile(npc.GetSource_FromThis(), t.Target.Center + (npc.Center - t.Target.Center).RotatedBy((i + 1f) / (fakeBrains.Length + 1) * MathF.PI * 2), npc.velocity.RotatedBy((i + 1f) / (fakeBrains.Length + 1) * MathF.PI * 2), fakeBrain, fakeBrainDamage, fakeBrainKnockback, -1, npc.whoAmI, 1, -1);
+                            }
+                            else
+                            {
+                                proj.velocity = npc.velocity.RotatedBy((i + 1f) / (fakeBrains.Length + 1) * MathF.PI * 2);
+                                proj.ai[1] = 1;
+                            }
+                        }
+                        fakeBrains = [];
+                        if (Main.getGoodWorld)
+                        {
+                            for (int i = 0; i < fakeBrainsLegendary.Length; i++)
+                            {
+                                Projectile proj = Main.projectile[fakeBrainsLegendary[i]];
+                                if (!proj.active || proj.type != fakeBrain)
+                                {
+                                    fakeBrainsLegendary[i] = Projectile.NewProjectile(npc.GetSource_FromThis(), t.Target.Center + (npc.Center - t.Target.Center).RotatedBy((i + 0.5f) / (fakeBrainsLegendary.Length + 1) * MathF.PI * 2), npc.velocity.RotatedBy((i + 0.5f) / (fakeBrainsLegendary.Length + 1) * MathF.PI * 2), fakeBrain, fakeBrainDamage, fakeBrainKnockback, -1, npc.whoAmI, 1, -1);
+                                }
+                                else
+                                {
+                                    proj.velocity = npc.velocity.RotatedBy((i + 0.5f) / (fakeBrainsLegendary.Length + 1) * MathF.PI * 2);
+                                    proj.ai[1] = 1;
+                                }
+                            }
+                            fakeBrainsLegendary = [];
+                        }
                     }
-                    if (timer > time - 40)
+                    if (timer > time1)
+                    {
+                        npc.velocity = npc.velocity.Normalized() * (npc.velocity.Length() - 0.1f);
+                    }
+                    else
+                    {
+                        int BrainCount = WorldDifficultySystem.suicide? 3 : 2;
+                        if (fakeBrains.Length != BrainCount)
+                        {
+                            fakeBrains = new int[BrainCount];
+                            for (int i = 0; i < BrainCount; i++)
+                            {
+                                fakeBrains[i] = Projectile.NewProjectile(npc.GetSource_FromThis(), t.Target.Center + (npc.Center - t.Target.Center).RotatedBy((i + 1f) / (BrainCount + 1) * MathF.PI * 2), Vector2.Zero, fakeBrain, fakeBrainDamage, fakeBrainKnockback, -1, npc.whoAmI, -1);
+                            }
+                            if (Main.getGoodWorld)
+                            {
+                                BrainCount = WorldDifficultySystem.suicide? 3 : 2;
+                                fakeBrainsLegendary = new int[BrainCount];
+                                for (int i = 0; i < BrainCount; i++)
+                                {
+                                    fakeBrainsLegendary[i] = Projectile.NewProjectile(npc.GetSource_FromThis(), t.Target.Center + (npc.Center - t.Target.Center).RotatedBy((i + 0.5f) / (BrainCount + 1) * MathF.PI * 2) * 1.5f, Vector2.Zero, fakeBrain, fakeBrainDamage, fakeBrainKnockback, -1, npc.whoAmI, -1);
+                                }    
+                            }
+                        }
+
+                        for (int i = 0; i < fakeBrains.Length; i++)
+                        {
+                            Projectile proj = Main.projectile[fakeBrains[i]];
+                            if (!proj.active || proj.type != fakeBrain)
+                            {
+                                fakeBrains[i] = Projectile.NewProjectile(npc.GetSource_FromThis(), t.Target.Center + (npc.Center - t.Target.Center).RotatedBy((i + 1f) / (fakeBrains.Length + 1) * MathF.PI * 2), Vector2.Zero, fakeBrain, fakeBrainDamage, fakeBrainKnockback, -1, npc.whoAmI, -1);
+                            }
+                            else
+                            {
+                                Vector2 target = t.Target.Center + (npc.Center - t.Target.Center).RotatedBy((i + 1f) / (fakeBrains.Length + 1) * MathF.PI * 2);
+                                proj.velocity = target - proj.Center;
+                            }
+                        }
+                        if (Main.getGoodWorld)
+                        {
+                            for (int i = 0; i < fakeBrainsLegendary.Length; i++)
+                            {
+                                Projectile proj = Main.projectile[fakeBrainsLegendary[i]];
+                                if (!proj.active || proj.type != fakeBrain)
+                                {
+                                    fakeBrainsLegendary[i] = Projectile.NewProjectile(npc.GetSource_FromThis(), t.Target.Center + (npc.Center - t.Target.Center).RotatedBy((i + 0.5f) / (fakeBrainsLegendary.Length + 1) * MathF.PI * 2), Vector2.Zero, fakeBrain, fakeBrainDamage, fakeBrainKnockback, -1, npc.whoAmI, -1);
+                                }
+                                else
+                                {
+                                    Vector2 target = t.Target.Center + (npc.Center - t.Target.Center).RotatedBy((i + 0.5f) / (fakeBrainsLegendary.Length + 1) * MathF.PI * 2) * 1.5f;
+                                    proj.velocity = target - proj.Center;
+                                }
+                            }
+                        }
+
+                        CheckPhase(npc);
+                        float p = 1 - MathF.Min(timer / (float)time1, 1);
+                        TargetPosition = t.Target.Center + npc.Center.DirectionFrom(t.Target.Center).RotatedBy(0.1f * npc.ai[0] * (1 - p)) * (550 + p * 65);
+                        Movement(npc, TargetPosition);
+                    }
+                    if (MainTimer == 0)
+                    {
+                        NextAttack2(npc);
+                    }
+                    break;
+                case 4:
+                    maxSpeed = 15;
+                    acceleration = 0.3f;
+                    TargetPosition = t.Target.Center + npc.Center.DirectionFrom(t.Target.Center).RotatedBy(0.42f * npc.ai[0]) * 450;
+                    Movement(npc, TargetPosition);
+                    if (timer == 0)
+                    {
+                        openTimer = 12;
+                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                        float speed = 18;
+                        Vector2 direction = npc.DirectionTo(SmartShoot(npc.Center, speed, t.Target.Center, t.Target.velocity, 20));
+                        Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, direction.RotatedByRandom(0.35f) * speed, fakeBrain, fakeBrainDamage, fakeBrainKnockback, -1, npc.whoAmI, 1, npc.target);
+                        timer = 60;
+                    }
+                    if (MainTimer == 0)
+                    {
+                        NextAttack2(npc);
+                    }
+                    break;
+                case 5:
+                    time = 180;
+                    time1 = time - 40;
+                    if (timer == 0)
+                    {
+                        openTimer = 25;
+                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                        Vector2 dir = npc.DirectionTo(t.Target.Center);
+                        float speed = 28;
+                        npc.velocity = dir * speed;
+                        npc.ai[0] *= random.NextDir() * 1.2f;
+                        npc.ai[0] = MathHelper.Clamp(npc.ai[0], -1.6f, 1.6f);
+                        int count = 2;
+                        float speedDif = 3.5f;
+                        float angleBetween = MathF.PI * 0.28f / count;
+                        float startAngle = dir.ToRotation();
+                        for (int i = 1; i < count + 1; i++)
+                        {
+                            float _speed = speed - i * speedDif;
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, (startAngle + angleBetween * i).ToRotationVector2() * _speed, fakeBrain, fakeBrainDamage, fakeBrainKnockback, -1, npc.whoAmI, 1, npc.target);
+                            Projectile.NewProjectile(npc.GetSource_FromThis(), npc.Center, (startAngle - angleBetween * i).ToRotationVector2() * _speed, fakeBrain, fakeBrainDamage, fakeBrainKnockback, -1, npc.whoAmI, 1, npc.target);
+                        }
+                        timer = time;
+                    }
+                    if (timer > time1)
                     {
                         npc.velocity = npc.velocity.Normalized() * (npc.velocity.Length() - 0.1f);
                     }
                     else
                     {
                         CheckPhase(npc);
-                        float p = 1 - MathF.Min(timer / 60f, 1);
-                        TargetPosition = t.Target.Center + npc.Center.DirectionFrom(t.Target.Center).RotatedBy(0.15f * npc.ai[0] * (1 - p)) * (350 + p * 65);
+                        float p = 1 - MathF.Min(timer / (float)time1, 1);
+                        TargetPosition = t.Target.Center + npc.Center.DirectionFrom(t.Target.Center).RotatedBy(0.1f * npc.ai[0] * (1 - p)) * (550 + p * 65);
                         Movement(npc, TargetPosition);
                     }
                     if (MainTimer == 0)
                     {
                         NextAttack2(npc);
+                    }
+                    break;
+            }
+        }
+        public void DoThirdPhase(NPC npc)
+        {
+            switch (attack)
+            {
+                case -2:
+                    Movement(npc);
+                    CheckPhase(npc);
+                    if (EaterofWorldsHead.attack == 4 && EaterofWorldsHead.MainTimer == EaterofWorldsHead.MainTimerMax - 1)
+                    {
+                        float velocity = 15;
+                        int count = 8;
+                        float distance = 20;
+                        Vector2 direction = random.NextVector2Unit() * distance;
+                        int oldnpc = -1;
+                        for (int i = 0; i < count; i++)
+                        {
+                            string context = i == count - 1? "MakeGroup" : null;
+                            oldnpc = NewNPC(npc.GetSource_FromThis(context), npc.Center + direction, npc.DirectionTo(t.Target.Center) * velocity, NPCID.Creeper, 0, oldnpc, 0, 0, 1);
+                            direction.RotateBy(MathF.PI / count);
+                        }
+                    }
+                    if (!NPC.AnyNPCs(NPCID.EaterofWorldsHead))
+                    {
+                        NextAttack2(npc);
+                    }
+                    break;
+                case -1:
+                    if (timer == 1)
+                    {
+                        EffectsSystem.AddFilter(new StrikeWaveFilter() {WavePower = 10, disposingSpeed = 0.05f, multiplySpeedByWavePower = true, speed1 = 1.5f, speed2 = 1.495f, WaveCenter = npc.Center, WaveRadius2 = -200});
+
+                        int eow = NewNPC(npc.GetSource_FromThis(), npc.Center, npc.DirectionTo(t.Target.Center) * 25, NPCID.EaterofWorldsHead, 0, 0, -EaterofWorldsHead.SegmentsCount2);
+                        SoundEngine.PlaySound(SoundID.Roar, npc.Center);
+                        
+                        EaterofWorldsHead.NextAttack2();
+                        attack = -2;
+                    }
+                    if (NPC.AnyNPCs(NPCID.EaterofWorldsTail))
+                    {
+                        Movement(npc);
+                        CheckPhase(npc);    
+                    }
+                    else
+                    {
+                        Movement(npc, new Vector2(npc.ai[0], npc.ai[1]));
                     }
                     break;
             }
@@ -488,12 +693,25 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                 phase = 2;
                 EaterOfWorldsRealeseAnimation = true;
                 attackCounter = 0;
-                SetMainTimer(600);
+                SetMainTimer(400);
                 npc.ai[0] = npc.Center.X;
                 npc.ai[1] = npc.Center.Y;
                 Main.instance.CameraModifiers.Add(new SmoothMoovingCameraModifier() { AimTime = 30, OriginalCameraPosition = Main.screenPosition, TotalTime = MainTimer - 120, StartZoom = Main.GameZoomTarget, TargetZoom = ClientConfig.Instance.CutsceneCameraZoom, hideUI = ClientConfig.Instance.CutsceneHideUI });
                 SmoothMoovingCameraModifier.TargetPosition = npc.Center - Main.ScreenSize.ToVector2() / 2;
                 SmoothMoovingCameraModifier.Timer = 0;
+                return true;
+            }
+            if (phase == 2 && ((EaterofWorldsHead.Phase == 2 && !NPC.AnyNPCs(NPCID.EaterofWorldsHead)) || (segmentsLifes.Count == 0 && !NPC.AnyNPCs(NPCID.EaterofWorldsHead))))
+            {
+                attack = -1;
+                phase = 3;
+                attackCounter = 0;
+                segmentsLifes = [];
+                EaterofWorldsHead.attack = 0;
+                EaterofWorldsHead.CheckPhase();
+                timer = 120;
+                npc.ai[0] = npc.Center.X;
+                npc.ai[1] = npc.Center.Y;
                 return true;
             }
             return false;
@@ -505,6 +723,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         }
         public void NextAttack1(NPC npc)
         {
+            if (phase != 1)
+            {
+                return;
+            }
             attackCounter++;
             {
                 if (attackCounter >= attacks1.Length)
@@ -547,6 +769,10 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
         }
         public void NextAttack2(NPC npc)
         {
+            if (phase != 2)
+            {
+                return;
+            }
             Start:
             attackCounter++;
             {
@@ -571,8 +797,13 @@ namespace Terrapain.Content.NPCs.Bosses.VanillaBosses.EvilBosses
                 case 2:
                     npc.ai[0] = random.NextDir() * (WorldDifficultySystem.suicide? 1.2f : 1f);
                     SetMainTimer(800);
+                    attack = random.NextBool(2)? 2 : 4;
                     break;
                 case 3:
+                    fakeBrains = [];
+                    fakeBrainsLegendary = [];
+                    attack = random.NextBool(2)? 3 : 5;
+                    timer = 60;
                     npc.ai[0] = random.NextDir() * (WorldDifficultySystem.suicide? 1.2f : 1f);
                     SetMainTimer(800);
                     break;

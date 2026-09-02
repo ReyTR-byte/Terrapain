@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Common.Global.TGlobalNPCs;
+﻿using Terrapain.Content.NPCs.Servants;
+using Terrapain.Content.NPCs.VanillaNPCs;
 using Terraria;
 using static Terrapain.Content.Functions;
 

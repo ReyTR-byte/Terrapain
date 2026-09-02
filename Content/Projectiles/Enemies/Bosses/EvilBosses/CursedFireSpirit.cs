@@ -17,9 +17,8 @@ namespace Terrapain.Content.Projectiles.Enemies.Bosses.EvilBosses
             Projectile.aiStyle = -1;
             Projectile.hostile = true;
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 600;
+            Projectile.timeLeft = 200;
             Projectile.tileCollide = false;
-            Projectile.extraUpdates = 1;
             Projectile.GetGlobalProjectile<TGlobalProjectile>().afterimage = true;
             Projectile.GetGlobalProjectile<TGlobalProjectile>().afterimagesCount = 4;
         }

@@ -671,6 +671,7 @@ Mods: {
 			// CursedFireSpirit.DisplayName: Cursed Fire Spirit
 			// Nugget.DisplayName: Nugget
 			// IchorBomb.DisplayName: Ichor Bomb
+			// FakeBrain.DisplayName: Fake Brain
 		}
 
 		Configs: {

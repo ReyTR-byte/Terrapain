@@ -251,13 +251,15 @@ namespace Terrapain.Content.Groups
 
 
         static RenderTarget2D renderTarget;
-        static RenderTarget2D saveScreenRenderTarget;
+        static GraphicsDevice renderTargetDevice;
         void updateTarget()
         {
-            if (renderTarget == null || renderTarget.Height != Main.screenHeight || renderTarget.Width != Main.screenWidth)
+            GraphicsDevice graphicsDevice = Main.graphics.GraphicsDevice;
+            if (renderTarget == null || renderTarget.IsDisposed || renderTargetDevice != graphicsDevice || renderTarget.Height != Main.screenHeight || renderTarget.Width != Main.screenWidth)
             {
+                renderTarget?.Dispose();
                 renderTarget = new RenderTarget2D(
-                    Main.graphics.GraphicsDevice,
+                    graphicsDevice,
                     Main.screenWidth,
                     Main.screenHeight,
                     false,
@@ -266,52 +268,26 @@ namespace Terrapain.Content.Groups
                     0,
                     RenderTargetUsage.PreserveContents
                 );
-            }
-            if (saveScreenRenderTarget == null || saveScreenRenderTarget.Height != Main.screenHeight || saveScreenRenderTarget.Width != Main.screenWidth)
-            {
-                saveScreenRenderTarget = new RenderTarget2D(
-                    Main.graphics.GraphicsDevice,
-                    Main.screenWidth,
-                    Main.screenHeight,
-                    false,
-                    Main.graphics.GraphicsDevice.PresentationParameters.BackBufferFormat,
-                    DepthFormat.None,
-                    0,
-                    RenderTargetUsage.PreserveContents
-                );
+                renderTargetDevice = graphicsDevice;
             }
         }
-        public override void PostDrawNPCs(SpriteBatch spriteBatch, Vector2 screenPos)
+        public override void DrawToRenderTarget()
         {
-            if (Count == 0)
-            {
-                Texture2D texture = ModContent.Request<Texture2D>("Terrapain/Content/Groups/kishka").Value;
-                for (int i = 0; i < k.Count; i++)
+                if (lines.Count > 0 && WorldDifficultySystem.suicide)
                 {
-                    k[i].chain.DrawSmoothed(spriteBatch, texture, null, Color.White * k[i].progress, true, 1);
-                }
-            }
-            if (lines.Count > 0)
-                {
-                    var originalRenderTargets = Main.graphics.GraphicsDevice.GetRenderTargets();
-                    if (WorldDifficultySystem.suicide)
-                    {
-                        spriteBatch.End();
-                        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, new Matrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
-                        updateTarget();
-                        Main.graphics.GraphicsDevice.SetRenderTarget(saveScreenRenderTarget);
-                        Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-                        spriteBatch.Draw(originalRenderTargets[0].RenderTarget as RenderTarget2D, new Rectangle(0, 0, Main.screenWidth, Main.screenHeight), Color.White);
-                        Main.graphics.GraphicsDevice.SetRenderTarget(renderTarget);
-                        Main.graphics.GraphicsDevice.Clear(Color.Transparent);
-                    }
-                    spriteBatch.End();
+                    Vector2 screenPos = Main.screenPosition;
+                    SpriteBatch spriteBatch = Main.spriteBatch;
+
+                    updateTarget();
+                    Main.graphics.GraphicsDevice.SetRenderTarget(renderTarget);
+                    Main.graphics.GraphicsDevice.Clear(Color.Transparent);
+
                     spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
                     Texture2D tex = null;
                     if (GraphicsConfig.Instance.shaders == GraphicsConfig.GraphicsLevel.Potato)
                     {
                         spriteBatch.End();
-                        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
                         tex = ExtraTextureRegistry.CubedGradient10Mirrored.Value;
                     }
                     foreach (var line in lines)
@@ -368,22 +344,99 @@ namespace Terrapain.Content.Groups
                             spriteBatch.DrawLine(p3 + Main.screenPosition, p2 + Main.screenPosition, line.color, 8, tex);
                         }
                     }
-                    if (GraphicsConfig.Instance.shaders != GraphicsConfig.GraphicsLevel.Potato)
+                    //if (GraphicsConfig.Instance.shaders != GraphicsConfig.GraphicsLevel.Potato)
+                    //{
+                    //    spriteBatch.End();
+                    //    spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                    //}
+                    spriteBatch.End();
+                    Main.graphics.GraphicsDevice.SetRenderTarget(null);
+                }
+        }
+        public override void PostDrawNPCs(SpriteBatch spriteBatch, Vector2 screenPos)
+        {
+            if (Count == 0)
+            {
+                Texture2D texture = ModContent.Request<Texture2D>("Terrapain/Content/Groups/kishka").Value;
+                for (int i = 0; i < k.Count; i++)
+                {
+                    k[i].chain.DrawSmoothed(spriteBatch, texture, null, Color.White * k[i].progress, true, 1);
+                }
+            }
+            if (lines.Count > 0)
+                {
+                    if (WorldDifficultySystem.torture)
                     {
-                        spriteBatch.End();
-                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
-                    }
-                    if (WorldDifficultySystem.suicide)
-                    {
-                        spriteBatch.End();
-                        Main.graphics.GraphicsDevice.SetRenderTargets(originalRenderTargets);
-
-                        if (saveScreenRenderTarget != null)
+                        spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                        Texture2D tex = null;
+                        if (GraphicsConfig.Instance.shaders == GraphicsConfig.GraphicsLevel.Potato)
                         {
-                            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, new Matrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
-                            spriteBatch.Draw(saveScreenRenderTarget, Vector2.Zero, Color.White);
                             spriteBatch.End();
+                            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                            tex = ExtraTextureRegistry.CubedGradient10Mirrored.Value;
                         }
+                        foreach (var line in lines)
+                        {
+                            Vector2 p1 = line.start - screenPos;
+                            float? num1 = line.direction.X == 0? null : (20 - p1.X) / line.direction.X;
+                            float? num2 = line.direction.Y == 0? null : (20 - p1.Y) / line.direction.Y;
+                            float? num3 = line.direction.X == 0? null : (Main.screenWidth - 20 - p1.X) / line.direction.X;
+                            float? num4 = line.direction.Y == 0? null : (Main.screenHeight - 20 - p1.Y) / line.direction.Y;
+                            Vector2 p2 = Vector2.Zero;
+                            Vector2 p3 = Vector2.Zero;
+                            if (num1.HasValue)
+                            {
+                                Vector2 _p2 = p1 + line.direction * num1.Value;
+                                if (_p2.Y > 20 && _p2.Y < Main.screenHeight - 20)
+                                {
+                                    p2 = _p2;
+                                }
+                            }
+                            if (num2.HasValue && p2 == Vector2.Zero)
+                            {
+                                Vector2 _p2 = p1 + line.direction * num2.Value;
+                                if (_p2.X > 20 && _p2.Y < Main.screenWidth - 20)
+                                {
+                                    p2 = _p2;
+                                }
+                            }
+                            if (p2 != Vector2.Zero)
+                            {
+                                if (num3.HasValue)
+                                {
+                                    Vector2 _p3 = p1 + line.direction * num3.Value;
+                                    if (_p3.Y > 20 && _p3.Y < Main.screenHeight - 20)
+                                    {
+                                        p3 = _p3;
+                                    }
+                                }
+                                if (num4.HasValue && p3 == Vector2.Zero)
+                                {
+                                    Vector2 _p3 = p1 + line.direction * num4.Value;
+                                    if (_p3.X > 20 && _p3.X < Main.screenWidth - 20)
+                                    {
+                                        p3 = _p3;
+                                    }
+                                }
+                                if (GraphicsConfig.Instance.shaders != GraphicsConfig.GraphicsLevel.Potato)
+                                {
+                                    ManagedShader Shade = ShaderManager.GetShader("Terrapain.LaserShader");
+                                    Shade.TrySetParameter("lenght", 900);
+                                    Shade.TrySetParameter("width", 8);
+                                    spriteBatch.End();
+                                    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearWrap, DepthStencilState.None, Main.Rasterizer, Shade.WrappedEffect, Main.GameViewMatrix.TransformationMatrix);
+                                }
+                                spriteBatch.DrawLine(p3 + Main.screenPosition, p2 + Main.screenPosition, line.color, 8, tex);
+                            }
+                        }
+                        if (GraphicsConfig.Instance.shaders != GraphicsConfig.GraphicsLevel.Potato)
+                        {
+                            spriteBatch.End();
+                            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+                        }
+                    }
+                    else
+                    {
                         if (renderTarget != null)
                         {
                             ManagedShader shader = ShaderManager.GetShader("Terrapain.PlayerMask");
@@ -392,11 +445,12 @@ namespace Terrapain.Content.Groups
                             shader.TrySetParameter("h", Main.screenHeight);
                             shader.TrySetParameter("radius1", 100f);
                             shader.TrySetParameter("radius2", 150f);
+                            spriteBatch.End();
                             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, shader.WrappedEffect, new Matrix(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
                             spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);
                             spriteBatch.End();
+                            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
                         }
-                        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
                     }
                 }
         }

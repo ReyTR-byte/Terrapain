@@ -53,7 +53,7 @@ namespace Terrapain.Common.Global
 
         public override void SetDefaults(Projectile entity)
         {
-            if (TextureAssets.Projectile[entity.type] != null)
+            if (TextureAssets.Projectile[entity.type] != null && drawCenter == Vector2.Zero)
             {
                 Main.instance.LoadProjectile(entity.type);
                 Texture2D texture = TextureAssets.Projectile[entity.type].Value;
