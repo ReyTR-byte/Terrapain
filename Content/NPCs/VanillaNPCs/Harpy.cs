@@ -36,13 +36,14 @@ namespace Terrapain.Content.NPCs.VanillaNPCs
                     return true;
                 }
                 var Points = npc.FindPath(t.Target.Center.ToTileCoordinates(), 50);//AStarPathfinder.FindPath(npc.Center.ToTileCoordinates(), t.Target.Center.ToTileCoordinates(), IsWakeable, 500);
-                //if (Points != null)
-                //{
-                //    foreach(var point in Points)
-                //    {
-                //        Dust.NewDust(point, 0, 0, DustID.BlueTorch);
-                //    }
-                //}
+                if (Points != null)
+                {
+                    Functions.Chatic(Points.Count);
+                    foreach(var point in Points)
+                    {
+                        Dust.NewDust(point, 0, 0, DustID.BlueTorch);
+                    }
+                }
             }
             return false;
         }

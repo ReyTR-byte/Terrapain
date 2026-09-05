@@ -1,13 +1,7 @@
-using System.Data;
-using System.Formats.Asn1;
-using System.Net.Http.Headers;
-using System.Windows.Markup;
-using ILGPU.IR.Transformations;
-using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow.PointsToAnalysis;
-using Newtonsoft.Json.Linq;
 using ReLogic.Threading;
 using Terrapain.Content.Groups;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
 using static Terrapain.Content.TUtilities.PathFinderSystem;
@@ -214,6 +208,7 @@ namespace Terrapain.Content.TUtilities
         }
         public static List<Vector2> FindPath(this Entity npc, Point target, Rectangle area)
         {
+            var _start = DateTime.Now;
             Point start = (npc.BottomRight - Vector2.One).ToTileCoordinates();
             if (!area.Include(target) || !area.Include(start))
             {
@@ -223,14 +218,38 @@ namespace Terrapain.Content.TUtilities
             int h = ((npc.height - 1) >> 4) + 1;
             bool halfBlock = (npc.height - 1) % 16 < 8;
             bool[,] map = GetMap(area, w, h, halfBlock);
+            var getMapTime = DateTime.Now;
+            Console.WriteLine("GetMap time: " + (getMapTime - _start).TotalMilliseconds + "ms");
             List<Node> nodes = GetArea(area);
-            //foreach (var node in nodes)
-            //{
-            //    Dust.NewDust((node + offset).ToWorldCoordinates(), 0, 0, DustID.Torch);
-            //}
+            var getAreaTime = DateTime.Now;
+            Console.WriteLine("GetArea time: " + (getAreaTime - getMapTime).TotalMilliseconds + "ms");
+            // bool first = true;
+            // if (Main.GameUpdateCount % 10 == 0)
+            // {
+            //     foreach (var node in nodes)
+            //     {
+            //         Dust.NewDust(node.ApplyOffset(new Point(w, h)).ToWorldCoordinates(), 0, 0, DustID.Torch);
+            //         foreach (var link in node.links)
+            //         {  
+            //                 int d = Dust.NewDust(link.ApplyOffset(new Point(w, h)).ToWorldCoordinates() * 0.2f + node.ApplyOffset(new Point(w, h)).ToWorldCoordinates() * 0.8f, 0, 0, ModContent.DustType<PinkHeart>());
+            //                 Main.dust[d].noGravity = true;
+            //                 Main.dust[d].velocity = Vector2.Zero;
+            //                 Main.dust[d].position = link.ApplyOffset(new Point(w, h)).ToWorldCoordinates() * 0.2f + node.ApplyOffset(new Point(w, h)).ToWorldCoordinates() * 0.8f;
+            //                 d = Dust.NewDust(link.ApplyOffset(new Point(w, h)).ToWorldCoordinates() * 0.4f + node.ApplyOffset(new Point(w, h)).ToWorldCoordinates() * 0.6f, 0, 0, ModContent.DustType<PinkHeart>());
+            //                 Main.dust[d].noGravity = true;
+            //                 Main.dust[d].velocity = Vector2.Zero;
+            //                 Main.dust[d].position = link.ApplyOffset(new Point(w, h)).ToWorldCoordinates() * 0.4f + node.ApplyOffset(new Point(w, h)).ToWorldCoordinates() * 0.6f;
+            //         }
+            //     }
+            // }
+            getAreaTime = DateTime.Now;
             Graph graph = new Graph() { origin = start};
             BuildGraph(ref graph, map, nodes, target, w, h, halfBlock, area);
+            var buildGraphTime = DateTime.Now;
+            Console.WriteLine("BuildGraph time: " + (buildGraphTime - getAreaTime).TotalMilliseconds + "ms");
             List<List<Point>> Pathes = BuildPathes(graph);
+            var buildPathesTime = DateTime.Now;
+            Console.WriteLine("BuildPathes time: " + (buildPathesTime - buildGraphTime).TotalMilliseconds + "ms");
             int shortest = -1;
             float length = -1;
             if (Pathes != null)
@@ -250,6 +269,9 @@ namespace Terrapain.Content.TUtilities
                     }
                 }
             }
+            //var buildPathesTime = DateTime.Now;
+            Console.WriteLine("FindFastest time: " + (DateTime.Now - buildPathesTime).TotalMilliseconds + "ms");
+            Console.WriteLine("Pathfinding time: " + (DateTime.Now - _start).TotalMilliseconds + "ms");
             if (shortest == -1)
             {
                 return null;
@@ -257,10 +279,10 @@ namespace Terrapain.Content.TUtilities
             else
             {
                 List<Vector2> path = new List<Vector2>();
-                Vector2 _offset = new Vector2 ((float)w * 8, (float)h * 8);
+                Vector2 _offset = new Vector2((float)w * 8 - 16, (float)h * 8 - 16);
                 foreach(var point in Pathes[shortest])
                 {
-                    path.Add(point.ToWorldCoordinates() - _offset);
+                    path.Add(point.ToWorldCoordinates(-_offset.X, -_offset.Y));
                 }
                 return path;
             }
@@ -273,7 +295,7 @@ namespace Terrapain.Content.TUtilities
                 newNodes.Add(n.point);
             }
             Point size = new Point(width, height);
-            if (MakeGraphLink(ref graph, map, target, true))
+            if (MakeGraphLink(ref graph, map, target, true, area.Location))
             {
                 Graph _ = graph.hui[0];
                 _.reachTarget = true;
@@ -285,78 +307,25 @@ namespace Terrapain.Content.TUtilities
                 for (int i = 0; i < nodes.Count; i++)
                 {    
                     Node node = nodes[i];
-                    bool? check = node.Check(size, halfBlock);
                     Point coordinates = node.ApplyOffset(size) - area.Location;
-                    if (!check.HasValue)
-                    {
-                        if (node.offset == Point.Zero)
+                    int w = map.GetLength(0);
+                    int h = map.GetLength(1);
+                    if (coordinates.X < map.GetLength(0) && coordinates.Y < map.GetLength(1))
+                    {    
+                        bool? check = node.Check(size, halfBlock);
+                        if (!check.HasValue)
                         {
-                            if (!map[coordinates.X + 1, coordinates.Y] && !map[coordinates.X, coordinates.Y + 1])
-                            {
-                                check = true;
-                                node.sizeMin = size;
-                                node.minHalfBlock = halfBlock;
-                            }
-                            else
-                            {
-                                check = false;
-                                node.sizeMax = size;
-                                node.maxHalfBlock = halfBlock;
-                            }
+                            check = node.CheckOnMap(map, coordinates, size, halfBlock);
                         }
-                        else if (node.offset == new Point(0, 1))
-                        {
-                            if (!map[coordinates.X - 1, coordinates.Y] && !map[coordinates.X, coordinates.Y + 1])
-                            {
-                                check = true;
-                                node.sizeMin = size;
-                                node.minHalfBlock = halfBlock;
-                            }
-                            else
-                            {
-                                check = false;
-                                node.sizeMax = size;
-                                node.maxHalfBlock = halfBlock;
-                            }
-                        }
-                        else if (node.offset == new Point(1, 0))
-                        {
-                            if (!map[coordinates.X + 1, coordinates.Y] && !map[coordinates.X, coordinates.Y - 1])
-                            {
-                                check = true;
-                                node.sizeMin = size;
-                                node.minHalfBlock = halfBlock;
-                            }
-                            else
-                            {
-                                check = false;
-                                node.sizeMax = size;
-                                node.maxHalfBlock = halfBlock;
-                            }
-                        }
-                        else if (node.offset == new Point(1, 1))
-                        {
-                            if (!map[coordinates.X - 1, coordinates.Y] && !map[coordinates.X, coordinates.Y - 1])
-                            {
-                                check = true;
-                                node.sizeMin = size;
-                                node.minHalfBlock = halfBlock;
-                            }
-                            else
-                            {
-                                check = false;
-                                node.sizeMax = size;
-                                node.maxHalfBlock = halfBlock;
-                            }
-                        }
-                    }
 
-                    if (check?? false && MakeGraphLink(ref graph, map, coordinates, false))
-                    {
-                        newNodes.Remove(node.point);
-                        nodesToContinue.Add(node);
+                        if ((check?? false) && MakeGraphLink(ref graph, map, coordinates + area.Location, false, area.Location))
+                        {
+                            newNodes.Remove(node.point);
+                            nodesToContinue.Add(node);
+                        }
+                        SetNode(node);
+                        //Node? test = TryGetNode(node.point);
                     }
-                    SetNode(node);
                 }
 
                 for (int i = 0; i < graph.hui.Count; i++)
@@ -370,7 +339,7 @@ namespace Terrapain.Content.TUtilities
         }
         private static void BuildGraph(ref Graph graph, Node node, bool[,] map, Point target, Point size, bool halfBlock, Point location, List<Point> nodes)
         {
-            if (MakeGraphLink(ref graph, map, target, true))
+            if (MakeGraphLink(ref graph, map, target, true, location))
             {
                 Graph _ = graph.hui[0];
                 _.reachTarget = true;
@@ -382,33 +351,62 @@ namespace Terrapain.Content.TUtilities
                 for (int i = 0; i < node.links.Count; i++)
                 {
                     Link link = node.links[i];
-                    if (nodes.Contains(link.point))
+                    bool? check = link.Check(size, halfBlock);
+                    if ((check ?? true) && nodes.Contains(link.point))
                     {
-                        bool? check = link.Check(size, halfBlock);
-                        Point coordinates = node.ApplyOffset(size) - location;
+                        if (link.point == node.point)
+                        {
+                            
+                        }
+                        // Point coordinates = link.ApplyOffset(size) - location;
                         if (!check.HasValue)
                         {
-                            Node? node1 = TryGetNode(link.point);
-                            if (node1.HasValue && MakeGraphLink(ref graph, map, coordinates, false))
+                            if (TryGetNode(link.point, out Node node1))
                             {
-                                link.sizeMin = size;
-                                link.minHalfBlock = halfBlock;
-                                nodesToContinue.Add(node1.Value);
-                                nodes.Remove(link.point);
+                                bool? check1 = node1.Check(size, halfBlock);
+                                if (!check1.HasValue)
+                                {
+                                    check1 = node1.CheckOnMap(map, node1.ApplyOffset(size) - location, size, halfBlock);
+                                }
+                                if (check1?? false)
+                                {    
+                                    if (MakeGraphLink(ref graph, map, link.ApplyOffset(size), false, location))
+                                    {
+                                        link.sizeMin = size;
+                                        link.minHalfBlock = halfBlock;
+                                        nodesToContinue.Add(node1);
+                                        nodes.Remove(link.point);
+                                    }
+                                    else
+                                    {
+                                        link.sizeMax = size;
+                                        link.maxHalfBlock = halfBlock;
+                                    }
+                                    node.links[i] = link;
+                                    if (node1.TryGetLink(node.point, out Link link1, out int j))
+                                    {
+                                        link1 = link;
+                                        link1.point = node.point;
+                                        link1.offset = node.offset;
+                                        node1.links[j] = link1;
+                                        SetNode(node1);
+                                    }
+                                    else
+                                    {
+                                        
+                                    }
+                                }
+                                else
+                                {
+                                    nodes.Remove(link.point);
+                                    link.sizeMax = size;
+                                    link.maxHalfBlock = halfBlock;
+                                }
                             }
                             else
                             {
-                                link.sizeMax = size;
-                                link.maxHalfBlock = halfBlock;
-                            }
-                            node.links[i] = link;
-                            if (node1?.TryGetLink(node.point, out Link link1, out int j)?? false)
-                            {
-                                link1 = link;
-                                link1.point = node.point;
-                                link1.offset = node.offset;
-                                node1.Value.links[j] = link1;
-                                SetNode(node1.Value);
+                                node.links.RemoveAt(i);
+                                i--;
                             }
                         }
                         else
@@ -416,11 +414,12 @@ namespace Terrapain.Content.TUtilities
                             if (check?? false)
                             {
                                 nodes.Remove(link.point);
-                                graph.hui.Add(new Graph() { origin = coordinates });
+                                graph.hui.Add(new Graph() { origin = link.ApplyOffset(size) });
                                 Node? node1 = TryGetNode(link.point);
                                 if (node1.HasValue)
                                 {
-                                    nodesToContinue.Add(TryGetNode(link.point).Value);
+                                    nodesToContinue.Add(node1.Value);
+                                    nodes.Remove(node1.Value.point);
                                 }
                                 else
                                 {
@@ -441,19 +440,19 @@ namespace Terrapain.Content.TUtilities
                 }
             }
         }
-        private static bool MakeGraphLink(ref Graph graph, bool[,] map, Point node, bool target)
+        private static bool MakeGraphLink(ref Graph graph, bool[,] map, Point node, bool target, Point offset)
         {
             Point left;
             Point right;
             if(graph.origin.X - node.X > 0)
             {
-                left = node;
-                right = graph.origin;
+                left = node - offset;
+                right = graph.origin - offset;
             }
             else
             {
-                right = node;
-                left = graph.origin;
+                right = node - offset;
+                left = graph.origin - offset;
             }
             int w = right.X - left.X;
             int h = right.Y - left.Y;
@@ -461,7 +460,6 @@ namespace Terrapain.Content.TUtilities
             {
                 return false;
             }
-            bool hit = false;
             if (w != 0)
             {
                 float k = (float)h / (w + 1);
@@ -476,35 +474,28 @@ namespace Terrapain.Content.TUtilities
                     {
                         if (map[x, _y])
                         {
-                            hit = true;
-                            continue;
+                            //Dust.NewDust((new Point(x, _y) + offset).ToWorldCoordinates(), 0, 0, DustID.RedTorch, Scale: 0.25f);
+                            return false;
                         }
-                    }
-                    if (hit)
-                    {
-                        continue;
+                        //Dust.NewDust((new Point(x, _y) + offset).ToWorldCoordinates(), 0, 0, DustID.GreenTorch, Scale: 0.25f);
                     }
                 }
             }
             else
             {
                 int ymin = Math.Min(left.Y, right.Y);
-                int ymax = Math.Min(left.Y, right.Y) + 1;
+                int ymax = Math.Max(left.Y, right.Y) + 1;
                 for (int y = ymin; y < ymax; y++)
                 {
                     if (map[left.X, y])
                     {
-                        hit = true;
-                        continue;
+                        //Dust.NewDust((new Point(left.X, y) + offset).ToWorldCoordinates(), 0, 0, DustID.RedTorch, Scale: 0.25f);
+                        return false;
                     }
                 }
             }
-            if (!hit)
-            {
-                graph.hui.Add(new Graph() { origin = node });
-                return true;
-            }
-            return false;
+            graph.hui.Add(new Graph() { origin = node });
+            return true;
         }
         private static List<List<Point>> BuildPathes(Graph graph)
         {
@@ -573,6 +564,92 @@ namespace Terrapain.Content.TUtilities
                 }
                 return null;
             }
+            public bool? CheckOnMap(bool[,] map, Point coordinates, Point size, bool halfBlock)
+            {
+                int w = map.GetLength(0);
+                int h = map.GetLength(1);
+                if (offset == Point.Zero)
+                {
+                    if (coordinates.X < w - 1 && coordinates.Y < h - 1)
+                    {
+                        if (!map[coordinates.X + 1, coordinates.Y] && !map[coordinates.X, coordinates.Y + 1])
+                        {   
+                            sizeMin = size;
+                            minHalfBlock = halfBlock; 
+                            return true;
+                        }
+                        else
+                        {
+                            //Dust.NewDust(point.ToWorldCoordinates(), 0, 0, DustID.Torch);
+                            sizeMax = size;
+                            maxHalfBlock = halfBlock; 
+                            return false;
+                        }
+                    }
+                    return null;
+                }
+                else if (offset == new Point(0, 1))
+                {
+                    if (coordinates.X > 0 && coordinates.Y < h - 1)
+                    {
+                        if (!map[coordinates.X + 1, coordinates.Y] && !map[coordinates.X, coordinates.Y - 1])
+                        {   
+                            sizeMin = size;
+                            minHalfBlock = halfBlock; 
+                            return true;
+                        }
+                        else
+                        {
+                            //Dust.NewDust(point.ToWorldCoordinates(), 0, 0, DustID.Torch);
+                            sizeMax = size;
+                            maxHalfBlock = halfBlock; 
+                            return false;
+                        }
+                    }
+                    return null;
+                }
+                else if (offset == new Point(1, 0))
+                {
+                    if (coordinates.X < h - 1 && coordinates.Y > 0)
+                    {
+                        if (!map[coordinates.X - 1, coordinates.Y] && !map[coordinates.X, coordinates.Y + 1])
+                        {   
+                            sizeMin = size;
+                            minHalfBlock = halfBlock; 
+                            return true;
+                        }
+                        else
+                        {
+                            //Dust.NewDust(point.ToWorldCoordinates(), 0, 0, DustID.Torch);
+                            sizeMax = size;
+                            maxHalfBlock = halfBlock; 
+                            return false;
+                        }
+                    }
+                    return null;
+                }
+                else if (offset == new Point(1, 1))
+                {
+                    if (coordinates.X > 0 && coordinates.Y > 0)
+                    {
+                        if (!map[coordinates.X - 1, coordinates.Y] && !map[coordinates.X, coordinates.Y - 1])
+                        {   
+                            sizeMin = size;
+                            minHalfBlock = halfBlock; 
+                            return true;
+                        }
+                        else
+                        {
+                            //Dust.NewDust(point.ToWorldCoordinates(), 0, 0, DustID.Torch);
+                            sizeMax = size;
+                            maxHalfBlock = halfBlock; 
+                            return false;
+                        }
+                    }
+                    return null;
+                }
+                return null;
+            }
             public Point ApplyOffset(Point Size)
             {
                 Size.X -= 1;
@@ -583,13 +660,16 @@ namespace Terrapain.Content.TUtilities
             {
                 i = -1;
                 link = new Link();
-                for (int j = 0; j < links.Count; j++)
+                lock (links)
                 {
-                    if (links[j].point == point)
+                    for (int j = 0; j < links.Count; j++)
                     {
-                        link = links[j];
-                        i = j;
-                        return true;
+                        if (links[j].point == point)
+                        {
+                            link = links[j];
+                            i = j;
+                            return true;
+                        }
                     }
                 }
                 return false;
@@ -610,6 +690,15 @@ namespace Terrapain.Content.TUtilities
             {
                 sizeMin = new Point(1, 1);
                 minHalfBlock = true;
+            }
+            public Point ApplyOffset(Point Size)
+            {
+                Size.X -= 1;
+                Size.Y -= 1;
+                if (offset != Point.Zero)
+                {
+                }
+                return point + offset * Size;
             }
             public bool? Check(Point size, bool halfBlock)
             {
@@ -633,13 +722,9 @@ namespace Terrapain.Content.TUtilities
         {
             int x = node.point.X / squareSide;
             int y = node.point.Y / squareSide;
-            if (Nodes[x, y].TryGetValue(node.point, out _))
+            lock (Nodes[x, y])
             {
                 Nodes[x, y][node.point] = node;
-            }
-            else
-            {
-                Nodes[x, y].Add(node.point, node);
             }
         }
         public static Node? TryGetNode(Point point)
@@ -653,7 +738,7 @@ namespace Terrapain.Content.TUtilities
         public static bool TryGetNode(Point point, out Node node)
         {
             node = new Node();
-            if (Nodes[point.X / squareSide, point.Y / squareSide].TryGetValue(point, out Node _node))
+            if (Nodes[point.X / squareSide, point.Y / squareSide] != null && Nodes[point.X / squareSide, point.Y / squareSide].TryGetValue(point, out Node _node))
             {
                 node = _node;
                 return true;
@@ -666,7 +751,8 @@ namespace Terrapain.Content.TUtilities
             for (int x = Area.X / squareSide; x <= Area.Right / squareSide; x++)
             {
                 for (int y = Area.Y / squareSide; y <= Area.Bottom / squareSide; y++)
-                {
+                {   
+                    UnloadArea(x, y);
                     if (Nodes[x, y] == null)
                     {
                         LoadArea(x, y);
@@ -684,7 +770,7 @@ namespace Terrapain.Content.TUtilities
         }
         public static void LoadArea(int x, int y)
         {
-            Rectangle area = new Rectangle(x * squareSide, y * squareSide, squareSide - 1, squareSide - 1);
+            Rectangle area = new Rectangle(x * squareSide - 1, y * squareSide - 1, squareSide + 1, squareSide + 1);
 
             bool[,] map = GetMap(area, 1, 1, true);
             bool[,] map1 = GetMap(area, 1, 1, false);
@@ -695,13 +781,25 @@ namespace Terrapain.Content.TUtilities
             nodes1.AddRange(GetNodes(map1, area));
             for (int i = 0; i < nodes1.Count; i++)
             {
-                if (nodes.Contains(nodes1[i]))
+                if (Contains(nodes, nodes1[i], out int index))
                 {
-                    nodes.Remove(nodes[i]);
-                    nodes2.Add(nodes[i]);
+                    nodes.RemoveAt(index);
+                    nodes2.Add(nodes1[i]);
                     nodes1.RemoveAt(i);
                     i--;
                 }
+            }
+            bool Contains(List<Node> items, Node item, out int index)
+            {
+                index = 0;
+                for (; index < items.Count; index++)
+                {
+                    if (items[index].point == item.point)
+                    {
+                        return true;
+                    }
+                }
+                return false;
             }
             List<Node> nodes3 = [];
 
@@ -725,11 +823,16 @@ namespace Terrapain.Content.TUtilities
                 nodes3.Add(_node);
             }
 
-            List<Node> nodes4 = [];//new (nodes3);
-            int x1 = area.X;
-            int x2 = area.Right;
-            int y1 = area.Y;
-            int y2 = area.Bottom;
+            if (nodes3.Count == 0)
+            {
+                Nodes[x, y] = [];
+                return;
+            }
+            List<Node> nodes4 = [];
+            int x1 = area.X + 1;
+            int x2 = area.Right - 1;
+            int y1 = area.Y + 1;
+            int y2 = area.Bottom - 1;
             int w = Nodes.GetLength(0);
             int h = Nodes.GetLength(1);
             if (x > 0 && Nodes[x - 1, y] != null)
@@ -760,7 +863,7 @@ namespace Terrapain.Content.TUtilities
             if (x < w && y > 0 && Nodes[x + 1, y - 1] != null)
             {
                 y1 = (y - 1) * squareSide;
-                x2 = (x + 1) * squareSide - 1;
+                x2 = (x + 2) * squareSide - 1;
                 foreach (var node in Nodes[x + 1, y - 1])
                 {
                     nodes4.Add(node.Value);
@@ -768,7 +871,7 @@ namespace Terrapain.Content.TUtilities
             }
             if (x < w && Nodes[x + 1, y] != null)
             {
-                x2 = (x + 1) * squareSide - 1;
+                x2 = (x + 2) * squareSide - 1;
                 foreach (var node in Nodes[x + 1, y])
                 {
                     nodes4.Add(node.Value);
@@ -776,8 +879,8 @@ namespace Terrapain.Content.TUtilities
             }
             if (x < w && y < h && Nodes[x + 1, y + 1] != null)
             {
-                y2 = (y + 1) * squareSide - 1;
-                x2 = (x + 1) * squareSide - 1;
+                y2 = (y + 2) * squareSide - 1;
+                x2 = (x + 2) * squareSide - 1;
                 foreach (var node in Nodes[x + 1, y + 1])
                 {
                     nodes4.Add(node.Value);
@@ -785,7 +888,7 @@ namespace Terrapain.Content.TUtilities
             }
             if (y < h && Nodes[x, y + 1] != null)
             {
-                y2 = (y + 1) * squareSide - 1;
+                y2 = (y + 2) * squareSide - 1;
                 foreach (var node in Nodes[x, y + 1])
                 {
                     nodes4.Add(node.Value);
@@ -794,57 +897,97 @@ namespace Terrapain.Content.TUtilities
             if (x > 0 && y < h && Nodes[x - 1, y + 1] != null)
             {
                 x1 = (x - 1) * squareSide;
-                y2 = (y + 1) * squareSide - 1;
+                y2 = (y + 2) * squareSide - 1;
                 foreach (var node in Nodes[x - 1, y + 1])
                 {
                     nodes4.Add(node.Value);
                 }
             }
-
+            Node[] nodes5 = nodes4.ToArray();
             Rectangle newArea = new Rectangle(x1, y1, x2 - x1, y2 - y1);
             bool[,] map2 = GetMap(newArea, 1, 1, true);
 
-            FastParallel.For(0, nodes3.Count, delegate(int start, int end, object context)
+            Nodes[x,y] = [];
+            if (nodes3.Count * nodes4.Count > 50)
             {
-                for (int i = start; i < end; i++)
+                FastParallel.For(0, nodes3.Count, delegate(int start, int end, object context)
+                {
+                    for (int i = start; i < end; i++)
+                    {
+                        Node node1 = nodes3[i];
+                        for(int j = 0; j < nodes4.Count; j++)
+                        {
+                            if ((nodes5[j].existToHalfBlock && node1.existToHalfBlock) || (nodes5[j].existToNotHalfBlock && node1.existToNotHalfBlock))
+                            {
+                                if (CheckLink(node1.point - newArea.Location, map2, nodes5[j].point - newArea.Location))
+                                {
+                                    Node node = nodes5[j];
+                                    node1.links.Add(new Link() { point = node.point, offset = node.offset, existToHalfBlock = node.existToHalfBlock && node1.existToHalfBlock, existToNotHalfBlock = node.existToNotHalfBlock && node1.existToNotHalfBlock});
+                                    AddLink(j, new Link() { point = node1.point, offset = node1.offset, existToHalfBlock = node.existToHalfBlock && node1.existToHalfBlock, existToNotHalfBlock = node.existToNotHalfBlock && node1.existToNotHalfBlock});
+                                    //SetNode(node);
+                                }
+                            }
+                        }
+                        foreach(var node in nodes3)
+                        {
+                            if ((node.existToHalfBlock && node1.existToHalfBlock) || (node.existToNotHalfBlock && node1.existToNotHalfBlock))
+                            {
+                                if (CheckLink(node1.point - newArea.Location, map2, node.point - newArea.Location))
+                                {
+                                    node1.links.Add(new Link() { point = node.point, offset = node.offset, existToHalfBlock = node.existToHalfBlock && node1.existToHalfBlock, existToNotHalfBlock = node.existToNotHalfBlock && node1.existToNotHalfBlock});
+                                    //SetNode(node);
+                                }
+                            }
+                        }
+                        SetNode(node1);
+                    }
+                });
+                void AddLink(int i, Link link)
+                {
+                    lock (nodes5[i].links)
+                    {
+                        nodes5[i].links.Add(link);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < nodes3.Count; i++)
                 {
                     Node node1 = nodes3[i];
-                    foreach(var node in nodes4)
+                    for(int j = 0; j < nodes5.Length; j++)
                     {
+                        Node node = nodes5[j]; 
                         if ((node.existToHalfBlock && node1.existToHalfBlock) || (node.existToNotHalfBlock && node1.existToNotHalfBlock))
                         {
                             if (CheckLink(node1.point - newArea.Location, map2, node.point - newArea.Location))
                             {
-                                node1.links.Add(new Link() { point = node.point, existToHalfBlock = node.existToHalfBlock && node1.existToHalfBlock, existToNotHalfBlock = node.existToNotHalfBlock && node1.existToNotHalfBlock});
-                                node.links.Add(new Link() { point = node1.point, existToHalfBlock = node.existToHalfBlock && node1.existToHalfBlock, existToNotHalfBlock = node.existToNotHalfBlock && node1.existToNotHalfBlock});
+                                node1.links.Add(new Link() { point = node.point, offset = node.offset, existToHalfBlock = node.existToHalfBlock && node1.existToHalfBlock, existToNotHalfBlock = node.existToNotHalfBlock && node1.existToNotHalfBlock});
+                                nodes5[j].links.Add(new Link() { point = node1.point, offset = node1.offset, existToHalfBlock = node.existToHalfBlock && node1.existToHalfBlock, existToNotHalfBlock = node.existToNotHalfBlock && node1.existToNotHalfBlock});
                                 SetNode(node);
                             }
                         }
                     }
-                    nodes3[i] = node1;
-                }
-            });
-            Nodes[x,y] = [];
-            FastParallel.For(0, nodes3.Count, delegate(int start, int end, object context)
-            {
-                for (int i = start; i < end; i++)
-                {
-                    Node node1 = nodes3[i];
-                    foreach(var node in nodes3)
+                    for(int j = i + 1; j < nodes3.Count; j++)
                     {
+                        var node = nodes3[j];
                         if ((node.existToHalfBlock && node1.existToHalfBlock) || (node.existToNotHalfBlock && node1.existToNotHalfBlock))
                         {
                             if (CheckLink(node1.point - newArea.Location, map2, node.point - newArea.Location))
                             {
-                                node1.links.Add(new Link() { point = node.point, existToHalfBlock = node.existToHalfBlock && node1.existToHalfBlock, existToNotHalfBlock = node.existToNotHalfBlock && node1.existToNotHalfBlock});
-                                node.links.Add(new Link() { point = node1.point, existToHalfBlock = node.existToHalfBlock && node1.existToHalfBlock, existToNotHalfBlock = node.existToNotHalfBlock && node1.existToNotHalfBlock});
+                                node1.links.Add(new Link() { point = node.point, offset = node.offset, existToHalfBlock = node.existToHalfBlock && node1.existToHalfBlock, existToNotHalfBlock = node.existToNotHalfBlock && node1.existToNotHalfBlock});
+                                nodes3[j].links.Add(new Link() { point = node1.point, offset = node1.offset, existToHalfBlock = node.existToHalfBlock && node1.existToHalfBlock, existToNotHalfBlock = node.existToNotHalfBlock && node1.existToNotHalfBlock});
                                 //SetNode(node);
                             }
                         }
                     }
                     SetNode(node1);
                 }
-            });
+            }
+            foreach(var node in nodes5)
+            {
+                SetNode(node);
+            }
         }
         public static void UnloadArea(int x, int y)
         {
@@ -870,6 +1013,18 @@ namespace Terrapain.Content.TUtilities
         }
         private static bool CheckLink(Point origin, bool[,] map, Point node)
         {
+            if (origin == node)
+            {
+                return false;
+            }
+            if (node.X < 0 || node.X >= map.GetLength(0) || node.Y < 0 || node.Y >= map.GetLength(1))
+            {
+                return false;
+            }
+            if (origin.X < 0 || origin.X >= map.GetLength(0) || origin.Y < 0 || origin.Y >= map.GetLength(1))
+            {
+                return false;
+            }
             Point left;
             Point right;
             if(origin.X - node.X > 0)
@@ -902,7 +1057,7 @@ namespace Terrapain.Content.TUtilities
                     {
                         if (map[x, _y])
                         {
-                            return true;
+                            return false;
                         }
                     }
                 }
@@ -915,11 +1070,11 @@ namespace Terrapain.Content.TUtilities
                 {
                     if (map[left.X, y])
                     {
-                        return true;
+                        return false;
                     }
                 }
             }
-            return false;
+            return true;
         }
         public static bool[,] GetMap(Rectangle area, int width, int height, bool halfBlocks)
         {
@@ -934,9 +1089,11 @@ namespace Terrapain.Content.TUtilities
                     {
                         if (Main.tile[X, Y].IsSolid())
                         {
+                            int _y = 1;
                             if (!halfBlocks || !Main.tile[X, Y].IsHalfBlock)
                             {
                                 map[X - area.X, Y - area.Y] = true;
+                                _y = 0;
                             }
                             int y = 1;
                             for (int x = 0; x < width && X + x < endX; x++)
@@ -945,7 +1102,7 @@ namespace Terrapain.Content.TUtilities
                                 {
                                     map[X - area.X + x, Y - area.Y + y] = true;
                                 }
-                                y = 0;
+                                y = _y;
                             }
                         }
                     }
@@ -968,24 +1125,31 @@ namespace Terrapain.Content.TUtilities
                         {
                             if(map[x + 1, y + 1] && !map[x + 1, y] && !map[x, y + 1])
                             {
-                                nodes.Add(new Node() { point = new Point(x, y) + Area.Location, offset = Point.Zero });
+                                Add(new Node() { point = new Point(x, y) + Area.Location, offset = Point.Zero });
                             }
                             else if(map[x + 1, y - 1] && !map[x + 1, y] && !map[x, y - 1])
                             {
-                                nodes.Add(new Node() { point = new Point(x, y) + Area.Location, offset = new Point(0, 1) });
+                                Add(new Node() { point = new Point(x, y) + Area.Location, offset = new Point(0, 1) });
                             }
                             else if(map[x - 1, y + 1] && !map[x - 1, y] && !map[x, y + 1])
                             { 
-                                nodes.Add(new Node() { point = new Point(x, y) + Area.Location, offset = new Point(1, 0) });
+                                Add(new Node() { point = new Point(x, y) + Area.Location, offset = new Point(1, 0) });
                             }
                             else if(map[x - 1, y - 1] && !map[x - 1, y] && !map[x, y - 1])
                             {
-                                nodes.Add(new Node() { point = new Point(x, y) + Area.Location, offset = new Point(1, 1) });
+                                Add(new Node() { point = new Point(x, y) + Area.Location, offset = new Point(1, 1) });
                             }
                         }
                     }
                 }
             });
+            void Add(Node node)
+            {
+                lock (nodes)
+                {
+                    nodes.Add(node);
+                }
+            }
             return nodes;
         }
     }
