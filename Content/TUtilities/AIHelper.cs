@@ -1,3 +1,4 @@
+using ReLogic.Reflection;
 using ReLogic.Threading;
 using Terrapain.Content.Groups;
 using Terraria;
@@ -10,6 +11,7 @@ namespace Terrapain.Content.TUtilities
 {
     public static class AIHelper
     {
+        #region movementStyles
         public static void CommonTerrapainFlyingMovement(Entity entity, Vector2 targetPosition, float rotatingSpeed, float MaxSpeed, float acceleration, float BreakingZone, bool instantBreak = true)
 		{
 			if (entity.Center == targetPosition)
@@ -167,6 +169,58 @@ namespace Terrapain.Content.TUtilities
             }
 			return rotateToTarget;
         }
+        public static void WallsAvoidMovement(Entity entity, ScanInfo scan, float speed1, float speed2)
+        {
+            if (scan.rightClosest < scan.length)
+            {
+                if (scan.right[0] > scan.right[scan.height - 1])
+                {
+                    entity.velocity.Y -= speed2;
+                }
+                else if (scan.right[0] < scan.right[scan.height - 1])
+                {
+                    entity.velocity.Y += speed2;
+                }
+                entity.velocity.X -= ((float)scan.length / (scan.rightClosest + 1)) * speed1;
+            }
+            if (scan.leftClosest < scan.length)
+            {
+                if (scan.left[0] > scan.left[scan.height - 1])
+                {
+                    entity.velocity.Y -= speed2;
+                }
+                else if (scan.left[0] < scan.left[scan.height - 1])
+                {
+                    entity.velocity.Y += speed2;
+                }
+                entity.velocity.X += ((float)scan.length / (scan.rightClosest + 1)) * speed1;
+            }
+            if (scan.upClosest < scan.length)
+            {
+                if (scan.up[0] > scan.up[scan.width - 1])
+                {
+                    entity.velocity.X -= speed2;
+                }
+                else if (scan.up[0] < scan.up[scan.width - 1])
+                {
+                    entity.velocity.X += speed2;
+                }
+                entity.velocity.Y += ((float)scan.length / (scan.rightClosest + 1)) * speed1;
+            }
+            if (scan.downClosest < scan.length)
+            {
+                if (scan.down[0] > scan.down[scan.width - 1])
+                {
+                    entity.velocity.X -= speed2;
+                }
+                else if (scan.down[0] < scan.down[scan.width - 1])
+                {
+                    entity.velocity.X += speed2;
+                }
+                entity.velocity.Y -= ((float)scan.length / (scan.rightClosest + 1)) * speed1;
+            }
+        }
+        #endregion
         public static bool TryGetGroup<T>(this NPC npc, out T group) where T : Group
         {
             var t = npc.GetT();
@@ -182,9 +236,14 @@ namespace Terrapain.Content.TUtilities
             group = null;
             return false;
         }
+        public static bool Include(this Rectangle rectangle, Point point)
+        {
+            return point.X >= rectangle.X && point.X <= rectangle.Right && point.Y >= rectangle.Y && point.Y <= rectangle.Bottom;
+        }
+        #region findPathStaf
         struct Graph
         {
-            public List<Graph> hui;
+            public List<Graph> links;
             public Point origin;
             public bool reachTarget;
             public void SetReachTarget()
@@ -193,24 +252,20 @@ namespace Terrapain.Content.TUtilities
             }
             public Graph()
             {
-                hui = [];
+                links = [];
             }
         }
-        public static bool Include(this Rectangle rectangle, Point point)
-        {
-            return point.X >= rectangle.X && point.X <= rectangle.Right && point.Y >= rectangle.Y && point.Y <= rectangle.Bottom;
-        }
-        public static List<Vector2> FindPath(this Entity npc, Point target, int radius)
+        public static List<Vector2> FindPath(this Entity npc, Vector2 target, int radius)
         {
             Point p = npc.Center.ToTileCoordinates();
             Rectangle area = new Rectangle(p.X - radius, p.Y - radius, radius * 2, radius * 2);
             return FindPath(npc, target, area);
         }
-        public static List<Vector2> FindPath(this Entity npc, Point target, Rectangle area)
+        public static List<Vector2> FindPath(this Entity npc, Vector2 target, Rectangle area)
         {
             var _start = DateTime.Now;
             Point start = (npc.BottomRight - Vector2.One).ToTileCoordinates();
-            if (!area.Include(target) || !area.Include(start))
+            if (!area.Include(start))
             {
                 return null;
             }
@@ -218,6 +273,10 @@ namespace Terrapain.Content.TUtilities
             int h = ((npc.height - 1) >> 4) + 1;
             bool halfBlock = (npc.height - 1) % 16 < 8;
             bool[,] map = GetMap(area, w, h, halfBlock);
+            if (TryGetPoint(map, target, out Point _target, w, h, area.Location))
+            {
+                return null;
+            }
             var getMapTime = DateTime.Now;
             Console.WriteLine("GetMap time: " + (getMapTime - _start).TotalMilliseconds + "ms");
             List<Node> nodes = GetArea(area);
@@ -244,7 +303,7 @@ namespace Terrapain.Content.TUtilities
             // }
             getAreaTime = DateTime.Now;
             Graph graph = new Graph() { origin = start};
-            BuildGraph(ref graph, map, nodes, target, w, h, halfBlock, area);
+            BuildGraph(ref graph, map, nodes, _target, w, h, halfBlock, area);
             var buildGraphTime = DateTime.Now;
             Console.WriteLine("BuildGraph time: " + (buildGraphTime - getAreaTime).TotalMilliseconds + "ms");
             List<List<Point>> Pathes = BuildPathes(graph);
@@ -284,8 +343,38 @@ namespace Terrapain.Content.TUtilities
                 {
                     path.Add(point.ToWorldCoordinates(-_offset.X, -_offset.Y));
                 }
+                path.RemoveAt(0);
                 return path;
             }
+        }
+        static bool TryGetPoint(bool[,] Map, Vector2 target, out Point point, int w, int h, Point offset)
+        {
+            // Dust.NewDust((target.ToTileCoordinates()).ToWorldCoordinates(), 0, 0, DustID.RedTorch, Scale: 0.25f);
+            point = (target).ToTileCoordinates() + new Point((w - 1) / 2, (h - 1) / 2) - offset;
+            // Dust.NewDust((point + offset).ToWorldCoordinates(), 0, 0, DustID.RedTorch, Scale: 0.25f);
+            int w1 = Map.GetLength(0);
+            int h1 = Map.GetLength(1);
+            if (point.X > -1 && point.X < w1 && point.Y > -1 && point.Y < h1 && !Map[point.X, point.Y])
+            {
+                point += offset;
+                return false;
+            }
+            Point _point = target.ToTileCoordinates() - offset;
+            for (int x = 0; x < w; x++)
+            {
+                point.X = _point.X + x;
+                for (int y = 0; y < h; y++)
+                {
+                    point.Y = _point.Y + y;
+                    // Dust.NewDust((point + offset).ToWorldCoordinates(), 0, 0, DustID.Torch, Scale: 0.25f);
+                    if (point.X > -1 && point.X < w1 && point.Y > -1 && point.Y < h1 && !Map[point.X, point.Y])
+                    {
+                        point += offset;
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
         private static void BuildGraph(ref Graph graph, bool[,] map, List<Node> nodes, Point target, int width, int height, bool halfBlock, Rectangle area)
         {
@@ -297,9 +386,9 @@ namespace Terrapain.Content.TUtilities
             Point size = new Point(width, height);
             if (MakeGraphLink(ref graph, map, target, true, area.Location))
             {
-                Graph _ = graph.hui[0];
+                Graph _ = graph.links[0];
                 _.reachTarget = true;
-                graph.hui[0] = _;
+                graph.links[0] = _;
             }
             else
             {
@@ -328,12 +417,12 @@ namespace Terrapain.Content.TUtilities
                     }
                 }
 
-                for (int i = 0; i < graph.hui.Count; i++)
+                for (int i = 0; i < graph.links.Count; i++)
                 {
-                    Graph graf = graph.hui[i];
+                    Graph graf = graph.links[i];
                     Node node = nodesToContinue[i];
                     BuildGraph(ref graf, node, map, target, size, halfBlock, area.Location, newNodes);
-                    graph.hui[i] = graf;
+                    graph.links[i] = graf;
                 }
             }
         }
@@ -341,9 +430,9 @@ namespace Terrapain.Content.TUtilities
         {
             if (MakeGraphLink(ref graph, map, target, true, location))
             {
-                Graph _ = graph.hui[0];
+                Graph _ = graph.links[0];
                 _.reachTarget = true;
-                graph.hui[0] = _;
+                graph.links[0] = _;
             }
             else
             {
@@ -356,7 +445,8 @@ namespace Terrapain.Content.TUtilities
                     {
                         if (link.point == node.point)
                         {
-                            
+                            nodes.Remove(node.point);
+                            continue;
                         }
                         // Point coordinates = link.ApplyOffset(size) - location;
                         if (!check.HasValue)
@@ -391,10 +481,6 @@ namespace Terrapain.Content.TUtilities
                                         node1.links[j] = link1;
                                         SetNode(node1);
                                     }
-                                    else
-                                    {
-                                        
-                                    }
                                 }
                                 else
                                 {
@@ -414,7 +500,7 @@ namespace Terrapain.Content.TUtilities
                             if (check?? false)
                             {
                                 nodes.Remove(link.point);
-                                graph.hui.Add(new Graph() { origin = link.ApplyOffset(size) });
+                                graph.links.Add(new Graph() { origin = link.ApplyOffset(size) });
                                 Node? node1 = TryGetNode(link.point);
                                 if (node1.HasValue)
                                 {
@@ -423,7 +509,7 @@ namespace Terrapain.Content.TUtilities
                                 }
                                 else
                                 {
-                                    graph.hui.RemoveAt(graph.hui.Count - 1);
+                                    graph.links.RemoveAt(graph.links.Count - 1);
                                 }
                             }
                         }
@@ -431,12 +517,12 @@ namespace Terrapain.Content.TUtilities
                 }
                 SetNode(node);
 
-                for (int i = 0; i < graph.hui.Count; i++)
+                for (int i = 0; i < graph.links.Count; i++)
                 {
-                    Graph graf = graph.hui[i];
+                    Graph graf = graph.links[i];
                     Node node2 = nodesToContinue[i];
                     BuildGraph(ref graf, node2, map, target, size, halfBlock, location, new List<Point> (nodes));
-                    graph.hui[i] = graf;
+                    graph.links[i] = graf;
                 }
             }
         }
@@ -494,7 +580,7 @@ namespace Terrapain.Content.TUtilities
                     }
                 }
             }
-            graph.hui.Add(new Graph() { origin = node });
+            graph.links.Add(new Graph() { origin = node });
             return true;
         }
         private static List<List<Point>> BuildPathes(Graph graph)
@@ -504,7 +590,7 @@ namespace Terrapain.Content.TUtilities
                 return new ([[graph.origin]]);
             }
             List<List<Point>> pathes = [];
-            foreach (var g in graph.hui)
+            foreach (var g in graph.links)
             {
                 List<List<Point>> _pathes = BuildPathes(g);
                 if (_pathes != null)
@@ -519,6 +605,211 @@ namespace Terrapain.Content.TUtilities
             }
             return pathes;
         }
+        #endregion
+        #region scanStaf
+        public struct ScanInfo
+        {
+            public int length;
+            public int width;
+            public int height;
+            public int[] right;
+            public int rightClosest;
+            public int[] left;
+            public int leftClosest;
+            public int[] up;
+            public int upClosest;
+            public int[] down;
+            public int downClosest;
+            public int[] rightUp;
+            public int rightUpClosest;
+            public int[] rightDown;
+            public int rightDownClosest;
+            public int[] leftUp;
+            public int leftUpClosest;
+            public int[] leftDown;
+            public int leftDownClosest;
+        }
+        public static ScanInfo ScanAround(this Entity npc, int radius, bool right = true, bool left = true, bool up = true, bool down = true, bool rightUp = false, bool rightDown = false, bool leftUp = false, bool leftDown = false)
+        {
+            ScanInfo result = new ScanInfo();
+            Point pos = npc.position.ToTileCoordinates();
+            result.length = radius;
+            result.width = npc.TopRight.ToTileCoordinates().X - pos.X + 1;
+            result.height = npc.BottomLeft.ToTileCoordinates().Y - pos.Y + 1;
+
+            int w = result.width;
+            int h = result.height;
+            if (right)
+            {
+                result.right = new int[h];
+                result.rightClosest = radius;
+                Point dir = new Point(1, 0);
+                for (int i = 0; i < h - 1; i++)
+                {
+                    result.right[i] = Scan(pos + new Point(w, i), dir, radius);
+                    result.rightClosest = Math.Min(result.rightClosest, result.right[i]);
+                }
+                bool halfBlock = (npc.Bottom.Y - 1) % 16 < 8;
+                result.right[h - 1] = Scan(pos + new Point(w, h - 1), dir, radius, halfBlock);
+                result.rightClosest = Math.Min(result.rightClosest, result.right[h - 1]);
+            }
+            if (left)
+            {
+                result.left = new int[h];
+                result.leftClosest = radius;
+                Point dir = new Point(-1, 0);
+                for (int i = 0; i < h - 1; i++)
+                {
+                    result.left[i] = Scan(pos + new Point(-1, i), dir, radius);
+                    result.leftClosest = Math.Min(result.leftClosest, result.left[i]);
+                }
+                bool halfBlock = (npc.Bottom.Y - 1) % 16 < 8;
+                result.left[h - 1] = Scan(pos + new Point(-1, h - 1), dir, radius, halfBlock);
+                result.leftClosest = Math.Min(result.leftClosest, result.left[h - 1]);
+            }
+            if (up)
+            {
+                result.up = new int[w];
+                result.upClosest = radius;
+                Point dir = new Point(0, -1);
+                for (int i = 0; i < w; i++)
+                {
+                    result.up[i] = Scan(pos + new Point(i, -1), dir, radius);
+                    result.upClosest = Math.Min(result.upClosest, result.up[i]);
+                }
+            }
+            if (down)
+            {
+                result.down = new int[w];
+                result.downClosest = radius;
+                Point dir = new Point(0, 1);
+                for (int i = 0; i < w; i++)
+                {
+                    result.down[i] = Scan(pos + new Point(i, h), dir, radius);
+                    result.downClosest = Math.Min(result.downClosest, result.down[i]);
+                }
+            }
+            if (rightUp)
+            {
+                result.rightUp = new int[w + h + 1];
+                result.rightUpClosest = radius;
+                Point dir = new Point(1, -1);
+                result.rightUp[0] = Scan(pos + new Point(0, -1), dir, radius, slopeRightDown: true);
+                result.rightUpClosest = Math.Min(result.rightUpClosest, result.rightUp[0]);
+                for (int i = 1; i <= w; i++)
+                {
+                    result.rightUp[i] = Scan(pos + new Point(i, -1), dir, radius);
+                    result.rightUpClosest = Math.Min(result.rightUpClosest, result.rightUp[i]);
+                }
+                for (int i = 0; i < h - 1; i++)
+                {
+                    result.rightUp[w + 1 + i] = Scan(pos + new Point(w, i), dir, radius);
+                    result.rightUpClosest = Math.Min(result.rightUpClosest, result.rightUp[i]);
+                }
+                bool halfBlock = ((npc.BottomRight.X - 1) % 16 + 1) + ((npc.BottomRight.Y - 1) % 16 + 1) <= 8;
+                result.rightUp[w + h] = Scan(pos + new Point(w, h -1), dir, radius, halfBlock, slopeLeftUp: true);
+                result.rightUpClosest = Math.Min(result.rightUpClosest, result.rightUp[0]);
+            }
+            if (rightDown)
+            {
+                result.rightDown = new int[w + h + 1];
+                result.rightDownClosest = radius;
+                Point dir = new Point(1, 1);
+                result.rightDown[0] = Scan(pos + new Point(w, 0), dir, radius, slopeLeftDown: true);
+                result.rightDownClosest = Math.Min(result.rightDownClosest, result.rightDown[0]);
+                for (int i = 1; i <= h; i++)
+                {
+                    result.rightDown[i] = Scan(pos + new Point(w, i), dir, radius);
+                    result.rightDownClosest = Math.Min(result.rightDownClosest, result.rightDown[i]);
+                }
+                for (int i = 1; i < w; i++)
+                {
+                    result.rightDown[h + i] = Scan(pos + new Point(w - i, h), dir, radius);
+                    result.rightDownClosest = Math.Min(result.rightDownClosest, result.rightDown[i]);
+                }
+                result.rightDown[w + h] = Scan(pos + new Point(0, h), dir, radius, slopeRightUp: true);
+                result.rightDownClosest = Math.Min(result.rightDownClosest, result.rightDown[0]);
+            }
+            if (leftUp)
+            {
+                result.leftUp = new int[w + h + 1];
+                result.leftUpClosest = radius;
+                Point dir = new Point(-1, -1);
+                result.leftUp[0] = Scan(pos + new Point(w - 1, -1), dir, radius, slopeLeftDown: true);
+                result.leftUpClosest = Math.Min(result.leftUpClosest, result.leftUp[0]);
+                for (int i = 1; i <= w; i++)
+                {
+                    result.leftUp[i] = Scan(pos + new Point(w - 1 -i, -1), dir, radius);
+                    result.leftUpClosest = Math.Min(result.leftUpClosest, result.leftUp[i]);
+                }
+                for (int i = 0; i < h - 1; i++)
+                {
+                    result.leftUp[w + 1 + i] = Scan(pos + new Point(-1, i), dir, radius);
+                    result.leftUpClosest = Math.Min(result.leftUpClosest, result.leftUp[i]);
+                }
+                bool halfBlock = (16 - ((npc.BottomLeft.X - 1) % 16 + 1)) + ((npc.BottomLeft.Y - 1) % 16 + 1) <= 8;
+                result.leftUp[w + h] = Scan(pos + new Point(- 1, h -1), dir, radius, halfBlock, slopeRightUp: true);
+                result.leftUpClosest = Math.Min(result.leftUpClosest, result.leftUp[0]);
+            }
+            if (leftDown)
+            {
+                result.rightDown = new int[w + h + 1];
+                result.rightDownClosest = radius;
+                Point dir = new Point(-1, 1);
+                result.rightDown[0] = Scan(pos + new Point(-1, 0), dir, radius, slopeRightDown: true);
+                result.rightDownClosest = Math.Min(result.rightDownClosest, result.rightDown[0]);
+                for (int i = 1; i <= h; i++)
+                {
+                    result.rightDown[i] = Scan(pos + new Point(-1, i), dir, radius);
+                    result.rightDownClosest = Math.Min(result.rightDownClosest, result.rightDown[i]);
+                }
+                for (int i = 0; i < w - 1; i++)
+                {
+                    result.rightDown[h + 1 + i] = Scan(pos + new Point(i, h), dir, radius);
+                    result.rightDownClosest = Math.Min(result.rightDownClosest, result.rightDown[i]);
+                }
+                result.rightDown[w + h] = Scan(pos + new Point(w, h), dir, radius, slopeLeftUp: true);
+                result.rightDownClosest = Math.Min(result.rightDownClosest, result.rightDown[0]);
+            }
+            return result;
+        }
+        public static int Scan(Point start, Point dir, int length, bool halfBlock = false, bool slopeRightUp = false, bool slopeRightDown = false, bool slopeLeftUp = false, bool slopeLeftDown = false)
+        {
+            for (int i = 0; i < length; i++)
+            {
+                if (start.X < 0 || start.X >= Main.maxTilesX || start.Y < 0 || start.Y >= Main.maxTilesY)
+                {
+                    return length;
+                }
+                Tile tile = Main.tile[start];
+                if (tile.IsSolid())
+                {
+                    if (halfBlock && tile.IsHalfBlock)
+                    {
+                        continue;
+                    }
+                    else if (slopeRightUp && tile.TopSlope && tile.RightSlope)
+                    {
+                        continue;
+                    }
+                    else if (slopeRightDown && tile.BottomSlope && tile.RightSlope)
+                    {
+                        continue;
+                    }
+                    else if (slopeLeftUp && tile.TopSlope && tile.LeftSlope)
+                    {
+                        continue;
+                    }
+                    else if (slopeLeftDown && tile.BottomSlope && tile.LeftSlope)
+                    {
+                        continue;
+                    }
+                    return i;
+                }
+            }
+            return length;
+        }
+        #endregion
     }
     public class PathFinderSystem : ModSystem
     {
@@ -590,7 +881,7 @@ namespace Terrapain.Content.TUtilities
                 }
                 else if (offset == new Point(0, 1))
                 {
-                    if (coordinates.X > 0 && coordinates.Y < h - 1)
+                    if (coordinates.X < h - 1 && coordinates.Y > 0)
                     {
                         if (!map[coordinates.X + 1, coordinates.Y] && !map[coordinates.X, coordinates.Y - 1])
                         {   
@@ -610,7 +901,7 @@ namespace Terrapain.Content.TUtilities
                 }
                 else if (offset == new Point(1, 0))
                 {
-                    if (coordinates.X < h - 1 && coordinates.Y > 0)
+                    if (coordinates.X > 0 && coordinates.Y < h - 1)
                     {
                         if (!map[coordinates.X - 1, coordinates.Y] && !map[coordinates.X, coordinates.Y + 1])
                         {   
@@ -752,7 +1043,7 @@ namespace Terrapain.Content.TUtilities
             {
                 for (int y = Area.Y / squareSide; y <= Area.Bottom / squareSide; y++)
                 {   
-                    UnloadArea(x, y);
+                    //UnloadArea(x, y);
                     if (Nodes[x, y] == null)
                     {
                         LoadArea(x, y);
