@@ -63,6 +63,7 @@ namespace Terrapain.Common.Global
         public bool fallThroughtPlatforms;
         public bool canselDeathHitEffect;
         public bool despawnLikeABoss;
+        public bool undead;
 
         
         public static List<DrawTask> PreDrawNPCsDrawTasks = new List<DrawTask>();
@@ -119,6 +120,96 @@ namespace Terrapain.Common.Global
         }
         public override void SetDefaults(NPC entity)
         {
+            switch (entity.type)
+            {
+                case NPCID.Zombie:
+                case NPCID.DoctorBones:
+                case NPCID.TheGroom:
+                case NPCID.BaldZombie:
+                case NPCID.PincushionZombie:
+                case NPCID.SlimedZombie:
+                case NPCID.SwampZombie:
+                case NPCID.TwiggyZombie:
+                case NPCID.FemaleZombie:
+                case NPCID.ZombieRaincoat:
+                case NPCID.ZombieMushroom:
+                case NPCID.ZombieMushroomHat:
+                case NPCID.ZombieDoctor:
+                case NPCID.ZombieSuperman:
+                case NPCID.ZombiePixie:
+                case NPCID.ZombieEskimo:
+                case NPCID.ZombieXmas:
+                case NPCID.ZombieSweater:
+                case NPCID.ZombieElf:
+                case NPCID.ZombieElfBeard:
+                case NPCID.ZombieElfGirl:
+                case NPCID.ArmedZombie:
+                case NPCID.ArmedZombieEskimo:
+                case NPCID.ArmedZombiePincussion:
+                case NPCID.ArmedZombieSlimed:
+                case NPCID.ArmedZombieSwamp:
+                case NPCID.ArmedZombieTwiggy:
+                case NPCID.ArmedZombieCenx:
+                case NPCID.BloodZombie:
+                case NPCID.ZombieMerman:
+                case NPCID.TorchZombie:
+                case NPCID.ArmedTorchZombie:
+                case NPCID.MaggotZombie:
+
+                case NPCID.SkeletronHead:
+                case NPCID.SkeletronHand:
+                case NPCID.Skeleton:
+                case NPCID.UndeadMiner:
+                case NPCID.ArmoredSkeleton:
+                case NPCID.UndeadViking:
+                case NPCID.ArmoredViking:
+                case NPCID.HeadacheSkeleton:
+                case NPCID.MisassembledSkeleton:
+                case NPCID.PantlessSkeleton:
+                case NPCID.SkeletonArcher:
+                case NPCID.SkeletonSniper:
+                case NPCID.TacticalSkeleton:
+                case NPCID.SkeletonCommando:
+                case NPCID.SkeletonTopHat:
+                case NPCID.SkeletonAstonaut:
+                case NPCID.SkeletonAlien:
+                case NPCID.BoneThrowingSkeleton:
+                case NPCID.BoneThrowingSkeleton2:
+                case NPCID.BoneThrowingSkeleton3:
+                case NPCID.BoneThrowingSkeleton4:
+                case NPCID.SkeletonMerchant:
+                case NPCID.GreekSkeleton:
+                case NPCID.SporeSkeleton:
+                case NPCID.AngryBones:
+                case NPCID.AngryBonesBig:
+                case NPCID.AngryBonesBigMuscle:
+                case NPCID.AngryBonesBigHelmet:
+                case NPCID.RustyArmoredBonesAxe:
+                case NPCID.RustyArmoredBonesFlail:
+                case NPCID.RustyArmoredBonesSword:
+                case NPCID.RustyArmoredBonesSwordNoArmor:
+                case NPCID.BlueArmoredBones:
+                case NPCID.BlueArmoredBonesMace:
+                case NPCID.BlueArmoredBonesNoPants:
+                case NPCID.BlueArmoredBonesSword:
+                case NPCID.HellArmoredBones:
+                case NPCID.HellArmoredBonesSpikeShield:
+                case NPCID.HellArmoredBonesMace:
+                case NPCID.HellArmoredBonesSword:
+                case NPCID.Necromancer:
+                case NPCID.NecromancerArmored:
+                case NPCID.RaggedCaster:
+                case NPCID.RaggedCasterOpenCoat:
+
+                case NPCID.Mummy:
+                case NPCID.DarkMummy:
+                case NPCID.LightMummy:
+                case NPCID.BloodMummy:
+                case NPCID.Vampire:
+                case NPCID.BoneLee:
+                    undead = true;
+                    break;
+            }
             if (drawCenter == Vector2.Zero)
             {
                 if (TextureAssets.Npc[entity.type] != null)
@@ -216,8 +307,8 @@ namespace Terrapain.Common.Global
                     Terrapain.group[group].hasBeenDrawn = true;
                 }
             }
-            Color col = npc.GetAlpha(Color.White);
-            Color col2 = npc.GetColor(Color.White);
+            //Color col = npc.GetAlpha(Color.White);
+            //Color col2 = npc.GetColor(Color.White);
 
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
@@ -266,10 +357,6 @@ namespace Terrapain.Common.Global
             {
                 TDrawNPC(spriteBatch, npc, texture);
             }
-            if (npc.type == NPCID.EaterofWorldsBody)
-            {
-
-            }
             spriteBatch.End();
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
             return (draw?? true) && useVanillaDrawing;
@@ -301,10 +388,6 @@ namespace Terrapain.Common.Global
             {
                 NPCBehaviour?.OnFirstTick(npc);
                 FirstTick = false;
-            }
-            if (npc.type == NPCID.Harpy)
-            {
-                
             }
             return NPCBehaviour?.ModPreAI(npc)?? true;
         }
@@ -423,22 +506,29 @@ namespace Terrapain.Common.Global
 
         private void On_Main_Draw(On_Main.orig_EnsureRenderTargetContent orig, Main self)
         {
-            foreach (var npc in Main.npc)
+            try
             {
-                if (npc.active)
+                foreach (var npc in Main.npc)
                 {
-                    if (npc.TryGetGlobalNPC<TGlobalNPC>(out var result))
+                    if (npc.active)
                     {
-                        result.DrawToRenderTarget(npc);
+                        if (npc.TryGetGlobalNPC<TGlobalNPC>(out var result))
+                        {
+                            result.DrawToRenderTarget(npc);
+                        }
+                    }
+                }
+                foreach (var Group in Terrapain.group)
+                {
+                    if (Group?.active?? false)
+                    {
+                        Group.DrawToRenderTarget();
                     }
                 }
             }
-            foreach (var Group in Terrapain.group)
+            catch
             {
-                if (Group?.active?? false)
-                {
-                    Group.DrawToRenderTarget();
-                }
+                
             }
             orig(self);
         }

@@ -1,12 +1,6 @@
-using Luminance.Core.Graphics;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Terrapain.Assets.Extratextures;
 using Terrapain.Common.Global.Trails;
-using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Content;
-using Terrapain.Content.DamageClasses;
-using Terrapain.Content.NPCs;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -46,8 +40,7 @@ namespace Terrapain.Common.Global
             orig(self, wetVelocity);
             if (self.GetT().trail != null)
             {
-                self.GetT().trail.projectile = self.whoAmI;
-                self.GetT().trail.Update();
+                self.GetT().trail.Update(self);
             }
         }
 
@@ -57,7 +50,7 @@ namespace Terrapain.Common.Global
             {
                 Main.instance.LoadProjectile(entity.type);
                 Texture2D texture = TextureAssets.Projectile[entity.type].Value;
-                drawCenter = texture.Size() / 2;
+                drawCenter = texture.Size() / 2 / Main.projFrames[entity.type];
             }
             oldFrame = new int[ProjectileID.Sets.TrailCacheLength[entity.type]];
         }
@@ -107,7 +100,7 @@ namespace Terrapain.Common.Global
             }
             if (trail != null)
             {
-                trail.Draw(Main.spriteBatch);
+                trail.Draw(Main.spriteBatch, projectile);
                 if (NonPremultiplied)
                 {
                     Main.spriteBatch.End();

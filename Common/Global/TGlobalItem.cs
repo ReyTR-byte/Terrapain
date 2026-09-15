@@ -18,7 +18,6 @@ namespace Terrapain.Common.Global
 		public override bool InstancePerEntity => true;
 		public bool activeAccessory;
         public bool dashAccessory;
-		//public bool CanUse = true;
         public float ShootRotation;
 		public float ShootSpeedBonus;
 		public int dust = -1;
@@ -46,7 +45,7 @@ namespace Terrapain.Common.Global
 
 		public int[] MassiveSwords =
 		{
-			121,
+			ItemID.FieryGreatsword,
 			//ItemID.CopperAxe,
 			//ItemID.GoldAxe,
 			//ItemID.CopperPickaxe,
@@ -99,7 +98,7 @@ namespace Terrapain.Common.Global
 		public int[] LightSwords =
 		{
 			ItemID.Muramasa,
-			190,
+			ItemID.BladeofGrass,
 			ItemID.IronBroadsword,
 			ItemID.CopperBroadsword,
 			ItemID.TinBroadsword,
@@ -147,7 +146,7 @@ namespace Terrapain.Common.Global
         }
         public override void SetDefaults(Item entity)
         {
-			if (MassiveSwords.Contains(entity.type) || ((entity.pick > 0 || entity.axe > 0 || entity.hammer > 0) && entity.useStyle == ItemUseStyleID.Swing)) {
+            if (MassiveSwords.Contains(entity.type) || ((entity.pick > 0 || entity.axe > 0 || entity.hammer > 0) && entity.useStyle == ItemUseStyleID.Swing)) {
 				entity.useStyle = MassiveSwing;
 				entity.useTurn = false;
 				if (StaminaUsage == 0)
@@ -299,9 +298,7 @@ namespace Terrapain.Common.Global
         {
             if (item.DamageType == DamageClass.Melee || item.DamageType == DamageClass.MeleeNoSpeed)
             {
-                player.Custom().Stamina -= item.GetT().StaminaUsage * player.Custom().staminaUsageMultiplyer;
-                player.Custom().StaminaRegenerationTimer = player.Custom().GetStaminaTimer;
-                player.Custom().StaminaRegeneration = 0;
+				player.Custom().UseStamina(item.GetT().StaminaUsage);
             }
             if (item.useStyle == ItemUseStyleID.Swing)
             {
