@@ -9,6 +9,7 @@ namespace Terrapain.Common.System
     public class KeybindSystem : ModSystem
     {
         public static ModKeybind DashKeybind { get; private set; }
+        public static ModKeybind SprintKeybind { get; private set; }
         public static ModKeybind RealiseHookedNPC { get; private set; }
         public static ModKeybind ActiveAccesory1 { get; private set; }
         public static ModKeybind ActiveAccesory2 { get; private set; }
@@ -33,6 +34,7 @@ namespace Terrapain.Common.System
         public override void Load()
         {
             DashKeybind = KeybindLoader.RegisterKeybind(Mod, "Dash", Microsoft.Xna.Framework.Input.Keys.F);
+            SprintKeybind = KeybindLoader.RegisterKeybind(Mod, "Sprint", Microsoft.Xna.Framework.Input.Keys.LeftShift);
             RealiseHookedNPC = KeybindLoader.RegisterKeybind(Mod, "RealiseHookedNPC", Microsoft.Xna.Framework.Input.Keys.R);
             ActiveAccesory1 = KeybindLoader.RegisterKeybind(Mod, "ActiveAccesory1", Microsoft.Xna.Framework.Input.Keys.O);
             ActiveAccesory2 = KeybindLoader.RegisterKeybind(Mod, "ActiveAccesory2", Microsoft.Xna.Framework.Input.Keys.P);
@@ -45,6 +47,7 @@ namespace Terrapain.Common.System
         public override void Unload()
         {
             DashKeybind = null;
+            SprintKeybind = null;
             RealiseHookedNPC = null;
             ActiveAccesory1 = null;
             ActiveAccesory2 = null; 
