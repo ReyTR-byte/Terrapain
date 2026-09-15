@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Common.Global;
-using Terrapain.Content.Buffs;
+﻿using Terrapain.Common.Global;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Terrapain.Content.Projectiles.Ammo.Bouquet
+namespace Terrapain.Content.Projectiles.Ammo.Arrows.Bouquet
 {
-    public class DaybloomPetal : ModProjectile
+    public class FireblossomPetal : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -34,7 +29,7 @@ namespace Terrapain.Content.Projectiles.Ammo.Bouquet
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            target.AddBuff(ModContent.BuffType<DaybloomInfection>(), 480);
+            target.AddBuff(BuffID.OnFire, 480);
         }
     }
 }

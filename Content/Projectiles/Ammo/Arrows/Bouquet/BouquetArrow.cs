@@ -1,17 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Common.Global;
+﻿using Terrapain.Common.Global;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
-namespace Terrapain.Content.Projectiles.Ammo.Bouquet
+namespace Terrapain.Content.Projectiles.Ammo.Arrows.Bouquet
 {
     public class BouquetArrow : ModProjectile
     {

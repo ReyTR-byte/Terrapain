@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Common.Global;
-using Terraria;
+﻿using Terraria;
 using Terraria.ID;
+using Terrapain.Common.Global;
 using Terraria.ModLoader;
 
-namespace Terrapain.Content.Projectiles.Ammo.Bouquet
+namespace Terrapain.Content.Projectiles.Ammo.Arrows.Bouquet
 {
-    public class DeathweedPetal : ModProjectile
+    public class ShiverthornPetal : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -34,7 +29,7 @@ namespace Terrapain.Content.Projectiles.Ammo.Bouquet
         }
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            target.AddBuff(BuffID.Ichor, 480);
+            target.AddBuff(BuffID.Frostburn, 480);
         }
     }
 }

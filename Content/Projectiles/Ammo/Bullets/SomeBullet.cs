@@ -4,32 +4,32 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Terrapain.Content.Projectiles.Ammo
+namespace Terrapain.Content.Projectiles.Ammo.Bullets
 {
 	public class SomeBullet : ModProjectile
 	{
         int timer = 60;
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0; // The recording mode
+            ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5;
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
             Main.projFrames[Projectile.type] = 2;
         }
 
 		public override void SetDefaults()
 		{
-			Projectile.width = 10; // The width of projectile hitbox
-			Projectile.height = 10; // The height of projectile hitbox
-			Projectile.aiStyle = -1; // The ai style of the projectile, please reference the source code of Terraria
-			Projectile.friendly = true; // Can the projectile deal damage to enemies?
-			Projectile.hostile = false; // Can the projectile deal damage to the player?
-			Projectile.DamageType = DamageClass.Ranged; // Is the projectile shoot by a ranged weapon?
-			Projectile.penetrate = 1; // How many monsters the projectile can penetrate. (OnTileCollide below also decrements penetrate for bounces as well)
-			Projectile.timeLeft = 600; // The live time for the projectile (60 = 1 second, so 600 is 10 seconds)
-			Projectile.light = 0.2f; // Does the projectile's speed be influenced by water?
-			Projectile.tileCollide = true; // Can the projectile collide with tiles?
+			Projectile.width = 10;
+			Projectile.height = 10;
+			Projectile.aiStyle = -1;
+			Projectile.friendly = true;
+			Projectile.hostile = false;
+			Projectile.DamageType = DamageClass.Ranged;
+			Projectile.penetrate = 1;
+			Projectile.timeLeft = 600;
+			Projectile.light = 0.2f;
+			Projectile.tileCollide = true;
 			Projectile.extraUpdates = 1;
-			AIType = ProjectileID.Bullet; // Act exactly like default Bullet
+			AIType = ProjectileID.Bullet;
 		}
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
@@ -47,9 +47,7 @@ namespace Terrapain.Content.Projectiles.Ammo
                 Projectile.width -= 2;
                 Projectile.position += Vector2.One;
                 Projectile.damage = Convert.ToInt32(Projectile.damage * 0.8);
-                AISearchForTarget(out bool foundTarget,
-                                    out float distanceFromTarget,
-                                    out Vector2 targetCenter);
+                AISearchForTarget(out bool foundTarget, out Vector2 targetCenter);
                 if (foundTarget)
                 {
                     Vector2 VTT = targetCenter - Projectile.Center;
@@ -58,12 +56,9 @@ namespace Terrapain.Content.Projectiles.Ammo
                 }
             }
         }
-        private void AISearchForTarget(//Player owner,
-                                       out bool foundTarget,
-                                       out float distanceFromTarget,
-                                       out Vector2 targetCenter)
+        private void AISearchForTarget(out bool foundTarget, out Vector2 targetCenter)
         {
-            distanceFromTarget = 2000f;
+            float distanceFromTarget = 2000f;
             targetCenter = Projectile.position;
             foundTarget = false;
                 for (int i = 0; i < Main.maxNPCs; i++)
@@ -86,11 +81,9 @@ namespace Terrapain.Content.Projectiles.Ammo
                     }
                 }
             }
-            //Projectile.friendly = foundTarget;
         }
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
         {
-            // This code and the similar code above in OnTileCollide spawn dust from the tiles collided with. SoundID.Item10 is the bounce sound you hear.
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
             SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
         }

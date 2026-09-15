@@ -10,11 +10,11 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Terrapain.Content.Projectiles.Ammo
+namespace Terrapain.Content.Projectiles.Ammo.Bullets
 {
 	public class SlimeBullet : ModProjectile
 	{
-		float penetrate;
+		//float penetrate;
 		public override void SetStaticDefaults()
 		{
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
@@ -34,15 +34,18 @@ namespace Terrapain.Content.Projectiles.Ammo
 			Projectile.light = 0.2f; // Does the projectile's speed be influenced by water?
 			Projectile.tileCollide = true; // Can the projectile collide with tiles?
 			Projectile.extraUpdates = 1; // Set to above 0 if you want the projectile to update multiple time in a frame
-			penetrate = Projectile.ai[0] + 5;
 			AIType = ProjectileID.Bullet; // Act exactly like default Bullet
-			Projectile.GetGlobalProjectile<TGlobalProjectile>().afterimage = true;
-			Projectile.GetGlobalProjectile<TGlobalProjectile>().afterimagesCount = 4;
+			Projectile.GetT().afterimage = true;
+			Projectile.GetT().afterimagesCount = 4;
+		}
+        public override void OnSpawn(IEntitySource source)
+		{
+			Projectile.penetrate = 5;
 		}
 		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			Projectile.damage = (int)(Projectile.damage * 0.8);
-			penetrate--;
+			//penetrate--;
 			Vector2 CollidePosition = Vector2.Zero;
 			if (Projectile.velocity.Y > 0)
 				CollidePosition.X = Math.Abs(target.position.Y - Projectile.Center.Y) * Projectile.velocity.X / Projectile.velocity.Length() + Projectile.Center.X;
@@ -57,7 +60,7 @@ namespace Terrapain.Content.Projectiles.Ammo
 					else
 						Projectile.position.X = target.position.X + target.width - 4.05f;
 					Projectile.velocity.X *= -0.95f;
-					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, penetrate - 5);
+					//Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, penetrate - 5);
 					Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.t_Slime, Projectile.velocity.X, Projectile.velocity.Y, 0, Color.LightBlue);
 					return;
 				}
@@ -78,13 +81,13 @@ namespace Terrapain.Content.Projectiles.Ammo
 					Projectile.position.X = target.position.X + target.width - 4.05f;
 				Projectile.velocity.X *= -0.95f;
 			}
-			Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, penetrate - 5);
+			//Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position, Projectile.velocity, Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, penetrate - 5);
 			Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.t_Slime, Projectile.velocity.X, Projectile.velocity.Y, 0, Color.LightBlue);
 		}
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
-			penetrate--;
-			if (penetrate <= 0)
+			Projectile.penetrate--;
+			if (Projectile.penetrate <= 0)
 			{
 				Projectile.Kill();
 			}
@@ -110,12 +113,7 @@ namespace Terrapain.Content.Projectiles.Ammo
 
 			return false;
 		}
-		public override void AI()
-		{
-			if (penetrate <= 0)
-				Projectile.Kill();
-        }
-		public override void Kill(int timeLeft)
+		public override void OnKill(int timeLeft)
 		{
 			// This code and the similar code above in OnTileCollide spawn dust from the tiles collided with. SoundID.Item10 is the bounce sound you hear.
 			Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);

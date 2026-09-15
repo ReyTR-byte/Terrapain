@@ -6,10 +6,15 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using static Terrapain.Content.Functions;
 
-namespace Terrapain.Content.Projectiles.Ammo
+namespace Terrapain.Content.Projectiles.Ammo.Bullets
 {
     public class JungleBullet: ModProjectile
     {
+        public override void SetStaticDefaults()
+		{
+			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 4;
+			ProjectileID.Sets.TrailingMode[Projectile.type] = 0;
+		}
         public override void SetDefaults()
         {
             Projectile.width = 8;
@@ -22,8 +27,8 @@ namespace Terrapain.Content.Projectiles.Ammo
             Projectile.light = 0.2f;
             Projectile.tileCollide = true;
             Projectile.extraUpdates = 1;
-            Projectile.GetGlobalProjectile<TGlobalProjectile>().afterimage = true;
-            Projectile.GetGlobalProjectile<TGlobalProjectile>().afterimagesCount = 4;
+            Projectile.GetT().afterimage = true;
+            Projectile.GetT().afterimagesCount = 4;
         }
         int target;
         bool FoundTarget;

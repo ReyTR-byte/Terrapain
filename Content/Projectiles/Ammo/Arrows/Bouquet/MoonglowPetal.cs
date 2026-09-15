@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Common.Global;
+﻿using Terrapain.Common.Global;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Terrapain.Content.Projectiles.Ammo.Bouquet
+namespace Terrapain.Content.Projectiles.Ammo.Arrows.Bouquet
 {
-    internal class WaterleafPetal : ModProjectile
+    public class MoonglowPetal : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -29,6 +26,10 @@ namespace Terrapain.Content.Projectiles.Ammo.Bouquet
             if (Projectile.velocity.Y < 0)
                 angel = 2 * (float)Math.PI - angel;
             Projectile.rotation = angel;
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            target.AddBuff(BuffID.Poisoned, 480);
         }
     }
 }

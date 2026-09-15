@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Common.Global;
-using Terraria.DataStructures;
+﻿using Terrapain.Common.Global;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace Terrapain.Content.Projectiles.Ammo.Bouquet
+namespace Terrapain.Content.Projectiles.Ammo.Arrows.Bouquet
 {
-    public class BlinkrootPetal : ModProjectile
+    public class DeathweedPetal : ModProjectile
     {
         public override void SetDefaults()
         {
@@ -23,10 +19,6 @@ namespace Terrapain.Content.Projectiles.Ammo.Bouquet
             Projectile.GetGlobalProjectile<TGlobalProjectile>().useModDrawingInPreDraw = true;
             Projectile.GetGlobalProjectile<TGlobalProjectile>().useVanillaDrawing = false;
         }
-        public override void OnSpawn(IEntitySource source)
-        {
-            Projectile.damage *= 2;
-        }
         public override void AI()
         {
             Projectile.velocity.Y += 0.09f;
@@ -34,6 +26,10 @@ namespace Terrapain.Content.Projectiles.Ammo.Bouquet
             if (Projectile.velocity.Y < 0)
                 angel = 2 * (float)Math.PI - angel;
             Projectile.rotation = angel;
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            target.AddBuff(BuffID.Ichor, 480);
         }
     }
 }
