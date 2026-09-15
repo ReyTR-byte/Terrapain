@@ -18,7 +18,7 @@ using Terraria.Utilities;
 
 namespace Terrapain.Content.Items.Weapons.RangerWeapons
 {
-	public class SlimeBow : ModItem
+	public class SlimeBow : ModItem, IBowUseStyle
 	{
 		public override void SetStaticDefaults() {
 
@@ -50,18 +50,18 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
             Item.value = Item.buyPrice(gold: 6);
         }
 		UnifiedRandom rand = new UnifiedRandom();
+		public void FullPowerShoot(BowsOverride bowsOverride, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+		{
+			int count = 10;
+			float step = MathF.PI * 2 / count;
+			float startAngle = velocity.ToRotation() + (count % 2 == 0? step / 2 : 0);
+			for (int i = 0; i < count; i++)
+			{
+				Projectile.NewProjectile(source, position, (startAngle + step * i).ToRotationVector2() * 15, ModContent.ProjectileType<FriendlyCrownGem>(), (int)(damage * 0.75f), knockback, player.whoAmI, velocity.X, velocity.Y, 15);
+			}
+		}
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
 		{
-            if (Item.GetGlobalItem<BowsOverride>().bowTime >= Item.useAnimation * 5)
-			{
-				int count = 10;
-				float step = MathF.PI * 2 / count;
-				float startAngle = velocity.ToRotation() + (count % 2 == 0? step / 2 : 0);
-				for (int i = 0; i < count; i++)
-				{
-					Projectile.NewProjectile(source, position, (startAngle + step * i).ToRotationVector2() * 15, ModContent.ProjectileType<FriendlyCrownGem>(), (int)(damage * 0.75f), knockback, player.whoAmI, velocity.X, velocity.Y, 15);
-				}
-			}
 			for (int i = rand.Next(3, 7); i > 0; i--)
 			{
 				Dust.NewDust(player.Center + velocity / velocity.Length() + new Vector2(-3, -3), 6, 6, DustID.t_Slime, 0, 0, 0, Color.LightBlue);
