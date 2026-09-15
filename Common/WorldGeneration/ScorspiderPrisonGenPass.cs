@@ -1,7 +1,5 @@
-using Microsoft.Xna.Framework;
 using StructureHelper.API;
 using StructureHelper.Models;
-using Terrapain.Content.NPCs.Bosses.Scorspider;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -37,9 +35,9 @@ namespace Terrapain.Common.WorldGeneration
                 }
                 attempts++;
             }
-            Generator.GenerateStructure("Common/WorldGeneration/Structures/ScorspiderPrison.shstruct", new Point16(x, y), ScorspiderPrisonGen._mod);
+            Generator.GenerateStructure("Common/WorldGeneration/Structures/ScorspiderPrison.shstruct", new Point16(x, y), TWorldGen._mod);
             //ScorspiderBody.PrisonPosition = new Vector2(x, y);
-            StructureData sd = Generator.GetStructureData("Common/WorldGeneration/Structures/ScorspiderPrison.shstruct", ScorspiderPrisonGen._mod);
+            StructureData sd = Generator.GetStructureData("Common/WorldGeneration/Structures/ScorspiderPrison.shstruct", TWorldGen._mod);
             //ScorspiderBody.prisonWidth = sd.width;
             //ScorspiderBody.prisonHeight = sd.height;
         }

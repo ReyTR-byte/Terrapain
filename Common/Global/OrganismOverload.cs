@@ -1,15 +1,11 @@
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Common.System;
 using Terrapain.Content.Buffs;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using ReLogic.Graphics;
-using Terrapain.Content;
 
 namespace Terrapain.Common.Global
 {

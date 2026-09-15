@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Terrapain.Content;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
 
 namespace Terrapain.Common.Global

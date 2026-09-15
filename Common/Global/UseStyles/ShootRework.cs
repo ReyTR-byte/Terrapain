@@ -1,11 +1,7 @@
 using Luminance.Common.Utilities;
-using Microsoft.Xna.Framework;
 using Terrapain.Content;
-using Terrapain.Content.Items.Weapons.MagicWeapons;
-using Terrapain.Content.Items.Weapons.MeleeWeapons;
 using Terraria;
 using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Terrapain.Common.Global.UseStyles{

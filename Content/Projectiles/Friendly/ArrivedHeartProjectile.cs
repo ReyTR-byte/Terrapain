@@ -2,7 +2,6 @@
 using Terrapain.Content.DamageClasses;
 using Terrapain.Content.Dusts;
 using Terraria;
-using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -73,45 +72,6 @@ namespace Terrapain.Content.Projectiles.Friendly
                 length = 10,
                 startWidth = 20
             };
-
-            //{
-            //    int count = 20;
-            //    Vector2 circleCenter = new Vector2(0.5f, -0.5f);
-            //    float circleRadius = 0.5f;
-            //    Vector2 bottom = new Vector2(0, 1);
-            //    Vector2 transitionPoint = RightTriangle(bottom, circleCenter, circleRadius);
-            //    float maxAngle = MathF.PI + (transitionPoint - circleCenter).ToRotation();
-            //    float perimeter = circleRadius * maxAngle + bottom.Distance(transitionPoint);
-            //    float step = perimeter / count;
-            //    float stepsForCircle = circleRadius * maxAngle / perimeter * count;
-            //    float stepOnCircle = maxAngle / stepsForCircle;
-            //    Vector2[] vertices = new Vector2[count];
-            //    for (int i = 0; i < count; i++)
-            //    {
-            //        if (i < stepsForCircle)
-            //        {
-            //            vertices[i] = circleCenter - Vector2.UnitX.RotatedBy(stepOnCircle * i) * circleRadius;
-            //        }
-            //        else
-            //        {
-            //            vertices[i] = transitionPoint + (bottom - transitionPoint) * ((i - stepsForCircle) / (count - 1 - stepsForCircle));
-            //        }
-            //    }
-            //    HeartVertices = new Vector2[count * 2 - 2];
-            //    for (int i = 0; i < count * 2 - 2; i++)
-            //    {
-            //        if (i < count)
-            //        {
-            //            HeartVertices[i] = vertices[i];
-            //        }
-            //        else
-            //        {
-            //            Vector2 vec = vertices[i - count + 1];
-            //            vec.X *= -1;
-            //            HeartVertices[i] = vec;
-            //        }
-            //    }
-            //}
         }
         public static Vector2[] HeartVertices;
         int target;

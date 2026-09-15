@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Common.Global;
+﻿using Terrapain.Common.Global;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Terrapain.Content.Buffs
 {
-    internal class DaybloomInfection : ModBuff
+    public class DaybloomInfection : ModBuff
     {
         public override void SetStaticDefaults()
         {

@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
@@ -6,7 +5,6 @@ using Terraria.ID;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 using Terrapain.Content.Buffs;
-using Humanizer;
 using Terrapain.Common.Global;
 using Terrapain.Common.System;
 using Terrapain.Content.DamageClasses;
@@ -17,16 +15,15 @@ namespace Terrapain.Content.Items.Tools
 	{
 		public override void SetStaticDefaults() 
         {
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1; // Amount of this item needed to research and become available in Journey mode's duplication menu. Amount based on vanilla hooks' amount needed
+			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 		}
 
 		public override void SetDefaults() 
         {
-			// Copy values from the Amethyst Hook
 			Item.CloneDefaults(ItemID.AmethystHook);
 			Item.value = Item.buyPrice(silver: 80);
-			Item.shootSpeed = 18f; // This defines how quickly the hook is shot.
-			Item.shoot = ModContent.ProjectileType<ScorspiderHookProjectile>(); // Makes the item shoot the hook's projectile when used.
+			Item.shootSpeed = 18f;
+			Item.shoot = ModContent.ProjectileType<ScorspiderHookProjectile>();
             Item.damage = 20;
             Item.DamageType = ModContent.GetInstance<Unarmed>();
             Item.width = 32;
@@ -39,26 +36,23 @@ namespace Terrapain.Content.Items.Tools
 		private static Asset<Texture2D> chainTexture;
 
 		public override void Load()
-        { // This is called once on mod (re)load when this piece of content is being loaded.
-			// This is the path to the texture that we'll use for the hook's chain. Make sure to update it.
+        {
 			chainTexture = ModContent.Request<Texture2D>("Terrapain/Content/Items/Tools/ScorspiderHookChain");
 		}
 
 		public override void Unload()
-        { // This is called once on mod reload when this piece of content is being unloaded.
-			// It's currently pretty important to unload your static fields like this, to avoid having parts of your mod remain in memory when it's been unloaded.
+        {
 			chainTexture = null;
 		}
 
 		public override void SetDefaults()
         {
-			Projectile.CloneDefaults(ProjectileID.GemHookAmethyst); // Copies the attributes of the Amethyst hook's projectile.
+			Projectile.CloneDefaults(ProjectileID.GemHookAmethyst);
             Projectile.friendly = true;
 			Projectile.width = 20;
 			Projectile.height = 20;
 		}
 
-		// Use this hook for hooks that can have multiple hooks mid-flight: Dual Hook, Web Slinger, Fish Hook, Static Hook, Lunar Hook.
 		public override bool? CanUseGrapple(Player player) 
         {
 			int hooksOut = 0;
@@ -112,21 +106,19 @@ namespace Terrapain.Content.Items.Tools
 
 		public override void NumGrappleHooks(Player player, ref int numHooks)
         {
-			numHooks = 3; // The amount of hooks that can be shot out
+			numHooks = 3;
 		}
 
-		// default is 11, Lunar is 24
 		public override void GrappleRetreatSpeed(Player player, ref float speed) 
         {
-			speed = 18f; // How fast the grapple returns to you after meeting its max shoot distance
+			speed = 18f;
 		}
 
 		public override void GrapplePullSpeed(Player player, ref float speed) 
         {
-			speed = 10; // How fast you get pulled to the grappling hook projectile's landing position
+			speed = 10;
 		}
 
-		// Adjusts the position that the player will be pulled towards. This will make them hang 50 pixels away from the tile being grappled.
         int iTarget = -1;
         NPC Target => iTarget >= 0? Main.npc[iTarget] : null;
         Vector2 PositionAboutTarget;
@@ -203,7 +195,6 @@ namespace Terrapain.Content.Items.Tools
             }
         }
 
-		// Draws the grappling hook's chain.
 		public override bool PreDrawExtras() 
         {
 			Vector2 playerCenter = Main.player[Projectile.owner].MountedCenter;
@@ -213,21 +204,19 @@ namespace Terrapain.Content.Items.Tools
 			float distanceToPlayer = directionToPlayer.Length();
 
 			while (distanceToPlayer > 20f && !float.IsNaN(distanceToPlayer)) {
-				directionToPlayer /= distanceToPlayer; // get unit vector
-				directionToPlayer *= chainTexture.Height(); // multiply by chain link length
+				directionToPlayer /= distanceToPlayer;
+				directionToPlayer *= chainTexture.Height();
 
-				center += directionToPlayer; // update draw position
-				directionToPlayer = playerCenter - center; // update distance
+				center += directionToPlayer;
+				directionToPlayer = playerCenter - center;
 				distanceToPlayer = directionToPlayer.Length();
 
 				Color drawColor = Lighting.GetColor((int)center.X / 16, (int)(center.Y / 16));
 
-				// Draw chain
 				Main.EntitySpriteDraw(chainTexture.Value, center - Main.screenPosition,
 					chainTexture.Value.Bounds, drawColor, chainRotation,
 					chainTexture.Size() * 0.5f, 1f, SpriteEffects.None, 0);
 			}
-			// Stop vanilla from drawing the default chain.
 			return false;
 		}
 	}

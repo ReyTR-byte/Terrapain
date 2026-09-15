@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework;
 using Terrapain.Common.Global;
 using Terrapain.Content.Dashes;
 using Terrapain.Content.Items.Abstract;

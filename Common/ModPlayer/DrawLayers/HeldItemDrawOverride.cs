@@ -1,19 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terrapain.Common.Global;
 using Terrapain.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
-using Terraria.ID;
 using Terraria.ModLoader;
-using static AssGen.Assets;
 
 namespace Terrapain.Common.TerrapainModPlayer.DrawLayers
 {
@@ -33,7 +25,7 @@ namespace Terrapain.Common.TerrapainModPlayer.DrawLayers
 
             Main.instance.LoadItem(num);
             Asset<Texture2D> t = TextureAssets.Item[num];
-            Rectangle frame = ((Main.itemAnimations[num] == null) ? t.Frame() : Main.itemAnimations[num].GetFrame(t.Value));
+            Rectangle frame = (Main.itemAnimations[num] == null) ? t.Frame() : Main.itemAnimations[num].GetFrame(t.Value);
 
             Vector2 position = drawInfo.drawPlayer.itemLocation - Main.screenPosition;
 
@@ -64,7 +56,6 @@ namespace Terrapain.Common.TerrapainModPlayer.DrawLayers
                     rotationAdd += 2 * (drawInfo.drawPlayer.HeldItem.GetT().spriteRotation.HasValue? MathF.PI / 2 - drawInfo.drawPlayer.HeldItem.GetT().spriteRotation.Value : MathF.PI / 4) * dir;
                 }
             }
-
 
             drawInfo.DrawDataCache.Add(new DrawData(
                 t.Value,

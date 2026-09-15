@@ -1,16 +1,9 @@
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Configuration;
 using Terraria;
 using Terraria.Audio;
-using Terraria.DataStructures;
-using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using Terrapain.Common.Global;
-using Terrapain.Content.NPCs.Bosses.Scorspider;
 using Terrapain.Content.Buffs;
 using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
 
@@ -64,7 +57,7 @@ namespace Terrapain.Content.Projectiles.Friendly
                 Main.projectile[proj].hostile = false;
             }
         }
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
             // This code and the similar code above in OnTileCollide spawn dust from the tiles collided with. SoundID.Item10 is the bounce sound you hear.
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);

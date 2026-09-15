@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Content;
+﻿using Terrapain.Content;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

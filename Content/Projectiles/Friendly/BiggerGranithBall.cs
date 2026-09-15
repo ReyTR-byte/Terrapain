@@ -1,6 +1,4 @@
-﻿
-using Microsoft.Xna.Framework;
-using Terrapain.Common.Global;
+﻿using Terrapain.Common.Global;
 using Terrapain.Content.Buffs;
 using Terraria;
 using Terraria.Audio;

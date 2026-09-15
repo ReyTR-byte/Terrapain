@@ -1,6 +1,5 @@
 using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Content;
-using Terrapain.Content.Buffs;
 using Terrapain.Content.Projectiles.Friendly;
 using Terraria;
 using Terraria.ID;
@@ -10,7 +9,7 @@ namespace Terrapain.Common.Global
 {
     public class ShootBonusProjectiles : GlobalItem
     {
-        public override bool? UseItem(Item item, Terraria.Player player)
+        public override bool? UseItem(Item item, Player player)
         {
             if (player.GetModPlayer<TerrapainPlayer>().ExplosiveSkull && item.DamageType == DamageClass.Ranged && player.GetModPlayer<TerrapainPlayer>().ExplosiveSkullReload == 0)
             {

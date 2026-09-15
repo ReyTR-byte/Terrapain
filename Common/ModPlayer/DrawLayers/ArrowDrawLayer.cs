@@ -3,7 +3,7 @@ using ReLogic.Content;
 using Terrapain.Common.Global;
 using Terrapain.Common.Global.UseStyles;
 using Terrapain.Content;
-using Terrapain.Content.Projectiles.Ammo.Bouquet;
+using Terrapain.Content.Projectiles.Ammo.Arrows.Bouquet;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;

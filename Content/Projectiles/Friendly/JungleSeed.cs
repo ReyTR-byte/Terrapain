@@ -1,4 +1,5 @@
 ﻿using Terrapain.Common.Global;
+using Terrapain.Content.TUtilities;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -36,19 +37,20 @@ namespace Terrapain.Content.Projectiles.Friendly
             {
                 if (Main.npc[target].active)
                 {
-                    Vector2 vectorToTargetPosition = Main.npc[target].Center - Projectile.Center;
-                    float positiveRotation = AngleBetweenVectors(vectorToTargetPosition, Projectile.velocity);
-                    positiveRotation = NormalizeRotation(positiveRotation);
-                    float negativeRotation = AngleBetweenVectors(Projectile.velocity, vectorToTargetPosition);
-                    negativeRotation = NormalizeRotation(negativeRotation);
-                    if (positiveRotation > negativeRotation)
-                    {
-                        Projectile.velocity.RotateBy(MathF.Max(-negativeRotation, -0.025f));
-                    }
-                    else
-                    {
-                        Projectile.velocity.RotateBy(MathF.Min(positiveRotation, 0.025f));
-                    }
+                    AIHelper.OnlyRotationalMovement(Projectile, Main.npc[target].Center, 0.025f);
+                    // Vector2 vectorToTargetPosition = Main.npc[target].Center - Projectile.Center;
+                    // float positiveRotation = AngleBetweenVectors(vectorToTargetPosition, Projectile.velocity);
+                    // positiveRotation = NormalizeRotation(positiveRotation);
+                    // float negativeRotation = AngleBetweenVectors(Projectile.velocity, vectorToTargetPosition);
+                    // negativeRotation = NormalizeRotation(negativeRotation);
+                    // if (positiveRotation > negativeRotation)
+                    // {
+                    //     Projectile.velocity.RotateBy(MathF.Max(-negativeRotation, -0.025f));
+                    // }
+                    // else
+                    // {
+                    //     Projectile.velocity.RotateBy(MathF.Min(positiveRotation, 0.025f));
+                    // }
                 }
             }
             else if (Projectile.timeLeft % 6 == 0)
