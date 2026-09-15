@@ -10,9 +10,6 @@ using Terrapain.Content.Items.Ingredients;
 
 namespace Terrapain.Content.Items.Weapons.SummonerWeapons
 {
-    // This is a basic item template.
-    // Please see tModLoader's ExampleMod for every other example:
-    // https://github.com/tModLoader/tModLoader/tree/stable/ExampleMod
     public class GlassKnife : ModItem
     {
         public override void SetStaticDefaults()
@@ -36,7 +33,7 @@ namespace Terrapain.Content.Items.Weapons.SummonerWeapons
             Item.UseSound = SoundID.Item1;
             Item.autoReuse = true;
             Item.mana = 20;
-            Item.shoot = ModContent.ProjectileType<Content.Projectiles.Minions.GlassKnife>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.Minions.GlassKnife>();
             Item.buffType = ModContent.BuffType<GlassKnifeBuff>();
             Item.value = Item.buyPrice(gold: 7);
         }
