@@ -1,4 +1,5 @@
-﻿using Terrapain.Common.UI.Assets.AbilitiesIcons;
+﻿using Terrapain.Common.System;
+using Terrapain.Common.UI.Assets.AbilitiesIcons;
 using Terrapain.Common.UI.Assets.BarFills;
 using Terrapain.Content.DamageClasses;
 using Terrapain.Content.Dashes;
@@ -117,23 +118,6 @@ namespace Terrapain.Content.Items.Accessories.ActiveAccessories.VanillaItemActiv
             return false;
         }
         public override string AbilityDescription => $"Mods.Terrapain.AbilityDescription.{this.GetType().Name}" + (infiniteFlightDuration > 0? "InfFly" : "");
-        // public BootsActiveAccessory(float VelocityMultiplyer, int Duration, int Reload, float AccelerationMultiplyer, int InfiniteFlightDuration = 0, float DashPriority = 2, int DashPenetrate = -1, bool Hurtfull = false)
-        // {
-        //     velocityMultiplyer = VelocityMultiplyer;
-        //     duration = Duration;
-        //     AbilityReloadMax = Reload;
-        //     accelerationMultiplyer = AccelerationMultiplyer;
-        //     infiniteFlightDuration = InfiniteFlightDuration;
-        //     dashPriority = DashPriority;
-        //     dashPenetrate = DashPenetrate;
-        //     hurtfull = Hurtfull;
-        //     if (InfiniteFlightDuration != 0)
-        //     {
-        //         abilityChargeStrip = new DoubleAbilityBarFill(1 - (float)infiniteFlightDuration / duration);
-        //     }
-        //     abilityIcon = infiniteFlightDuration == 0? new BootIcon() : new BootIconInfiniteFly();
-        //     DescriptionLinesCount = 1;
-        // }
         bool Using;
         public override void OnUseAbility(Player player, Item item)
         {
@@ -161,6 +145,11 @@ namespace Terrapain.Content.Items.Accessories.ActiveAccessories.VanillaItemActiv
                     curentMaxVelocity = 0;
                 }
                 player.Custom().Dash = new ActiveAccessoryDash(item) { DashDuration = DashDuration, damageType = item.DamageType, DashPower = DashPower, priority = dashPriority, penetrate = dashPenetrate, hurtfull = hurtfull };
+            }
+            else if (KeybindSystem.SprintKeybind.Current && MathF.Abs(player.velocity.X) > player.accRunSpeed)
+            {
+                player.Custom().UseStamina(0.15f);
+                player.accRunSpeed = player.Custom().Stamina * 0.05f;
             }
         }
         float FloatAbilityReload;
