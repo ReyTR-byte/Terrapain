@@ -1,12 +1,13 @@
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.DataStructures;
 using Terrapain.Content.Buffs;
-using Iced.Intel;
 using Terrapain.Common.TerrapainModPlayer;
 using Terrapain.Common.Global;
+using Terrapain.Common.Global.Trails;
+using Terrapain.Content.TUtilities;
+using ReLogic.Reflection;
 
 namespace Terrapain.Content.Projectiles.Minions
 {
@@ -41,6 +42,20 @@ namespace Terrapain.Content.Projectiles.Minions
             Projectile.tileCollide = false;
             Projectile.minion = true;
             Projectile.minionSlots = 1f;
+            Projectile.GetT().drawCenter = new Vector2(18);
+            Projectile.GetT().useModDrawingInPreDraw = true;
+            Projectile.GetT().useVanillaDrawing = false;
+            Projectile.GetT().trail = new MultipleTrail()
+            {
+                trails = [new SwordTrail()
+                {
+                    Top = new Vector2(18, -18),
+                    Bottom = new Vector2(-5, 5),
+                    startColor = Color.White,
+                    endColor = Color.Transparent,
+                    length = 0,
+                }]
+            };
         }
         public override bool? CanCutTiles()
         {
@@ -95,7 +110,8 @@ namespace Terrapain.Content.Projectiles.Minions
             AISearchForTarget(owner, out bool foundTarget, out float distanceFromTarget, out Vector2 targetCenter);
             Vector2 VectorToTarget = targetCenter - Projectile.Center;
             AIRotating(VectorToTarget, foundTarget, VectorToIdlePosition);
-            AIMovment(foundTarget, VectorToTarget, distanceFromTarget, VectorToIdlePosition, distanceToIdlePosition);
+            AIMovment(foundTarget, VectorToTarget, distanceFromTarget, VectorToIdlePosition);
+            TrailManagement();
         }
         private void AIGeneral(Player owner, out Vector2 VectorToIdlePosition, out float distanceToIdlePosition)
         {
@@ -110,6 +126,17 @@ namespace Terrapain.Content.Projectiles.Minions
                 Projectile.position = idelPosition;
                 Projectile.velocity *= 0.1f;
                 Projectile.netUpdate = true;
+                Projectile.GetT().trail = new MultipleTrail()
+                {
+                    trails = [new SwordTrail()
+                    {
+                        Top = new Vector2(18, -18),
+                        Bottom = new Vector2(-5, 5),
+                        startColor = Color.White,
+                        endColor = Color.Transparent,
+                        length = 0,
+                    }]
+                };
             }
         }
         private void AISearchForTarget(Player owner,
@@ -147,7 +174,7 @@ namespace Terrapain.Content.Projectiles.Minions
 
                         bool closeThroughWall = between < 100f;
 
-                        if (((closest && inRange) || !foundTarget) && (lineOfSight || closeThroughWall))
+                        if (inRange && (closest || !foundTarget) && (lineOfSight || closeThroughWall))
                         {
                             distanceFromTarget = between;
                             targetCenter = npc.Center;
@@ -162,8 +189,7 @@ namespace Terrapain.Content.Projectiles.Minions
         private void AIMovment(bool foundTarget,
                                Vector2 vectorToTarget,
                                float distanceFromTarget,
-                               Vector2 vectorToIdelPosition,
-                               float distanceToIdlePosition)
+                               Vector2 vectorToIdelPosition)
         {
             int speed = 16;
             if (dashTime <= 0 && dash)
@@ -247,205 +273,61 @@ namespace Terrapain.Content.Projectiles.Minions
                 if (foundTarget)
                 {
                     float goalAngle = Projectile.AngleTo(Projectile.Center + vectorToTarget) + (float)Math.PI * 0.25f;
-                    goalAngle = goalAngle % (2f * (float)Math.PI);
-                    if (goalAngle < 0)
-                    {
-                        goalAngle += (float)Math.PI * 2;
-                    }
-                    Projectile.rotation = Projectile.rotation % (2f * (float)Math.PI);
-                    if (Projectile.rotation < 0)
-                    {
-                        Projectile.rotation += (float)Math.PI * 2;
-                    }
-
-                    if (goalAngle < (float)Math.PI)
-                    {
-                        if (Projectile.rotation > goalAngle && Projectile.rotation < goalAngle + Math.PI)
-                        {
-                            if (angularVelocity > -0.3f)
-                                angularVelocity -= 0.1f;
-                        }
-                        else
-                        {
-                            if (angularVelocity < 0.3f)
-                                angularVelocity += 0.1f;
-                        }
-                    }
-                    else
-                    {
-                        if (Projectile.rotation < goalAngle && Projectile.rotation > goalAngle - Math.PI)
-                        {
-                            if (angularVelocity < 0.3f)
-                                angularVelocity += 0.1f;
-                        }
-                        else
-                        {
-                            if (angularVelocity > -0.3f)
-                                angularVelocity -= 0.1f;
-                        }
-                    }
-                    if ((Projectile.rotation + angularVelocity >= goalAngle && Projectile.rotation <= goalAngle) || (Projectile.rotation + angularVelocity <= goalAngle && Projectile.rotation >= goalAngle))
-                    {
-                        Projectile.rotation = goalAngle;
-                        rotateToTarget = true;
-                        angularVelocity = 0;
-                    }
-                    goalAngle += 2 * (float)Math.PI;
-                    if ((Projectile.rotation + angularVelocity > goalAngle && Projectile.rotation < goalAngle) || (Projectile.rotation + angularVelocity < goalAngle && Projectile.rotation > goalAngle))
-                    {
-                        Projectile.rotation = goalAngle;
-                        rotateToTarget = true;
-                        angularVelocity = 0;
-                    }
-                    goalAngle -= 4 * (float)Math.PI;
-                    if ((Projectile.rotation + angularVelocity > goalAngle && Projectile.rotation < goalAngle) || (Projectile.rotation + angularVelocity < goalAngle && Projectile.rotation > goalAngle))
-                    {
-                        Projectile.rotation = goalAngle;
-                        rotateToTarget = true;
-                        angularVelocity = 0;
-                    }
-                    else
-                    {
-                        Projectile.rotation += angularVelocity;
-                    }
+                    rotateToTarget = AIHelper.AngularAcceleration(ref angularVelocity, 0.1f, 0.3f, goalAngle, ref Projectile.rotation);
                 }
                 else
                 {
                     if (vectorToIdelPosition.Length() > 150)
                     {
                         float goalAngle = Projectile.AngleTo(Projectile.Center + Projectile.velocity) + (float)Math.PI * 0.25f;
-                        goalAngle = goalAngle % (2f * (float)Math.PI);
-                        if (goalAngle < 0)
-                        {
-                            goalAngle += (float)Math.PI * 2;
-                        }
-                        Projectile.rotation = Projectile.rotation % (2f * (float)Math.PI);
-                        if (Projectile.rotation < 0)
-                        {
-                            Projectile.rotation += (float)Math.PI * 2;
-                        }
-
-                        if (goalAngle < (float)Math.PI)
-                        {
-                            if (Projectile.rotation > goalAngle && Projectile.rotation < goalAngle + Math.PI)
-                            {
-                                if (angularVelocity > -0.3f)
-                                    angularVelocity -= 0.1f;
-                            }
-                            else
-                            {
-                                if (angularVelocity < 0.3f)
-                                    angularVelocity += 0.1f;
-                            }
-                        }
-                        else
-                        {
-                            if (Projectile.rotation < goalAngle && Projectile.rotation > goalAngle - Math.PI)
-                            {
-                                if (angularVelocity < 0.3f)
-                                    angularVelocity += 0.1f;
-                            }
-                            else
-                            {
-                                if (angularVelocity > -0.3f)
-                                    angularVelocity -= 0.1f;
-                            }
-                        }
-                        if ((Projectile.rotation + angularVelocity > goalAngle && Projectile.rotation < goalAngle) || (Projectile.rotation + angularVelocity < goalAngle && Projectile.rotation > goalAngle))
-                        {
-                            Projectile.rotation = goalAngle;
-                            rotateToTarget = true;
-                            angularVelocity = 0;
-                        }
-                        goalAngle += 2 * (float)Math.PI;
-                        if ((Projectile.rotation + angularVelocity > goalAngle && Projectile.rotation < goalAngle) || (Projectile.rotation + angularVelocity < goalAngle && Projectile.rotation > goalAngle))
-                        {
-                            Projectile.rotation = goalAngle;
-                            rotateToTarget = true;
-                            angularVelocity = 0;
-                        }
-                        goalAngle -= 4 * (float)Math.PI;
-                        if ((Projectile.rotation + angularVelocity > goalAngle && Projectile.rotation < goalAngle) || (Projectile.rotation + angularVelocity < goalAngle && Projectile.rotation > goalAngle))
-                        {
-                            Projectile.rotation = goalAngle;
-                            rotateToTarget = true;
-                            angularVelocity = 0;
-                        }
-                        else
-                        {
-                            Projectile.rotation += angularVelocity;
-                        }
+                        rotateToTarget = AIHelper.AngularAcceleration(ref angularVelocity, 0.1f, 0.3f, goalAngle, ref Projectile.rotation);
                     }
                     else
                     {
                         float goalAngle = Projectile.AngleTo(Projectile.Center + Vector2.UnitY) + (float)Math.PI * 0.25f;
-                        goalAngle = goalAngle % (2f * (float)Math.PI);
-                        if (goalAngle < 0)
-                        {
-                            goalAngle += (float)Math.PI * 2;
-                        }
-                        Projectile.rotation = Projectile.rotation % (2f * (float)Math.PI);
-                        if (Projectile.rotation < 0)
-                        {
-                            Projectile.rotation += (float)Math.PI * 2;
-                        }
-
-                        if (Projectile.rotation != goalAngle)
-                        {
-                            if (goalAngle < (float)Math.PI)
-                            {
-                                if (Projectile.rotation > goalAngle && Projectile.rotation < goalAngle + Math.PI)
-                                {
-                                    if (angularVelocity > -0.3f)
-                                        angularVelocity -= 0.03f;
-                                }
-                                else
-                                {
-                                    if (angularVelocity < 0.3f)
-                                        angularVelocity += 0.03f;
-                                }
-                            }
-                            else
-                            {
-                                if (Projectile.rotation < goalAngle && Projectile.rotation > goalAngle - Math.PI)
-                                {
-                                    if (angularVelocity < 0.3f)
-                                        angularVelocity += 0.03f;
-                                }
-                                else
-                                {
-                                    if (angularVelocity > -0.3f)
-                                        angularVelocity -= 0.03f;
-                                }
-                            }
-                            if ((Projectile.rotation + angularVelocity > goalAngle && Projectile.rotation < goalAngle) || (Projectile.rotation + angularVelocity < goalAngle && Projectile.rotation > goalAngle))
-                            {
-                                Projectile.rotation = goalAngle;
-                                rotateToTarget = true;
-                                angularVelocity = 0;
-                            }
-                            goalAngle += 2 * (float)Math.PI;
-                            if ((Projectile.rotation + angularVelocity > goalAngle && Projectile.rotation < goalAngle) || (Projectile.rotation + angularVelocity < goalAngle && Projectile.rotation > goalAngle))
-                            {
-                                Projectile.rotation = goalAngle;
-                                rotateToTarget = true;
-                                angularVelocity = 0;
-                            }
-                            goalAngle -= 4 * (float)Math.PI;
-                            if ((Projectile.rotation + angularVelocity > goalAngle && Projectile.rotation < goalAngle) || (Projectile.rotation + angularVelocity < goalAngle && Projectile.rotation > goalAngle))
-                            {
-                                Projectile.rotation = goalAngle;
-                                rotateToTarget = true;
-                                angularVelocity = 0;
-                            }
-                            else
-                            {
-                                Projectile.rotation += angularVelocity;
-                            }
-                        }
+                        rotateToTarget = AIHelper.AngularAcceleration(ref angularVelocity, 0.03f, 0.3f, goalAngle, ref Projectile.rotation);
                     }
                 }
             }
+        }
+        void TrailManagement()
+        {
+            List<ProjectileTrail> trails = (Projectile.GetT().trail as MultipleTrail).trails;
+            if (dash)
+            {   
+                if (trails.Count == 1)
+                {    
+                    trails.Add(new ProjectileTrail
+                    {
+                        startColor = Color.Transparent,
+                        endColor = Color.Transparent,
+                        Offset = new Vector2(16, -16),
+                        smooth = false,
+                        length = 10,
+                        startWidth = 18,
+                        endWidth = 18
+                    });
+                }
+                else
+                {
+                    trails[1].length = 10;
+                }
+                trails[1].startColor = new Color(trails[1].startColor.ToVector4() + new Vector4(0.1f));
+            }
+            else if (!dash && trails.Count == 2)
+            {
+                trails[1].startColor = new Color(trails[1].startColor.ToVector4() - new Vector4(0.1f));
+                trails[1].length--;
+                if (trails[1].length < 2)
+                {
+                    trails.RemoveAt(1);
+                }
+            }
+            float rotation = Projectile.rotation + MathF.PI * 0.25f;
+            rotation -= Projectile.velocity.ToRotation();
+            float s = Projectile.velocity.Length() * MathF.Abs(MathF.Cos(rotation));
+            trails[0].startColor = Lighting.GetColor(Projectile.Center.ToTileCoordinates()) * (s / 10);
+            trails[0].length = (int)MathHelper.Clamp(s * 1.5f, 2, 15);
         }
     }
 }
