@@ -1,12 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Terrapain.Common.Global;
+﻿using Terrapain.Common.Global;
 using Terrapain.Common.Global.UseStyles;
-using Terrapain.Content.Projectiles.Ammo.Bouquet;
+using Terrapain.Content.Projectiles.Ammo.Arrows.Bouquet;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -14,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace Terrapain.Content.Items.Weapons.RangerWeapons
 {
-    public class Gardeneer : ModItem
+    public class Gardeneer : ModItem, IBowUseStyle
     {
         public override void SetDefaults()
         {
@@ -40,6 +34,10 @@ namespace Terrapain.Content.Items.Weapons.RangerWeapons
                 velocity += player.velocity;
             }
             velocity = velocity.RotatedByRandom(0.02);
+        }
+        public virtual void FullPowerShoot(BowsOverride bowsOverride, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<SomeFlower>(), damage, knockback, player.whoAmI);
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
