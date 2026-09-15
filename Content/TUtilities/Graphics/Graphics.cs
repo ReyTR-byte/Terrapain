@@ -262,111 +262,49 @@ namespace Terrapain.Content.TUtilities.Graphics
                 MainIndices[IndicesIndex++] = num4;
             }
             DrawPimitives(shader);
-            // Main.instance.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-            // Main.instance.GraphicsDevice.RasterizerState.ScissorTestEnable = true;
-            // Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
+        }
+        public static void RenderSwordTrail(IEnumerable<Vector2> TopPoints, IEnumerable<Vector2> BottomPoints, VertexColorFunction topColor, VertexColorFunction bottomColor, ManagedShader shader)
+        {
+            var shaderToUse = shader ?? ShaderManager.GetShader("Terrapain.TrailShader");
+            VerticesIndex = 0;
+            IndicesIndex = 0;
 
-            // Vector2 quadArea = texture.Size();
-            // float maxDimension = MathF.Max(quadArea.X, quadArea.Y);
-
-            // var viewMatrix = Main.GameViewMatrix.TransformationMatrix
-            //     * Matrix.CreateOrthographicOffCenter(0f, Main.screenWidth, Main.screenHeight, 0f, -maxDimension - 1f, maxDimension + 1f);
-            // shader.TrySetParameter("uWorldViewProjection", viewMatrix);
-            // shader.Apply();
-
-            // VertexBuffer.SetData(MainVertices, 0, VerticesIndex, SetDataOptions.Discard);
-            // IndexBuffer.SetData(MainIndices, 0, IndicesIndex, SetDataOptions.Discard);
-
-            // Main.instance.GraphicsDevice.SetVertexBuffer(VertexBuffer);
-            // Main.instance.GraphicsDevice.Indices = IndexBuffer;
-            // Main.instance.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, VerticesIndex, 0, IndicesIndex / 3);
+            float topLen = 0;
+            for (int i = 0; i < TopPoints.Count() - 1; i++)
+            {
+                topLen += TopPoints.ElementAt(i).Distance(TopPoints.ElementAt(i + 1));
+            }
+            float bottomLen = 0;
+            for (int i = 0; i < BottomPoints.Count() - 1; i++)
+            {
+                bottomLen += BottomPoints.ElementAt(i).Distance(BottomPoints.ElementAt(i + 1));
+            }
+            float tl = 0;
+            float bl = 0;
+            for (int i = 0; i < TopPoints.Count(); i++)
+            {
+                if (i > 0)
+                {
+                    MainIndices[IndicesIndex++] = (short)(i * 2 - 2);
+                    MainIndices[IndicesIndex++] = (short)(i * 2 - 1);
+                    MainIndices[IndicesIndex++] = (short)(i * 2);
+                    MainIndices[IndicesIndex++] = (short)(i * 2);
+                    MainIndices[IndicesIndex++] = (short)(i * 2 + 1);
+                    MainIndices[IndicesIndex++] = (short)(i * 2 - 1);
+                    tl += TopPoints.ElementAt(i - 1).Distance(TopPoints.ElementAt(i));
+                    bl += BottomPoints.ElementAt(i - 1).Distance(BottomPoints.ElementAt(i));
+                }
+                MainVertices[VerticesIndex++] = new VertexPosition2DColorTexture(TopPoints.ElementAt(i) - Main.screenPosition, topColor(tl / topLen, tl, topLen, TopPoints.ElementAt(i)), new Vector2(tl / topLen, 0), 1);
+                MainVertices[VerticesIndex++] = new VertexPosition2DColorTexture(BottomPoints.ElementAt(i) - Main.screenPosition, bottomColor(bl / bottomLen, bl, bottomLen, BottomPoints.ElementAt(i)), new Vector2(bl / bottomLen, 1), 1);
+            }
+            DrawPimitives(shaderToUse);
         }
         public static void RenderTrail(IEnumerable<Vector2> Points, TrailSettings settings, int segmentsCount = 1, Vector2? dirIn = null, Vector2? dirOut = null, bool DebugPoints = false)
         {
             MakeTrailVertices(Points, settings, dirIn, dirOut, segmentsCount);
-            // VerticesIndex = 0;
-            // IndicesIndex = 0;
-            // float totalLength = 0;
-            // for (int i = 1; i < Points.Count(); i++)
-            // {
-            //     totalLength += Points.ElementAt(i).Distance(Points.ElementAt(i - 1));
-            // }
-            // float length = 0;
-            // float progress = 0;
-            // for (int i = 0; i < Points.Count(); i++)
-            // {
-            //     if (i > 0)
-            //     {
-            //         MainIndices[IndicesIndex++] = (short)(i * 2 - 2);
-            //         MainIndices[IndicesIndex++] = (short)(i * 2 - 1);
-            //         MainIndices[IndicesIndex++] = (short)(i * 2);
-            //         MainIndices[IndicesIndex++] = (short)(i * 2);
-            //         MainIndices[IndicesIndex++] = (short)(i * 2 + 1);
-            //         MainIndices[IndicesIndex++] = (short)(i * 2 - 1);
-            //         float distance = (Points.ElementAt(i).Distance(Points.ElementAt(i - 1)));
-            //         length += distance;
-            //         progress = length / totalLength * segmentsCount;
-            //     }
-            //     Color color = settings.ColorFunction(progress, length, totalLength, Points.ElementAt(i));
-            //     float Width = settings.WidthFunction(progress, length, totalLength, Points.ElementAt(i));
-            //     Vector2 dir = Vector2.Zero;
-            //     if (i == 0)
-            //     {
-            //         dir = dirIn?? Points.ElementAt(0).DirectionTo(Points.ElementAt(1));
-            //         dir = new Vector2(dir.Y, -dir.X);
-            //     }
-            //     else if (i < Points.Count() - 1)
-            //     {
-            //         Vector2 dir1 = Points.ElementAt(i).DirectionTo(Points.ElementAt(i + 1));
-            //         Vector2 dir2 = Points.ElementAt(i).DirectionTo(Points.ElementAt(i - 1));
-            //         float angle = AngleBetweenVectors(dir1, dir2);
-            //         if (angle > MathF.PI * 0.99f || angle < -MathF.PI * 0.99f)
-            //         {
-            //             dir = new Vector2(dir1.Y, -dir1.X);
-            //         }
-            //         else
-            //         {
-            //             if (angle > 0)
-            //             {
-            //                 dir = ((dir1 + dir2) / 2).ToUnit();
-            //             }
-            //             else
-            //             {
-            //                 dir = -((dir1 + dir2) / 2).ToUnit();
-            //             }
-            //         }
-            //     }
-            //     else
-            //     {
-            //         dir = dirOut?? Points.ElementAt(i).DirectionFrom(Points.ElementAt(i - 1));
-            //         dir = new Vector2(dir.Y, -dir.X);
-            //     }
 
-            //     MainVertices[VerticesIndex++] = new(Points.ElementAt(i) + dir * Width - Main.screenPosition, color, new Vector2(progress, 1), 1);
-            //     MainVertices[VerticesIndex++] = new(Points.ElementAt(i) - dir * Width - Main.screenPosition, color, new Vector2(progress, 0), 1);
-            // }
-            // Texture2D texture = ExtraTextureRegistry.WhitePixel.Value;
             ManagedShader shader = settings.Shader?? ShaderManager.GetShader("Terrapain.TrailShader");
 
-            // Main.instance.GraphicsDevice.SamplerStates[1] = SamplerState.PointClamp;
-            // Main.instance.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
-            // Main.instance.GraphicsDevice.RasterizerState.ScissorTestEnable = true;
-            // Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
-
-            // Vector2 quadArea = texture.Size();
-            // float maxDimension = MathF.Max(quadArea.X, quadArea.Y);
-
-            // var viewMatrix = Main.GameViewMatrix.TransformationMatrix
-            //     * Matrix.CreateOrthographicOffCenter(0f, Main.screenWidth, Main.screenHeight, 0f, -maxDimension - 1f, maxDimension + 1f);
-            // shader.TrySetParameter("uWorldViewProjection", viewMatrix);
-            // shader.Apply();
-
-            // VertexBuffer.SetData(MainVertices, 0, VerticesIndex, SetDataOptions.Discard);
-            // IndexBuffer.SetData(MainIndices, 0, IndicesIndex, SetDataOptions.Discard);
-
-            // Main.instance.GraphicsDevice.SetVertexBuffer(VertexBuffer);
-            // Main.instance.GraphicsDevice.Indices = IndexBuffer;
-            // Main.instance.GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, VerticesIndex, 0, IndicesIndex / 3);
             DrawPimitives(shader);
             if (DebugPoints)
             {
@@ -445,16 +383,11 @@ namespace Terrapain.Content.TUtilities.Graphics
         }
         public static void DrawPimitives(ManagedShader shader, SamplerState samplerState = null, RasterizerState rasterizerState = null)
         {
-            //Texture2D texture = ExtraTextureRegistry.WhitePixel.Value;
-            //ManagedShader shader = settings.Shader?? ShaderManager.GetShader("Terrapain.TrailShader");
 
             Main.instance.GraphicsDevice.SamplerStates[1] = samplerState?? SamplerState.PointClamp;
             Main.instance.GraphicsDevice.RasterizerState = rasterizerState??RasterizerState.CullNone;
             Main.instance.GraphicsDevice.RasterizerState.ScissorTestEnable = true;
             Main.instance.GraphicsDevice.ScissorRectangle = new Rectangle(0, 0, Main.screenWidth, Main.screenHeight);
-
-            //Vector2 quadArea = texture.Size();
-            //float maxDimension = MathF.Max(quadArea.X, quadArea.Y);
 
             var viewMatrix = Main.GameViewMatrix.TransformationMatrix
                 * Matrix.CreateOrthographicOffCenter(0f, Main.screenWidth, Main.screenHeight, 0f, -2f, 2f);
