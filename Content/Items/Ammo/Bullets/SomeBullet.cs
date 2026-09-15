@@ -2,7 +2,7 @@ using Terraria.ID;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
 
-namespace Terrapain.Content.Items.Ammo
+namespace Terrapain.Content.Items.Ammo.Bullets
 {
 	public class SomeBullet : ModItem
 	{
@@ -17,13 +17,13 @@ namespace Terrapain.Content.Items.Ammo
 			Item.width = 10;
 			Item.height = 10;
 			Item.maxStack = 9999;
-			Item.consumable = true; // This marks the item as consumable, making it automatically be consumed when it's used as ammunition, or something else, if possible.
+			Item.consumable = true;
 			Item.knockBack = 1.5f;
 			Item.value = 10;
 			Item.rare = ItemRarityID.Green;
-			Item.shoot = ModContent.ProjectileType<Content.Projectiles.Ammo.SomeBullet>(); // The projectile that weapons fire when using this item as ammunition.
-			Item.shootSpeed = 10f; // The speed of the projectile.
-			Item.ammo = AmmoID.Bullet; // The ammo class this ammo belongs to.
+			Item.shoot = ModContent.ProjectileType<Projectiles.Ammo.Bullets.SomeBullet>();
+			Item.shootSpeed = 10f;
+			Item.ammo = AmmoID.Bullet;
 		}
 	}
 }
