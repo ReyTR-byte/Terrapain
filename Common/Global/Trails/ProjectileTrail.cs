@@ -20,7 +20,6 @@ namespace Terrapain.Common.Global.Trails
         public int length;
         public bool smooth = true;
         public TrailSettings trailSettings = null;
-        public int projectile;
         public Vector2 Offset;
         public List<Vector2> Smooth(List<Vector2> points, float targetDistance, float scale)
         {
@@ -113,45 +112,32 @@ namespace Terrapain.Common.Global.Trails
             PointsToReturn.RemoveAt(0);
             return PointsToReturn;
         }
-        Vector2 oldOffset;
-        public void Update()
+        
+        public virtual void Update(Projectile proj)
         {
             smooth &= GraphicsConfig.Instance.smoothing;
-            var proj = Main.projectile[projectile];
             if (smooth)
             {
-                Vector2 offset = new Vector2(Offset.X * proj.spriteDirection, Offset.Y).RotatedBy(proj.rotation);
                 List<Vector2> positions = new List<Vector2>();
-                positions.Add(proj.Center + offset);
-                proj.oldPos[0] += oldOffset;
+                positions.Add(proj.Center + Offset.RotatedBy(proj.rotation));
                 for (int i = 0; i < 3; i++)
                 {
                     if (proj.oldPos[i] == Vector2.Zero)
                     {
                         break;
                     }
-                    positions.Add(proj.oldPos[i] + proj.Size / 2);
+                    positions.Add(proj.oldPos[i] + Offset.RotatedBy(proj.oldRot[i]) + proj.Size / 2);
                 }
                 if (positions.Count > 0)
                 {
                     hui = Smooth(positions, 16, Main.GameZoomTarget);
                 }
-                oldOffset = offset;
-            }
-            else
-            {
-                if (proj.oldPos[0] != Vector2.Zero)
-                { 
-                    Vector2 offset = new Vector2(Offset.X * proj.spriteDirection, Offset.Y).RotatedBy(proj.rotation);
-                    proj.oldPos[0] += offset;
-                }
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch, Projectile proj)
         {
             List<Vector2> points = new List<Vector2>();
-            var proj = Main.projectile[projectile];
             if (smooth)
             {
                 points = new (trailCache);
@@ -171,7 +157,7 @@ namespace Terrapain.Common.Global.Trails
                     {
                         break;
                     }
-                    points.Add(proj.oldPos[i] + proj.Size / 2);
+                    points.Add(proj.oldPos[i] + Offset.RotatedBy(proj.oldRot[i]) + proj.Size / 2);
                 }
             }
             float WidthFunction(float progress, float length, float totalLength, Vector2 position)
