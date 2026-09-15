@@ -1,10 +1,6 @@
 ﻿using Luminance.Common.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terrapain.Content;
+using Terrapain.Content.Projectiles.Ammo.Arrows;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -18,6 +14,10 @@ namespace Terrapain.Common.Global.UseStyles
     public class BowsOverride : GlobalItem
     {
         public int bowTime;
+        public float damageMultiply = 5;
+        public float speedMultiply = 1.5f;
+        public float knockbackMultiply = 3f;
+        public float fullCharge = 5;
         public int projectile;
         public SoundStyle? sound;
         public override bool InstancePerEntity => true;
@@ -27,8 +27,13 @@ namespace Terrapain.Common.Global.UseStyles
         }
         public override void SetDefaults(Item entity)
         {
+            if (entity.ModItem != null && entity.ModItem is IBowUseStyle)
+            {
+                (entity.ModItem as IBowUseStyle).SetBowDeffaults(this);
+            }
             sound = entity.UseSound;
             entity.UseSound = null;
+            fullCharge = MathF.Max(MathF.Max(damageMultiply, knockbackMultiply), speedMultiply);
         }
         public override void UseStyle(Item item, Player player, Rectangle heldItemFrame)
         {
@@ -70,15 +75,15 @@ namespace Terrapain.Common.Global.UseStyles
                 }
             }
         }
-        public override void ModifyShootStats(Item item, Terraria.Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        public override void ModifyShootStats(Item item, Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
             float multiply = (float)bowTime / item.useAnimation;
-            velocity *= MathF.Min(multiply, 1.5f);
-            damage = (int)(damage * MathF.Min(multiply, 5f));
-            knockback *= MathF.Min(multiply, 3f);
+            velocity *= MathF.Min(multiply, speedMultiply);
+            damage = (int)(damage * MathF.Min(multiply, damageMultiply));
+            knockback *= MathF.Min(multiply, knockbackMultiply);
             projectile = type;
         }
-        public override bool CanConsumeAmmo(Item weapon, Item ammo, Terraria.Player player)
+        public override bool CanConsumeAmmo(Item weapon, Item ammo, Player player)
         {
             if(bowTime == 1)
             {
@@ -87,16 +92,58 @@ namespace Terrapain.Common.Global.UseStyles
             return true;
         }
         UnifiedRandom random = new();
-        public override bool Shoot(Item item, Terraria.Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        public override bool Shoot(Item item, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             if (bowTime == 1)
             {
                 return false;
             }
-            if (bowTime >= item.useAnimation * 5)
+            if (bowTime >= item.useAnimation * fullCharge)
             {
+                if (item.ModItem != null && item.ModItem is IBowUseStyle)
+                {
+                    (item.ModItem as IBowUseStyle).FullPowerShoot(this, player, source, position, velocity, type, damage, knockback);
+                }    
                 switch (item.type)
                 {
+                    case ItemID.CopperBow:
+                        Projectile.NewProjectile(source, position, velocity.RotatedBy(0.2f), ModContent.ProjectileType<CopperArrow>(), damage / 3, knockback, player.whoAmI);
+                        Projectile.NewProjectile(source, position, velocity.RotatedBy(-0.2f), ModContent.ProjectileType<CopperArrow>(), damage / 3, knockback, player.whoAmI);
+                        break;
+                    case ItemID.TinBow:
+                        Projectile.NewProjectile(source, position, velocity.RotatedBy(0.15f), ModContent.ProjectileType<TinArrow>(), damage / 3, knockback, player.whoAmI);
+                        Projectile.NewProjectile(source, position, velocity.RotatedBy(-0.15f), ModContent.ProjectileType<TinArrow>(), damage / 3, knockback, player.whoAmI);
+                        break;
+                    case ItemID.IronBow:
+                        Projectile.NewProjectile(source, position, velocity.RotatedBy(0.15f), ModContent.ProjectileType<IronArrow>(), damage / 2, knockback, player.whoAmI);
+                        Projectile.NewProjectile(source, position, velocity.RotatedBy(-0.15f), ModContent.ProjectileType<IronArrow>(), damage / 2, knockback, player.whoAmI);
+                        break;
+                    case ItemID.LeadBow:
+                        Projectile.NewProjectile(source, position, velocity.RotatedBy(0.15f), ModContent.ProjectileType<LeadArrow>(), damage / 2, knockback, player.whoAmI);
+                        Projectile.NewProjectile(source, position, velocity.RotatedBy(-0.15f), ModContent.ProjectileType<LeadArrow>(), damage / 2, knockback, player.whoAmI);
+                        break;
+                    case ItemID.TungstenBow:
+                        Vector2 offset = velocity.ToUnit().RotatedBy(MathF.PI / 2);
+                        Projectile.NewProjectile(source, position + offset * 6, velocity, ModContent.ProjectileType<TungstenArrow>(), damage / 2, knockback, player.whoAmI);
+                        Projectile.NewProjectile(source, position - offset * 6, velocity, ModContent.ProjectileType<TungstenArrow>(), damage / 2, knockback, player.whoAmI);
+                        break;
+                    case ItemID.SilverBow:
+                        offset = velocity.ToUnit().RotatedBy(MathF.PI / 2);
+                        Projectile.NewProjectile(source, position + offset * 6, velocity, ModContent.ProjectileType<SilverArrow>(), damage / 2, knockback, player.whoAmI);
+                        Projectile.NewProjectile(source, position - offset * 6, velocity, ModContent.ProjectileType<SilverArrow>(), damage / 2, knockback, player.whoAmI);
+                        break;
+                    case ItemID.GoldBow:
+                        offset = velocity.ToUnit().RotatedBy(MathF.PI / 2);
+                        Projectile.NewProjectile(source, position + offset * 6, velocity, ModContent.ProjectileType<GoldenArrow>(), damage / 2, knockback, player.whoAmI);
+                        Projectile.NewProjectile(source, position - offset * 6, velocity, ModContent.ProjectileType<GoldenArrow>(), damage / 2, knockback, player.whoAmI);
+                        break;
+                    case ItemID.PlatinumBow:
+                        offset = velocity.ToUnit().RotatedBy(MathF.PI / 2);
+                        Projectile.NewProjectile(source, position + offset * 6, velocity, ModContent.ProjectileType<PlatinumArrow>(), damage / 2, knockback, player.whoAmI);
+                        Projectile.NewProjectile(source, position - offset * 6, velocity, ModContent.ProjectileType<PlatinumArrow>(), damage / 2, knockback, player.whoAmI);
+                        Projectile.NewProjectile(source, position + offset * 12, velocity, ModContent.ProjectileType<PlatinumArrow>(), damage / 2, knockback, player.whoAmI);
+                        Projectile.NewProjectile(source, position - offset * 12, velocity, ModContent.ProjectileType<PlatinumArrow>(), damage / 2, knockback, player.whoAmI);
+                        break;
                     case ItemID.Tsunami:
                         Projectile.NewProjectile(source, position, velocity / 2, ProjectileID.Typhoon, (int)(damage * 0.8f), knockback, player.whoAmI);
                         break;
@@ -114,5 +161,10 @@ namespace Terrapain.Common.Global.UseStyles
             }
             return true;
         }
+    }
+    public interface IBowUseStyle
+    {
+        public virtual void SetBowDeffaults(BowsOverride bowsOverride) { }
+        public virtual void FullPowerShoot(BowsOverride bowsOverride, Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback) { }
     }
 }
