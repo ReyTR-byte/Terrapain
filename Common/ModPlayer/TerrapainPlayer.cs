@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework.Graphics;
-using Terrapain.Assets.Extratextures;
 using Terrapain.Common.Config;
 using Terrapain.Common.Global;
 using Terrapain.Common.System;
@@ -10,11 +9,13 @@ using Terrapain.Content.Buffs;
 using Terrapain.Content.Buffs.Potions;
 using Terrapain.Content.DamageClasses;
 using Terrapain.Content.Dashes;
+using Terrapain.Content.Items.Accessories;
+using Terrapain.Content.Items.System;
+using Terrapain.Content.Items.Tools;
+using Terrapain.Content.Items.Weapons.RangerWeapons;
 using Terrapain.Content.Items.Weapons.SummonerWeapons;
-using Terrapain.Content.NPCs.Bosses.Scorspider;
 using Terrapain.Content.Projectiles.Enemies.Bosses.Scorspider;
 using Terrapain.Content.Stimulators;
-using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent.UI.ResourceSets;
@@ -58,6 +59,13 @@ namespace Terrapain.Common.TerrapainModPlayer
 		public int UnarmedMouseActiveTimer;
 		public bool UnarmedMouseActive => UnarmedMouseActiveTimer != 0;
 
+		public void UseStamina(float amount)
+		{
+			Stamina -= amount * staminaUsageMultiplyer;
+			Stamina = MathF.Max(0, Stamina);
+			StaminaRegenerationTimer = GetStaminaTimer;
+			StaminaRegeneration = 0;
+		}
 		public float Stamina = 100;
         public int StaminaRegenerationTimer;
         public int StaminaRegenerationTimerMax;
@@ -99,6 +107,7 @@ namespace Terrapain.Common.TerrapainModPlayer
             On_Player.SpawnFastRunParticles += On_Player_SpawnFastRunParticles;
 			//On_Player.ApplyItemTime 
         }
+
         public override void Unload()
         {
 			On_Player.SpawnFastRunParticles -= On_Player_SpawnFastRunParticles;
@@ -194,6 +203,22 @@ namespace Terrapain.Common.TerrapainModPlayer
 				item.GetT().ActiveAccessory.ResetAbilities(Player, item, reason);
 			}
 		}
+		public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
+        {
+            if (!mediumCoreDeath)
+            {
+                return [
+                    new Item(ModContent.ItemType<TheDropOfPain>()),
+                    new Item(ModContent.ItemType<Vozdukhan>()),
+                    new Item(ItemID.TopazStaff),
+                    new Item(ItemID.IronBroadsword),
+                    new Item(ItemID.LesserHealingPotion) {stack = 30},
+                    new Item(ModContent.ItemType<StarterHook>()),
+                    new Item(ModContent.ItemType<StarterBoots>()),
+                ];
+            }
+            return [];
+        }
 		public override void PreUpdate()
 		{
 			for (int i = oldCenters.Length - 1; i > 0; i--)
@@ -362,7 +387,7 @@ namespace Terrapain.Common.TerrapainModPlayer
 		{
 			ShootingStars(shootingStar.time, shootingStar.shootRate, shootingStar.damage, shootingStar.knockback, shootingStar.speed, shootingStar.damageClass, shootingStar.position, shootingStar.targetPosition, shootingStar.targetClosest, shootingStar.folowPlayer, shootingStar.projectileType, shootingStar.range, i);
         }
-		public override void ModifyHitByNPC(NPC npc, ref Terraria.Player.HurtModifiers modifiers)
+		public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
 		{
 			if (GranithShellChestplateBonus)
 			{
@@ -376,7 +401,7 @@ namespace Terrapain.Common.TerrapainModPlayer
 				AcidCobwebBonusReload = 600;
 			}
 		}
-        public override void ModifyHurt(ref Terraria.Player.HurtModifiers modifiers)
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
         {
 			if (GranithShellChestplateBonus)
 				modifiers.FinalDamage *= 0.95f;
