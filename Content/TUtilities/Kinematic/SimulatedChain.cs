@@ -1,20 +1,23 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Terrapain.Content.TUtilities.Graphics;
 using Terraria;
+using Terraria.Utilities.Terraria.Utilities;
 
 namespace Terrapain.Content.TUtilities.Kinematic
 {
     public class SimulatedChain
     {
-        public SimulatedChain(int fragments, float lengthPerFragment, Vector2 start, float rotation, float mass, float accessfulRotation = MathF.PI)
+        public SimulatedChain(int fragments, float lengthPerFragment, Vector2 start, float rotation, float mass, float accessfulRotation = MathF.PI, float gravity = 0.3f, float breaking = 1)
         {
             Fragments = new SimulatedJoint[fragments];
+            this.gravity = new Vector2(0, gravity);
             for (int i = 0; i < fragments; i++)
             {
-                Fragments[i] = new SimulatedJoint(lengthPerFragment, mass, start + Vector2.UnitX.RotatedBy(rotation) * (lengthPerFragment / 2 + lengthPerFragment * i), accessfulRotation);
+                Fragments[i] = new SimulatedJoint(lengthPerFragment, mass, start + Vector2.UnitX.RotatedBy(rotation) * (lengthPerFragment / 2 + lengthPerFragment * i), accessfulRotation, breaking);
             }
         }
         public int Count => Fragments.Length;
+        public Vector2 gravity;
         public SimulatedJoint[] Fragments;
         public List<Vector2> SoothedPoints;
         public List<Vector4> Colors;
@@ -26,12 +29,13 @@ namespace Terrapain.Content.TUtilities.Kinematic
             for (int i = 0; i < Fragments.Length; i++)
             {
                 if (!Fragments[i].fixedAt.HasValue)
-                    Fragments[i].velocity += Vector2.UnitY * 0.3f;
+                    Fragments[i].velocity += gravity;
             }
-            float averageDistanceMiss = -1;
+            float averageDistanceMiss = 999999;
             int itteration = 0;
-            while ((averageDistanceMiss == -1 || averageDistanceMiss > 0.1f) && itteration < 10)
+            while ((averageDistanceMiss > 0.1f) && itteration < 10)
             {
+                averageDistanceMiss = 0;
                 for (int i = 0; i < Fragments.Length - 1; i++)
                 {
                     if (Fragments[i].fixedAt != null)
@@ -50,11 +54,11 @@ namespace Terrapain.Content.TUtilities.Kinematic
                     {
                         float mass = Fragments[i].mass + Fragments[i + 1].mass;
                         float Force = Fragments[i].futurePosition.Distance(Fragments[i + 1].futurePosition) - Fragments[i].length;
-                        Force *= mass;
-                        Force /= 4;
+                        Force /= 2;
                         Vector2 forceDirection = Fragments[i].futurePosition.DirectionTo(Fragments[i + 1].futurePosition);
-                        Fragments[i].ApplyForce(forceDirection * Force);
-                        Fragments[i + 1].ApplyForce(-forceDirection * Force);
+                        float mul1 = ((mass - Fragments[i].mass) / mass);
+                        Fragments[i].velocity += Force * forceDirection * ((mass - Fragments[i].mass) / mass);
+                        Fragments[i + 1].velocity += Force * -forceDirection * ((mass - Fragments[i + 1].mass) / mass);
                     }
                     if (Fragments[i].accessfulRotation < MathF.PI)
                     {
