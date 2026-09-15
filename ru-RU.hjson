@@ -10,6 +10,7 @@ Mods: {
 			ActiveAccesory5.DisplayName: Активный Аксессуар 5
 			ActiveAccesory6.DisplayName: Активный Аксессуар 6
 			ActiveAccesory7.DisplayName: Активный Аксессуар 7
+			// Sprint.DisplayName: Sprint
 		}
 
 		DamageClasses.Unarmed.DisplayName: урона безоружного
@@ -52,6 +53,7 @@ Mods: {
 			SmallSpider.DisplayName: Маленький паук
 			Suicide.DisplayName: Самоубийство
 			Torture.DisplayName: Пытка
+			// HarpyKing.DisplayName: Harpy King
 		}
 
 		Tiles: {
@@ -104,6 +106,11 @@ Mods: {
 			Slimed: {
 				// DisplayName: Slimed
 				// Description: Mods.Terrapain.Buffs.Slimed.Description
+			}
+
+			LeadIntoxication: {
+				// DisplayName: Lead Intoxication
+				// Description: Mods.Terrapain.Buffs.LeadIntoxication.Description
 			}
 		}
 
@@ -598,6 +605,56 @@ Mods: {
 				// Tooltip: ""
 				// DisplayName: Wormy Brain
 			}
+
+			CopperArrow: {
+				// DisplayName: Copper Arrow
+				// Tooltip: ""
+			}
+
+			GoldenArrow: {
+				// DisplayName: Golden Arrow
+				// Tooltip: ""
+			}
+
+			IronArrow: {
+				// DisplayName: Iron Arrow
+				// Tooltip: ""
+			}
+
+			LeadArrow: {
+				// DisplayName: Lead Arrow
+				// Tooltip: ""
+			}
+
+			PlatinumArrow: {
+				// DisplayName: Platinum Arrow
+				// Tooltip: ""
+			}
+
+			SilverArrow: {
+				// DisplayName: Silver Arrow
+				// Tooltip: ""
+			}
+
+			TinArrow: {
+				// DisplayName: Tin Arrow
+				// Tooltip: ""
+			}
+
+			TungstenArrow: {
+				// DisplayName: Tungsten Arrow
+				// Tooltip: ""
+			}
+
+			StarterBoots: {
+				// DisplayName: Starter Boots
+				// Tooltip: ""
+			}
+
+			StarterHook: {
+				// DisplayName: Starter Hook
+				// Tooltip: ""
+			}
 		}
 
 		Projectiles: {
@@ -672,6 +729,18 @@ Mods: {
 			// Nugget.DisplayName: Nugget
 			// IchorBomb.DisplayName: Ichor Bomb
 			// FakeBrain.DisplayName: Fake Brain
+			// HarpyFeatherHostile.DisplayName: Harpy Feather Hostile
+			// CopperArrow.DisplayName: Copper Arrow
+			// CopperNugget.DisplayName: Copper Nugget
+			// GoldenArrow.DisplayName: Golden Arrow
+			// IronArrow.DisplayName: Iron Arrow
+			// LeadArrow.DisplayName: Lead Arrow
+			// PlatinumArrow.DisplayName: Platinum Arrow
+			// SilverArrow.DisplayName: Silver Arrow
+			// TinArrow.DisplayName: Tin Arrow
+			// TungstenArrow.DisplayName: Tungsten Arrow
+			// SomeFlower.DisplayName: Some Flower
+			// StarterHookProjectile.DisplayName: Starter Hook Projectile
 		}
 
 		Configs: {
