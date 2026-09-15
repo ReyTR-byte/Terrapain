@@ -1,8 +1,6 @@
-using ReLogic.Reflection;
 using ReLogic.Threading;
 using Terrapain.Content.Groups;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using static Terrapain.Content.Functions;
 using static Terrapain.Content.TUtilities.PathFinderSystem;
@@ -193,7 +191,7 @@ namespace Terrapain.Content.TUtilities
                 {
                     entity.velocity.Y += speed2;
                 }
-                entity.velocity.X += ((float)scan.length / (scan.rightClosest + 1)) * speed1;
+                entity.velocity.X += ((float)scan.length / (scan.leftClosest + 1)) * speed1;
             }
             if (scan.upClosest < scan.length)
             {
@@ -205,7 +203,7 @@ namespace Terrapain.Content.TUtilities
                 {
                     entity.velocity.X += speed2;
                 }
-                entity.velocity.Y += ((float)scan.length / (scan.rightClosest + 1)) * speed1;
+                entity.velocity.Y += ((float)scan.length / (scan.upClosest + 1)) * speed1;
             }
             if (scan.downClosest < scan.length)
             {
@@ -217,7 +215,7 @@ namespace Terrapain.Content.TUtilities
                 {
                     entity.velocity.X += speed2;
                 }
-                entity.velocity.Y -= ((float)scan.length / (scan.rightClosest + 1)) * speed1;
+                entity.velocity.Y -= ((float)scan.length / (scan.downClosest + 1)) * speed1;
             }
         }
         #endregion
@@ -263,6 +261,15 @@ namespace Terrapain.Content.TUtilities
         }
         public static List<Vector2> FindPath(this Entity npc, Vector2 target, Rectangle area)
         {
+            int x1 = Math.Max(area.X, 0);
+            int x2 = Math.Min(area.Right, Main.maxTilesX - 1);
+            int y1 = Math.Max(area.Y, 0);
+            int y2 = Math.Min(area.Bottom, Main.maxTilesY - 1);
+            area = new Rectangle(x1, y1, x2 - x1, y2 - y1);
+            if (area.Width < 0 || area.Height < 0)
+            {
+                return null;
+            }
             var _start = DateTime.Now;
             Point start = (npc.BottomRight - Vector2.One).ToTileCoordinates();
             if (!area.Include(start))
@@ -271,6 +278,7 @@ namespace Terrapain.Content.TUtilities
             }
             int w = ((npc.width - 1) >> 4) + 1;
             int h = ((npc.height - 1) >> 4) + 1;
+            Point size = new Point(w, h);
             bool halfBlock = (npc.height - 1) % 16 < 8;
             bool[,] map = GetMap(area, w, h, halfBlock);
             if (TryGetPoint(map, target, out Point _target, w, h, area.Location))
@@ -279,7 +287,7 @@ namespace Terrapain.Content.TUtilities
             }
             var getMapTime = DateTime.Now;
             Console.WriteLine("GetMap time: " + (getMapTime - _start).TotalMilliseconds + "ms");
-            List<Node> nodes = GetArea(area);
+            List<Node> nodes = GetArea(area, size, halfBlock);
             var getAreaTime = DateTime.Now;
             Console.WriteLine("GetArea time: " + (getAreaTime - getMapTime).TotalMilliseconds + "ms");
             // bool first = true;
@@ -806,6 +814,7 @@ namespace Terrapain.Content.TUtilities
                     }
                     return i;
                 }
+                start += dir;
             }
             return length;
         }
@@ -815,12 +824,53 @@ namespace Terrapain.Content.TUtilities
     {
         public override void OnWorldLoad()
         {
+            On_WorldGen.KillTile += On_WorldGen_KillTile;
+            On_WorldGen.PlaceTile += On_WorldGen_PlaceTile;
+            On_WorldGen.SlopeTile += On_WorldGen_SlopeTile;
+            On_Player.ItemCheck_UseMiningTools_TryPoundingTile += On_Player_ItemCheck_UseMiningTools_TryPoundingTile;
             Nodes = new Dictionary<Point, Node>[Main.maxTilesX / squareSide + 1, Main.maxTilesY / squareSide + 1];
         }
         public override void OnWorldUnload()
         {
+            On_WorldGen.KillTile -= On_WorldGen_KillTile;
+            On_WorldGen.PlaceTile -= On_WorldGen_PlaceTile;
+            On_WorldGen.SlopeTile -= On_WorldGen_SlopeTile;
+            On_Player.ItemCheck_UseMiningTools_TryPoundingTile -= On_Player_ItemCheck_UseMiningTools_TryPoundingTile;
             Nodes = new Dictionary<Point, Node>[0, 0];
         }
+        private bool On_WorldGen_SlopeTile(On_WorldGen.orig_SlopeTile orig, int i, int j, int slope, bool noEffects)
+        {
+            //On_Player.ItemCheck_UseMiningTools_TryPoundingTile += On_Player_ItemCheck_UseMiningTools_TryPoundingTile;
+            //Chatic("slope" + slope);
+            return orig(i, j, slope, noEffects);
+        }
+        private void On_Player_ItemCheck_UseMiningTools_TryPoundingTile(On_Player.orig_ItemCheck_UseMiningTools_TryPoundingTile orig, Player self, Item sItem, int tileHitId, ref bool hitWall, int x, int y)
+        {
+            bool oldHalfBlock = Main.tile[x, y].IsHalfBlock;
+            orig(self, sItem, tileHitId, ref hitWall, x, y);
+            if (Main.tile[x, y].IsSolid() && oldHalfBlock != Main.tile[x, y].IsHalfBlock)
+            {
+                UnloadArea(x / squareSide, y/ squareSide);
+                Chatic("it works!");
+            }
+        }
+        private void On_WorldGen_KillTile(On_WorldGen.orig_KillTile orig, int i, int j, bool fail, bool effectOnly, bool noItem)
+        {
+            if (Main.tile[i, j].IsSolid() && !effectOnly && !fail)
+            {
+                UnloadArea(i / squareSide, j / squareSide);
+            }
+            orig(i, j, fail, effectOnly, noItem);
+        }
+        private bool On_WorldGen_PlaceTile(On_WorldGen.orig_PlaceTile orig, int i, int j, int Type, bool mute, bool forced, int plr, int style)
+        {
+            if (Main.tile[i, j].IsSolid() != Main.tileSolid[Type])
+            {
+                UnloadArea(i / squareSide, j / squareSide);
+            }
+            return orig(i, j, Type, mute, forced, plr, style);
+        }
+
         public const int squareSide = 25;
         public struct Node
         {
@@ -859,6 +909,11 @@ namespace Terrapain.Content.TUtilities
             {
                 int w = map.GetLength(0);
                 int h = map.GetLength(1);
+                if (coordinates.X < 0 || coordinates.X >= w || coordinates.Y < 0 || coordinates.Y >= h)
+                {
+                    return null;
+                }
+                    
                 if (offset == Point.Zero)
                 {
                     if (coordinates.X < w - 1 && coordinates.Y < h - 1)
@@ -881,7 +936,7 @@ namespace Terrapain.Content.TUtilities
                 }
                 else if (offset == new Point(0, 1))
                 {
-                    if (coordinates.X < h - 1 && coordinates.Y > 0)
+                    if (coordinates.X < w - 1 && coordinates.Y > 0)
                     {
                         if (!map[coordinates.X + 1, coordinates.Y] && !map[coordinates.X, coordinates.Y - 1])
                         {   
@@ -1059,9 +1114,38 @@ namespace Terrapain.Content.TUtilities
             }
             return result;
         }
+        public static List<Node> GetArea(Rectangle Area, Point size, bool halfBlock)
+        {
+            List<Node> result = [];
+            for (int x = Area.X / squareSide; x <= Area.Right / squareSide; x++)
+            {
+                for (int y = Area.Y / squareSide; y <= Area.Bottom / squareSide; y++)
+                {   
+                    //UnloadArea(x, y);
+                    if (Nodes[x, y] == null)
+                    {
+                        LoadArea(x, y);
+                    }
+                    foreach(var node in Nodes[x, y])
+                    {
+                        if ((node.Value.Check(size, halfBlock)?? true) && Area.Include(node.Value.ApplyOffset(size)))
+                        {
+                            result.Add(node.Value);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
         public static void LoadArea(int x, int y)
         {
             Rectangle area = new Rectangle(x * squareSide - 1, y * squareSide - 1, squareSide + 1, squareSide + 1);
+
+            int x1 = Math.Max(area.X, 0);
+            int x2 = Math.Min(area.Right, Main.maxTilesX - 1);
+            int y1 = Math.Max(area.Y, 0);
+            int y2 = Math.Min(area.Bottom, Main.maxTilesY - 1);
+            area = new Rectangle(x1, y1, x2 - x1, y2 - y1);
 
             bool[,] map = GetMap(area, 1, 1, true);
             bool[,] map1 = GetMap(area, 1, 1, false);
@@ -1120,10 +1204,10 @@ namespace Terrapain.Content.TUtilities
                 return;
             }
             List<Node> nodes4 = [];
-            int x1 = area.X + 1;
-            int x2 = area.Right - 1;
-            int y1 = area.Y + 1;
-            int y2 = area.Bottom - 1;
+            x1 = area.X + 1;
+            x2 = area.Right - 1;
+            y1 = area.Y + 1;
+            y2 = area.Bottom - 1;
             int w = Nodes.GetLength(0);
             int h = Nodes.GetLength(1);
             if (x > 0 && Nodes[x - 1, y] != null)
@@ -1196,6 +1280,11 @@ namespace Terrapain.Content.TUtilities
             }
             Node[] nodes5 = nodes4.ToArray();
             Rectangle newArea = new Rectangle(x1, y1, x2 - x1, y2 - y1);
+            x1 = Math.Max(newArea.X, 0);
+            x2 = Math.Min(newArea.Right, Main.maxTilesX - 1);
+            y1 = Math.Max(newArea.Y, 0);
+            y2 = Math.Min(newArea.Bottom, Main.maxTilesY - 1);
+            newArea = new Rectangle(x1, y1, x2 - x1, y2 - y1);
             bool[,] map2 = GetMap(newArea, 1, 1, true);
 
             Nodes[x,y] = [];
